@@ -23,8 +23,10 @@ if (!DATABASE_URL) {
   throw new Error("DATABASE_URL is not defined")
 }
 
-export const config = {
+const config = {
   frontendOrigin: FRONTEND_ORIGIN,
   serverPort: Number(SERVER_PORT),
   databaseUrl: DATABASE_URL,
 }
+
+export default config;
