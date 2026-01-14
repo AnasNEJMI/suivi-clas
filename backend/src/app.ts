@@ -1,9 +1,16 @@
-import express, { NextFunction } from 'express';
+import "dotenv/config";
+
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN;
+if (!FRONTEND_ORIGIN) {
+  throw new Error("FRONTEND_ORIGIN is not defined")
+}
+
+import express from 'express';
 import cors from 'cors';
 import apiRouter from './routes/api.routes';
-import { config } from './config';
 
-export const isAuth = true;
+
+console.log('FRONTEND_ORIGIN', FRONTEND_ORIGIN)
 
 const app = express();
 
@@ -17,7 +24,7 @@ app.use(
             }
 
             // Allow only the configured frontend origin
-            if(origin === config.frontendOrigin){
+            if(origin === FRONTEND_ORIGIN){
                 return callback(null, true);
             }
 
