@@ -8,6 +8,8 @@ import DashboardHome from './components/dashboard/dashboard-home.tsx'
 import DashboardSettings from './components/dashboard/dashboard-settings.tsx'
 import SignUp from './pages/signup.tsx'
 import Dashboard from './pages/dashboard.tsx'
+import Adminboard from './pages/adminboard.tsx'
+import AdminboardCreateUser from './components/adminboard/adminboard-create-user.tsx'
 
 
 
@@ -26,7 +28,16 @@ const router = createBrowserRouter([
           {index : true, Component : DashboardHome},
           {path : 'settings', Component : DashboardSettings}
         ]
-      }
+      },
+      {
+        path : 'adminboard',
+        Component : Adminboard,
+        children : [
+          {index : true, Component : DashboardHome},
+          {path : 'create-user', Component : AdminboardCreateUser},
+          {path : 'settings', Component : DashboardSettings}
+        ]
+      },
     ],
   }
 ])
