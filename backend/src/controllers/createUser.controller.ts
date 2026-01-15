@@ -1,26 +1,40 @@
 import express from 'express';
-import { hashPassword } from '../utils/auth';
+import { hashPassword } from '../utils/auth.utils';
 import { CreateUserInput } from '../schemas/user.schema';
 import {prisma} from '../db/prisma';
 import { Prisma } from '../generated/prisma/client';
+import { ApiResponse } from '../types/response.types';
+import { ApiError } from '../classes/ApiError.class';
+import { sendCreated } from '../utils/success.utils';
 
-export async function createUserHandler(req: express.Request, res: express.Response){
-    const {email, password} = req.body as CreateUserInput;
+type CreateUserResponse = {
+    id : number,
+    email : string,
+    createdAt : string
+}
 
-    //check if a user with the same email already exists
-    const existingUser = await prisma.user.findUnique({
-        where : {email}
-    })
 
-    if(existingUser){
-        return res.status(409).json({
-            error : "USER_ALREADY_EXISTS"
-        })
-    }
-
-    const passwordHash = await hashPassword(password);
-
+export async function createUserHandler(
+    req: express.Request,
+    res: express.Response<ApiResponse<CreateUserResponse>>,
+    next : express.NextFunction
+){
+    
     try{
+        console.log('ps ps')
+        const {email, password} = req.body as CreateUserInput;
+    
+        //check if a user with the same email already exists
+        const existingUser = await prisma.user.findUnique({
+            where : {email}
+        })
+    
+        if(existingUser){
+            throw ApiError.userAlreadyExists(email);
+        }
+    
+        const passwordHash = await hashPassword(password);
+
         const user = await prisma.user.create({
             data : {
                 email,
@@ -28,25 +42,20 @@ export async function createUserHandler(req: express.Request, res: express.Respo
             }
         })
 
-        return res.status(201).json({
-            id:user.id,
-            email: user.email,
+        return sendCreated<CreateUserResponse>(res, {
+            id : user.id,
+            email : user.email,
+            createdAt : user.createdAt.toISOString(),
         })
-
+        
     }catch(err){
         if(
             err instanceof Prisma.PrismaClientKnownRequestError &&
             err.code === "P2002"
         ){
-            return res.status(409).json({
-                error : "USER_ALREADY_EXISTS"
-            })
+            return next(ApiError.userAlreadyExists())
         }
 
-        throw err;
+        next(err)
     }
-
-
-    console.log('user created successfully with email : ', email, 'password : ', password)
-    res.json({ email : email});
 };

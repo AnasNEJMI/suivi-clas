@@ -8,6 +8,8 @@ if (!FRONTEND_ORIGIN) {
 import express from 'express';
 import cors from 'cors';
 import apiRouter from './routes/api.routes';
+import { errorHandler } from "./middleware/errorHandler.middleware";
+import { ApiError } from "./classes/ApiError.class";
 
 
 console.log('FRONTEND_ORIGIN', FRONTEND_ORIGIN)
@@ -36,19 +38,25 @@ app.use(
         credentials : true,
     })
 )
+
 app.use(express.json());
 
 app.use((err: unknown, req: express.Request, res: express.Response, next : express.NextFunction) => {
     //if syntax error, return json body
     if(err instanceof SyntaxError){
-        return res.status(400).json({
-            error : "Invalid json body."
-        });
+        next(ApiError.invalidJsonBodyError())
+    }else{
+        next(ApiError.internalError());
     }
-    next(err);
 })
+
 
 app.use('/api',apiRouter);
 
+app.use((req: express.Request, res: express.Response, next : express.NextFunction) => {
+    next(ApiError.routeNotFound())
+});
+
+app.use(errorHandler);
 
 export default app;

@@ -1,0 +1,39 @@
+import express from 'express';
+import z, { ZodError } from "zod";
+import { ApiError } from '../classes/ApiError.class';
+
+type ValidationTarget = 'body' | 'query' | 'params';
+
+function validate(schema : z.ZodType, target : ValidationTarget = 'body'){
+    return (
+        req : express.Request,
+        res : express.Response,
+        next : express.NextFunction
+    ) => {
+        try{
+            console.log('ps')
+            const data = req[target];
+            const result = schema.safeParse(data);
+
+            req[target] = result;
+        }catch(err){
+            if(err instanceof ZodError){
+                next(ApiError.validationError());
+            }else{
+                next(ApiError.internalError());
+            }
+        }
+    }
+}
+
+export function validateBody(schema : z.ZodType){
+    return validate(schema, 'body');
+}
+
+export function validateQuery(schema : z.ZodType){
+    return validate(schema, 'query');
+}
+
+export function validateParams(schema : z.ZodType){
+    return validate(schema, 'params');
+}
