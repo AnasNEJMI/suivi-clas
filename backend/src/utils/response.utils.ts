@@ -32,8 +32,6 @@ export function sendSuccess<T>(
     });
 };
 
-
-
 export function sendCreated<T>(
     res: express.Response,
     data: T
