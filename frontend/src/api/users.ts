@@ -22,7 +22,7 @@ export async function createUser(payload : CreateUserPayload) : Promise<CreateUs
 
     if(!response.ok){
         const errorBody = await response.json().catch(() => null);
-        
+        console.log(errorBody)
         throw new Error(errorBody?.message ?? "Erreur Serveur");
     }
 
