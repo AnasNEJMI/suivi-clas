@@ -5,7 +5,7 @@ import {prisma} from '../db/prisma';
 import { Prisma } from '../generated/prisma/client';
 import { ApiResponse } from '../types/response.types';
 import { ApiError } from '../classes/ApiError.class';
-import { sendCreated } from '../utils/success.utils';
+import { sendCreated } from '../utils/response.utils';
 
 type CreateUserResponse = {
     id : number,

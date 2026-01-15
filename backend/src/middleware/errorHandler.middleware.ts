@@ -2,7 +2,7 @@ import express from 'express';
 import { ApiError } from '../classes/ApiError.class';
 import { ZodError } from 'zod';
 import { ErrorCodes } from '../constants/errors.constants';
-import { sendError } from '../utils/errors.utils';
+import { sendError } from '../utils/response.utils';
 
 export function errorHandler(
     err : Error,

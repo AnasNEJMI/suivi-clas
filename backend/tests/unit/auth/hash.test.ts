@@ -1,4 +1,4 @@
-import { hashPassword, verifyPassword } from "../../src/utils/auth.utils";
+import { hashPassword, verifyPassword } from "../../../src/utils/auth.utils";
 
 import {describe, it, expect} from 'vitest';
 
