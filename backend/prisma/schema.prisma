@@ -26,10 +26,17 @@ model User {
 model Session {
   id        String    @id @default(uuid())
   userId    Int
-  user      User      @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], onDelete : Cascade)
+
+  //session data
   createdAt DateTime  @default(now())
   expiresAt DateTime
-  revokedAt DateTime?
+  lastActiveAt DateTime @default(now())
+  
+  //security
   userAgent String?
   ipAddress String?
+
+  @@index([userId])
+  @@index([expiresAt])
 }
