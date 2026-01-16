@@ -108,6 +108,7 @@ export function CreateUserForm({
                             </FieldLabel>
                             <Input
                                 {...field}
+                                disabled = {createUserMutation.isPending}
                                 type='password'
                                 id="form-cu-password"
                                 aria-invalid={fieldState.invalid}
@@ -131,6 +132,7 @@ export function CreateUserForm({
                             </FieldLabel>
                             <Input
                                 {...field}
+                                disabled = {createUserMutation.isPending}
                                 type='password'
                                 id="form-cu-confirmPassword"
                                 aria-invalid={fieldState.invalid}
