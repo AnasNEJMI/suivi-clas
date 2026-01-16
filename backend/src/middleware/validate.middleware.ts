@@ -4,7 +4,7 @@ import { ApiError } from '../classes/ApiError.class';
 
 type ValidationTarget = 'body' | 'query' | 'params';
 
-function validate(schema : z.ZodType, target : ValidationTarget = 'body'){
+export function validate(schema : z.ZodType, target : ValidationTarget = 'body'){
     return (
         req : express.Request,
         res : express.Response,

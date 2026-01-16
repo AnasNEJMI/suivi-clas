@@ -21,7 +21,6 @@ export async function createUserHandler(
 ){
     
     try{
-        console.log('ps ps')
         const {email, password} = req.body as CreateUserInput;
     
         //check if a user with the same email already exists

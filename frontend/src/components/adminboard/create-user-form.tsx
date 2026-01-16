@@ -18,56 +18,18 @@ import { Input } from "@/components/ui/input"
 import z from "zod"
 import {Controller, useForm} from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod"
-import { toast } from "sonner"
-import { useMutation } from "@tanstack/react-query"
 import { createUser } from "@/api/users"
-
-const emailErrorMessage = "Veuiller renseigner une adresse email valide.";
-const pwMinLengthErrorMessage = "Le mot de passe doit être composé d'au moins 8 caractères.";
-const pwMaxLengthErrorMessage = "Le mot de passe doit être composé d'au plus 20 caractères.";
-const pwUppercaseErrorMessage = "Le mot de passe doit être contenir au moins une lettre majuscule.";
-const pwLowercaseErrorMessage = "Le mot de passe doit être contenir au moins une lettre miniscule.";
-const pwNumberErrorMessage = "Le mot de passe doit être contenir au moins un chiffre.";
-const pwSpecialCharacterErrorMessage = "Le mot de passe doit être contenir au moins un caractère spécial.";
-const pwMismatchErrorMessage = "Veuillez renseigner le même mot de passe.";
-
-const passwordSchema = z
-  .string()
-  .min(8, { message: pwMinLengthErrorMessage })
-  .max(20, { message: pwMaxLengthErrorMessage })
-  .refine((password) => /[A-Z]/.test(password), {
-    message: pwUppercaseErrorMessage,
-  })
-  .refine((password) => /[a-z]/.test(password), {
-    message: pwLowercaseErrorMessage,
-  })
-  .refine((password) => /[0-9]/.test(password), { message: pwNumberErrorMessage })
-  .refine((password) => /[!@#$%^&*]/.test(password), {
-    message: pwSpecialCharacterErrorMessage,
-  });
-
-const emailSchema = z
-  .email({error : emailErrorMessage})
-
-
-const formSchema = z.object({
-  email: emailSchema,
-  password: passwordSchema,
-  confirmPassword : z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-    error : pwMismatchErrorMessage,
-    path : ['confirmPassword']
-})
-
-
-
+import ErrorToast from "../toasts/error-toast"
+import SuccessToast from "../toasts/success-toast"
+import { createUserFormSchema } from "@/lib/schemas/createuser.schema"
+import { useApiMutation } from "@/hooks/useApiMutation"
 
 export function CreateUserForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver : zodResolver(formSchema),
+    const form = useForm<z.infer<typeof createUserFormSchema>>({
+        resolver : zodResolver(createUserFormSchema),
         defaultValues : {
             email : '',
             password : '',
@@ -75,55 +37,29 @@ export function CreateUserForm({
         }
     })
 
-    const createUserMutation = useMutation({
-        mutationFn : createUser,
-        onSuccess : (data) => {
-            console.log(data)
-            toast(
-                "Vous avez soumis les identifiants suivants", {
-                description: (
-                    <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-                    <code>{JSON.stringify(data, null, 2)}</code>
-                    </pre>
-                ),
-                position: "bottom-right",
-                classNames: {
-                    content: "flex flex-col gap-2",
-                },
-                style: {
-                    "--border-radius": "calc(var(--radius)  + 4px)",
-                } as React.CSSProperties,
-            })
-
-            form.reset()
-        },
-        onError : (error) => {
-            toast.error(error.message)
+    const createUserMutation = useApiMutation(
+        createUser,
+        {
+            onSuccess : (data) => {
+                SuccessToast({
+                    message : "L'utilisateur a été créé avec succès.",
+                    data
+                })
+                form.reset()
+            },
+            onError : (error) => {
+                ErrorToast({error});
+            }
         }
-    })
+    )
 
-    function onSubmit(data: z.infer<typeof formSchema>) {
+    function onSubmit(data: z.infer<typeof createUserFormSchema>) {
 
         createUserMutation.mutate({
             email: data.email,
             password: data.password,
         })
 
-        // console.log(data);
-        // toast("Vous avez soumis les valeurs suivantes", {
-        // description: (
-        //     <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-        //     <code>{JSON.stringify(data, null, 2)}</code>
-        //     </pre>
-        // ),
-        // position: "bottom-right",
-        // classNames: {
-        //     content: "flex flex-col gap-2",
-        // },
-        // style: {
-        //     "--border-radius": "calc(var(--radius)  + 4px)",
-        // } as React.CSSProperties,
-        // })
     }
 
 
@@ -216,8 +152,10 @@ export function CreateUserForm({
             <Button type="button" variant="outline" onClick={() => form.reset()}>
                 Annuler
             </Button>
-            <Button type="submit" form="form-cu">
-                Créer
+            <Button type="submit" form="form-cu" disabled = {createUserMutation.isPending}>
+                {
+                    createUserMutation.isPending ? 'Loading ...' : 'Créer'
+                }
             </Button>
             </Field>
         </CardFooter>
