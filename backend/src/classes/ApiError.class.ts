@@ -27,6 +27,14 @@ export class ApiError extends Error{
         )
     }
 
+    static invalidCredentials(email? : string) : ApiError{
+        return new ApiError(
+            ErrorCodes.INVALID_CREDENTIALS,
+            ErrorMessagesMap[ErrorCodes.INVALID_CREDENTIALS],
+            email ? {email} : undefined
+        )
+    }
+
     static validationError(message?: string, details?: Record<string, unknown>): ApiError {
         return new ApiError(
             ErrorCodes.VALIDATION_ERROR,
@@ -53,6 +61,13 @@ export class ApiError extends Error{
         return new ApiError(
             ErrorCodes.INVALID_JSON_BODY_ERROR,
             message?? ErrorMessagesMap[ErrorCodes.INVALID_JSON_BODY_ERROR]
+        );
+    }
+
+    static unauthorized(message? : string): ApiError {
+        return new ApiError(
+            ErrorCodes.UNAUTHORIZED,
+            message?? ErrorMessagesMap[ErrorCodes.UNAUTHORIZED]
         );
     }
 }

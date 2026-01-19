@@ -68,7 +68,7 @@ export const ErrorMessagesMap: Record<ErrorCode, string> = {
   
   // 401
   UNAUTHORIZED: "Accès non autorisé.",
-  INVALID_CREDENTIALS: "Les identifiants ne sont pas valides.",
+  INVALID_CREDENTIALS: "L'adresse email ou le mot de passe ne sont pas valides.",
   TOKEN_EXPIRED: "Le jeton a expiré.",
   
   // 403

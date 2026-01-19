@@ -10,6 +10,7 @@ import cors from 'cors';
 import apiRouter from './routes/api.routes';
 import { errorHandler } from "./middleware/errorHandler.middleware";
 import { ApiError } from "./classes/ApiError.class";
+import cookieParser from "cookie-parser";
 
 
 console.log('FRONTEND_ORIGIN', FRONTEND_ORIGIN)
@@ -39,6 +40,7 @@ app.use(
     })
 )
 
+app.use(cookieParser());
 app.use(express.json());
 
 app.use((err: unknown, req: express.Request, res: express.Response, next : express.NextFunction) => {

@@ -1,6 +1,6 @@
 import express from 'express';
 import { hashPassword } from '../utils/auth.utils';
-import { CreateUserInput } from '../schemas/user.schema';
+import { CreateUserInput } from '../schemas/auth.schema';
 import {prisma} from '../db/prisma';
 import { Prisma } from '../generated/prisma/client';
 import { ApiResponse } from '../types/response.types';
@@ -36,7 +36,7 @@ export async function createUserHandler(
 
         const user = await prisma.user.create({
             data : {
-                email,
+                email : email.toLocaleLowerCase(),
                 passwordHash,
             }
         })
