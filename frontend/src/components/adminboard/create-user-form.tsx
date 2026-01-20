@@ -21,8 +21,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { createUser } from "@/api/users"
 import ErrorToast from "../toasts/error-toast"
 import SuccessToast from "../toasts/success-toast"
-import { createUserFormSchema } from "@/lib/schemas/createuser.schema"
 import { useApiMutation } from "@/hooks/useApiMutation"
+import { createUserFormSchema } from "@/lib/schemas/createUser.schema"
 
 export function CreateUserForm({
   className,
@@ -87,6 +87,7 @@ export function CreateUserForm({
                                 {...field}
                                 type="email"
                                 id="form-cu-email"
+                                disabled = {createUserMutation.isPending}
                                 aria-invalid={fieldState.invalid}
                                 placeholder="Adresse email"
                                 autoComplete="off"

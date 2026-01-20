@@ -26,6 +26,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { useAuth } from "@/contexts/auth/use-auth"
+import { useState } from "react"
+import { useNavigate } from "react-router"
+import { Button } from "./ui/button"
 
 export function NavUser({
   user,
@@ -37,7 +41,21 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const {requestLogout} = useAuth();
+  const [isRequestingLoggingOut, setIsRequestingLoggingOut] = useState(false);
+  const navigate = useNavigate();
 
+  async function onLogout(){
+    setIsRequestingLoggingOut(true);
+    try{
+      await requestLogout();
+      navigate('/login');
+    }catch(error){
+      console.error(error);
+    }finally{
+      setIsRequestingLoggingOut(false);
+    }
+  }
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -96,9 +114,11 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <IconLogout />
-              Log out
+            <DropdownMenuItem className="p-0">
+              <Button className="w-full" disabled = {isRequestingLoggingOut} onClick={onLogout}>
+                <IconLogout className="text-background"/>
+                {isRequestingLoggingOut ? 'Logging out ...' : 'Log out'}
+              </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -8,3 +8,9 @@ export const routes = [
   { path: "/dashboard", name: "Dashboard", element: Dashboard},
   { path: "/adminboard", name: "Adminboard", element: Adminboard},
 ];
+
+export const queryKeys = {
+  auth : {
+    user : ['auth', 'user'] as const,
+  },
+}
