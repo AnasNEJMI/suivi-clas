@@ -2,11 +2,11 @@ import { fetchUser, login, logout} from '@/api/auth';
 import React from 'react'
 import AuthContext from './auth-context';
 import {useQuery, useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from '@/lib/data';
 import { useApiMutation } from '@/hooks/useApiMutation';
 import SuccessToast from '@/components/toasts/success-toast';
 import ErrorToast from '@/components/toasts/error-toast';
 import { ApiError } from '@/lib/errors/apiError.class';
+import { queryKeys } from '@/lib/query/keys';
 
 
 const AuthProvider = ({children} : {children : React.ReactNode}) => {
@@ -19,6 +19,7 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
     staleTime : 5 * 6 * 1000,
     gcTime : 10 * 60 * 1000
   })
+  
 
 
   const loginMutation = useApiMutation(

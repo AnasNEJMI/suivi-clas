@@ -26,6 +26,7 @@ export async function requireAuthHandler(
         const sessionId = req.cookies[SESSION_CONFIG.COOKIE_NAME];
 
         console.log('sessionId', sessionId)
+        
         ////validation of cookie value
         if(!sessionId){
             throw ApiError.unauthorized('Aucune session trouvée.')
