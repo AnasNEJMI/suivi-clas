@@ -1,4 +1,5 @@
 export const ErrorCodes = {
+    REDIRECT : 'REDIRECT',
     NETWORK_ERROR : 'NETWORK_ERROR',
     // 400 - Bad Request
     VALIDATION_ERROR: 'VALIDATION_ERROR',
@@ -39,6 +40,8 @@ export type ErrorCode = typeof ErrorCodes[keyof typeof ErrorCodes]
 export const ErrorStatusMap: Record<ErrorCode, number> = {
   NETWORK_ERROR : 0,
 
+  REDIRECT : 302,
+
   // 400
   VALIDATION_ERROR: 400,
   INVALID_INPUT: 400,
@@ -74,6 +77,7 @@ export const ErrorStatusMap: Record<ErrorCode, number> = {
 export const ErrorMessagesMap: Record<ErrorCode, string> = {
   NETWORK_ERROR : 'Impossible de se connecter au serveur. Vérifiez votre connexion internet.',
 
+  REDIRECT : '',
   // 400
   VALIDATION_ERROR: "Les données saisies ne sont pas valides.",
   INVALID_INPUT: "Les données saisies ne sont pas valides.",
