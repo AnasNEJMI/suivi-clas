@@ -9,7 +9,7 @@ export async function protectedRouteLoader(){
             queryKey : queryKeys.auth.user,
             queryFn : fetchUser,
             retry : false,
-            staleTime : 5 * 6 * 1000,
+            staleTime : 0,
             gcTime : 10 * 60 * 1000
         })
 
@@ -24,6 +24,7 @@ export async function protectedRouteLoader(){
         }
 
         //connection error  
+        queryClient.setQueryData(queryKeys.auth.user, null);
         console.error('Une erreur de connexion a survenue.', error);
         throw redirect('/login');
     }

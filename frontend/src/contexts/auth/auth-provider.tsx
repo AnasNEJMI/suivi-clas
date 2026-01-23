@@ -51,6 +51,7 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
     {
       onSuccess : () => {
         queryClient.setQueryData(queryKeys.auth.user, null);
+        queryClient.invalidateQueries({queryKey : queryKeys.auth.user});
         queryClient.clear();
         SuccessToast({
           message : `Déconnecté avec succès.`
@@ -58,6 +59,8 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
       },
       onError : (error) => {
         queryClient.setQueryData(queryKeys.auth.user, null);
+        queryClient.invalidateQueries({queryKey : queryKeys.auth.user});
+        queryClient.clear();
         if (error instanceof ApiError) {
           ErrorToast({error});
         } else {

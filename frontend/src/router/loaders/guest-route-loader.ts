@@ -9,7 +9,7 @@ export async function guestRouteLoader(){
             queryKey : queryKeys.auth.user,
             queryFn : fetchUser,
             retry : false,
-            staleTime : 5 * 6 * 1000,
+            staleTime : 0,
             gcTime : 10 * 60 * 1000
         })
 
@@ -24,6 +24,7 @@ export async function guestRouteLoader(){
         }
 
         //connection error
+        queryClient.setQueryData(queryKeys.auth.user, null);
         console.error('Une erreur de connexion a survenue.', error);
         return null;
     }

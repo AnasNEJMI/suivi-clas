@@ -44,7 +44,7 @@ export function LoginForm({
     setIsRequestingLoggingIn(true);
     try{
       await requestLogin(data.email, data.password);
-      navigate('/dashboard');
+      navigate('/dashboard', {replace : true});
     }catch(error){
       console.error(error);
     }finally{
