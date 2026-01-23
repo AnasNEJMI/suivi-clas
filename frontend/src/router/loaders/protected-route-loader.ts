@@ -13,8 +13,6 @@ export async function protectedRouteLoader(){
             gcTime : 10 * 60 * 1000
         })
 
-        console.log('finished fetching from protectedRouteLoader, user : ', user);
-
         if(!user){
             throw redirect(`/login`);
         }

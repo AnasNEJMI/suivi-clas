@@ -1,9 +1,6 @@
 
 import {Request, Response, NextFunction} from 'express';
-import { prisma } from '../db/prisma';
-import { ApiError } from '../classes/ApiError.class';
-import { comparePassword } from '../utils/auth.utils';
-import { createSession, deleteSession } from '../utils/session.utils';
+import { deleteSession } from '../utils/session.utils';
 import { SESSION_CONFIG } from '../configs/session.config';
 import { sendSuccess } from '../utils/response.utils';
 

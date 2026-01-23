@@ -13,7 +13,6 @@ type CreateUserResponse = {
     createdAt : string
 }
 
-
 export async function createUserHandler(
     req: express.Request,
     res: express.Response<ApiResponse<CreateUserResponse>>,

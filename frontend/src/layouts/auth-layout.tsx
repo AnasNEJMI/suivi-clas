@@ -4,7 +4,7 @@ import LoadingSplashScreen from '@/pages/loading-splash-screen';
 import { Outlet } from 'react-router'
 
 const AuthLayout = () => {
-  const {user,isLoading} = useAuth();
+  const {isLoading} = useAuth();
 
   if(isLoading){
     return (
@@ -12,7 +12,6 @@ const AuthLayout = () => {
     )
   }
 
-  console.log('finished loading, user is : ', user)
   return (
     <>
         <Outlet/>

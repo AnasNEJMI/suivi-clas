@@ -57,6 +57,7 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
         })
       },
       onError : (error) => {
+        queryClient.setQueryData(queryKeys.auth.user, null);
         if (error instanceof ApiError) {
           ErrorToast({error});
         } else {
@@ -64,7 +65,6 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
             error: new ApiError('UNKNOWN_ERROR', 'Erreur de connexion', 0),
           });
         }
-        queryClient.setQueryData(queryKeys.auth.user, null);
       },
 
     }

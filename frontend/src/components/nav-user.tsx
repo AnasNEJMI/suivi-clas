@@ -30,6 +30,7 @@ import { useAuth } from "@/contexts/auth/use-auth"
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import { Button } from "./ui/button"
+import { ApiError } from "@/lib/errors/apiError.class"
 
 export function NavUser({
   user,
@@ -51,7 +52,9 @@ export function NavUser({
       await requestLogout();
       navigate('/login');
     }catch(error){
-      console.error(error);
+      if(ApiError.isUnauthorized(error)){
+          navigate('/login')
+      }
     }finally{
       setIsRequestingLoggingOut(false);
     }

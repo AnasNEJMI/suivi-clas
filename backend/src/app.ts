@@ -9,8 +9,9 @@ import express from 'express';
 import cors from 'cors';
 import apiRouter from './routes/api.routes';
 import { errorHandler } from "./middleware/errorHandler.middleware";
-import { ApiError } from "./classes/ApiError.class";
 import cookieParser from "cookie-parser";
+import jsonSyntaxHandler from "./middleware/jsonSyntaxHandler.middleware";
+import routeNotFoundHandler from "./middleware/routeNotFound.middleware";
 
 
 console.log('FRONTEND_ORIGIN', FRONTEND_ORIGIN)
@@ -43,22 +44,11 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
-app.use((err: unknown, req: express.Request, res: express.Response, next : express.NextFunction) => {
-    //if syntax error, return json body
-    if(err instanceof SyntaxError){
-        next(ApiError.invalidJsonBodyError())
-    }else{
-        next(ApiError.internalError());
-    }
-})
-
+app.use(jsonSyntaxHandler)
 
 app.use('/api',apiRouter);
 
-app.use((req: express.Request, res: express.Response, next : express.NextFunction) => {
-    next(ApiError.routeNotFound())
-});
-
+app.use(routeNotFoundHandler);
 app.use(errorHandler);
 
 export default app;

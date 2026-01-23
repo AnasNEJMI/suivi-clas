@@ -13,8 +13,6 @@ export async function guestRouteLoader(){
             gcTime : 10 * 60 * 1000
         })
 
-        console.log('finished fetching from guestRouteLoader, user : ', user);
-
         if(user){
             throw redirect('/dashboard')
         }
