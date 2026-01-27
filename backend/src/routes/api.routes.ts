@@ -10,8 +10,8 @@ import { logoutHandler } from '../controllers/logout.controller';
 
 const router = Router();
 
-router.post('/users', asyncHandler(createUserHandler), validateBody(createUserSchema));
-router.post('/auth/login', asyncHandler(loginHandler), validateBody(loginSchema));
+router.post('/users', validateBody(createUserSchema), asyncHandler(createUserHandler));
+router.post('/auth/login',validateBody(loginSchema), loginHandler);
 router.post('/auth/logout', requireAuthHandler, asyncHandler(logoutHandler));
 router.get('/auth/profile', requireAuthHandler, asyncHandler(profileHandler));
 

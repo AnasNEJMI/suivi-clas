@@ -7,5 +7,10 @@ export default async function routeNotFoundHandler(
     res : Response,
     next : NextFunction,
 ){
-    next(ApiError.routeNotFound())
+    console.log(err);
+    if(err instanceof ApiError){
+        next(err);
+    }else{
+        next(ApiError.routeNotFound())
+    }
 }

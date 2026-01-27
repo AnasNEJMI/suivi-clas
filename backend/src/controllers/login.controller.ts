@@ -6,6 +6,7 @@ import { comparePassword } from '../utils/auth.utils';
 import { createSession } from '../utils/session.utils';
 import { SESSION_CONFIG } from '../configs/session.config';
 import { sendSuccess } from '../utils/response.utils';
+import { PrismaClientKnownRequestError } from '../generated/prisma/internal/prismaNamespace';
 
 type loginInput = {
     email : string,
@@ -27,7 +28,7 @@ export async function loginHandler(
 ){
     try{
         const {email, password} = req.body as loginInput;
-        
+
         //validate email
         const user = await prisma.user.findUnique({
             where : {email : email.toLocaleLowerCase()}
@@ -69,6 +70,10 @@ export async function loginHandler(
             }
         )
     }catch(error){
-        next(error);
+        if(error instanceof PrismaClientKnownRequestError){
+            next(ApiError.internalError())
+        }else{
+            next(error);
+        }
     }
 }

@@ -12,11 +12,28 @@ import { errorHandler } from "./middleware/errorHandler.middleware";
 import cookieParser from "cookie-parser";
 import jsonSyntaxHandler from "./middleware/jsonSyntaxHandler.middleware";
 import routeNotFoundHandler from "./middleware/routeNotFound.middleware";
+import helmet from "helmet";
 
 
 console.log('FRONTEND_ORIGIN', FRONTEND_ORIGIN)
 
 const app = express();
+
+// app.use(helmet({
+//     contentSecurityPolicy : {
+//         directives : {
+//             defaultSrc: ["'self'"],
+//             styleSrc: ["'self'", "'unsafe-inline'"],
+//             scriptSrc: ["'self'"],
+//             imgSrc: ["'self'", "data:", "https:"],
+//         }
+//     },
+//     hsts: {
+//         maxAge: 31536000,
+//         includeSubDomains: true,
+//         preload: true,
+//     }
+// }))
 
 app.use(
     cors({
