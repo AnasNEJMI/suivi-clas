@@ -58,10 +58,10 @@ export function LoginForm({
         <CardHeader>
           <CardTitle>Se connecter</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Soumettre votre email et votre mot de passe
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="mt-2">
           <form id = 'form-login' onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>
               <Controller
@@ -121,15 +121,15 @@ export function LoginForm({
           </form>
         </CardContent>
         <CardFooter>
-          <Field orientation="horizontal">
-          <Button type="button" variant="outline" onClick={() => form.reset()}>
-              Annuler
-          </Button>
-          <Button type="submit" form="form-login" disabled = {isRequestingLoggingIn}>
-              {
-                isRequestingLoggingIn ? 'Loading ...' : 'Créer'
-              }
-          </Button>
+          <Field orientation="horizontal" className="flex">
+            <Button size='lg' type="button" variant="outline" onClick={() => form.reset()} className="font-medium text-base py-6 flex-1">
+                Annuler
+            </Button>
+            <Button type="submit" size='lg' form="form-login" disabled = {isRequestingLoggingIn} className="font-medium text-base py-6 flex-1">
+                {
+                  isRequestingLoggingIn ? 'Chargement ...' : 'Se Connecter'
+                }
+            </Button>
           </Field>
         </CardFooter>
       </Card>

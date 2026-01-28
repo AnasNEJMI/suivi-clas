@@ -8,8 +8,8 @@
     "test:coverage": "vitest run --coverage",
     "prisma:generate": "prisma generate",
     "dev": "npm run prisma:generate && tsx --watch src/server.ts",
-    "build": "npm run prisma:generate && tsc tsc",
-    "start": "node  dist/app.js"
+    "build": "npm run prisma:generate && tsc",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "AnasNEJMI",
