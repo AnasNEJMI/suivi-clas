@@ -1,8 +1,8 @@
 import express from 'express';
-import { ApiError } from '../classes/ApiError.class';
+import { ApiError } from '../classes/ApiError.class.js';
 import { ZodError } from 'zod';
-import { ErrorCodes } from '../constants/errors.constants';
-import { sendError } from '../utils/response.utils';
+import { ErrorCodes } from '../constants/errors.constants.js';
+import { sendError } from '../utils/response.utils.js';
 
 export function errorHandler(
     err : Error,

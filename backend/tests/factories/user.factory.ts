@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
-import { hashPassword } from '../../src/utils/auth.utils';
-import { testPrisma } from '../helpers/testDb';
+import { hashPassword } from '../../src/utils/auth.utils.js';
+import { testPrisma } from '../helpers/testDb.js';
 
 export const UserFactory = {
     async createUser(

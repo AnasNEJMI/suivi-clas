@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ApiError } from "../classes/ApiError.class";
+import { ApiError } from "../classes/ApiError.class.js";
 
 export default async function routeNotFoundHandler(
     err : unknown,

@@ -7,13 +7,13 @@ if (!FRONTEND_ORIGIN) {
 
 import express from 'express';
 import cors from 'cors';
-import apiRouter from './routes/api.routes';
-import { errorHandler } from "./middleware/errorHandler.middleware";
+import apiRouter from './routes/api.routes.js';
+import { errorHandler } from "./middleware/errorHandler.middleware.js";
 import cookieParser from "cookie-parser";
-import jsonSyntaxHandler from "./middleware/jsonSyntaxHandler.middleware";
-import routeNotFoundHandler from "./middleware/routeNotFound.middleware";
+import jsonSyntaxHandler from "./middleware/jsonSyntaxHandler.middleware.js";
+import routeNotFoundHandler from "./middleware/routeNotFound.middleware.js";
 import helmet from "helmet";
-import { helmetConfig } from "./configs/helmet.config";
+import { helmetConfig } from "./configs/helmet.config.js";
 
 
 console.log('FRONTEND_ORIGIN', FRONTEND_ORIGIN)

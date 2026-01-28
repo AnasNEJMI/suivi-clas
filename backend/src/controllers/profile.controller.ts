@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { sendSuccess } from "../utils/response.utils";
+import { sendSuccess } from "../utils/response.utils.js";
 
 type profileSuccessResponse = {
     user : {

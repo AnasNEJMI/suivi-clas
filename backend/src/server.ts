@@ -1,4 +1,4 @@
-import app from "./app";
+import app from "./app.js";
 
 const SERVER_PORT = process.env.SERVER_PORT;
 if (!SERVER_PORT) {

@@ -1,11 +1,11 @@
 import express from 'express';
-import { hashPassword } from '../utils/auth.utils';
-import { CreateUserInput } from '../schemas/auth.schema';
-import {prisma} from '../db/prisma';
-import { Prisma } from '../generated/prisma/client';
-import { ApiResponse } from '../types/response.types';
-import { ApiError } from '../classes/ApiError.class';
-import { sendCreated } from '../utils/response.utils';
+import { hashPassword } from '../utils/auth.utils.js';
+import { CreateUserInput } from '../schemas/auth.schema.js';
+import {prisma} from '../db/prisma.js';
+import { Prisma } from '../generated/prisma/client.js';
+import { ApiResponse } from '../types/response.types.js';
+import { ApiError } from '../classes/ApiError.class.js';
+import { sendCreated } from '../utils/response.utils.js';
 
 type CreateUserResponse = {
     id : number,

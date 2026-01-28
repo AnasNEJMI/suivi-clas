@@ -1,8 +1,8 @@
 
 import {Request, Response, NextFunction} from 'express';
-import { deleteSession } from '../utils/session.utils';
-import { SESSION_CONFIG } from '../configs/session.config';
-import { sendSuccess } from '../utils/response.utils';
+import { deleteSession } from '../utils/session.utils.js';
+import { SESSION_CONFIG } from '../configs/session.config.js';
+import { sendSuccess } from '../utils/response.utils.js';
 
 
 type logoutResponse = {

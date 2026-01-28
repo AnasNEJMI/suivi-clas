@@ -2,6 +2,7 @@
   "name": "ready",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "vitest",
     "test:run": "vitest run",

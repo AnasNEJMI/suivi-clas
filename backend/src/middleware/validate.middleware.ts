@@ -1,6 +1,6 @@
 import express from 'express';
 import z, { ZodError } from "zod";
-import { ApiError } from '../classes/ApiError.class';
+import { ApiError } from '../classes/ApiError.class.js';
 
 type ValidationTarget = 'body' | 'query' | 'params';
 

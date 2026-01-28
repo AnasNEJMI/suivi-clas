@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { ApiError } from '../../../src/classes/ApiError.class';
-import { ErrorCodes, ErrorMessagesMap, ErrorStatusMap } from '../../../src/constants/errors.constants';
+import { ApiError } from '../../../src/classes/ApiError.class.js';
+import { ErrorCodes, ErrorMessagesMap, ErrorStatusMap } from '../../../src/constants/errors.constants.js';
 
 describe('ApiError', () => {
     describe('constructor', () => {

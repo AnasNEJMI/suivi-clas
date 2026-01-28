@@ -1,12 +1,12 @@
 
 import {Request, Response, NextFunction} from 'express';
-import { prisma } from '../db/prisma';
-import { ApiError } from '../classes/ApiError.class';
-import { comparePassword } from '../utils/auth.utils';
-import { createSession } from '../utils/session.utils';
-import { SESSION_CONFIG } from '../configs/session.config';
-import { sendSuccess } from '../utils/response.utils';
-import { PrismaClientKnownRequestError } from '../generated/prisma/internal/prismaNamespace';
+import { prisma } from '../db/prisma.js';
+import { ApiError } from '../classes/ApiError.class.js';
+import { comparePassword } from '../utils/auth.utils.js';
+import { createSession } from '../utils/session.utils.js';
+import { SESSION_CONFIG } from '../configs/session.config.js';
+import { sendSuccess } from '../utils/response.utils.js';
+import { PrismaClientKnownRequestError } from '../generated/prisma/internal/prismaNamespace.js';
 
 type loginInput = {
     email : string,

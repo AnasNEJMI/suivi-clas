@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { createUserHandler } from '../controllers/createUser.controller';
-import {validateBody } from '../middleware/validate.middleware';
-import { createUserSchema, loginSchema } from '../schemas/auth.schema';
-import { asyncHandler } from '../middleware/asyncHandler.middleware';
-import { loginHandler } from '../controllers/login.controller';
-import { requireAuthHandler } from '../middleware/auth.middleware';
-import { profileHandler } from '../controllers/profile.controller';
-import { logoutHandler } from '../controllers/logout.controller';
+import { createUserHandler } from '../controllers/createUser.controller.js';
+import {validateBody } from '../middleware/validate.middleware.js';
+import { createUserSchema, loginSchema } from '../schemas/auth.schema.js';
+import { asyncHandler } from '../middleware/asyncHandler.middleware.js';
+import { loginHandler } from '../controllers/login.controller.js';
+import { requireAuthHandler } from '../middleware/auth.middleware.js';
+import { profileHandler } from '../controllers/profile.controller.js';
+import { logoutHandler } from '../controllers/logout.controller.js';
 
 const router = Router();
 

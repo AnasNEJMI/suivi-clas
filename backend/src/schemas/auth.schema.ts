@@ -1,5 +1,5 @@
 import z from "zod";
-import { validationMessages } from "../utils/auth.utils";
+import { validationMessages } from "../utils/auth.utils.js";
 
 /////////////////CREATE USER///////////////////////
 

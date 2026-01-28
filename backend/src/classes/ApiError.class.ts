@@ -1,4 +1,4 @@
-import { ErrorCode, ErrorCodes, ErrorMessagesMap, ErrorStatusMap } from "../constants/errors.constants";
+import { ErrorCode, ErrorCodes, ErrorMessagesMap, ErrorStatusMap } from "../constants/errors.constants.js";
 
 export class ApiError extends Error{
     public readonly code: ErrorCode;

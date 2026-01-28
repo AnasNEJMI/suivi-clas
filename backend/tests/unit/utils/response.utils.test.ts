@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { Response } from 'express';
-import { sendSuccess, sendError, sendCreated } from '../../../src/utils/response.utils';
-import { ErrorCodes, ErrorMessagesMap } from '../../../src/constants/errors.constants';
+import { sendSuccess, sendError, sendCreated } from '../../../src/utils/response.utils.js';
+import { ErrorCodes, ErrorMessagesMap } from '../../../src/constants/errors.constants.js';
 import { success } from 'zod';
 
 describe('Response Utils', () => {

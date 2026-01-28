@@ -1,6 +1,6 @@
 import express from 'express';
-import { ErrorCode, ErrorStatusMap } from '../constants/errors.constants';
-import { ApiErrorResponse, ApiSuccessResponse } from '../types/response.types';
+import { ErrorCode, ErrorStatusMap } from '../constants/errors.constants.js';
+import { ApiErrorResponse, ApiSuccessResponse } from '../types/response.types.js';
 
 export function sendError(
     res : express.Response,

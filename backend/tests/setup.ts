@@ -1,5 +1,5 @@
 import { beforeAll, afterAll, afterEach } from 'vitest';
-import {connectDb, disconnectDb, cleanDb} from './helpers/testDb'
+import {connectDb, disconnectDb, cleanDb} from './helpers/testDb.js'
 
 beforeAll(async () => {
     await connectDb();

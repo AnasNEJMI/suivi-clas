@@ -1,6 +1,6 @@
 import { addDays } from "date-fns";
-import { SESSION_CONFIG } from "../configs/session.config";
-import { prisma } from "../db/prisma";
+import { SESSION_CONFIG } from "../configs/session.config.js";
+import { prisma } from "../db/prisma.js";
 
 export async function createSession(
     userId : number,
