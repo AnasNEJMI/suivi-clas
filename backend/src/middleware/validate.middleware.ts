@@ -11,19 +11,15 @@ export function validate(schema : z.ZodType, target : ValidationTarget = 'body')
         next : express.NextFunction
     ) => {
         try{
-            console.log('ps');
             const data = req[target];
-            console.log('data : ',data);
-            
+
             const result = schema.safeParse(data);
-            console.log('safeparse data  : ',result);
-            
+
             if(!result.success){
                 throw result.error;
             }
 
             req[target] = result.data;
-            console.log('req[target] : ',result.data);
 
             next();
         }catch(err){

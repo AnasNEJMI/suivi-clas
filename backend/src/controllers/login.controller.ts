@@ -71,6 +71,7 @@ export async function loginHandler(
         )
     }catch(error){
         if(error instanceof PrismaClientKnownRequestError){
+            console.log('prisma error : ', error);
             next(ApiError.internalError())
         }else{
             next(error);

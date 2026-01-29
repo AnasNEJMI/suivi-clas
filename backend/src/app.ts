@@ -12,7 +12,6 @@ import { errorHandler } from "./middleware/errorHandler.middleware.js";
 import cookieParser from "cookie-parser";
 import jsonSyntaxHandler from "./middleware/jsonSyntaxHandler.middleware.js";
 import routeNotFoundHandler from "./middleware/routeNotFound.middleware.js";
-import helmet from "helmet";
 import { helmetConfig } from "./configs/helmet.config.js";
 
 
