@@ -12,6 +12,9 @@ import Adminboard from './pages/adminboard.tsx'
 import AdminboardCreateUser from './components/adminboard/adminboard-create-user.tsx'
 import { guestRouteLoader } from './router/loaders/guest-route-loader.ts'
 import { protectedRouteLoader } from './router/loaders/protected-route-loader.ts'
+import About from './pages/about.tsx'
+import Contact from './pages/contact.tsx'
+import Profile from './pages/profile.tsx'
 
 
 
@@ -21,8 +24,16 @@ const router = createBrowserRouter([
     Component : RootLayout,
     children : [
       {index : true, Component : Home},
+      {path : 'contact', Component : Contact},
+      {path : 'a-propos', Component : About},
       {path : 'login', Component : Login, loader : guestRouteLoader,  shouldRevalidate: () => true,},
       {path : 'signup', Component : SignUp},
+      {
+        path : 'profile',
+        Component : Profile,
+        loader : protectedRouteLoader,
+        shouldRevalidate: () => true,
+      },
       {
         path : 'dashboard',
         Component : Dashboard,

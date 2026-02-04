@@ -1,5 +1,5 @@
 import {queryClient } from "@/lib/query/client";
-import { redirect } from "react-router";
+import {replace } from "react-router";
 import { queryKeys } from "@/lib/query/keys";
 import { fetchUser } from "@/api/auth";
 
@@ -9,12 +9,12 @@ export async function guestRouteLoader(){
             queryKey : queryKeys.auth.user,
             queryFn : fetchUser,
             retry : false,
-            staleTime : 0,
+            staleTime : 10 * 60 * 1000,
             gcTime : 10 * 60 * 1000
         })
 
         if(user){
-            throw redirect('/dashboard')
+            throw replace('/dashboard')
         }
 
         return {user};

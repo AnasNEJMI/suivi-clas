@@ -1,5 +1,14 @@
+@font-face {
+  font-family: Outfit;
+  font-style: normal;
+  font-display: swap;
+  src: url("../src/assets/fonts/Outfit.ttf") format("ttf");
+}
+
 @import "tailwindcss";
 @import "tw-animate-css";
+
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -64,6 +73,7 @@
 }
 
 @theme inline {
+  --font-outfit : Outfit, "sans-serif";
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -144,5 +154,58 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image: url("src/assets/checkered-2.png");
+    background-repeat: repeat;
+  }
+
+  h1,h2,h3,h4,h5,h6,p,span{
+      @apply font-outfit  
+  }
+
+  h2{
+    @apply font-semibold
+  }
+
+  ::-webkit-scrollbar
+  {
+    width: 6px;  /* for vertical scrollbars */
+    height: 6px; /* for horizontal scrollbars */
+  }
+
+  ::-webkit-scrollbar-track
+  {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  ::-webkit-scrollbar-thumb
+  {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+@layer utilities{
+  .checkered-bg{
+    background-image: url("src/assets/checkered.png");
+    background-repeat: repeat;
+  }
+
+  .hero-clipped-left{
+    clip-path: polygon(50% 75%, 100% 0, 100% 100%, 50% 100%);
+  }
+
+  .noise-bg{
+    position: relative;
+    overflow: hidden;
+    ::after{
+      content: '';
+      position: absolute;
+      top : 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-image: url("src/assets/noise-bg.png");
+      mix-blend-mode: overlay;
+      opacity:1;
+    }
   }
 }

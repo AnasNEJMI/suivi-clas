@@ -44,7 +44,7 @@ export function LoginForm({
     setIsRequestingLoggingIn(true);
     try{
       await requestLogin(data.email, data.password);
-      navigate('/dashboard', {replace : true});
+      navigate('/profile', {replace : true});
     }catch(error){
       console.error(error);
     }finally{
@@ -54,11 +54,11 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+      <Card className=" bg-linear-150 from-25% from-lime-50 to-95% to-lime-100 border-lime-400">
         <CardHeader>
           <CardTitle>Se connecter</CardTitle>
           <CardDescription>
-            Soumettre votre email et votre mot de passe
+            Soumettre votre identifiant et votre mot de passe pour accéder à votre espace personnel
           </CardDescription>
         </CardHeader>
         <CardContent className="mt-2">
@@ -79,6 +79,7 @@ export function LoginForm({
                       aria-invalid={fieldState.invalid}
                       autoComplete="email"
                       required
+                      className="bg-white focus-visible:ring-lime-500/50 focus-visible:border-lime-200  border-lime-200"
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -109,6 +110,7 @@ export function LoginForm({
                       aria-invalid={fieldState.invalid}
                       autoComplete="current-password"
                       required
+                      className="bg-white focus-visible:ring-lime-500/50 focus-visible:border-lime-200  border-lime-200"
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />

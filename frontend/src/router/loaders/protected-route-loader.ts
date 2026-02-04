@@ -1,7 +1,7 @@
 import { fetchUser } from "@/api/auth";
 import {queryClient } from "@/lib/query/client";
 import { queryKeys } from "@/lib/query/keys";
-import { redirect} from "react-router";
+import {replace} from "react-router";
 
 export async function protectedRouteLoader(){
     try{
@@ -9,12 +9,12 @@ export async function protectedRouteLoader(){
             queryKey : queryKeys.auth.user,
             queryFn : fetchUser,
             retry : false,
-            staleTime : 0,
+            staleTime : 10 * 60 * 1000,
             gcTime : 10 * 60 * 1000
         })
 
         if(!user){
-            throw redirect(`/login`);
+            throw replace(`/login`);
         }
 
         return {user};
@@ -26,6 +26,6 @@ export async function protectedRouteLoader(){
         //connection error  
         queryClient.setQueryData(queryKeys.auth.user, null);
         console.error('Une erreur de connexion a survenue.', error);
-        throw redirect('/login');
+        throw replace('/login');
     }
 }

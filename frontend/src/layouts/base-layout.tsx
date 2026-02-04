@@ -5,7 +5,7 @@ const BaseLayout = ({children} : {children : React.ReactNode}) => {
   return (
      <>
       {/* <Navigation/> */}
-      <main className='relative z-10 w-full min-h-screen flex flex-col items-center px-6'>
+      <main className='relative z-10 w-full min-h-screen flex flex-col items-center overflow-hidden'>
         {children}
       </main>
     </>
