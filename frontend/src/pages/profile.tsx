@@ -5,10 +5,8 @@ import { CompetencesMethodologiques } from '@/components/profile/competences-tra
 import Presence from '@/components/profile/presence';
 import SubjectsHistory from '@/components/profile/subjets-history';
 import Todo from '@/components/profile/todo';
-import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/auth/use-auth';
 import BaseLayout from '@/layouts/base-layout';
-import { CheckCircle, XCircle } from 'lucide-react';
 import { Navigate, useLoaderData } from 'react-router';
 
 const data = [
@@ -114,13 +112,13 @@ const Profile = () => {
     const {user : contextUser, isAuthenticated} = useAuth();
 
     if(!loaderData?.user && !isAuthenticated){
-        return <Navigate to='/login' replace/>;
+        return <Navigate to='/' replace/>;
     }
 
     const user = loaderData.user || contextUser;
 
     if(!user){
-        return <Navigate to='/login' replace/>;
+        return <Navigate to='/' replace/>;
     }
 
   return (

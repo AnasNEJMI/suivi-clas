@@ -50,10 +50,10 @@ const HomeHero = () => {
                     isAuthenticated &&
                     <div className='border rounded-xl p-6 bg-linear-150 from-25% from-lime-50 to-95% to-lime-100 border-lime-400'>
                         <h2 className='text-3xl'>Bienvenue</h2>
-                        <p className='text-muted-foreground mt-2'>Accéder à votre tableau de bord</p>
+                        <p className='text-muted-foreground mt-2'>Accéder à votre profile</p>
                         <Button size='lg' className='py-6 text-lg w-full mt-6'>
-                            <Link to='/dashboard'>
-                                Tableau de bord
+                            <Link to='/profile'>
+                                Profile
                             </Link>
                         </Button>
                     </div>

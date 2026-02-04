@@ -11,6 +11,7 @@ interface PresenceProps {
 
 const Presence = ({className, data, student} : PresenceProps) => {
     const presencePercentage = (data : bilanDataType[]) => {
+        console.log(data);
         return '75%';
     }
   return (

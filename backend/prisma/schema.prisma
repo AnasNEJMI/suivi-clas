@@ -13,14 +13,113 @@ datasource db {
   provider = "postgresql"
 }
 
+
 model User {
   id           Int      @id @default(autoincrement())
-  email        String   @unique
+  username     String   @unique
+  firstName    String   @default("john")
+  lastName     String   @default("doe")
   passwordHash String
+
+  //characteristics
+  classId      Int?
+  class        Class?    @relation(fields : [classId], references: [id], onDelete : SetNull)
+  gender       UserGender @default(m) //gender is either 'm' | 'f'
+  role         UserRole @default(student) //role is either 'admin' | 'org' | 'student'
+
+  //additional info
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  lastVisit    DateTime @default(now()) //last time the user visited their profile page
+
+  sessions Session[] //a user can have multiple sessions
+  bilans Bilan[] //a user can have multiple bilans
+  skill Skill? //a user can have at most one skill entry
+
+  @@index(classId)
+}
+
+model Class{
+  id            Int      @id @default(autoincrement())
+  label         String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  users User[] //a class can have multiple users
+  lessons Lesson[] //a class can have multiple lessons
+}
+
+model Bilan{
+  id        Int       @id @default(autoincrement())
+
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id], onDelete : Cascade)
+
+  subject   SubjectType @default(math)
+
+  lessonId  Int?
+  lesson    Lesson?      @relation(fields: [lessonId], references: [id], onDelete : SetNull)
+
+  date      DateTime 
+  summary   String
+
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  sessions Session[] //a user can have multiple sessions
+   @@index([userId])
+}
+
+model Skill{
+  id            Int       @id @default(autoincrement())
+  userId        Int       @unique
+  user          User      @relation(fields: [userId], references: [id], onDelete : Cascade)
+  ponctuality   Int       @default(0)
+  preparation   Int       @default(0)
+  autonomy      Int       @default(0)
+  organisation  Int       @default(0)
+  regularity    Int       @default(0)
+  discipline    Int       @default(0)
+  respect       Int       @default(0)
+
+  positive      String    @default("")
+  negative      String    @default("")
+  improvements  String    @default("")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Doc{
+  id           Int       @id @default(autoincrement())
+
+  lessonId      Int
+  lesson        Lesson    @relation(fields : [lessonId], references: [id], onDelete : Cascade)
+
+  type         DocType @default(fiche) //type can be either 'fiche' | 'qcm' | 'exercices'
+  link         String  @default("")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  //@@unique([type, link])
+}
+
+model Lesson{
+  id           Int       @id @default(autoincrement())
+
+  classId      Int
+  class        Class    @relation(fields : [classId], references: [id], onDelete : Cascade)
+  
+  subject      SubjectType @default(math)
+  
+  label        String @default("")
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  bilans Bilan[] // a lesson can have mutliple bilans
+  docs Doc[] // a lesson can have mutliple docs
+  @@index([subject])
+  //@@unique([classId, subject, label])
 }
 
 model Session {
@@ -39,4 +138,29 @@ model Session {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+
+
+////////////////////////////////////////////
+
+enum UserRole {
+  student
+  admin
+  org
+}
+enum UserGender {
+  m
+  f
+}
+enum DocType {
+  fiche
+  qcm
+  exercices
+}
+
+enum SubjectType {
+  math
+  pc
+  svt
 }
