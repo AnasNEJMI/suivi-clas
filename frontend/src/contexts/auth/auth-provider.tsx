@@ -11,7 +11,7 @@ import { queryKeys } from '@/lib/query/keys';
 
 const AuthProvider = ({children} : {children : React.ReactNode}) => {
   const queryClient = useQueryClient();
-  
+
   const {data : user = null, isLoading, refetch} = useQuery({
     queryKey : queryKeys.auth.user,
     queryFn : fetchUser,
@@ -29,7 +29,7 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
         console.log('login success : ', data);
         queryClient.setQueryData(queryKeys.auth.user, data.user);
         SuccessToast({
-          message : `Bienvenue ${data.user.email}`,
+          message : `Bienvenue ${data.user.firstName}`,
           data : data.user
         })
       },
@@ -37,6 +37,7 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
         if (error instanceof ApiError) {
           ErrorToast({error});
         } else {
+          console.log('unknown error : ', error);
           ErrorToast({
             error: new ApiError('UNKNOWN_ERROR', 'Erreur de connexion', 0),
           });
@@ -73,8 +74,8 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
     }
   )
 
-  const requestLogin = async (email : string, password : string) : Promise<void> => {
-    await loginMutation.mutateAsync({email, password})
+  const requestLogin = async (username : string, password : string) : Promise<void> => {
+    await loginMutation.mutateAsync({username, password})
   }
   const requestLogout = async () : Promise<void> => {
     await logoutMutation.mutateAsync()
@@ -87,7 +88,7 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
       value={{
         user,
         isLoading,
-        isAuthenticated : !!user,
+        isAuthenticated : !!user && !isLoading,
         requestLogin,
         requestLogout,
         requestRefetchUser

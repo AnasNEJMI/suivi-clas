@@ -126,7 +126,7 @@ const Profile = () => {
         <Header/>
         <section className='w-full max-w-7xl pt-32 md:pt-48 px-6'>
             <span className='text-sm opacity-75 px-2 py-1 rounded-full bg-lime-200 text-lime-700'>Dernière connexion : 01/05/2026</span>
-            <h1 className='font-semibold text-4xl mt-4'>Bienvenue Bilal,</h1>
+            <h1 className='font-semibold text-4xl mt-4'>Bienvenue {user.username} !👋</h1>
             <p className='text-base mt-4 w-full text-balance opacity-65 max-w-md'>{profileDesc}</p>
         </section>
         <section className='relative w-full max-w-7xl mt-12 lg:mt-20 px-6 py-2 flex flex-col'>

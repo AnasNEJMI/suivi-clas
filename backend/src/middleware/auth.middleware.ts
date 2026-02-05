@@ -3,15 +3,12 @@ import { ApiError } from '../classes/ApiError.class.js';
 import { SESSION_CONFIG } from '../configs/session.config.js';
 import { getSession } from '../utils/session.utils.js';
 import { isValidUUID } from '../utils/auth.utils.js';
+import { User } from '../types/data.types.js';
 
 declare global {
   namespace Express {
     interface Request {
-      user?: {
-        id: number;
-        email: string;
-        createdAt: Date;
-      };
+      user?: User,
       sessionId?: string;
     }
   }

@@ -7,17 +7,16 @@ import { createSession } from '../utils/session.utils.js';
 import { SESSION_CONFIG } from '../configs/session.config.js';
 import { sendSuccess } from '../utils/response.utils.js';
 import { PrismaClientKnownRequestError } from '../generated/prisma/internal/prismaNamespace.js';
+import { UserGender } from '../generated/prisma/enums.js';
+import { User } from '../types/data.types.js';
 
 type loginInput = {
-    email : string,
+    username : string,
     password : string,
 }
 
 type loginSuccessResponse = {
-    user : {
-        id  : number,
-        email : string
-    }
+    user : User
 }
 
 
@@ -27,12 +26,25 @@ export async function loginHandler(
     next : NextFunction
 ){
     try{
-        const {email, password} = req.body as loginInput;
+        const {username, password} = req.body as loginInput;
+        console.log('username :', username);
+        console.log('password :', password);
 
         //validate email
         const user = await prisma.user.findUnique({
-            where : {email : email.toLocaleLowerCase()}
+            where : {
+                username : username
+            },
+            include : {
+                class : {
+                    select : {
+                        label : true,
+                    }
+                }
+            }
         });
+
+        console.log('user retrieved : ',user);
         
         if(!user){
             throw ApiError.invalidCredentials();
@@ -65,7 +77,12 @@ export async function loginHandler(
             {
                 user : {
                     id : user.id,
-                    email : user.email
+                    username : user.username,
+                    firstName : user.firstName,
+                    lastName : user.lastName,
+                    gender : user.gender === UserGender.f? 'f' : 'm',
+                    class : user.class,
+                    createdAt : user.createdAt,
                 }
             }
         )

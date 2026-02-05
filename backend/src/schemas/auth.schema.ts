@@ -3,8 +3,8 @@ import { validationMessages } from "../utils/auth.utils.js";
 
 /////////////////CREATE USER///////////////////////
 
-const createUserEmailSchema = z
-  .email(validationMessages.createUser.emailError);
+const createUserUsernameSchema = z
+  .string().min(1,validationMessages.createUser.usernameError);
 
 const createUserPasswordSchema = z
   .string()
@@ -16,7 +16,7 @@ const createUserPasswordSchema = z
   .regex(/[!@#$%^&*]/, validationMessages.createUser.pwSpecialCharacterError);
 
   export const createUserSchema = z.object({
-    email: createUserEmailSchema,
+    email: createUserUsernameSchema,
     password: createUserPasswordSchema,
   });
 
@@ -26,15 +26,15 @@ export type CreateUserInput = z.infer<typeof createUserSchema>;
 
 //////////////////////////LOGIN///////////////////////////
 
-const loginEmailSchema = z
-  .email(validationMessages.login.emailError);
+const loginUsernameSchema = z
+  .string().min(1, validationMessages.login.usernameError);
 
 const loginPasswordSchema = z
   .string()
   .min(1, validationMessages.login.pwError);
 
 export const loginSchema = z.object({
-  email : loginEmailSchema,
+  username : loginUsernameSchema,
   password : loginPasswordSchema
 });
 

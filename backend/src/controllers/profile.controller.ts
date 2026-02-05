@@ -1,12 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { sendSuccess } from "../utils/response.utils.js";
+import { User } from "../types/data.types.js";
 
 type profileSuccessResponse = {
-    user : {
-        id : number,
-        email : string,
-        createdAt : string,
-    }
+    user : User
 }
 
 export async function profileHandler(
@@ -23,8 +20,13 @@ export async function profileHandler(
             {
                 user : {
                     id : user.id,
-                    email : user.email,
-                    createdAt : user.createdAt.toISOString(),
+                    username : user.username,
+                    firstName : user.firstName,
+                    lastName : user.lastName,
+                    gender : user.gender,
+                    class : user.class? {label : user.class.label} : null,
+                    createdAt : user.createdAt,
+
                 }
             }
         )

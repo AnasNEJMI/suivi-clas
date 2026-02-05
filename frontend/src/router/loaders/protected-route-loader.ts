@@ -14,10 +14,10 @@ export async function protectedRouteLoader(){
         })
 
         if(!user){
-            throw replace(`/login`);
+            throw replace(`/`);
         }
 
-        return {user};
+        return user;
     }catch(error){
         if(error instanceof Response && error.status === 302){
             throw error;
@@ -26,6 +26,6 @@ export async function protectedRouteLoader(){
         //connection error  
         queryClient.setQueryData(queryKeys.auth.user, null);
         console.error('Une erreur de connexion a survenue.', error);
-        throw replace('/login');
+        throw replace('/');
     }
 }

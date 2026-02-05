@@ -1,13 +1,8 @@
+import type { User } from "@/api/auth";
 import { createContext } from "react";
 
-export type user = {
-  id : number,
-  email : string,
-  createdAt : string,
-}
-
 type AuthContextType = {
-  user : user | null,
+  user : User | null,
   isLoading : boolean,
   isAuthenticated : boolean,
   requestLogin: (email : string, password : string) => Promise<void>,

@@ -34,7 +34,7 @@ export function LoginForm({
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver : zodResolver(loginFormSchema),
     defaultValues : {
-      email : '',
+      username : '',
       password : ''
     }
   })
@@ -43,7 +43,7 @@ export function LoginForm({
   async function onSubmit(data : z.infer<typeof loginFormSchema>){
     setIsRequestingLoggingIn(true);
     try{
-      await requestLogin(data.email, data.password);
+      await requestLogin(data.username, data.password);
       navigate('/profile', {replace : true});
     }catch(error){
       console.error(error);
@@ -65,19 +65,19 @@ export function LoginForm({
           <form id = 'form-login' onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>
               <Controller
-                name = 'email'
+                name = 'username'
                 control={form.control}
                 render = {({field, fieldState}) => (
                   <Field data-invalid = {fieldState.invalid}>
-                    <FieldLabel htmlFor="form-login-email">Email</FieldLabel>
+                    <FieldLabel htmlFor="form-login-username">Identifiant</FieldLabel>
                     <Input
                       {...field}
-                      id="form-login-email"
-                      type="email"
-                      placeholder="Adresse email"
+                      id="form-login-username"
+                      type="text"
+                      placeholder="Identifiant"
                       disabled = {isRequestingLoggingIn}
                       aria-invalid={fieldState.invalid}
-                      autoComplete="email"
+                      autoComplete='off'
                       required
                       className="bg-white focus-visible:ring-lime-500/50 focus-visible:border-lime-200  border-lime-200"
                     />

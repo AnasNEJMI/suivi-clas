@@ -20,7 +20,7 @@ export async function createSession(
             user : {
                 select : {
                     id : true,
-                    email : true,
+                    username : true,
                     createdAt : true,
                 }
             }
@@ -37,7 +37,11 @@ export async function getSession(sessionId : string){
             user : {
                 select : {
                     id : true,
-                    email : true,
+                    username : true,
+                    firstName : true,
+                    lastName : true,
+                    gender : true,
+                    class : true,
                     createdAt : true,
                 }
             }

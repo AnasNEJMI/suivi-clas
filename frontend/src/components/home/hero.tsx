@@ -1,17 +1,26 @@
 import { Button } from '../ui/button'
 import { useAuth } from '@/contexts/auth/use-auth'
-import { Link } from 'react-router'
+import { Link, useLoaderData } from 'react-router'
 import { LoginForm } from '../login/login-form'
-
+import AuthWelcome from './auth-welcome'
+import type { User } from '@/api/auth'
 const organisation = 'Fleurs du Lys'
 const title = 'Bienvenue au pôle scientifique'
 const desc = 'Cet espace est dédié au suivi des séances du pôle scientifique de Fleurs du Lys, vous offrant des bilans, des supports et de la méthodologie afin de mieux aborder vos révisions et vos éxamens.'
 
 
 const HomeHero = () => {
-    const {user, isAuthenticated} = useAuth();
+    const loaderData = useLoaderData() as {user : User | null};
+    const {user : contextUser, isAuthenticated} = useAuth();
 
-    console.log(user)
+    let user = null;
+    if(loaderData){
+        user = loaderData.user  || contextUser;
+    }
+
+    console.log('snapshot:', JSON.stringify(user))
+    console.log('isAuthenticated:', isAuthenticated)
+    console.log('firstName value:', JSON.stringify(user?.username))
   return (
     <section className="w-full min-h-dvh pt-28 lg:pt-20 max-w-7xl flex flex-col items-center justify-center px-6">
         <svg viewBox='0 0 100 100' className='absolute bottom-0 left-1/2 -translate-x-1/2 aspect-5/4 lg:w-full h-dvh -z-10' preserveAspectRatio="none">
@@ -36,7 +45,7 @@ const HomeHero = () => {
         <div className='flex flex-col justify-start items-center lg:flex-row lg:justify-between lg:items-start max-w-7xl gap-24 lg:gap-12 pb-6'>
             <div className='flex flex-col items-center lg:items-start'>
                 <span className="bg-lime-100 py-1 px-4 font-bold text-lime-600 text-lg rounded-full border border-lime-300">{organisation}</span>
-                <h1 className="text-4xl lg:text-5xl font-black mt-4 text-center lg:text-start">{title}</h1>
+                <h1 className="text-4xl lg:text-5xl font-bold mt-4 text-center lg:text-start">{title}</h1>
                 <p className="max-w-xl font-regular text-lg font-medium mt-6 text-balance text-center lg:text-start opacity-75">{desc}</p>
                 <Link to='/a-propos' className='mt-8'>
                     <Button className='text-lg py-6 px-8'>À propos de nous</Button>
@@ -44,19 +53,9 @@ const HomeHero = () => {
             </div>
             <div className="w-full max-w-sm">
                 {
-                    !isAuthenticated && <LoginForm />
-                }
-                {
-                    isAuthenticated &&
-                    <div className='border rounded-xl p-6 bg-linear-150 from-25% from-lime-50 to-95% to-lime-100 border-lime-400'>
-                        <h2 className='text-3xl'>Bienvenue</h2>
-                        <p className='text-muted-foreground mt-2'>Accéder à votre profile</p>
-                        <Button size='lg' className='py-6 text-lg w-full mt-6'>
-                            <Link to='/profile'>
-                                Profile
-                            </Link>
-                        </Button>
-                    </div>
+                    isAuthenticated && user ?
+                    <AuthWelcome user = {user} />
+                    : <LoginForm/>
                 }
             </div>
         </div>

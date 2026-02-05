@@ -22,7 +22,7 @@ export async function comparePassword(
 
 export const validationMessages = {
     createUser : {
-        emailError : "Veuiller renseigner une adresse email valide.",
+        usernameError : "Veuiller renseigner un identifiant et un mot de passe valides.",
         pwMinLengthError : "Le mot de passe doit être composé d'au moins 8 caractères.",
         pwMaxLengthError : "Le mot de passe doit être composé d'au plus 20 caractères.",
         pwUppercaseError : "Le mot de passe doit être contenir au moins une lettre majuscule.",
@@ -31,7 +31,7 @@ export const validationMessages = {
         pwSpecialCharacterError : "Le mot de passe doit être contenir au moins un caractère spécial.",
     },
     login : {
-        emailError : "Veuiller renseigner une adresse email et un mot de passe valides.",
+        usernameError : "Veuiller renseigner un identifiant et un mot de passe valides.",
         pwError : "Veuiller renseigner une adresse email et un mot de passe valides.",
     }
 }

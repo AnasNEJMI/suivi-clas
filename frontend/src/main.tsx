@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     path : '/',
     Component : RootLayout,
     children : [
-      {index : true, Component : Home},
+      {index : true, Component : Home, loader : guestRouteLoader,  shouldRevalidate: () => true,},
       {path : 'contact', Component : Contact},
       {path : 'a-propos', Component : About},
       {path : 'login', Component : Login, loader : guestRouteLoader,  shouldRevalidate: () => true,},

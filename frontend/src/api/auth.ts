@@ -6,9 +6,13 @@ import { ErrorCodes, ErrorStatusMap } from "@/lib/errors/errors.constants"
 ///////////////FETCH USER//////////////////
 
 export type User = {
-    id : number,
-    email : string,
-    createdAt : string,
+    id  : number,
+    username : string,
+    firstName : string,
+    lastName : string,
+    gender : 'f' | 'm',
+    class : {label : string} | null,
+    createdAt : Date,
 }
 
 export async function fetchUser():Promise<User | null>{
@@ -28,15 +32,12 @@ export async function fetchUser():Promise<User | null>{
 //////////////////LOGIN//////////////////
 
 export type LoginPayload = {
-  email: string
+  username: string
   password: string
 }
 
 export type LoginResponse = {
-  user : {
-    id: number
-    email: string
-  }
+  user : User
 }
 
 export async function login(payload : LoginPayload):Promise<LoginResponse>{
@@ -53,3 +54,5 @@ export async function logout():Promise<void>{
         method : 'POST',
     })
 }
+
+/////////////////////////////////////////
