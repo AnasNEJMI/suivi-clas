@@ -50,10 +50,9 @@ export function NavUser({
     setIsRequestingLoggingOut(true);
     try{
       await requestLogout();
-      navigate('/login', {replace : true});
     }catch(error){
       if(ApiError.isUnauthorized(error)){
-          navigate('/login', {replace : true})
+          navigate('/', {replace : true})
       }
     }finally{
       setIsRequestingLoggingOut(false);

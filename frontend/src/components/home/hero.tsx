@@ -17,10 +17,6 @@ const HomeHero = () => {
     if(loaderData){
         user = loaderData.user  || contextUser;
     }
-
-    console.log('snapshot:', JSON.stringify(user))
-    console.log('isAuthenticated:', isAuthenticated)
-    console.log('firstName value:', JSON.stringify(user?.username))
   return (
     <section className="w-full min-h-dvh pt-28 lg:pt-20 max-w-7xl flex flex-col items-center justify-center px-6">
         <svg viewBox='0 0 100 100' className='absolute bottom-0 left-1/2 -translate-x-1/2 aspect-5/4 lg:w-full h-dvh -z-10' preserveAspectRatio="none">

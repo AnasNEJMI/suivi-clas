@@ -20,7 +20,6 @@ import { Controller, useForm } from "react-hook-form"
 import { createLoginFormSchema as loginFormSchema } from "@/lib/schemas/login.schema"
 import type z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useNavigate } from "react-router"
 import { useState } from "react"
 
 export function LoginForm({
@@ -28,7 +27,6 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
   const {requestLogin}  = useAuth();
-  const navigate = useNavigate();
   const [isRequestingLoggingIn, setIsRequestingLoggingIn] = useState(false);
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
@@ -44,7 +42,6 @@ export function LoginForm({
     setIsRequestingLoggingIn(true);
     try{
       await requestLogin(data.username, data.password);
-      navigate('/profile', {replace : true});
     }catch(error){
       console.error(error);
     }finally{
@@ -54,7 +51,7 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className=" bg-linear-150 from-25% from-lime-50 to-95% to-lime-100 border-lime-400">
+      <Card className="bg-linear-135 from-25% from-lime-100/50 to-95% to-lime-300/75 border-lime-400 font-outfit">
         <CardHeader>
           <CardTitle>Se connecter</CardTitle>
           <CardDescription>

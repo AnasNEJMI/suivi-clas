@@ -13,12 +13,13 @@ export type User = {
     gender : 'f' | 'm',
     class : {label : string} | null,
     createdAt : Date,
+    role : 'admin' | 'org' | 'student',
 }
 
 export async function fetchUser():Promise<User | null>{
     try{
-        return await apiRequest<User>('/api/auth/profile')
-
+        const response =  await apiRequest<{user : User}>('/api/auth/profile')
+        return response.user;
     }catch(error){
         if(error instanceof ApiError
         && error.statusCode === ErrorStatusMap[ErrorCodes.UNAUTHORIZED]){

@@ -26,7 +26,7 @@ export async function profileHandler(
                     gender : user.gender,
                     class : user.class? {label : user.class.label} : null,
                     createdAt : user.createdAt,
-
+                    role : user.role
                 }
             }
         )

@@ -32,9 +32,11 @@ function SuccessToast<T>({message, data = undefined} : SuccessTostProps<T>) {
           {
             position: "bottom-right",
             classNames: {
-                content: "flex flex-col gap-2",
+                content: "flex flex-col gap-2 text-lg font-medium",
             },
             style: {
+                "--normal-bg": "color-mix(in oklab, var(--color-lime-300) 85%, transparent)",
+                "--normal-border": "var(--color-lime-400)",
                 "--border-radius": "calc(var(--radius)  + 4px)",
             } as React.CSSProperties,
           }

@@ -7,7 +7,7 @@ import { createSession } from '../utils/session.utils.js';
 import { SESSION_CONFIG } from '../configs/session.config.js';
 import { sendSuccess } from '../utils/response.utils.js';
 import { PrismaClientKnownRequestError } from '../generated/prisma/internal/prismaNamespace.js';
-import { UserGender } from '../generated/prisma/enums.js';
+import { UserGender, UserRole } from '../generated/prisma/enums.js';
 import { User } from '../types/data.types.js';
 
 type loginInput = {
@@ -83,6 +83,7 @@ export async function loginHandler(
                     gender : user.gender === UserGender.f? 'f' : 'm',
                     class : user.class,
                     createdAt : user.createdAt,
+                    role : user.role === UserRole.admin ? 'admin' : user.role === UserRole.org? 'org' : 'student',
                 }
             }
         )

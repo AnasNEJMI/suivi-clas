@@ -6,4 +6,5 @@ export type User = {
     gender : 'm' | 'f',
     class : {label : string} | null,
     createdAt : Date,
+    role : 'admin' | 'org' | 'student',
 }

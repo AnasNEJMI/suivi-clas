@@ -43,6 +43,7 @@ export async function getSession(sessionId : string){
                     gender : true,
                     class : true,
                     createdAt : true,
+                    role : true,
                 }
             }
         }

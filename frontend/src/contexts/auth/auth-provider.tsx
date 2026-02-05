@@ -7,11 +7,12 @@ import SuccessToast from '@/components/toasts/success-toast';
 import ErrorToast from '@/components/toasts/error-toast';
 import { ApiError } from '@/lib/errors/apiError.class';
 import { queryKeys } from '@/lib/query/keys';
+import { useNavigate } from 'react-router';
 
 
 const AuthProvider = ({children} : {children : React.ReactNode}) => {
   const queryClient = useQueryClient();
-
+  const navigate = useNavigate();
   const {data : user = null, isLoading, refetch} = useQuery({
     queryKey : queryKeys.auth.user,
     queryFn : fetchUser,
@@ -30,8 +31,15 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
         queryClient.setQueryData(queryKeys.auth.user, data.user);
         SuccessToast({
           message : `Bienvenue ${data.user.firstName}`,
-          data : data.user
-        })
+        });
+
+        if(data.user.role === 'admin'){
+          navigate('/admin', {replace : true});
+        }else if(data.user.role === 'org'){
+          navigate('/association', {replace : true});
+        }else if(data.user.role === 'student'){
+          navigate('/profile', {replace : true});
+        }
       },
       onError : (error) => {
         if (error instanceof ApiError) {
@@ -57,6 +65,7 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
         SuccessToast({
           message : `Déconnecté avec succès.`
         })
+        navigate('/', {replace : true});
       },
       onError : (error) => {
         queryClient.setQueryData(queryKeys.auth.user, null);
