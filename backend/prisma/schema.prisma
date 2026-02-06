@@ -55,7 +55,7 @@ model Bilan{
   userId    Int
   user      User      @relation(fields: [userId], references: [id], onDelete : Cascade)
 
-  subject   SubjectType @default(math)
+  subject   String @default("math")
 
   lessonId  Int?
   lesson    Lesson?      @relation(fields: [lessonId], references: [id], onDelete : SetNull)
@@ -67,6 +67,7 @@ model Bilan{
   updatedAt    DateTime @updatedAt
 
    @@index([userId])
+   @@unique([userId, date])
 }
 
 model Skill{
@@ -109,7 +110,7 @@ model Lesson{
   classId      Int
   class        Class    @relation(fields : [classId], references: [id], onDelete : Cascade)
   
-  subject      SubjectType @default(math)
+  subject      String @default("math")
   
   label        String @default("")
   
@@ -157,10 +158,4 @@ enum DocType {
   fiche
   qcm
   exercices
-}
-
-enum SubjectType {
-  math
-  pc
-  svt
 }

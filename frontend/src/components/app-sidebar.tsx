@@ -1,26 +1,6 @@
 import * as React from "react"
-import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUsers,
-} from "@tabler/icons-react"
 
-import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -30,6 +10,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { Link, useNavigate } from "react-router"
+import { BicepsFlexedIcon, BookOpenIcon, ChartNoAxesCombinedIcon, DownloadIcon, NotebookTextIcon, UserIcon,} from "lucide-react"
+import { Separator } from "./ui/separator"
+import { useAuth } from "@/contexts/auth/use-auth"
+import { Button } from "./ui/button"
+import { IconLogout } from "@tabler/icons-react"
+import { ApiError } from "@/lib/errors/apiError.class"
 
 const data = {
   user: {
@@ -39,116 +26,58 @@ const data = {
   },
   navMain: [
     {
-      title: "Dashboard",
-      url: "#",
-      icon: IconDashboard,
+      title: "Utilisateurs",
+      url: "/admin/users",
+      icon: UserIcon,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
+      title: "Bilans",
+      url: "/admin/bilans",
+      icon: NotebookTextIcon,
     },
     {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
+      title: "Compétences",
+      url: "/admin/skills",
+      icon: BicepsFlexedIcon,
     },
     {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
+      title: "Sujets",
+      url: "/admin/lessons",
+      icon: BookOpenIcon,
     },
   ],
-  navClouds: [
+  analytics: [
     {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
+      title: "Statistiques",
+      url: "/admin/statistics",
+      icon: ChartNoAxesCombinedIcon,
     },
     {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
-    },
-  ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
+      title: "Téléchargements",
+      url: "/admin/downloads",
+      icon: DownloadIcon,
     },
   ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const {requestLogout} = useAuth();
+  const [isRequestingLoggingOut, setIsRequestingLoggingOut] = React.useState(false);
+  const navigate = useNavigate();
+
+  async function onLogout(){
+    setIsRequestingLoggingOut(true);
+    try{
+      await requestLogout();
+    }catch(error){
+      if(ApiError.isUnauthorized(error)){
+          navigate('/', {replace : true})
+      }
+    }finally{
+      setIsRequestingLoggingOut(false);
+    }
+  }
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -156,23 +85,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
+              className="p-0 bg-lime-200 hover:bg-lime-100"
             >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
+              <Link to="/" className="h-16 w-min p-0 ">
+                <div className="w-16 h-16"></div>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+      <Separator className="my-4"/>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavMain title="Suivi" items={data.navMain} />
+        <Separator className="my-4"/>
+        <NavMain title="Statistiques" items={data.analytics}/>
+        {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <Button className="w-full" disabled = {isRequestingLoggingOut} onClick={onLogout}>
+          <IconLogout className="text-background"/>
+          {isRequestingLoggingOut ? 'Logging out ...' : 'Log out'}
+        </Button>
       </SidebarFooter>
     </Sidebar>
   )

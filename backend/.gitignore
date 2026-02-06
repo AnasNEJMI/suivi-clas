@@ -10,3 +10,5 @@ tests
 
 Dockerfile
 .dockerignore
+
+/prisma/seed.data.ts

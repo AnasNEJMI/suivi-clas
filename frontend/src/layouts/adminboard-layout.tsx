@@ -7,6 +7,7 @@ interface AdminboardLayoutProps{
 }
 
 const AdminboardLayout = ({children} : AdminboardLayoutProps) => {
+  
   return (
     <SidebarProvider
       style={

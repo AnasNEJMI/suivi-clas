@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/auth/use-auth';
 import DashboardLayout from '@/layouts/dashboard-layout'
 import { Navigate, Outlet, useLoaderData } from 'react-router'
 
-const OrgBoard = () => {
+const Orgboard = () => {
   const loaderData = useLoaderData() as {user : User};
   const {user : contextUser, isAuthenticated} = useAuth();
 
@@ -24,4 +24,4 @@ const OrgBoard = () => {
   )
 }
 
-export default OrgBoard
+export default Orgboard

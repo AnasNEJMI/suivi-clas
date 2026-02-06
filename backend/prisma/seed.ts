@@ -1,191 +1,18 @@
 import "dotenv/config";
 import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient, UserGender, UserRole } from '../src/generated/prisma/client.js'
+import { PrismaClient,UserGender, UserRole } from '../src/generated/prisma/client.js'
 import {hashPassword} from '../src/utils/auth.utils.js'
+import {admin, CLASS_NAMES, ClassName, lessons, org, students} from './seed.data.js';
 
 const connectionString = `${process.env.DATABASE_URL}`
 
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
-const class4emeLabel = '4ème';
-const class2ndLabel = '2nde';
-
-const admin = {
-    firstName : 'Anas',
-    lastName : 'NEJMI',
-    username : 'AnasNEJMI',
-    gender : UserGender.m,
-    password : 'Aa-14081992-@',
-    role : UserRole.admin
-}
-
-const org = [
-    {
-        firstName : 'Sanae',
-        lastName : 'Fleurs Du Lys',
-        username : 'Sanae',
-        gender : UserGender.f,
-        password : 'FdL-Sanae-2026',
-        role : UserRole.org
-    },
-    {
-        firstName : 'Sabrina',
-        lastName : 'Fleurs Du Lys',
-        username : 'Sabrina',
-        gender : UserGender.f,
-        password : 'FdL-Sabrina-2026',
-        role : UserRole.org
-    },
-]
-
-
-const class4eme = [
-    {
-        firstName : 'Bilal',
-        lastName : 'BENHIDA',
-        username : 'Bilal',
-        gender : UserGender.m,
-        password : 'FdL-4eme-Bilal-2025-2026',
-        class : class4emeLabel,
-        role : UserRole.student
-    },
-    {
-        firstName : 'Sarah',
-        lastName : 'DUPRÉ',
-        username : 'Sarah',
-        gender : UserGender.f,
-        password : 'FdL-4eme-Sarah-2025-2026',
-        class : class4emeLabel,
-        role : UserRole.student
-    },
-    {
-        firstName : 'Imrane',
-        lastName : 'FERHATI',
-        username : 'Imrane',
-        gender : UserGender.m,
-        password : 'FdL-4eme-Imrane-2025-2026',
-        class : class4emeLabel,
-        role : UserRole.student
-    },
-    {
-        firstName : 'Cyrine',
-        lastName : 'MCHAR',
-        username : 'Cyrine',
-        gender : UserGender.f,
-        password : 'FdL-4eme-Cyrine-2025-2026',
-        class : class4emeLabel,
-        role : UserRole.student
-    },
-    {
-        firstName : 'Nasrinne',
-        lastName : 'ZIOUCH',
-        username : 'Nasrinne',
-        gender : UserGender.f,
-        password : 'FdL-4eme-ZIOUCH-2025-2026',
-        class : class4emeLabel,
-        role : UserRole.student
-    },
-    {
-        firstName : 'Safya',
-        lastName : 'LABIDI',
-        username : 'Safya',
-        gender : UserGender.f,
-        password : 'FdL-4eme-Safya-2025-2026',
-        class : class4emeLabel,
-        role : UserRole.student
-    },
-    {
-        firstName : 'Ahmed',
-        lastName : 'KERZAZI',
-        username : 'Ahmed',
-        gender : UserGender.m,
-        password : 'FdL-4eme-Ahmed-2025-2026',
-        class : class4emeLabel,
-        role : UserRole.student
-    },
-    {
-        firstName : 'Imran',
-        lastName : 'ABDELMOUMNI',
-        username : 'Imran',
-        gender : UserGender.m,
-        password : 'FdL-4eme-Imran-2025-2026',
-        class : class4emeLabel,
-        role : UserRole.student
-    },
-    {
-        firstName : 'Yosor',
-        lastName : 'MARZOUK',
-        username : 'Yosor',
-        gender : UserGender.f,
-        password : 'FdL-4eme-Yosor-2025-2026',
-        class : class4emeLabel,
-        role : UserRole.student
-    },
-]
-
-const classLycee = [
-    {
-        firstName : 'Isra',
-        lastName : 'Isra',
-        username : 'Isra',
-        class : class2ndLabel,
-        password : 'FdL-2nde-Isra-2025-2026',
-        role : UserRole.student
-    },
-]
-
 async function main(){
     console.log('seeding databases ...');
     
-    /////////////////////////////////////////////////////////////////
-
-    console.log('creating classes ...');
-    const classA = await prisma.class.create({
-        data : {
-            label : class4emeLabel,
-        }
-    })
-
-    const classB = await  prisma.class.create({
-        data : {
-            label : class2ndLabel,
-        }
-    })
-
-    console.log("classes created:", classA.label, classB.label);
-
-    /////////////////////////////////////////////////////////////////
-
-    const generatedOrgs : {
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
-        username: string;
-        firstName: string;
-        lastName: string;
-        passwordHash: string;
-        gender: UserGender;
-        role: UserRole;
-        lastVisit: Date;
-        classId: number | null;
-    }[] = [];
-
-    const generatedClass4eme : {
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
-        username: string;
-        firstName: string;
-        lastName: string;
-        passwordHash: string;
-        gender: UserGender;
-        role: UserRole;
-        lastVisit: Date;
-        classId: number | null;
-    }[] = [];
-
-    console.log("creating users ...");
+    ////////////////////////////ADMIN/////////////////////////////////
     console.log("creating admin ...");
 
     const adminPasswordHash = await hashPassword(admin.password);
@@ -199,11 +26,27 @@ async function main(){
             gender : admin.gender,
         }
     })
-    
     console.log("created admin : ", generatedAdmin);
-    console.log("creating org ...");
     
-    org.forEach(async user => {
+    /////////////////////////ORG/////////////////////////////////
+    console.log("creating org ...");
+    const generatedOrgs : {
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        username: string;
+        firstName: string;
+        lastName: string;
+        passwordHash: string;
+        gender: UserGender;
+        role: UserRole;
+        lastVisit: Date;
+        classId: number | null;
+    }[] = [];
+    
+    for (let i = 0; i < org.length; i++) {
+        const user = org[i];
+        
         const passwordHash = await hashPassword(user.password);
         const generateOrg = await prisma.user.create({
             data : {
@@ -217,32 +60,103 @@ async function main(){
         })
         
         generatedOrgs.push(generateOrg);
-    })
+    }
+
+    console.log("created org. ", JSON.stringify(generatedOrgs));
     
-    console.log("created org : ", JSON.stringify(generatedOrgs));
-    console.log("creating classe 4eme ...");
+        
+    ////////////////////////////CLASSES////////////////////////////
+    console.log("creating classes ....");
 
-    class4eme.forEach(async user => {
-        const passwordHash = await hashPassword(user.password);
-
-        const generatedUser = await prisma.user.create({
+    for (const className of CLASS_NAMES) {
+    
+        //generate the class
+        const generatedClass = await prisma.class.create({
             data : {
-                firstName : user.firstName,
-                lastName : user.lastName,
-                username : user.username,
-                role : user.role,
-                passwordHash : passwordHash,
-                classId : user.class === class4emeLabel ? classA.id : classB.id,
-                gender : user.gender
+                label : className,
             }
         })
+
+        console.log("created class with label : ", generatedClass.label, ' and id : ', generatedClass.id);
         
-        generatedClass4eme.push(generatedUser);
-    });
+        //generate the students for the class
+        console.log("creating students for class with with label : ", generatedClass.label, ' and id : ', generatedClass.id);
+        
+        const generatedStudents : {
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            username: string;
+            firstName: string;
+            lastName: string;
+            passwordHash: string;
+            gender: UserGender;
+            role: UserRole;
+            lastVisit: Date;
+            classId: number | null;
+        }[] = [];
+        
+        const classStudents = students[className];
 
-    console.log("classe 4eme created:", JSON.stringify(generatedClass4eme));
+        for (const student of classStudents) {
 
-    /////////////////////////////////////////////////////////////////
+            const passwordHash = await hashPassword(student.password);
+            
+            const generatedStudent = await prisma.user.create({
+                data : {
+                    firstName : student.firstName,
+                    lastName : student.lastName,
+                    username : student.username,
+                    role : student.role,
+                    passwordHash : passwordHash,
+                    classId : generatedClass.id,
+                    gender : student.gender
+                }
+            })
+            
+            generatedStudents.push(generatedStudent);
+        };
+        
+        console.log("created students for class with with label : ", generatedClass.label, ' and id : ', generatedClass.id, '/n the generated students are : ', ...generatedStudents);
+        
+        //generate the lessons for the class
+        console.log("creating lessons for class with with label : ", generatedClass.label, ' and id : ', generatedClass.id);
+        let generatedLessons : {
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            label: string;
+            subject: string;
+            classId: number | null;
+        }[] = [];
+
+        const classLessons = lessons[className];
+
+        for(const subject in classLessons){
+            const lessons = classLessons[subject as keyof typeof classLessons]
+
+            console.log('subject :',subject, ' lessons:',lessons)
+
+            for (const lesson of lessons) {
+                const generatedLesson = await prisma.lesson.create({
+                    data : {
+                        classId : generatedClass.id,
+                        label : lesson,
+                        subject : subject,
+                    }
+                })
+                
+                generatedLessons.push(generatedLesson);
+            }
+
+            console.log("created lessons for class with with label : ", generatedClass.label, ' and id : ', generatedClass.id, '/n the generated math lessons lessons are : ', ...generatedLessons);
+            generatedLessons = [];  
+        }
+            
+    };
+
+
+    //////////////////////////LESSONS///////////////////////////////
 
     console.log("Seeding finished!");
 }
