@@ -1,4 +1,4 @@
-import { UserGender, UserRole } from "../src/generated/prisma/enums.js";
+import { UserGender, UserRole } from "../generated/prisma/enums.js";
 
 export const CLASS_NAMES = ['4ème'] as const;
 export type ClassName = typeof CLASS_NAMES[number];

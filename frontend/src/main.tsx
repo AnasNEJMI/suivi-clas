@@ -54,6 +54,7 @@ const router = createBrowserRouter([
         ]
       },
       {
+        id: "admin",
         path : 'admin',
         Component : Adminboard,
         loader : adminRouteLoader,

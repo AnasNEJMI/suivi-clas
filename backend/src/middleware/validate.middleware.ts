@@ -14,7 +14,7 @@ export function validate(schema : z.ZodType, target : ValidationTarget = 'body')
             const data = req[target];
 
             const result = schema.safeParse(data);
-
+            console.log('validation result ', result)
             if(!result.success){
                 throw result.error;
             }

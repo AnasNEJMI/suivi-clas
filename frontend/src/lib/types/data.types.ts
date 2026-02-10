@@ -24,3 +24,11 @@ export type TodoLinksType = {
     qcm : string,
     exercices : string,
 }
+
+//////////////////////////////////////////////////////////////
+export const CLASS_NAMES = ['4ème', '2nde', '1ère', 'T'] as const;
+export type ClassName = typeof CLASS_NAMES[number];
+
+/////////////////////////////////////////////////////////////
+export const SUBJECTS = ['math', 'pc', 'svt'] as const;
+export type Subject = typeof SUBJECTS[number];

@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Bilan" ALTER COLUMN "summary" DROP NOT NULL,
+ALTER COLUMN "subject" DROP NOT NULL,
+ALTER COLUMN "subject" DROP DEFAULT;

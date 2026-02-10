@@ -185,7 +185,7 @@
 
 @layer utilities{
   .checkered-bg{
-    background-image: url("src/assets/checkered.png");
+    background-image: url("src/assets/checkered-2.png");
     background-repeat: repeat;
   }
 

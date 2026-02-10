@@ -94,8 +94,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <Separator className="my-4"/>
       <SidebarContent>
+      <Separator className="mb-4"/>
         <NavMain title="Suivi" items={data.navMain} />
         <Separator className="my-4"/>
         <NavMain title="Statistiques" items={data.analytics}/>
