@@ -2,7 +2,7 @@ import RecentlyAddedBilans from '@/components/adminboard/recently-added-bilans'
 import { SiteHeader } from '../../components/site-header'
 import AddBilanForm from '@/components/adminboard/add-bilan-form'
 import type { User } from '@/api/auth'
-import type { Bilan, Lesson } from '@/api/admin'
+import type { Bilan, Lesson } from '@/api/api.types'
 import { useRouteLoaderData } from 'react-router'
 
 const AdminboardBilans = () => {

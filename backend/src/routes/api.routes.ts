@@ -11,6 +11,7 @@ import { requireAdminHandler } from '../middleware/admin.middleware.js';
 import { getAdminBaseHandler } from '../controllers/getAdminBase.controller.js';
 import { addBilanSchema } from '../schemas/addBilan.schema.js';
 import { addBilanHandler } from '../controllers/addBilan.controller.js';
+import { studentProfileHandler } from '../controllers/studentProfile.controller.js';
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router.post('/users', validateBody(createUserSchema), asyncHandler(createUserHan
 router.post('/auth/login',validateBody(loginSchema), loginHandler);
 router.post('/auth/logout', requireAuthHandler, asyncHandler(logoutHandler));
 router.get('/auth/profile', requireAuthHandler, asyncHandler(profileHandler));
+router.get('/student/profile', requireAuthHandler, asyncHandler(studentProfileHandler));
 router.get('/admin/base', requireAuthHandler, requireAdminHandler, asyncHandler(getAdminBaseHandler))
 router.post('/admin/add-bilan', validateBody(addBilanSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addBilanHandler))
 

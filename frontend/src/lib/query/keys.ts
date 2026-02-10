@@ -4,5 +4,8 @@ export const queryKeys = {
   },
   admin : {
     base : ['admin, base'] as const,
+  },
+  student : {
+    profile : ['student', 'profile'] as const,
   }
 }

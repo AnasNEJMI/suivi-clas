@@ -1,4 +1,4 @@
-import type { Bilan } from "@/api/admin"
+import type { Bilan } from "@/api/api.types"
 import { cn } from "@/lib/utils";
 import { formatDate } from "date-fns";
 

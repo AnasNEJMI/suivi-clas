@@ -1,9 +1,10 @@
-import type { bilanDataPresent, bilanDataType } from '@/lib/types/data.types'
+import type { Bilan } from '@/api/api.types';
 import { cn } from '@/lib/utils';
+import { formatDate } from 'date-fns';
 
 interface SubjectsHistoryProps {
     className? : string,
-    data : bilanDataType[],
+    bilans : Bilan[],
 }
 
 const subjectCard : Record<string, {label : string, bgColor : string}> = {
@@ -21,36 +22,25 @@ const subjectCard : Record<string, {label : string, bgColor : string}> = {
     },
 }
 
-const SubjectsHistory = ({className, data} : SubjectsHistoryProps) => {
+const SubjectsHistory = ({className, bilans} : SubjectsHistoryProps) => {
 
-    console.log(subjectCard[(data[0] as bilanDataPresent).bilan.subject]);
   return (
     <>
         <h2 className='text-xl md:text-2xl font-bold bg'>Derniers sujets étudiés</h2>
         <div className={cn('relative z-10 overflow-x-auto py-4 w-full', className)}>
             <div className='inline-flex gap-6'>
                 {
-                    data && data.length>0 &&
-                    data.map((item, index) => {
-                        if(!item.present) return;
+                    bilans && bilans.length>0 &&
+                    bilans.map((bilan, index) => {
+                        if(!bilan.presence) return;
 
-                        return <div key={index} className={`w-48 h-48 rounded-3xl ${subjectCard[(item as bilanDataPresent).bilan.subject].bgColor} flex flex-col items-center justify-center gap-4`}>
-                            <span className='uppercase font-bold text-sm opacity-50'>{(item as bilanDataPresent).bilan.subject}</span>
-                            <span className='text-xl font-bold md:text-2xl text-center px-4'>{(item as bilanDataPresent).bilan.lesson}</span>
-                            <span className='uppercase font-bold text-base opacity-50'>{(item as bilanDataPresent).date}</span>
+                        return <div key={index} className={`w-48 py-8 rounded-3xl ${subjectCard[bilan.subject!].bgColor} flex flex-col items-center justify-center gap-4`}>
+                            <span className='uppercase font-bold text-sm opacity-50'>{bilan.subject!}</span>
+                            <span className='text-lg font-bold md:text-xl text-center px-4'>{bilan.lesson!.label}</span>
+                            <span className='uppercase font-bold text-base opacity-50'>{formatDate(bilan.date, 'd/MM/y')}</span>
                         </div>
                     })
                 }
-                {/* <div className='w-48 h-48 rounded-3xl bg-linear-135 from-25% from-red-400 to-75% to-rose-500 flex flex-col items-center justify-center gap-4'>
-                    <span className='uppercase font-bold text-sm opacity-50'>Physique/Chimie</span>
-                    <span className='text-xl font-bold md:text-2xl text-center px-4'>Les Ions</span>
-                    <span className='uppercase font-bold text-base opacity-50'>01/03</span>
-                </div>
-                <div className='w-48 h-48 rounded-3xl bg-linear-135 from-25% from-indigo-400 to-75% to-blue-500 text-white flex flex-col items-center justify-center gap-4'>
-                    <span className='uppercase font-bold text-sm opacity-50'>SVT</span>
-                    <span className='text-xl font-bold md:text-2xl text-center px-4'>Production Asexuée</span>
-                    <span className='uppercase font-bold text-base opacity-50'>01/03</span>
-                </div> */}
             </div>
         </div>
     </>

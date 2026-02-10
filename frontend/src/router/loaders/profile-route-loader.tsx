@@ -1,11 +1,12 @@
 import { fetchUser } from "@/api/auth";
+import { fetchStudentProfile } from "@/api/profile";
 import {queryClient } from "@/lib/query/client";
 import { queryKeys } from "@/lib/query/keys";
 import {replace} from "react-router";
 
 export async function profileRouteLoader(){
     try{
-        const user = await queryClient.fetchQuery({
+        const user = await queryClient.ensureQueryData({
             queryKey : queryKeys.auth.user,
             queryFn : fetchUser,
             retry : false,
@@ -17,7 +18,15 @@ export async function profileRouteLoader(){
             throw replace(`/`);
         }
 
-        return user;
+        const profile = await queryClient.ensureQueryData({
+            queryKey : queryKeys.student.profile,
+            queryFn : fetchStudentProfile,
+            staleTime : 24* 60 * 60 * 1000,
+        });
+
+        console.log('loaded profile : ', profile);
+
+        return {user : user, bilans : profile.bilans, docs : profile.docs};
     }catch(error){
         if(error instanceof Response && error.status === 302){
             throw error;

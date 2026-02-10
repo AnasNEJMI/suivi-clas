@@ -38,6 +38,7 @@ const router = createBrowserRouter([
       {path : 'login', Component : Login, loader : guestRouteLoader,  shouldRevalidate: () => true,},
       {path : 'signup', Component : SignUp},
       {
+        id : 'profile',
         path : 'profile',
         Component : Profile,
         loader : profileRouteLoader,

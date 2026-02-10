@@ -15,9 +15,10 @@ import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group'
 import { CLASS_NAMES} from '@/lib/types/data.types'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import type { User } from '@/api/auth'
-import { requestAddBilan, type Lesson } from '@/api/admin'
+import { requestAddBilan} from '@/api/admin'
 import { Textarea } from '../ui/textarea'
 import SuccessToast from '../toasts/success-toast'
+import type { Lesson } from '@/api/api.types'
 
 interface AddBilanFormProps {
   className ?: string,
@@ -401,7 +402,7 @@ const AddBilanForm = ({className, users, lessons, subjects} : AddBilanFormProps)
             </Button>
             <Button type="submit" size='lg' form="form-add-bilan" disabled = {isAddingBilan} className="font-medium text-base py-6 flex-1">
                 {
-                  isAddingBilan ? 'Chargement ...' : 'Se Connecter'
+                  isAddingBilan ? 'Chargement ...' : 'Créer'
                 }
             </Button>
           </Field>

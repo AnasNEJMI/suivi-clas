@@ -1,18 +1,19 @@
-import type { bilanDataType } from '@/lib/types/data.types'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from '../ui/select'
 import { SelectValue } from '@radix-ui/react-select'
 import { cn } from '@/lib/utils'
+import type { Bilan } from '@/api/api.types'
+import { formatDate } from 'date-fns'
 
 interface BilanDropdownProps {
     className? : string,
-    data : bilanDataType[],
+    bilans : Bilan[],
     selectedValue : string,
-    onValueChange : React.Dispatch<React.SetStateAction<bilanDataType>>
+    onValueChange : React.Dispatch<React.SetStateAction<Bilan>>
 }
-const BilanDropdown = ({className, data, selectedValue, onValueChange} : BilanDropdownProps) => {
+const BilanDropdown = ({className, bilans, selectedValue, onValueChange} : BilanDropdownProps) => {
     
     const updateValue = (value : string) => {
-        const bilan = data.find((bilan) => bilan.date === value);
+        const bilan = bilans.find((bilan) => formatDate(bilan.date, 'd/M/y') === value);
         if(!bilan){
         throw Error(`Couldn't find bilan for the date : ${value}`);
         }
@@ -26,9 +27,9 @@ const BilanDropdown = ({className, data, selectedValue, onValueChange} : BilanDr
         <SelectContent className={cn(className, '')}>
             <SelectGroup>
                 {
-                    data && data.length>0 &&
-                    data.map((bilan, index) => (
-                        <SelectItem key={index} value={bilan.date} className='text-lg font-medium font-outfit'>{bilan.date}/2026</SelectItem>
+                    bilans && bilans.length>0 &&
+                    bilans.map((bilan, index) => (
+                        <SelectItem key={index} value={formatDate(bilan.date, 'd/M/y')} className='text-lg font-medium font-outfit'>{formatDate(bilan.date, 'd/M/y')}</SelectItem>
                     ))
                 }
             </SelectGroup>
