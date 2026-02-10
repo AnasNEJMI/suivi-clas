@@ -7,13 +7,11 @@ import { useRouteLoaderData } from 'react-router'
 
 const AdminboardBilans = () => {
   const loaderData = useRouteLoaderData("admin") as {users : User[], bilans : Bilan[],lessons : Lesson[], subjects : string[]}
-  
-  
   return (
     <>
         <SiteHeader title='Bilans'/>
         <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2 checkered-bg">
+          <div className="@container/main flex flex-1 flex-col gap-2">
               <div className="min-h-svh w-full p-6">
                   <RecentlyAddedBilans
                     bilans = {loaderData.bilans}
