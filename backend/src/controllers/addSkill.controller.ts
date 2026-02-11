@@ -44,8 +44,23 @@ export async function addSkillHandler(
             
     
             //create bilan
-            const skill = await prisma.skill.create({
-                data : {
+            const skill = await prisma.skill.upsert({
+                where : {
+                    userId : user.id
+                },
+                update : {
+                    autonomy : autonomy,
+                    discipline : discipline,
+                    organisation : organisation,
+                    ponctuality : ponctuality,
+                    regularity : regularity,
+                    respect : respect,
+                    preparation : preparation,
+                    positive : positive,
+                    negative : negative,
+                    improvements : improvements,
+                },
+                create : {
                     userId : user.id,
                     autonomy : autonomy,
                     discipline : discipline,

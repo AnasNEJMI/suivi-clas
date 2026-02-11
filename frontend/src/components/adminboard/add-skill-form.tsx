@@ -14,8 +14,8 @@ import SuccessToast from '../toasts/success-toast'
 import type { Skill } from '@/api/api.types'
 import { addSkillSchema } from '@/lib/schemas/addSkill.schema'
 import { Slider } from '../ui/slider'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { requestAddSkill } from '@/api/admin'
+import { useIsBigScreen } from '@/hooks/use-bigScreen'
 
 interface AddSkillFormProps {
   className ?: string,
@@ -23,10 +23,10 @@ interface AddSkillFormProps {
   skills : Skill[]
 }
 
-const AddSkillForm = ({className, users} : AddSkillFormProps) => {
+const AddSkillForm = ({className, users, skills} : AddSkillFormProps) => {
     const [isAddingSkill, setIsAddingSkill] = useState(false);
     const [selectedStudents, setSelectedStudents] = useState<User[]>([])
-    const isMobile = useIsMobile();
+    const isBigScreen = useIsBigScreen();
     
     const form = useForm<z.infer<typeof addSkillSchema>>({
       resolver : zodResolver(addSkillSchema),
@@ -57,20 +57,38 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
     });
 
     useEffect(() => {
-      form.reset({
-        ...form.getValues(),
-        autonomy : 0,
-        discipline : 0,
-        organisation : 0,
-        ponctuality : 0,
-        regularity : 0,
-        respect : 0,
-        preparation : 0,
-        positive : '',
-        negative : '',
-        improvements : '',
-      })
-    }, [form, skillStudentId])
+      const skill = skills.find(skill => skill.user.id === skillStudentId);
+
+      if(skill){
+        form.reset({
+          ...form.getValues(),
+          autonomy : skill.autonomy,
+          discipline : skill.discipline,
+          organisation : skill.organisation,
+          ponctuality : skill.ponctuality,
+          regularity : skill.regularity,
+          respect : skill.respect,
+          preparation : skill.preparation,
+          positive : skill.positive,
+          negative : skill.negative,
+          improvements : skill.improvements,
+        })
+      }else{
+        form.reset({
+          ...form.getValues(),
+          autonomy : 0,
+          discipline : 0,
+          organisation : 0,
+          ponctuality : 0,
+          regularity : 0,
+          respect : 0,
+          preparation : 0,
+          positive : '',
+          negative : '',
+          improvements : '',
+        })
+      }
+    }, [skills, form, skillStudentId])
 
     useEffect(() => {
       form.reset({
@@ -126,7 +144,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
     }
 
   return (
-    <Card className={cn(className, 'font-outfit')}>
+    <Card className={cn(className, 'font-outfit max-w-5xl')}>
         <CardHeader>
           <CardTitle>Ajouter/Modifier les compétences transversales</CardTitle>
           <CardDescription>
@@ -209,13 +227,13 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                 )}
               >
               </Controller>
-              <div className='flex flex-col lg:flex-row lg:justify-between gap-4'>
+              <div className='flex flex-col lg:flex-row lg:justify-evenly gap-4'>
                 <Controller
                     name = 'autonomy'
                     control={form.control}
                     render = {({field, fieldState}) => (
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
-                        <FieldLabel htmlFor="form-add-skill-autonomy">Autonomie</FieldLabel>
+                        <FieldLabel htmlFor="form-add-skill-autonomy"><span className='text-sm'>Autonomie</span></FieldLabel>
                         <Slider
                           id="form-add-skill-autonomy"
                           step={1}
@@ -227,7 +245,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                           disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                           aria-invalid={fieldState.invalid}
                           className="lg:h-40 lg:w-min"
-                          orientation={isMobile? 'horizontal': 'vertical'}
+                          orientation={isBigScreen? 'horizontal': 'vertical'}
                         />
                         {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -241,7 +259,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     control={form.control}
                     render = {({field, fieldState}) => (
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
-                        <FieldLabel htmlFor="form-add-skill-discipline">Discipline</FieldLabel>
+                        <FieldLabel htmlFor="form-add-skill-discipline"><span className='text-sm'>Discipline</span></FieldLabel>
                         <Slider
                         id="form-add-skill-discipline"
                         step={1}
@@ -253,7 +271,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                         disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                         aria-invalid={fieldState.invalid}
                         className="lg:h-40 lg:w-min"
-                        orientation={isMobile? 'horizontal': 'vertical'}
+                        orientation={isBigScreen? 'horizontal': 'vertical'}
                         />
                         {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -267,7 +285,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     control={form.control}
                     render = {({field, fieldState}) => (
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
-                        <FieldLabel htmlFor="form-add-skill-organisation">Organisation</FieldLabel>
+                        <FieldLabel htmlFor="form-add-skill-organisation"><span className='text-sm'>Organisation</span></FieldLabel>
                         <Slider
                         id="form-add-skill-organisation"
                         step={1}
@@ -279,7 +297,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                         disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                         aria-invalid={fieldState.invalid}
                         className="lg:h-40 lg:w-min"
-                        orientation={isMobile? 'horizontal': 'vertical'}
+                        orientation={isBigScreen? 'horizontal': 'vertical'}
                         />
                         {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -293,7 +311,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     control={form.control}
                     render = {({field, fieldState}) => (
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
-                        <FieldLabel htmlFor="form-add-skill-ponctuality">Ponctualité</FieldLabel>
+                        <FieldLabel htmlFor="form-add-skill-ponctuality"><span className='text-sm'>Ponctualité</span></FieldLabel>
                         <Slider
                         id="form-add-skill-ponctuality"
                         step={1}
@@ -305,7 +323,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                         disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                         aria-invalid={fieldState.invalid}
                         className="lg:h-40 lg:w-min"
-                        orientation={isMobile? 'horizontal': 'vertical'}
+                        orientation={isBigScreen? 'horizontal': 'vertical'}
                         />
                         {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -319,7 +337,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     control={form.control}
                     render = {({field, fieldState}) => (
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
-                        <FieldLabel htmlFor="form-add-skill-regularity">Régularité</FieldLabel>
+                        <FieldLabel htmlFor="form-add-skill-regularity"><span className='text-sm'>Régularité</span></FieldLabel>
                         <Slider
                           id="form-add-skill-regularity"
                           step={1}
@@ -331,7 +349,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                           disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                           aria-invalid={fieldState.invalid}
                           className="lg:h-40 lg:w-min"
-                          orientation={isMobile? 'horizontal': 'vertical'}
+                          orientation={isBigScreen? 'horizontal': 'vertical'}
                         />
                         {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -345,7 +363,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     control={form.control}
                     render = {({field, fieldState}) => (
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
-                        <FieldLabel htmlFor="form-add-skill-preparation">Préparation</FieldLabel>
+                        <FieldLabel htmlFor="form-add-skill-preparation"><span className='text-sm'>Préparation</span></FieldLabel>
                         <Slider
                           id="form-add-skill-preparation"
                           step={1}
@@ -357,7 +375,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                           disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                           aria-invalid={fieldState.invalid}
                           className="lg:h-40 lg:w-min"
-                          orientation={isMobile? 'horizontal': 'vertical'}
+                          orientation={isBigScreen? 'horizontal': 'vertical'}
                         />
                         {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -371,7 +389,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     control={form.control}
                     render = {({field, fieldState}) => (
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
-                        <FieldLabel htmlFor="form-add-skill-respect">Respect</FieldLabel>
+                        <FieldLabel htmlFor="form-add-skill-respect"><span className='text-sm'>Respect</span></FieldLabel>
                         <Slider
                         id="form-add-skill-respect"
                         step={1}
@@ -383,7 +401,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                         disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                         aria-invalid={fieldState.invalid}
                         className="lg:h-40 lg:w-min"
-                        orientation={isMobile? 'horizontal': 'vertical'}
+                        orientation={isBigScreen? 'horizontal': 'vertical'}
                         />
                         {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />

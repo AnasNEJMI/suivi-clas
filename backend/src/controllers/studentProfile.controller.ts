@@ -6,8 +6,8 @@ import { prisma } from "../db/prisma.js";
 
 type profileSuccessResponse = {
     bilans : Bilan[],
+    skill : Skill,
     docs : Doc[],
-    // skill : Skill,
 }
 
 export async function studentProfileHandler(
@@ -54,11 +54,38 @@ export async function studentProfileHandler(
             }
         })
 
+        const skill = await prisma.skill.findUniqueOrThrow({
+            where : {
+                userId : user.id
+            },
+            select : {
+                id : true,
+                user : {
+                    select : {
+                        id : true,
+                        firstName : true,
+                        lastName : true,
+                    }
+                },
+                autonomy : true,
+                discipline : true,
+                organisation : true,
+                ponctuality : true,
+                regularity : true,
+                respect : true,
+                preparation : true,
+                positive : true,
+                negative : true,
+                improvements : true,
+            }
+        })
+
         return sendSuccess<profileSuccessResponse>(
             res,
             {
                 bilans,
-                docs : [],
+                skill,
+                docs : []
             }
         )
     }catch(error){

@@ -79,6 +79,29 @@ export async function getAdminBaseHandler(
             }
         })
 
+        const skills = await prisma.skill.findMany({
+            select : {
+                id : true,
+                user : {
+                    select : {
+                        id : true,
+                        firstName : true,
+                        lastName : true,
+                    }
+                },
+                autonomy : true,
+                discipline : true,
+                organisation : true,
+                ponctuality : true,
+                regularity : true,
+                respect : true,
+                preparation : true,
+                positive : true,
+                negative : true,
+                improvements : true,
+            }
+        })
+
         const subjects = SUBJECTS.map((subject) => {return subject});
 
         console.log('users : ', JSON.stringify(users))
@@ -92,9 +115,9 @@ export async function getAdminBaseHandler(
                 users,
                 bilans,
                 lessons,
-                docs : [],
-                skills : [],
+                skills,
                 subjects,
+                docs : [],
             }
         )
     }catch(error){

@@ -65,9 +65,9 @@ type SkillPayload = {
     improvements : string,
 }
 
-export async function requestAddSkill(payload : SkillPayload) : Promise<SkillPayload | null>{
+export async function requestAddSkill(payload : SkillPayload) : Promise<Skill | null>{
     try{
-        const response =  await apiRequest<{skill : SkillPayload}>('/api/admin/add-skill',{
+        const response =  await apiRequest<{skill : Skill}>('/api/admin/add-skill',{
             method : 'POST',
             body : JSON.stringify(payload)
         })

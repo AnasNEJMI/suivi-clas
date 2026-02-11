@@ -22,7 +22,7 @@ export async function adminRouteLoader(){
             staleTime : 10 * 60 * 1000,
         }) 
 
-        console.log('data received : ', JSON.stringify(data.bilans, null));
+        console.log('data received : ', JSON.stringify(data.skills, null));
         return data;
     }catch(error){
         if(error instanceof Response && error.status === 302){
