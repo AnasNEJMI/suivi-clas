@@ -144,7 +144,7 @@ const AddSkillForm = ({className, users, skills} : AddSkillFormProps) => {
     }
 
   return (
-    <Card className={cn(className, 'font-outfit max-w-5xl')}>
+    <Card className={cn(className, 'font-outfit w-full max-w-5xl')}>
         <CardHeader>
           <CardTitle>Ajouter/Modifier les compétences transversales</CardTitle>
           <CardDescription>

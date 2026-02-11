@@ -3,6 +3,9 @@ import { UserGender, UserRole } from "../generated/prisma/enums.js";
 export const CLASS_NAMES = ['4ème'] as const;
 export type ClassName = typeof CLASS_NAMES[number];
 
+export const DOC_TYPES = ['fiche', 'qcm', 'exercices'] as const;
+export type DocType = typeof DOC_TYPES[number];
+
 ///////////////////USERS//////////////////////
 type userData = {
     firstName: string,

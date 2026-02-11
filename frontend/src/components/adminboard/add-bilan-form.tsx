@@ -275,6 +275,7 @@ const AddBilanForm = ({className, users, lessons, subjects} : AddBilanFormProps)
                         value={field.value === true? 'présent': 'absent'}
                         onValueChange={setPresence}
                         id="form-add-bilan-presence"
+                        disabled = {bilanClassName === '' || bilanStudentId < 0 }
                         aria-invalid={fieldState.invalid}
                         variant="outline"
                         className='w-full md:max-w-xs items-center justify-end'

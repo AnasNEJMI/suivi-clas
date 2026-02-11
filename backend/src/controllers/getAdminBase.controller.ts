@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { sendSuccess } from "../utils/response.utils.js";
 import { Bilan, Doc, Lesson, Skill, User } from "../types/data.types.js";
 import { prisma } from "../db/prisma.js";
-import { Subject, SUBJECTS } from "../db/seed.data.js";
+import {SUBJECTS } from "../db/seed.data.js";
 
 type profileSuccessResponse = {
     users : User[],
@@ -52,6 +52,7 @@ export async function getAdminBaseHandler(
         })
 
         const bilans = await prisma.bilan.findMany({
+            
             select : {
                 id : true,
                 user : {
@@ -76,7 +77,7 @@ export async function getAdminBaseHandler(
 
             },orderBy : {
                 date : 'desc',
-            }
+            },take : 30
         })
 
         const skills = await prisma.skill.findMany({

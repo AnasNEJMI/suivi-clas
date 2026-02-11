@@ -11,14 +11,12 @@ const AdminboardSkills = () => {
         <SiteHeader title='Compétences'/>
         <div className="flex flex-1 flex-col">
         <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="min-h-svh w-full p-6">
-                  <div className='flex flex-col lg:flex-row gap-6 mt-12'>
+            <div className="min-h-svh w-full flex items-center justify-center p-6">
                     <AddSkillForm
-                      className='flex-1'
+                      className=''
                       users={loaderData.users}
                       skills={loaderData.skills}
                     />
-                  </div>
               </div>
         </div>
         </div>

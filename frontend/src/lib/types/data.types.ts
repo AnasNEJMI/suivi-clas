@@ -32,3 +32,7 @@ export type ClassName = typeof CLASS_NAMES[number];
 /////////////////////////////////////////////////////////////
 export const SUBJECTS = ['math', 'pc', 'svt'] as const;
 export type Subject = typeof SUBJECTS[number];
+
+////////////////////////////////////////////////////////////
+export const DOC_TYPES = ['fiche', 'qcm', 'exercices'] as const;
+export type DocType = typeof DOC_TYPES[number];

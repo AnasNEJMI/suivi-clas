@@ -81,3 +81,28 @@ export async function requestAddSkill(payload : SkillPayload) : Promise<Skill | 
         throw error;
     }
 }
+
+////////////////ADD SKILL///////////////////////
+type DocPayload = {
+    docId : number | undefined,
+    lessonId : number,
+    type : string,
+    link : string,
+}
+
+export async function requestAddDoc(payload : DocPayload) : Promise<Doc | null>{
+    try{
+        const response =  await apiRequest<{doc : Doc}>('/api/admin/add-doc',{
+            method : 'POST',
+            body : JSON.stringify(payload)
+        })
+        return response.doc;
+    }catch(error){
+        if(error instanceof ApiError
+        && error.statusCode === ErrorStatusMap[ErrorCodes.UNAUTHORIZED]){
+            return null;
+        }
+
+        throw error;
+    }
+}

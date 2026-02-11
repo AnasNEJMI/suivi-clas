@@ -33,7 +33,7 @@ export type Lesson = {
 
 export type Doc = {
     id : number,
-    lessonId : number,
+    lesson : {id : number, label : string},
     link : string,
     type : string,
 }
