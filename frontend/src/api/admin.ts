@@ -49,3 +49,35 @@ export async function requestAddBilan(payload : BilanPayload) : Promise<Bilan | 
         throw error;
     }
 }
+
+////////////////ADD SKILL///////////////////////
+type SkillPayload = {
+    userId : number,
+    autonomy : number,
+    discipline : number,
+    organisation : number,
+    ponctuality : number,
+    regularity : number,
+    respect : number,
+    preparation : number,
+    positive : string,
+    negative : string,
+    improvements : string,
+}
+
+export async function requestAddSkill(payload : SkillPayload) : Promise<SkillPayload | null>{
+    try{
+        const response =  await apiRequest<{skill : SkillPayload}>('/api/admin/add-skill',{
+            method : 'POST',
+            body : JSON.stringify(payload)
+        })
+        return response.skill;
+    }catch(error){
+        if(error instanceof ApiError
+        && error.statusCode === ErrorStatusMap[ErrorCodes.UNAUTHORIZED]){
+            return null;
+        }
+
+        throw error;
+    }
+}

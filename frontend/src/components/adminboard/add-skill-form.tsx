@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field'
 import type z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {useState, type SetStateAction } from 'react'
+import {useEffect, useState, type SetStateAction } from 'react'
 import { Button } from '../ui/button'
 import { cn } from '@/lib/utils'
 import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group'
@@ -15,6 +15,7 @@ import type { Skill } from '@/api/api.types'
 import { addSkillSchema } from '@/lib/schemas/addSkill.schema'
 import { Slider } from '../ui/slider'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { requestAddSkill } from '@/api/admin'
 
 interface AddSkillFormProps {
   className ?: string,
@@ -45,87 +46,75 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
       }
     })
 
-    const bilanClassName = useWatch({
+    const skillClassName = useWatch({
       control: form.control,
       name: "className",
     });
 
-    const bilanStudentId = useWatch({
+    const skillStudentId = useWatch({
       control: form.control,
       name: "studentId",
     });
-    
-    function updateFormValue<T extends string | number>(
-      label : "className" | "studentId" | "autonomy" | "discipline" | "organisation" | "ponctuality" | "regularity" | "respect" | "preparation" | "positive" | "negative" | "improvements",
-      value : T,
-      isInvalid : () => boolean = () => !value){
 
-        console.log(`${label} : `, value);
-        if(isInvalid()) return;
-        form.setValue(label, value);
-        console.log('form updated : ', form.getValues())
-    }
+    useEffect(() => {
+      form.reset({
+        ...form.getValues(),
+        autonomy : 0,
+        discipline : 0,
+        organisation : 0,
+        ponctuality : 0,
+        regularity : 0,
+        respect : 0,
+        preparation : 0,
+        positive : '',
+        negative : '',
+        improvements : '',
+      })
+    }, [form, skillStudentId])
+
+    useEffect(() => {
+      form.reset({
+        ...form.getValues(),
+        studentId : -1,
+        autonomy : 0,
+        discipline : 0,
+        organisation : 0,
+        ponctuality : 0,
+        regularity : 0,
+        respect : 0,
+        preparation : 0,
+        positive : '',
+        negative : '',
+        improvements : '',
+      })
+      filterAndUpdate(users,(user : User) => user.role === 'student' && user.class?.label === skillClassName, setSelectedStudents);
+    }, [form, skillClassName, users])
+
 
     function filterAndUpdate<T>(array : T[], condition : (item : T) => boolean, update : (value: SetStateAction<T[]>) => void){
       const filtered = array.filter(lesson => condition(lesson));
       update(filtered);
     }
 
-    const updateClassName = (value : string) => {
-        updateFormValue('className', value);
-        form.setValue('studentId', -1);
-        filterAndUpdate(users,(user : User) => user.role === 'student' && user.class?.label === value, setSelectedStudents);
-        
-        updateAutonomy([0]);
-        updateDiscipline([0]);
-        updateOrganisation([0]);
-        updatePonctuality([0]);
-        updateRegularity([0]);
-        updateRespect([0]);
-        updatePreparation([0]);
-    }
-    const updateStudentId = (value : string) => {
-        updateFormValue('studentId', parseInt(value));
-        updateAutonomy([0]);
-        updateDiscipline([0]);
-        updateOrganisation([0]);
-        updatePonctuality([0]);
-        updateRegularity([0]);
-        updateRespect([0]);
-        updatePreparation([0]);
-    }
-
-    // const updateStudentId = (value : string) => updateFormValue<number>('studentId', parseInt(value));
-  
-    const updateSkill = (
-        label:"className" | "studentId" | "autonomy" | "discipline" | "organisation" | "ponctuality" | "regularity" | "respect" | "preparation" | "positive" | "negative" | "improvements",
-        values : number[]
-    ) => {
-        form.setValue(label, values[0]);
-        console.log('form updated : ', form.getValues())
-    }
-
-    const updateAutonomy = (values : number[]) => updateSkill('autonomy', values);
-    const updateDiscipline = (values : number[]) => updateSkill('discipline', values);
-    const updateOrganisation = (values : number[]) => updateSkill('organisation', values);
-    const updatePonctuality = (values : number[]) => updateSkill('ponctuality', values);
-    const updateRegularity = (values : number[]) => updateSkill('regularity', values);
-    const updateRespect = (values : number[]) => updateSkill('respect', values);
-    const updatePreparation = (values : number[]) => updateSkill('preparation', values);
   
     async function onSubmit(data : z.infer<typeof addSkillSchema>){
       setIsAddingSkill(true);
       try{
-        // const bilan = await requestAddBilan({
-        //   userId : data.studentId,
-        //   date : data.date,
-        //   lessonId : data.lessonId,
-        //   subject : data.subject,
-        //   presence : data.presence,
-        //   summary : data.summary,
-        // });
+        const skill = await requestAddSkill({
+          userId : data.studentId,
+          autonomy : data.autonomy,
+          discipline : data.discipline,
+          organisation : data.organisation,
+          ponctuality : data.ponctuality,
+          regularity : data.regularity,
+          respect : data.respect,
+          preparation : data.preparation,
+          positive : data.positive,
+          negative : data.negative,
+          improvements : data.improvements,
+        });
 
-        console.log('bilan submitted successfully : ', JSON.stringify(data, null));
+        console.log('bilan submitted successfully : ', JSON.stringify(skill, null));
         SuccessToast({
           message : 'Compétences soumis avec succès !',
         })
@@ -157,7 +146,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                       <ToggleGroup
                         type="single"
                         value={field.value}
-                        onValueChange={updateClassName}
+                        onValueChange={(value) => field.onChange(value)}
                         id="form-add-skill-classname"
                         aria-invalid={fieldState.invalid}
                         variant="outline"
@@ -193,7 +182,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     <ToggleGroup
                       type="single"
                       value={field.value.toString()}
-                      onValueChange={updateStudentId}
+                      onValueChange={(value) => field.onChange(parseInt(value))}
                       id="form-add-skill-student"
                       aria-invalid={fieldState.invalid}
                       variant="outline"
@@ -228,17 +217,17 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
                         <FieldLabel htmlFor="form-add-skill-autonomy">Autonomie</FieldLabel>
                         <Slider
-                        {...field}
-                        id="form-add-skill-autonomy"
-                        step={1}
-                        min={0}
-                        max={20}
-                        value={[field.value]}
-                        onValueChange={updateAutonomy}
-                        disabled = {bilanClassName === '' || bilanStudentId < 0 || isAddingSkill}
-                        aria-invalid={fieldState.invalid}
-                        className="lg:h-40 lg:w-min"
-                        orientation={isMobile? 'horizontal': 'vertical'}
+                          id="form-add-skill-autonomy"
+                          step={1}
+                          min={0}
+                          max={20}
+                          value={[field.value]}
+                          onValueChange={(values) => {field.onChange(values[0]);}}
+                          onBlur={field.onBlur}
+                          disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
+                          aria-invalid={fieldState.invalid}
+                          className="lg:h-40 lg:w-min"
+                          orientation={isMobile? 'horizontal': 'vertical'}
                         />
                         {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -254,14 +243,14 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
                         <FieldLabel htmlFor="form-add-skill-discipline">Discipline</FieldLabel>
                         <Slider
-                        {...field}
                         id="form-add-skill-discipline"
                         step={1}
                         min={0}
                         max={20}
                         value={[field.value]}
-                        onValueChange={updateDiscipline}
-                        disabled = {bilanClassName === '' || bilanStudentId < 0 || isAddingSkill}
+                        onValueChange={(values) => {field.onChange(values[0]);}}
+                        onBlur={field.onBlur}
+                        disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                         aria-invalid={fieldState.invalid}
                         className="lg:h-40 lg:w-min"
                         orientation={isMobile? 'horizontal': 'vertical'}
@@ -280,14 +269,14 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
                         <FieldLabel htmlFor="form-add-skill-organisation">Organisation</FieldLabel>
                         <Slider
-                        {...field}
                         id="form-add-skill-organisation"
                         step={1}
                         min={0}
                         max={20}
                         value={[field.value]}
-                        onValueChange={updateOrganisation}
-                        disabled = {bilanClassName === '' || bilanStudentId < 0 || isAddingSkill}
+                        onValueChange={(values) => {field.onChange(values[0]);}}
+                        onBlur={field.onBlur}
+                        disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                         aria-invalid={fieldState.invalid}
                         className="lg:h-40 lg:w-min"
                         orientation={isMobile? 'horizontal': 'vertical'}
@@ -306,14 +295,14 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
                         <FieldLabel htmlFor="form-add-skill-ponctuality">Ponctualité</FieldLabel>
                         <Slider
-                        {...field}
                         id="form-add-skill-ponctuality"
                         step={1}
                         min={0}
                         max={20}
                         value={[field.value]}
-                        onValueChange={updatePonctuality}
-                        disabled = {bilanClassName === '' || bilanStudentId < 0 || isAddingSkill}
+                        onValueChange={(values) => {field.onChange(values[0]);}}
+                        onBlur={field.onBlur}
+                        disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                         aria-invalid={fieldState.invalid}
                         className="lg:h-40 lg:w-min"
                         orientation={isMobile? 'horizontal': 'vertical'}
@@ -332,17 +321,17 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
                         <FieldLabel htmlFor="form-add-skill-regularity">Régularité</FieldLabel>
                         <Slider
-                        {...field}
-                        id="form-add-skill-regularity"
-                        step={1}
-                        min={0}
-                        max={20}
-                        value={[field.value]}
-                        onValueChange={updateRegularity}
-                        disabled = {bilanClassName === '' || bilanStudentId < 0 || isAddingSkill}
-                        aria-invalid={fieldState.invalid}
-                        className="lg:h-40 lg:w-min"
-                        orientation={isMobile? 'horizontal': 'vertical'}
+                          id="form-add-skill-regularity"
+                          step={1}
+                          min={0}
+                          max={20}
+                          value={[field.value]}
+                          onValueChange={(values) => {field.onChange(values[0]);}}
+                          onBlur={field.onBlur}
+                          disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
+                          aria-invalid={fieldState.invalid}
+                          className="lg:h-40 lg:w-min"
+                          orientation={isMobile? 'horizontal': 'vertical'}
                         />
                         {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -358,17 +347,17 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
                         <FieldLabel htmlFor="form-add-skill-preparation">Préparation</FieldLabel>
                         <Slider
-                        {...field}
-                        id="form-add-skill-preparation"
-                        step={1}
-                        min={0}
-                        max={20}
-                        value={[field.value]}
-                        onValueChange={updatePreparation}
-                        disabled = {bilanClassName === '' || bilanStudentId < 0 || isAddingSkill}
-                        aria-invalid={fieldState.invalid}
-                        className="lg:h-40 lg:w-min"
-                        orientation={isMobile? 'horizontal': 'vertical'}
+                          id="form-add-skill-preparation"
+                          step={1}
+                          min={0}
+                          max={20}
+                          value={[field.value]}
+                          onValueChange={(values) => {field.onChange(values[0]);}}
+                          onBlur={field.onBlur}
+                          disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
+                          aria-invalid={fieldState.invalid}
+                          className="lg:h-40 lg:w-min"
+                          orientation={isMobile? 'horizontal': 'vertical'}
                         />
                         {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -384,14 +373,14 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                     <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
                         <FieldLabel htmlFor="form-add-skill-respect">Respect</FieldLabel>
                         <Slider
-                        {...field}
                         id="form-add-skill-respect"
                         step={1}
                         min={0}
                         max={20}
                         value={[field.value]}
-                        onValueChange={updateRespect}
-                        disabled = {bilanClassName === '' || bilanStudentId < 0 || isAddingSkill}
+                        onValueChange={(values) => {field.onChange(values[0]);}}
+                        onBlur={field.onBlur}
+                        disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                         aria-invalid={fieldState.invalid}
                         className="lg:h-40 lg:w-min"
                         orientation={isMobile? 'horizontal': 'vertical'}
@@ -415,7 +404,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                       {...field}
                       id="form-add-skill-positive"
                       placeholder="élements positifs"
-                      disabled = {bilanClassName === '' || bilanStudentId < 0 || isAddingSkill}
+                      disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                       aria-invalid={fieldState.invalid}
                       autoComplete='off'
                       required
@@ -438,7 +427,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                       {...field}
                       id="form-add-skill-negative"
                       placeholder="élements négatifs"
-                      disabled = {bilanClassName === '' || bilanStudentId < 0 || isAddingSkill}
+                      disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                       aria-invalid={fieldState.invalid}
                       autoComplete='off'
                       required
@@ -461,7 +450,7 @@ const AddSkillForm = ({className, users} : AddSkillFormProps) => {
                       {...field}
                       id="form-add-skill-improvements"
                       placeholder="élements négatifs"
-                      disabled = {bilanClassName === '' || bilanStudentId < 0 || isAddingSkill}
+                      disabled = {skillClassName === '' || skillStudentId < 0 || isAddingSkill}
                       aria-invalid={fieldState.invalid}
                       autoComplete='off'
                       required

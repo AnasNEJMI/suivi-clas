@@ -21,7 +21,7 @@ export type Bilan = {
 
 export type Skill = {
     id : number,
-    userId : number,
+    user : {id : number, firstName : string, lastName : string},
     autonomy : number,
     discipline : number,
     organisation : number,

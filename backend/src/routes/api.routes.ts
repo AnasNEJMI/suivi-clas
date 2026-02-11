@@ -12,6 +12,8 @@ import { getAdminBaseHandler } from '../controllers/getAdminBase.controller.js';
 import { addBilanSchema } from '../schemas/addBilan.schema.js';
 import { addBilanHandler } from '../controllers/addBilan.controller.js';
 import { studentProfileHandler } from '../controllers/studentProfile.controller.js';
+import { addSkillSchema } from '../schemas/addSkill.schema.js';
+import { addSkillHandler } from '../controllers/addSkill.controller.js';
 
 const router = Router();
 
@@ -22,5 +24,6 @@ router.get('/auth/profile', requireAuthHandler, asyncHandler(profileHandler));
 router.get('/student/profile', requireAuthHandler, asyncHandler(studentProfileHandler));
 router.get('/admin/base', requireAuthHandler, requireAdminHandler, asyncHandler(getAdminBaseHandler))
 router.post('/admin/add-bilan', validateBody(addBilanSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addBilanHandler))
+router.post('/admin/add-skill', validateBody(addSkillSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addSkillHandler))
 
 export default router
