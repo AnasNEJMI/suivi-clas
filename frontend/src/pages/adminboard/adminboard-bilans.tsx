@@ -23,7 +23,6 @@ const AdminboardBilans = () => {
                       lessons={loaderData.lessons}
                       subjects={loaderData.subjects}
                     />
-                    <div className='flex-1 bg-lime-300 h-40'></div>
                   </div>
               </div>
           </div>

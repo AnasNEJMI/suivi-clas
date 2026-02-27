@@ -35,6 +35,7 @@ model User {
   sessions Session[] //a user can have multiple sessions
   bilans Bilan[] //a user can have multiple bilans
   skill Skill? //a user can have at most one skill entry
+  qcms Qcm[] // a user can have mutliple qcms
 
   @@index(classId)
 }
@@ -120,6 +121,8 @@ model Lesson{
   
   bilans Bilan[] // a lesson can have mutliple bilans
   documents Document[] // a lesson can have mutliple docs
+  qcms Qcm[] // a lesson can have mutliple qcms
+  qcmBankQuestions QcmBankQuestion[]
   @@index([subject])
   //@@unique([classId, subject, label])
 }
@@ -143,6 +146,65 @@ model Session {
 }
 
 
+//////QCM///////
+
+model QcmBankQuestion{
+  id                Int        @id @default(autoincrement())
+
+  lessonId          Int
+  lesson            Lesson     @relation(fields : [lessonId], references: [id], onDelete : Cascade)
+
+  question          String     @default("")
+  difficulty        Difficulty @default(e)
+  answerA           String     @default("")
+  answerB           String     @default("")
+  answerC           String     @default("")
+  answerD           String     @default("")
+  correctAnswer     AnswerChoice
+  explanation       String     @default("")
+
+  createdAt         DateTime   @default(now())
+
+  @@index([lessonId])
+  qcmQuestions QcmQuestion[]
+}
+
+model Qcm{
+  id               Int         @id @default(autoincrement())
+
+  userId           Int
+  user             User        @relation(fields: [userId], references: [id], onDelete : Cascade)
+
+  lessonId         Int
+  lesson           Lesson        @relation(fields : [lessonId], references: [id], onDelete : Cascade)
+
+  completed        Boolean     @default(false)
+
+  createdAt        DateTime    @default(now())
+
+  @@index([userId])
+
+  qcmQuestions QcmQuestion[]
+}
+
+model QcmQuestion{
+  id               Int         @id @default(autoincrement())
+
+  bankQuestionId   Int
+  bankQuestion     QcmBankQuestion    @relation(fields: [bankQuestionId], references: [id], onDelete : Cascade)
+
+  qcmId            Int
+  qcm              Qcm         @relation(fields: [qcmId], references: [id], onDelete : Cascade)
+
+  selectedChoice   AnswerChoice?
+  correct          Boolean     @default(false)
+
+  createdAt        DateTime    @default(now())
+
+  @@index([bankQuestionId])
+  @@index([qcmId])
+}
+
 
 ////////////////////////////////////////////
 
@@ -154,4 +216,17 @@ enum UserRole {
 enum UserGender {
   m
   f
+}
+
+enum Difficulty{
+  e
+  m
+  h
+}
+
+enum AnswerChoice{
+  a
+  b
+  c
+  d
 }
