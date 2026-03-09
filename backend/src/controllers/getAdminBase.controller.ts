@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { sendSuccess } from "../utils/response.utils.js";
 import { Bilan, Doc, Lesson, Skill, User } from "../types/data.types.js";
 import { prisma } from "../db/prisma.js";
-import {SUBJECTS } from "../db/seed.data.js";
+import {SUBJECTS } from "../db/seed.types.js";
 
 type profileSuccessResponse = {
     users : User[],

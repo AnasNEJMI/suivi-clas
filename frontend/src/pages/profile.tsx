@@ -1,4 +1,4 @@
-import type { Bilan, Doc } from '@/api/api.types';
+import type { Bilan, Doc, QcmWithQuestions, Skill } from '@/api/api.types';
 import type { User } from '@/api/auth';
 import Header from '@/components/header';
 import BilanCard from '@/components/profile/bilan';
@@ -19,12 +19,13 @@ const todoLinks = {
 const profileDesc = 'Cet espace personnel met à votre disponibilité toutes les informations importantes et utiles concernant le déroulement des séances, les commentaires et les retours de notre encadrant, ainsi que la progression de chaque élève.'
 
 const Profile = () => {
-    const loaderData = useRouteLoaderData('profile') as {user : User, bilans : Bilan[], docs : Doc[]};
+    const loaderData = useRouteLoaderData('profile') as {user : User, bilans : Bilan[], docs : Doc[], skill : Skill, qcmWithQuestions : QcmWithQuestions[]};
 
     if(!loaderData.user){
         return <Navigate to='/' replace/>;
     }
 
+    console.log(loaderData.qcmWithQuestions);
   return (
     <BaseLayout>
         <Header/>
@@ -40,10 +41,11 @@ const Profile = () => {
             <div>
                 <BilanCard bilans = {loaderData.bilans}/>
                 <Todo student={'Bilal'} todoLinks={todoLinks} className='mt-12'/>
+                <pre className='w-60'>{JSON.stringify(loaderData.qcmWithQuestions, null)}</pre>
             </div>
             <div>
                 <Presence bilans={loaderData.bilans} student={loaderData.user.firstName}/>
-                <CompetencesMethodologiques className='mt-12'/>
+                <CompetencesMethodologiques skill = {loaderData.skill} className='mt-12'/>
             </div>
         </section>
     </BaseLayout>

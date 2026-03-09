@@ -38,19 +38,21 @@ export async function addBilanHandler(
             }
             
             //validate lesson
+            let lesson;
+
             if(presence){
-                const lesson = await prisma.lesson.findUnique({
+                lesson = await prisma.lesson.findUnique({
                     where : {
                         id : lessonId
                     }
                 });
                 
                 if(!lesson){
-                    throw ApiError.invalidCredentials("La leçon choisie n'est pas validate.");
+                    throw ApiError.invalidCredentials("La leçon choisie n'est pas valide.");
                 }
 
             }
-    
+
             const lesId = lessonId < 0 ? null : lessonId;
             const sub = subject === '' ? null : subject;
             const summ = summary === '' ? null : summary;
@@ -86,7 +88,47 @@ export async function addBilanHandler(
                     }
                 }
             })
-    
+
+            //once the bilan is created, check if there is any created qcms in this subject are created but not finished
+            //if any exist return pass
+            //if not create a new qcm on the subject
+            //1 - check if qcm with lessonId exists :
+            //EXISTS : Do nothing
+            //DOES NOT EXIST : Create qcm, create 10 qcm questions attached to this qcm
+            if(lesId !== null){
+                const qcm = await prisma.qcm.create({
+                    data : {
+                        userId : user.id,
+                        lessonId : lesId,
+                        completed : false,
+                    }
+                })
+
+                //get 10 random bank question ids for this lesson
+                const randomBankQuestions = await prisma.$queryRaw<{id : number}[]>`
+                    SELECT id
+                    FROM "QcmBankQuestion"
+                    WHERE "lessonId" = ${lesId}
+                    ORDER BY RANDOM()
+                    LIMIT 10;
+                `;
+
+                //create the data for the 10 questions of this qcm using the data available
+                const qcmQuestionsData = randomBankQuestions.map((bankQuestion) => {
+                    return {
+                        qcmId : qcm.id,
+                        bankQuestionId : bankQuestion.id,
+                    }
+                }
+                )
+
+                //create the 10 qcm question rows
+                const qcmQuestions = await prisma.qcmQuestion.createMany({
+                    data : qcmQuestionsData,
+                })
+
+                console.log(`Successfully created ${qcmQuestions.count} new questions for the qcm with ${qcm.id}, the user with id ${user.id} and lesson with id ${lesId}!`);
+            }
     
             //return response
             return sendSuccess<AddBilanSuccessResponse>(

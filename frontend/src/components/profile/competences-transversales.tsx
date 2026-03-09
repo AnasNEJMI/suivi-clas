@@ -15,17 +15,10 @@ import {
 } from "@/components/ui/chart"
 import { CompetencesAccordian } from "./competences-accordians"
 import { cn } from "@/lib/utils"
+import type { Skill } from "@/api/api.types"
+import { useMemo } from "react"
 
 export const description = "Evolution des compétences transversales de Bilal au cours de l'année"
-
-const chartData = [
-  { competence: "Ponctualité", niveau: 13},
-  { competence: "Autonomie", niveau: 5 },
-  { competence: "Respect", niveau: 15 },
-  { competence: "Régularité", niveau: 3 },
-  { competence: "Organisation", niveau: 17 },
-  { competence: "Préparation", niveau: 12 },
-]
 
 const chartConfig = {
   niveau: {
@@ -37,10 +30,23 @@ const chartConfig = {
 
 interface CompetencesMethodologiquesProps{
     className? : string,
+    skill : Skill
 }
 
 
-export function CompetencesMethodologiques({className} : CompetencesMethodologiquesProps) {
+export function CompetencesMethodologiques({className, skill} : CompetencesMethodologiquesProps) {
+
+  const chartData = useMemo(() => {
+    return [
+      { competence: "Ponctualité", niveau: skill.ponctuality},
+      { competence: "Autonomie", niveau: skill.autonomy },
+      { competence: "Respect", niveau: skill.respect },
+      { competence: "Régularité", niveau: skill.regularity },
+      { competence: "Organisation", niveau: skill.organisation },
+      { competence: "Préparation", niveau: skill.preparation },
+    ]
+  }, [skill])
+
   return (
     <>
         <h2 className={cn('text-xl md:text-2xl font-bold', className)}>Compétences méthodologiques</h2>
@@ -72,7 +78,7 @@ export function CompetencesMethodologiques({className} : CompetencesMethodologiq
             </ChartContainer>
         </CardContent>
         <CardFooter className="text-sm flex-col items-start w-full">
-            <CompetencesAccordian/>
+            <CompetencesAccordian positive= {skill.positive} negative= {skill.negative} improvements= {skill.improvements}/>
         </CardFooter>
         </Card>
     </>

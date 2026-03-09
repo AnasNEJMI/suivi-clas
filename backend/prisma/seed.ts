@@ -1,8 +1,9 @@
 import "dotenv/config";
 import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient,UserGender, UserRole } from '../generated/prisma/client.js'
-import {hashPassword} from '../utils/auth.utils.js'
-import {admin, CLASS_NAMES, lessons, org, students} from './seed.data.js';
+import { Difficulty, PrismaClient,UserGender, UserRole } from '../src/generated/prisma/client.js'
+import {hashPassword} from '../src/utils/auth.utils.js'
+import {admin, lessons, org, qcmQuestions, students} from '../src/db/seed.data.js';
+import { CLASS_NAMES, Subject } from "../src/db/seed.types.js";
 
 const connectionString = `${process.env.DATABASE_URL}`
 
@@ -117,7 +118,7 @@ async function main(){
             generatedStudents.push(generatedStudent);
         };
         
-        console.log("created students for class with with label : ", generatedClass.label, ' and id : ', generatedClass.id, '/n the generated students are : ', ...generatedStudents);
+        console.log("created students for class with with label : ", generatedClass.label, ' and id : ', generatedClass.id);
         
         //generate the lessons for the class
         console.log("creating lessons for class with with label : ", generatedClass.label, ' and id : ', generatedClass.id);
@@ -145,14 +146,54 @@ async function main(){
                         subject : subject,
                     }
                 })
+
+                //generate the qcm questions for the class
+                console.log("creating qcm questions for lesson with with label : ", generatedLesson.label, ' and id : ', generatedLesson.id);
+                let generatedBankQuestions : {
+                    question : string,
+                    difficulty : Difficulty,
+                    answerA : string,
+                    answerB : string,
+                    answerC : string,
+                    answerD : string,
+                    correctAnswer : 'a' | 'b' | 'c' | 'd',
+                    explanation : string,
+                }[] = []
+
+                const qcmQs = qcmQuestions[className][subject as Subject][generatedLesson.label];
+                
+                if(qcmQs && qcmQs.length > 0){
+                    for (let i = 0; i < qcmQs.length; i++) {
+                        const qcmQ = qcmQs[i]!;
+                        
+                        const generatedBankQuestion = await prisma.qcmBankQuestion.create({
+                            data : {
+                                lessonId : generatedLesson.id,
+                                question : qcmQ.question,
+                                difficulty : qcmQ.difficulty,
+                                answerA : qcmQ.answerA,
+                                answerB : qcmQ.answerB,
+                                answerC : qcmQ.answerC,
+                                answerD : qcmQ.answerD,
+                                correctAnswer : qcmQ.correctAnswer,
+                                explanation : qcmQ.explanation,
+                            }
+                        })
+
+                        generatedBankQuestions.push(generatedBankQuestion);
+                    }
+                }
+                console.log("created qcm questions for lesson with with label : ", generatedLesson.label, ' and id : ', generatedLesson.id);
+                
                 
                 generatedLessons.push(generatedLesson);
             }
 
-            console.log("created lessons for class with with label : ", generatedClass.label, ' and id : ', generatedClass.id, '/n the generated math lessons lessons are : ', ...generatedLessons);
+            console.log("created lessons for class with with label : ", generatedClass.label, ' and id : ', generatedClass.id);
             generatedLessons = [];  
         }
-            
+
+        
     };
 
 

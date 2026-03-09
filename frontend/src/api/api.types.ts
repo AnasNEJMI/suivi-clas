@@ -24,6 +24,33 @@ export type Skill = {
     improvements : string,
 }
 
+export type QcmWithQuestions = {
+    id : number,
+    createdAt: Date;
+    completed: boolean;
+    user: {
+        id: number;
+        firstName: string;
+        lastName: string;
+    };
+    lesson: {
+        id: number;
+        label: string;
+    };
+    qcmQuestions: {
+        selectedChoice: AnswerChoice | null;
+        bankQuestion: {
+            question: string;
+            difficulty: Difficulty;
+            answerA: string;
+            answerB: string;
+            answerC: string;
+            answerD: string;
+            correctAnswer: AnswerChoice;
+        };
+    }[];
+}
+
 export type Lesson = {
     id : number,
     class : {id : number, label : string},
@@ -37,3 +64,21 @@ export type Doc = {
     link : string,
     type : string,
 }
+
+
+export const AnswerChoice = {
+  a: 'a',
+  b: 'b',
+  c: 'c',
+  d: 'd'
+} as const
+
+export type AnswerChoice = (typeof AnswerChoice)[keyof typeof AnswerChoice]
+
+export const Difficulty = {
+  e: 'e',
+  m: 'm',
+  h: 'h'
+} as const
+
+export type Difficulty = (typeof Difficulty)[keyof typeof Difficulty]

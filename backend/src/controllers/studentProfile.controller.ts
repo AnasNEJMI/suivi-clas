@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { sendSuccess } from "../utils/response.utils.js";
-import { Bilan, Doc, Skill, User } from "../types/data.types.js";
+import { Bilan, Doc, QcmWithQuestions, Skill, User } from "../types/data.types.js";
 import { ApiError } from "../classes/ApiError.class.js";
 import { prisma } from "../db/prisma.js";
 
@@ -8,6 +8,7 @@ type profileSuccessResponse = {
     bilans : Bilan[],
     skill : Skill,
     docs : Doc[],
+    qcmWithQuestions : QcmWithQuestions[],
 }
 
 export async function studentProfileHandler(
@@ -25,7 +26,7 @@ export async function studentProfileHandler(
 
         const bilans = await prisma.bilan.findMany({
             where : {
-                id : user.id
+                userId : user.id
             },
             select : {
                 id : true,
@@ -53,6 +54,61 @@ export async function studentProfileHandler(
                 date : 'desc',
             }
         })
+        
+        const allBilans = await prisma.bilan.findMany();
+
+        console.log('fetched bilans for student with id', user.id, ' the bilans : ', bilans)
+        console.log('fetched all bilans ', allBilans)
+
+        const lessonIds = bilans.map(bilan => bilan.lesson?.id).filter((lessonId) => lessonId !== undefined);
+        const uniqueLessonIds = [...new Set(lessonIds)];
+
+        console.log('lessonIds ',uniqueLessonIds);
+
+        const qcmWithQuestions = await prisma.qcm.findMany({
+            where : {
+                userId : user.id,
+                lessonId : {in : uniqueLessonIds},
+            },
+            select : {
+                id : true,
+                user : {
+                    select : {
+                        id : true,
+                        firstName : true,
+                        lastName : true,
+                    }
+                },
+                lesson : {
+                    select : {
+                        id : true,
+                        label : true,
+                    }
+                },
+                completed : true,
+                createdAt : true,
+                qcmQuestions : {
+                    select : {
+                        bankQuestion : {
+                            select : {
+                                question : true,
+                                answerA : true,
+                                answerB : true,
+                                answerC : true,
+                                answerD : true,
+                                correctAnswer : true,
+                                difficulty : true,
+                            }
+                        },
+                        selectedChoice : true,
+                    }
+                }
+            }
+        })
+        //check if there is a qcm of this bilan's lessonId, 
+        //EXISTS : RETURN IT
+        //DOES NOT EXIST : CREATE qcm, create the 10 questions attached to it
+        //
 
         const skill = await prisma.skill.findUniqueOrThrow({
             where : {
@@ -85,7 +141,8 @@ export async function studentProfileHandler(
             {
                 bilans,
                 skill,
-                docs : []
+                docs : [],
+                qcmWithQuestions
             }
         )
     }catch(error){

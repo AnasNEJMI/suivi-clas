@@ -1,20 +1,7 @@
 import { UserGender, UserRole } from "../generated/prisma/enums.js";
+import { mathQuestions4e } from "./seed.data-4e.js";
+import { ClassName, QcmBankQuestionSeed, Subject, userData } from "./seed.types.js";
 
-export const CLASS_NAMES = ['4ème'] as const;
-export type ClassName = typeof CLASS_NAMES[number];
-
-export const DOC_TYPES = ['fiche', 'qcm', 'exercices'] as const;
-export type DocType = typeof DOC_TYPES[number];
-
-///////////////////USERS//////////////////////
-type userData = {
-    firstName: string,
-    lastName: string,
-    username: string,
-    gender: UserGender,
-    password: string,
-    role: UserRole;
-}
 
 export const admin = {
     firstName : 'Anas',
@@ -122,37 +109,30 @@ export const students : Record<ClassName, userData[]> = {
 }
 
 
-//////////////////LESSONS/////////////////////////////
-export const SUBJECTS = ['math', 'pc', 'svt'] as const;
-export type Subject = typeof SUBJECTS[number];
+
+export const MATH_LESSONS_4e = [
+    "Nombres relatifs",
+    "Fractions et Nombres rationnels",
+    "Puissances et notation scientifique",
+    "Divisibilité et nombres premiers",
+    "Calcul littéral et distributivité",
+    "Équations simples",
+    "Proportionnalité et pourcentages",
+    "Statistiques",
+    "Probabilités",
+    "Grandeurs et mesures",
+    "Thalès",
+    "Pythagore",
+    "Repérage dans le plan",
+    "Surfaces et volumes"
+] as const;
+
+export type MathLesson4e = typeof MATH_LESSONS_4e[number]
 
 
 export const lessons : Record<ClassName, Record<Subject, string[]>> = {
     '4ème' : {
-        'math' : [
-            "Nombres relatifs : addition, soustraction, multiplication, division",
-            "Comparaison et encadrement de nombres",
-            "Fractions équivalentes",
-            "Puissances, notations scientifiques",
-            "Racines carrées",
-            "Nombres premiers et divisibilité",
-            "Langage littéral : distributivité",
-            "Égalités et équations simples",
-            "Modélisation par équations",
-            "Statistiques",
-            "Probabilités",
-            "Proportionnalité et pourcentages",
-            "Dépendance de deux grandeurs",
-            "Grandeurs produits et quotients",
-            "Repérage dans l'espace (pavé, coordonnées)",
-            "Pyramide et cône de révolution",
-            "Agrandissements et réductions",
-            "Triangles égaux et semblables",
-            "Théorème de Thalès",
-            "Pythagore et cosinus d'un angle aigu",
-            "Parallélogrammes particuliers",
-            "Translation et transformations géométriques"
-        ],
+        'math' : [...MATH_LESSONS_4e] ,
         'pc' : [
             "Atmosphère et composition de l'air",
             "Propriétés de l'air et pression",
@@ -193,5 +173,19 @@ export const lessons : Record<ClassName, Record<Subject, string[]>> = {
             "Micro-organismes et infections",
             "Puberté, appareils génitaux, contraception"
         ]
+    }
+} as const;
+
+
+//I need a way to convert 
+export const qcmQuestions : Record<ClassName, Record<Subject, Record<string, QcmBankQuestionSeed[]>>> = {
+    '4ème' : {
+        'math' : mathQuestions4e,
+        'pc' : {
+
+        },
+        'svt' : {
+
+        }
     }
 }

@@ -1,10 +1,11 @@
-import type { Bilan, Doc } from "./api.types";
+import type { Bilan, Doc, QcmWithQuestions, Skill } from "./api.types";
 import { apiRequest } from "./client";
 
 export type StudentProfileData = {
     bilans : Bilan[],
+    skill : Skill,
     docs : Doc[],
-    // skills : Skill
+    qcmWithQuestions : QcmWithQuestions[],
 }
 
 

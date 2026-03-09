@@ -26,7 +26,7 @@ export async function profileRouteLoader(){
 
         console.log('loaded profile : ', profile);
 
-        return {user : user, bilans : profile.bilans, docs : profile.docs};
+        return {user : user, bilans : profile.bilans, docs : profile.docs, skill : profile.skill, qcmWithQuestions : profile.qcmWithQuestions};
     }catch(error){
         if(error instanceof Response && error.status === 302){
             throw error;

@@ -1,3 +1,5 @@
+import { AnswerChoice, Difficulty } from "../generated/prisma/enums.js"
+
 export type User = {
     id  : number,
     username : string,
@@ -46,4 +48,31 @@ export type Doc = {
     lesson : {id : number, label : string},
     link : string,
     type : string,
+}
+
+export type QcmWithQuestions = {
+    id : number,
+    createdAt: Date;
+    completed: boolean;
+    user: {
+        id: number;
+        firstName: string;
+        lastName: string;
+    };
+    lesson: {
+        id: number;
+        label: string;
+    };
+    qcmQuestions: {
+        selectedChoice: AnswerChoice | null;
+        bankQuestion: {
+            question: string;
+            difficulty: Difficulty;
+            answerA: string;
+            answerB: string;
+            answerC: string;
+            answerD: string;
+            correctAnswer: AnswerChoice;
+        };
+    }[];
 }

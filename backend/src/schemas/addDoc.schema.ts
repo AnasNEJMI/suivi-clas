@@ -1,5 +1,5 @@
 import z from "zod";
-import {DOC_TYPES, DocType } from "../db/seed.data.js";
+import {DOC_TYPES, DocType } from "../db/seed.types.js";
 
 const lessonIdError = 'Veuillez choisir un leçon.';
 const lessonLinkError = 'Veuillez soumettre un lien valide.';
