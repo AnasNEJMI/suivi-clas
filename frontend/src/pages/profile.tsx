@@ -4,6 +4,7 @@ import Header from '@/components/header';
 import BilanCard from '@/components/profile/bilan';
 import { CompetencesMethodologiques } from '@/components/profile/competences-transversales';
 import Presence from '@/components/profile/presence';
+import Qcms from '@/components/profile/qcms';
 import SubjectsHistory from '@/components/profile/subjets-history';
 import Todo from '@/components/profile/todo';
 import BaseLayout from '@/layouts/base-layout';
@@ -41,6 +42,7 @@ const Profile = () => {
             <div>
                 <BilanCard bilans = {loaderData.bilans}/>
                 <Todo student={'Bilal'} todoLinks={todoLinks} className='mt-12'/>
+                <Qcms qcmWithQuestions={loaderData.qcmWithQuestions}/>
                 <pre className='w-60'>{JSON.stringify(loaderData.qcmWithQuestions, null)}</pre>
             </div>
             <div>
