@@ -37,14 +37,26 @@ interface CompetencesMethodologiquesProps{
 export function CompetencesMethodologiques({className, skill} : CompetencesMethodologiquesProps) {
 
   const chartData = useMemo(() => {
-    return [
-      { competence: "Ponctualité", niveau: skill.ponctuality},
-      { competence: "Autonomie", niveau: skill.autonomy },
-      { competence: "Respect", niveau: skill.respect },
-      { competence: "Régularité", niveau: skill.regularity },
-      { competence: "Organisation", niveau: skill.organisation },
-      { competence: "Préparation", niveau: skill.preparation },
-    ]
+    if (skill){
+      return [
+        { competence: "Ponctualité", niveau: skill.ponctuality},
+        { competence: "Autonomie", niveau: skill.autonomy },
+        { competence: "Respect", niveau: skill.respect },
+        { competence: "Régularité", niveau: skill.regularity },
+        { competence: "Organisation", niveau: skill.organisation },
+        { competence: "Préparation", niveau: skill.preparation },
+      ]
+    }else {
+      return [
+        { competence: "Ponctualité", niveau: 0},
+        { competence: "Autonomie", niveau: 0 },
+        { competence: "Respect", niveau: 0 },
+        { competence: "Régularité", niveau: 0 },
+        { competence: "Organisation", niveau: 0 },
+        { competence: "Préparation", niveau: 0 },
+      ]
+
+    }
   }, [skill])
 
   return (
