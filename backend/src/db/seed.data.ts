@@ -2,7 +2,6 @@ import { UserGender, UserRole } from "../generated/prisma/enums.js";
 import { mathQuestions4e } from "./seed.data-4e.js";
 import { ClassName, QcmBankQuestionSeed, Subject, userData } from "./seed.types.js";
 
-
 export const admin = {
     firstName : 'Anas',
     lastName : 'NEJMI',

@@ -1,6 +1,4 @@
 import z from "zod";
-import { Subject, SUBJECTS } from "../db/seed.data.js";
-
 
 const dateErrorMessage = 'Veuillez soumettre une date valide.';
 const studentError = 'Veuillez choisir un étudiant.';

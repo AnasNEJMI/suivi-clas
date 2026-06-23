@@ -1,5 +1,4 @@
 import z from "zod";
-import { CLASS_NAMES, ClassName } from "../db/seed.data.js";
 
 const studentError = 'Veuillez choisir un étudiant.';
 const textError = 'Ce champ ne peut pas être vide.';
