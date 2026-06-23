@@ -24,7 +24,7 @@ export async function createUserHandler(
     
         //check if a user with the same email already exists
         const existingUser = await prisma.user.findUnique({
-            where : {email}
+            where : {username : email}
         })
     
         if(existingUser){
@@ -35,14 +35,14 @@ export async function createUserHandler(
 
         const user = await prisma.user.create({
             data : {
-                email : email.toLocaleLowerCase(),
+                username : email.toLocaleLowerCase(),
                 passwordHash,
             }
         })
 
         return sendCreated<CreateUserResponse>(res, {
             id : user.id,
-            email : user.email,
+            email : user.username,
             createdAt : user.createdAt.toISOString(),
         })
         
