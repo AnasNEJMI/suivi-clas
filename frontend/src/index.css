@@ -154,7 +154,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-image: url("checkered-2.png");
+    background-image: url("/assets/checkered-2.png");
     background-repeat: repeat;
   }
 
@@ -185,7 +185,7 @@
 
 @layer utilities{
   .checkered-bg{
-    background-image: url("src/assets/checkered-2.png");
+    background-image: url("/assets/checkered-2.png");
     background-repeat: repeat;
   }
 
@@ -203,7 +203,7 @@
       left: 0;
       height: 100%;
       width: 100%;
-      background-image: url("noise-bg.png");
+      background-image: url("/assets/noise-bg.png");
       mix-blend-mode: overlay;
       opacity:1;
     }
