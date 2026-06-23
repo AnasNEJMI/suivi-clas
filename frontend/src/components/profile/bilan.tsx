@@ -104,14 +104,16 @@ const BilanCard = ({className, bilans} : BilanCardProps) => {
     const [selectedBilan, setSelectedBilan] = useState<Bilan>(bilans[0])
   return (
     <>
+    <div className='flex justify-between items-center'>
+        <h2 className='text-xl md:text-2xl font-bold'>Bilan séance</h2>
+        {
+            bilans.length > 0 &&
+            <BilanDropdown bilans = {bilans} selectedValue={formatDate(selectedBilan.date, 'd/M/y')} onValueChange = {setSelectedBilan}/>
+        }
+    </div>
     {
         bilans.length > 0 &&
         <div>
-            <div className='flex justify-between items-center'>
-                <h2 className='text-xl md:text-2xl font-bold'>Bilan séance</h2>
-                <BilanDropdown bilans = {bilans} selectedValue={formatDate(selectedBilan.date, 'd/M/y')} onValueChange = {setSelectedBilan}/>
-            </div>
-            <>
                 {
                     selectedBilan.presence &&
                     <Card className={cn('bg-linear-330 from-15% from-green-200 to-60% to-lime-200 shadow-md rounded-xl border border-lime-400 mt-4', className)}>
@@ -140,7 +142,6 @@ const BilanCard = ({className, bilans} : BilanCardProps) => {
                     </Card>
 
                 }
-            </>
         </div>
     }
     {

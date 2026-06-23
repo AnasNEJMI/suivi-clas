@@ -19,7 +19,7 @@ const Presence = ({className, bilans, student} : PresenceProps) => {
     <>
         <div className={cn('flex justify-between items-center', className)}>
             <h2 className='text-xl md:text-2xl font-bold'>Présence</h2>
-            <span className='px-4 py-0.5 bg-zinc-800 text-white rounded-xl text-nowrap text-lg font-bold'>{Math.round((presentNum/total)*100)} %</span>
+            <span className='px-4 py-0.5 bg-zinc-800 text-white rounded-xl text-nowrap text-lg font-bold'>{bilans.length > 0 ? Math.round((presentNum/total)*100) : 0} %</span>
         </div>
         {
             bilans.length > 0 && 
