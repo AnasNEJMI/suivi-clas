@@ -22,6 +22,7 @@ export async function requireAuthHandler(
     try{
         const sessionId = req.cookies[SESSION_CONFIG.COOKIE_NAME];
 
+        console.log("sessionId valid ? ", !sessionId)
         console.log('sessionId', sessionId)
         
         ////validation of cookie value

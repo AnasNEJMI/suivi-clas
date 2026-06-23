@@ -50,11 +50,17 @@ export async function getSession(sessionId : string){
 
     })
 
+    console.log("retrieved session is : ", session);
+    
     if (!session){
         return null;
     }
-
+    
     const now = new Date();
+    
+    console.log("now : ", now);
+    console.log("retrieved session expiresAt : ", session?.expiresAt);
+    console.log("retrieved session is : ", session);
 
     if(session.expiresAt < now){
         await prisma.session.delete({
