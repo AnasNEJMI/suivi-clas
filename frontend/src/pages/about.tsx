@@ -1,7 +1,6 @@
 import Header from '@/components/header'
 import BaseLayout from '@/layouts/base-layout'
 import { Construction } from 'lucide-react'
-import React from 'react'
 
 const About = () => {
   return (
