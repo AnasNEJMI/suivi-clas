@@ -4,7 +4,7 @@ export const SESSION_CONFIG = {
     COOKIE_OPTIONS : {
         httpOnly : true,
         secure : process.env.NODE_ENV === 'production',
-        sameSite : process.env.NODE_ENV === 'production'? 'strict' as const : 'lax' as const,
+        sameSite : process.env.NODE_ENV === 'production'? 'none' as const : 'lax' as const,
         path : '/',
         maxAge : 7 * 24 *60 * 60 * 1000,
     }
