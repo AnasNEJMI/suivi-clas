@@ -11,6 +11,70 @@ export const admin = {
     role : UserRole.admin
 }
 
+export const orgs = [
+    {
+        name : "Fleurs Du Lys",
+        members : [
+        {
+            firstName : 'Sanae',
+            lastName : 'Fleurs Du Lys',
+            username : 'Sanae',
+            gender : UserGender.f,
+            password : 'CLAS-FdL-Sanae-77',
+        },
+        {
+            firstName : 'Sabrina',
+            lastName : 'Fleurs Du Lys',
+            username : 'Sabrina',
+            gender : UserGender.f,
+            password : 'CLAS-FdL-Sabrina-77',
+        },
+        ]
+    },
+    {
+        name : "Fleurs Du Lys",
+        members : [
+        {
+            firstName : 'Sanae',
+            lastName : 'Fleurs Du Lys',
+            username : 'Sanae',
+            gender : UserGender.f,
+            password : 'CLAS-FdL-Sanae-77',
+        },
+        {
+            firstName : 'Sabrina',
+            lastName : 'Fleurs Du Lys',
+            username : 'Sabrina',
+            gender : UserGender.f,
+            password : 'CLAS-FdL-Sabrina-77',
+        },
+        ]
+    }
+]
+
+export const animators = [
+    {
+        firstName : 'Anas',
+        lastName : 'NEJMI',
+        username : 'AnasNEJMI',
+        gender : UserGender.m,
+        password : "Anas-Anim-CLAS-77"
+    },
+    {
+        firstName : 'Selmah',
+        lastName : '',
+        username : 'Selmah',
+        gender : UserGender.f,
+        password : "Selmah-Anim-CLAS-77"
+    },
+]
+
+export const scolarYears = [
+    {
+        tag : '2026/2027'
+    }
+]
+
 export const org = [
     {
         firstName : 'Sanae',

@@ -13,218 +13,329 @@ datasource db {
   provider = "postgresql"
 }
 
+//////////////////// AUTH ENTITIES ////////////////////
 
-model User {
+model Student {
+  id           Int      @id @default(autoincrement()) 
+  username     String   @unique
+  firstName    String   @default("john")
+  lastName     String   @default("doe")
+  passwordHash String
+  gender       Gender   @default(m)
+
+  classId      Int?
+  class        Class?   @relation(fields: [classId], references: [id], onDelete: SetNull)
+
+  levelId  Int?
+  level    Level?  @relation(fields: [levelId], references: [id], onDelete: SetNull)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  lastVisit    DateTime @default(now())
+
+  sessions     Session[]
+  bilans       Bilan[]
+  skill        Skill?
+  qcms         Qcm[]
+
+  @@index([classId])
+}
+
+model Animator {
   id           Int      @id @default(autoincrement())
   username     String   @unique
   firstName    String   @default("john")
   lastName     String   @default("doe")
   passwordHash String
-
-  //characteristics
-  classId      Int?
-  class        Class?    @relation(fields : [classId], references: [id], onDelete : SetNull)
-  gender       UserGender @default(m) //gender is either 'm' | 'f'
-  role         UserRole @default(student) //role is either 'admin' | 'org' | 'student'
-
-  //additional info
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  lastVisit    DateTime @default(now()) //last time the user visited their profile page
-
-  sessions Session[] //a user can have multiple sessions
-  bilans Bilan[] //a user can have multiple bilans
-  skill Skill? //a user can have at most one skill entry
-  qcms Qcm[] // a user can have mutliple qcms
-
-  @@index(classId)
-}
-
-model Class{
-  id            Int      @id @default(autoincrement())
-  label         String   @unique
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  users User[] //a class can have multiple users
-  lessons Lesson[] //a class can have multiple lessons
-}
-
-model Bilan{
-  id        Int       @id @default(autoincrement())
-
-  userId    Int
-  user      User      @relation(fields: [userId], references: [id], onDelete : Cascade)
-
-  presence  Boolean @default(false)
-  subject   String? 
-
-  lessonId  Int?
-  lesson    Lesson?      @relation(fields: [lessonId], references: [id], onDelete : SetNull)
-
-  date      DateTime 
-  summary   String?
+  gender       Gender   @default(m)
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-   @@index([userId])
-   @@unique([userId, date])
+  associations    Association[]
+  sessions        Session[]
+  seances         Seance[]
+  bilansSubmitted Bilan[]  @relation("BilanSubmittedBy")
 }
 
-model Skill{
-  id            Int       @id @default(autoincrement())
-  userId        Int       @unique
-  user          User      @relation(fields: [userId], references: [id], onDelete : Cascade)
-  ponctuality   Int       @default(0)
-  preparation   Int       @default(0)
-  autonomy      Int       @default(0)
-  organisation  Int       @default(0)
-  regularity    Int       @default(0)
-  discipline    Int       @default(0)
-  respect       Int       @default(0)
+model AssociationMember {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  firstName    String   @default("john")
+  lastName     String   @default("doe")
+  passwordHash String
+  gender       Gender   @default(m)
 
-  positive      String    @default("")
-  negative      String    @default("")
-  improvements  String    @default("")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  associationId Int?
+  association   Association? @relation(fields: [associationId], references: [id], onDelete: SetNull)
 
-  @@index([userId])
-}
-
-model Document{
-  id           Int       @id @default(autoincrement())
-
-  lessonId      Int
-  lesson        Lesson    @relation(fields : [lessonId], references: [id], onDelete : Cascade)
-  
-  type         String @default("fiche") //type can be either 'fiche' | 'qcm' | 'exercices'
-  link         String  @default("")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  //@@unique([type, link])
+
+  sessions     Session[]
+
+  @@index([associationId])
 }
 
-model Lesson{
-  id           Int       @id @default(autoincrement())
+model Association {
+  id      Int    @id @default(autoincrement())
+  name    String @unique
 
-  classId      Int
-  class        Class    @relation(fields : [classId], references: [id], onDelete : Cascade)
-  
-  subject      String @default("math")
-  
-  label        String @default("")
-  
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  
-  bilans Bilan[] // a lesson can have mutliple bilans
-  documents Document[] // a lesson can have mutliple docs
-  qcms Qcm[] // a lesson can have mutliple qcms
-  qcmBankQuestions QcmBankQuestion[]
-  @@index([subject])
-  //@@unique([classId, subject, label])
+  members AssociationMember[]
+  classes Class[]
+  animators Animator[]
 }
+
+//////////////////// AUTH SESSIONS (polymorphic) ////////////////////
 
 model Session {
-  id        String    @id @default(uuid())
-  userId    Int
-  user      User      @relation(fields: [userId], references: [id], onDelete : Cascade)
+  id        String   @id @default(uuid())
 
-  //session data
-  createdAt DateTime  @default(now())
-  expiresAt DateTime
+  studentId           Int?
+  student             Student?           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  animatorId          Int?
+  animator            Animator?          @relation(fields: [animatorId], references: [id], onDelete: Cascade)
+
+  associationMemberId Int?
+  associationMember   AssociationMember? @relation(fields: [associationMemberId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
   lastActiveAt DateTime @default(now())
-  
-  //security
-  userAgent String?
-  ipAddress String?
+  userAgent    String?
+  ipAddress    String?
 
-  @@index([userId])
+  @@index([studentId])
+  @@index([animatorId])
+  @@index([associationMemberId])
   @@index([expiresAt])
 }
 
+//////////////////// ACADEMIC STRUCTURE ////////////////////
 
-//////QCM///////
+model Class {
+  id            Int      @id @default(autoincrement())
+  label         String   @unique
 
-model QcmBankQuestion{
-  id                Int        @id @default(autoincrement())
+  associationId Int?
+  association   Association? @relation(fields: [associationId], references: [id], onDelete: SetNull)
 
-  lessonId          Int
-  lesson            Lesson     @relation(fields : [lessonId], references: [id], onDelete : Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  question          String     @default("")
-  difficulty        Difficulty @default(e)
-  answerA           String     @default("")
-  answerB           String     @default("")
-  answerC           String     @default("")
-  answerD           String     @default("")
-  correctAnswer     AnswerChoice
-  explanation       String     @default("")
+  students Student[]
+  seances  Seance[]
 
-  createdAt         DateTime   @default(now())
+  @@index([associationId])
+}
+
+model Level {
+  id      Int     @id @default(autoincrement())
+  label   String  @unique  // "4ème", "3ème", "2nde", "1ère", "Terminale"
+  order   Int     @unique  // pour trier : 1=4ème, 2=3ème, 3=2nde, 4=1ère, 5=Terminale
+
+  students Student[]
+  lessons  Lesson[]
+}
+
+model Seance {
+  id           Int         @id @default(autoincrement())
+  date         DateTime
+
+  classId      Int?
+  class        Class?      @relation(fields: [classId], references: [id], onDelete: SetNull)
+
+  animatorId   Int?
+  animator     Animator?   @relation(fields: [animatorId], references: [id], onDelete: SetNull)
+
+  scolarYearId Int?
+  scolarYear   ScolarYear? @relation(fields: [scolarYearId], references: [id], onDelete: SetNull)
+
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  bilans       Bilan[]
+
+  @@unique([classId, date])
+  @@index([animatorId])
+  @@index([scolarYearId])
+}
+
+model ScolarYear {
+  id      Int      @id @default(autoincrement())
+  tag     String   @unique
+
+  seances Seance[]
+}
+
+model Bilan {
+  id            Int       @id @default(autoincrement())
+
+  studentId     Int
+  student       Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  seanceId      Int
+  seance        Seance    @relation(fields: [seanceId], references: [id], onDelete: Restrict)
+
+  submittedById Int?
+  submittedBy   Animator? @relation("BilanSubmittedBy", fields: [submittedById], references: [id], onDelete: SetNull)
+
+  presence      Boolean   @default(false)
+
+  lessonId      Int?
+  lesson        Lesson?   @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+
+  summary       String?
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([studentId])
+  @@index([seanceId])
+  @@index([submittedById])
+  @@unique([studentId, seanceId])
+}
+
+model Skill {
+  id            Int      @id @default(autoincrement())
+  studentId     Int      @unique
+  student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  ponctuality   Int      @default(0)
+  preparation   Int      @default(0)
+  autonomy      Int      @default(0)
+  organisation  Int      @default(0)
+  regularity    Int      @default(0)
+  discipline    Int      @default(0)
+  respect       Int      @default(0)
+
+  positive      String   @default("")
+  negative      String   @default("")
+  improvements  String   @default("")
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([studentId])
+}
+
+model Subject {
+  id      Int    @id @default(autoincrement())
+  label   String @unique
+
+  lessons Lesson[]
+}
+
+model Lesson {
+  id        Int     @id @default(autoincrement())
+
+  levelId   Int
+  level     Level   @relation(fields: [levelId], references: [id], onDelete: Restrict)
+
+  subjectId Int
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+
+  label     String  @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bilans           Bilan[]
+  documents        Document[]
+  qcms             Qcm[]
+  qcmBankQuestions QcmBankQuestion[]
+
+  @@unique([levelId, subjectId, label])
+  @@index([subjectId])
+}
+
+model Document {
+  id        Int      @id @default(autoincrement())
+
+  lessonId  Int
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  type      String   @default("fiche")
+  link      String   @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//////////////////// QCM ////////////////////
+
+model QcmBankQuestion {
+  id            Int          @id @default(autoincrement())
+
+  lessonId      Int
+  lesson        Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  question      String       @default("")
+  difficulty    Difficulty   @default(e)
+  answerA       String       @default("")
+  answerB       String       @default("")
+  answerC       String       @default("")
+  answerD       String       @default("")
+  correctAnswer AnswerChoice
+  explanation   String       @default("")
+
+  createdAt     DateTime     @default(now())
+
+  qcmQuestions  QcmQuestion[]
 
   @@index([lessonId])
-  qcmQuestions QcmQuestion[]
 }
 
-model Qcm{
-  id               Int         @id @default(autoincrement())
+model Qcm {
+  id        Int      @id @default(autoincrement())
 
-  userId           Int
-  user             User        @relation(fields: [userId], references: [id], onDelete : Cascade)
+  studentId Int
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
-  lessonId         Int
-  lesson           Lesson        @relation(fields : [lessonId], references: [id], onDelete : Cascade)
+  lessonId  Int
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
-  completed        Boolean     @default(false)
-
-  createdAt        DateTime    @default(now())
-
-  @@index([userId])
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
 
   qcmQuestions QcmQuestion[]
+
+  @@index([studentId])
 }
 
-model QcmQuestion{
-  id               Int         @id @default(autoincrement())
+model QcmQuestion {
+  id             Int             @id @default(autoincrement())
 
-  bankQuestionId   Int
-  bankQuestion     QcmBankQuestion    @relation(fields: [bankQuestionId], references: [id], onDelete : Cascade)
+  bankQuestionId Int
+  bankQuestion   QcmBankQuestion @relation(fields: [bankQuestionId], references: [id], onDelete: Cascade)
 
-  qcmId            Int
-  qcm              Qcm         @relation(fields: [qcmId], references: [id], onDelete : Cascade)
+  qcmId          Int
+  qcm            Qcm             @relation(fields: [qcmId], references: [id], onDelete: Cascade)
 
-  selectedChoice   AnswerChoice?
-  correct          Boolean     @default(false)
+  selectedChoice AnswerChoice?
+  correct        Boolean         @default(false)
 
-  createdAt        DateTime    @default(now())
+  createdAt      DateTime        @default(now())
 
   @@index([bankQuestionId])
   @@index([qcmId])
 }
 
+//////////////////// ENUMS ////////////////////
 
-////////////////////////////////////////////
-
-enum UserRole {
-  student
-  admin
-  org
-}
-enum UserGender {
+enum Gender {
   m
   f
 }
 
-enum Difficulty{
+enum Difficulty {
   e
   m
   h
 }
 
-enum AnswerChoice{
+enum AnswerChoice {
   a
   b
   c

@@ -1,210 +1,217 @@
 import "dotenv/config";
-import { PrismaPg } from '@prisma/adapter-pg'
-import { Difficulty, PrismaClient,UserGender, UserRole } from '../src/generated/prisma/client.js'
+import { PrismaPg } from '@prisma/adapter-pg';
 import {hashPassword} from '../src/utils/auth.utils.js'
-import {admin, lessons, org, qcmQuestions, students} from '../src/db/seed.data.js';
-import { CLASS_NAMES, Subject } from "../src/db/seed.types.js";
+import {
+  SCOLAR_YEAR_TAGS,
+  SUBJECTS,
+  ASSOCIATIONS_SEED,
+  ANIMATORS_SEED,
+  LEVELS,
+  LESSONS_SEED,
+} from "../src/db/seed.users.data.js";
+
+import {PrismaClient} from '../src/generated/prisma/client.js'
 
 const connectionString = `${process.env.DATABASE_URL}`
 
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
-async function main(){
-    console.log('seeding databases ...');
-    
-    ////////////////////////////ADMIN/////////////////////////////////
-    console.log("creating admin ...");
-
-    const adminPasswordHash = await hashPassword(admin.password);
-    const generatedAdmin = await prisma.user.create({
-        data : {
-            firstName : admin.firstName,
-            lastName : admin.lastName,
-            username : admin.username,
-            role : admin.role,
-            passwordHash : adminPasswordHash,
-            gender : admin.gender,
-        }
-    })
-    console.log("created admin : ", generatedAdmin);
-    
-    /////////////////////////ORG/////////////////////////////////
-    console.log("creating org ...");
-    const generatedOrgs : {
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
-        username: string;
-        firstName: string;
-        lastName: string;
-        passwordHash: string;
-        gender: UserGender;
-        role: UserRole;
-        lastVisit: Date;
-        classId: number | null;
-    }[] = [];
-    
-    for (let i = 0; i < org.length; i++) {
-        const user = org[i]!;
-        
-        const passwordHash = await hashPassword(user.password);
-        const generateOrg = await prisma.user.create({
-            data : {
-                firstName : user.firstName,
-                lastName : user.lastName,
-                username : user.username,
-                role : user.role,
-                passwordHash : passwordHash,
-                gender : user.gender,
-            }
-        })
-        
-        generatedOrgs.push(generateOrg);
-    }
-
-    console.log("created org. ", JSON.stringify(generatedOrgs));
-    
-        
-    ////////////////////////////CLASSES////////////////////////////
-    console.log("creating classes ....");
-
-    for (const className of CLASS_NAMES) {
-    
-        //generate the class
-        const generatedClass = await prisma.class.create({
-            data : {
-                label : className,
-            }
-        })
-
-        console.log("created class with label : ", generatedClass.label, ' and id : ', generatedClass.id);
-        
-        //generate the students for the class
-        console.log("creating students for class with with label : ", generatedClass.label, ' and id : ', generatedClass.id);
-        
-        const generatedStudents : {
-            createdAt: Date;
-            updatedAt: Date;
-            id: number;
-            username: string;
-            firstName: string;
-            lastName: string;
-            passwordHash: string;
-            gender: UserGender;
-            role: UserRole;
-            lastVisit: Date;
-            classId: number | null;
-        }[] = [];
-        
-        const classStudents = students[className];
-
-        for (const student of classStudents) {
-
-            const passwordHash = await hashPassword(student.password);
-            
-            const generatedStudent = await prisma.user.create({
-                data : {
-                    firstName : student.firstName,
-                    lastName : student.lastName,
-                    username : student.username,
-                    role : student.role,
-                    passwordHash : passwordHash,
-                    classId : generatedClass.id,
-                    gender : student.gender
-                }
-            })
-            
-            generatedStudents.push(generatedStudent);
-        };
-        
-        console.log("created students for class with with label : ", generatedClass.label, ' and id : ', generatedClass.id);
-        
-        //generate the lessons for the class
-        console.log("creating lessons for class with with label : ", generatedClass.label, ' and id : ', generatedClass.id);
-        let generatedLessons : {
-            createdAt: Date;
-            updatedAt: Date;
-            id: number;
-            label: string;
-            subject: string;
-            classId: number | null;
-        }[] = [];
-
-        const classLessons = lessons[className];
-
-        for(const subject in classLessons){
-            const lessons = classLessons[subject as keyof typeof classLessons]
-
-            console.log('subject :',subject, ' lessons:',lessons)
-
-            for (const lesson of lessons) {
-                const generatedLesson = await prisma.lesson.create({
-                    data : {
-                        classId : generatedClass.id,
-                        label : lesson,
-                        subject : subject,
-                    }
-                })
-
-                //generate the qcm questions for the class
-                console.log("creating qcm questions for lesson with with label : ", generatedLesson.label, ' and id : ', generatedLesson.id);
-                let generatedBankQuestions : {
-                    question : string,
-                    difficulty : Difficulty,
-                    answerA : string,
-                    answerB : string,
-                    answerC : string,
-                    answerD : string,
-                    correctAnswer : 'a' | 'b' | 'c' | 'd',
-                    explanation : string,
-                }[] = []
-
-                const qcmQs = qcmQuestions[className][subject as Subject][generatedLesson.label];
-                
-                if(qcmQs && qcmQs.length > 0){
-                    for (let i = 0; i < qcmQs.length; i++) {
-                        const qcmQ = qcmQs[i]!;
-                        
-                        const generatedBankQuestion = await prisma.qcmBankQuestion.create({
-                            data : {
-                                lessonId : generatedLesson.id,
-                                question : qcmQ.question,
-                                difficulty : qcmQ.difficulty,
-                                answerA : qcmQ.answerA,
-                                answerB : qcmQ.answerB,
-                                answerC : qcmQ.answerC,
-                                answerD : qcmQ.answerD,
-                                correctAnswer : qcmQ.correctAnswer,
-                                explanation : qcmQ.explanation,
-                            }
-                        })
-
-                        generatedBankQuestions.push(generatedBankQuestion);
-                    }
-                }
-                console.log("created qcm questions for lesson with with label : ", generatedLesson.label, ' and id : ', generatedLesson.id);
-                
-                
-                generatedLessons.push(generatedLesson);
-            }
-
-            console.log("created lessons for class with with label : ", generatedClass.label, ' and id : ', generatedClass.id);
-            generatedLessons = [];  
-        }
-
-        
-    };
-
-
-    //////////////////////////LESSONS///////////////////////////////
-
-    console.log("Seeding finished!");
+function resolveId(map: Map<string, number>, key: string, context: string): number {
+  const id = map.get(key);
+  if (!id) throw new Error(`[seed] "${key}" introuvable dans ${context} — vérifie l'orthographe`);
+  return id;
 }
 
-main().catch((e) => {
-    console.error('error while seeding. ',e);
+
+// ─────────────────────────────────────────────
+// 1. ANNÉE SCOLAIRE
+// ─────────────────────────────────────────────
+async function seedScolarYears(): Promise<Map<string, number>> {
+  console.log(`Seeding scolar years  → "${SCOLAR_YEAR_TAGS.length}"`);
+  for (let i = 0; i < SCOLAR_YEAR_TAGS.length; i++) {
+    const scolarYear = SCOLAR_YEAR_TAGS[i];
+    await prisma.scolarYear.create({ data: { tag: scolarYear } });
+  }
+  
+  const rows = await prisma.scolarYear.findMany({ select: { id: true, tag: true } });
+  return new Map(rows.map((s) => [s.tag, s.id]));
+}
+
+// ─────────────────────────────────────────────
+// 2. NIVEAUX SCOLAIRES
+// retourne Map<label, id>
+// ─────────────────────────────────────────────
+async function seedLevels(): Promise<Map<string, number>> {
+  console.log(`  → ${LEVELS.length} niveaux`);
+
+  await prisma.level.createMany({
+    data: LEVELS.map(({ label, order }) => ({ label, order })),
+  });
+
+  const rows = await prisma.level.findMany({
+    select: { id: true, label: true },
+  });
+
+  return new Map(rows.map((l) => [l.label, l.id]));
+}
+
+// ─────────────────────────────────────────────
+// 2. MATIÈRES
+// retourne un Map label → id pour usage futur (seed des leçons)
+// ─────────────────────────────────────────────
+async function seedSubjects(): Promise<Map<string, number>> {
+  console.log(`Seeding  → ${SUBJECTS.length} matières`);
+
+  await prisma.subject.createMany({
+    data: SUBJECTS.map((label) => ({ label })),
+  });
+
+  const rows = await prisma.subject.findMany({ select: { id: true, label: true } });
+  return new Map(rows.map((s) => [s.label, s.id]));
+}
+
+// ─────────────────────────────────────────────
+// 3. LECONS
+// retourne un Map label → id pour usage futur
+// ─────────────────────────────────────────────
+async function seedLessons(levelIdByLabel : Map<string, number>, subjectIdByLabel : Map<string, number>): Promise<void> {
+  console.log(`Seeding les leçons des matières`);
+
+  for(const lessonSeed of LESSONS_SEED){
+    for(const subjectSeed of lessonSeed.subjects){
+        console.log(`\n Seeding les leçons de la matière ${subjectSeed.subject} du niveau ${lessonSeed.level}`);
+        await prisma.lesson.createMany({
+            data : subjectSeed.lessons.map((lesson) => ({
+                subjectId : resolveId(subjectIdByLabel, subjectSeed.subject, "SUBJECTS"),
+                levelId : resolveId(levelIdByLabel, lessonSeed.level, "LEVELS"),
+                label : lesson,
+            }
+        ))})
+    }
+  }
+}
+
+// ─────────────────────────────────────────────
+// 4. ASSOCIATIONS → CLASSES → ÉLÈVES → MEMBRES
+// ─────────────────────────────────────────────
+async function seedAssociations(levelIdByLabel: Map<string, number>): Promise<Map<string, number>> {
+    const associationIdByName = new Map<string, number>();
+    for (const assocSeed of ASSOCIATIONS_SEED) {
+        console.log(`\n Seeding → Association "${assocSeed.name}"`);
+
+        const assoc = await prisma.association.create({data : {name : assocSeed.name}});
+        associationIdByName.set(assoc.name, assoc.id);
+
+        for(const classSeed of assocSeed.classes){
+            console.log(`Seeding la classe "${classSeed.label} de l'association ${assocSeed.name}" — ${classSeed.students.length} élèves`);
+
+            const studentData = await Promise.all(
+                classSeed.students.map(async (s) => ({
+                    username : s.username,
+                    firstName : s.firstName,
+                    lastName : s.lastName,
+                    gender : s.gender,
+                    level : {
+                        connect: {
+                            id: resolveId(levelIdByLabel, s.level, "LEVELS"),
+                        }
+                    },
+                    passwordHash : await hashPassword(s.password),
+                }))
+            )
+
+            await prisma.class.create({
+                data : {
+                    label : classSeed.label,
+                    associationId : assoc.id,
+                    students : {create : studentData},
+                }
+            })
+
+            if (assocSeed.members.length > 0) {
+                console.log(`Seeding les membres de l'association ${assoc.name} : ${assocSeed.members.length} membres`);
+                const membersData = await Promise.all(
+                    assocSeed.members.map(async (m) => ({
+                    username:      m.username,
+                    firstName:     m.firstName,
+                    lastName:      m.lastName,
+                    gender:        m.gender,
+                    passwordHash:  await hashPassword(m.password),
+                    associationId: assoc.id,
+                    }))
+                );
+
+                await prisma.associationMember.createMany({ data: membersData });
+            }
+
+        }
+    }
+
+    return associationIdByName;
+}
+
+
+// ─────────────────────────────────────────────
+// 5. ANIMATEURS + LIAISON MANY-TO-MANY
+// ─────────────────────────────────────────────
+async function seedAnimators(associationIdByName: Map<string, number>): Promise<void> {
+    for (const animSeed of ANIMATORS_SEED) {
+        const assocCount = animSeed.associations.length;
+        console.log(`Seeding les animateurs  → ${animSeed.username} (${assocCount} association${assocCount > 1 ? "s" : ""})`);
+
+        const connectIds = animSeed.associations.map((name) => {
+            const id = associationIdByName.get(name);
+            if(!id){
+                throw new Error(`Association introuvable : "${name}" — vérifie l'orthographe dans ANIMATORS_SEED`);
+            }
+
+            return {id};
+        });
+
+        await prisma.animator.create({
+            data : {
+                username : animSeed.username,
+                firstName:    animSeed.firstName,
+                lastName:     animSeed.lastName,
+                gender:       animSeed.gender,
+                passwordHash: await hashPassword(animSeed.password),
+                associations : {connect : connectIds},
+            }
+        })
+    }
+}
+
+// ─────────────────────────────────────────────
+// MAIN
+// ─────────────────────────────────────────────
+async function main(): Promise<void> {
+    console.log("\n Démarrage du seed...");
+
+    console.log("\n[ 1/5 ] Année scolaire");
+    await seedScolarYears();
+
+    console.log("\n[ 2/5 ] Niveaux scolaires");
+    const levelIdByLabel = await seedLevels();
+
+    console.log("\n[ 3/5 ] Matières");
+    const subjectIdByLabel = await seedSubjects();
+
+    console.log("\n[ 3/5 ] Leçons");
+    await seedLessons(levelIdByLabel, subjectIdByLabel);
+
+    console.log("\n[ 4/5 ] Associations, classes & utilisateurs");
+    const associationIdByName = await seedAssociations(levelIdByLabel);
+
+    console.log("\n[ 5/5 ] Animateurs");
+    await seedAnimators(associationIdByName);
+
+    console.log("\n✅ Seed terminé avec succès.\n");
+}
+
+main()
+  .catch((e) => {
+    console.error("\n❌ Seed échoué :", e);
     process.exit(1);
-}).finally(async () => {
-    await prisma.$disconnect();
-});
+  })
+  .finally(() => prisma.$disconnect());
