@@ -119,6 +119,23 @@ export const ASSOCIATIONS_SEED : AssociationSeed[] = [
     }
 ]
 
+
+
+// ─────────────────────────────────────────────
+// COMPETENCES
+// ─────────────────────────────────────────────
+export const SKILL_SEED = {
+  autonomy : 0,
+  discipline : 0,
+  organisation : 0,
+  ponctuality : 0,
+  regularity : 0,
+  respect : 0,
+  preparation : 0,
+  positive : '',
+  negative : '',
+  improvements : '',
+}
 // ─────────────────────────────────────────────
 // ANIMATEURS
 // ─────────────────────────────────────────────

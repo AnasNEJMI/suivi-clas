@@ -1,6 +1,7 @@
 import { ApiError } from "@/lib/errors/apiError.class"
 import { apiRequest } from "./client"
 import { ErrorCodes, ErrorStatusMap } from "@/lib/errors/errors.constants"
+import type { UserType } from "./api.types"
 
 
 ///////////////FETCH USER//////////////////
@@ -9,16 +10,19 @@ export type User = {
     id  : number,
     username : string,
     firstName : string,
-    lastName : string,
+    lastName : string
+    userType : UserType,
     gender : 'f' | 'm',
-    class : {label : string} | null,
+    class : {id : number, label : string} | null,
+    level : {id : number, label : string} | null,
+    association : {id : number, label : string} | null,
     createdAt : Date,
-    role : 'admin' | 'org' | 'student',
 }
 
 export async function fetchUser():Promise<User | null>{
     try{
         const response =  await apiRequest<{user : User}>('/api/auth/profile')
+        console.log('fetchUser response : ', response);
         return response.user;
     }catch(error){
         if(error instanceof ApiError
@@ -35,6 +39,7 @@ export async function fetchUser():Promise<User | null>{
 export type LoginPayload = {
   username: string
   password: string
+  userType : UserType
 }
 
 export type LoginResponse = {

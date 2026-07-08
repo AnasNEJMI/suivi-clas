@@ -1,17 +1,16 @@
 export type Bilan = {
-    id : number,
-    user : {id : number, firstName : string, lastName : string},
-    lesson : {id : number, label:string, subject : string} | null,
-    date : Date,
-    presence : boolean,
-    className : string,
-    subject : string | null,
-    summary : string | null,
+    id: number;
+    createdAt: Date;
+    date: Date;
+    presence: boolean;
+    summary: string | null;
+    seance: {id: number;date: Date};
+    submittedBy: {username: string; id: number; firstName: string; lastName: string;} | null;
+    lesson: {id: number; label: string; subject: {id: number; label: string;};} | null;
 }
 
 export type Skill = {
     id : number,
-    user : {id : number, firstName : string, lastName : string},
     autonomy : number,
     discipline : number,
     organisation : number,
@@ -82,3 +81,17 @@ export const Difficulty = {
 } as const
 
 export type Difficulty = (typeof Difficulty)[keyof typeof Difficulty]
+
+export const UserType = {
+    student : "student",
+    associationMember : "associationMember",
+    animator : "animator",
+} as const;
+
+export const USER_TYPES = ["student", "associationMember","animator"]
+export type UserType = (typeof UserType)[keyof typeof UserType]
+export const USER_TYPE_LABELS : Record<UserType, string> = {
+    "animator" : "Animateur(trice)",
+    "student" : "Élève",
+    "associationMember" : "Membre d'association",
+}

@@ -5,96 +5,6 @@ import type { Bilan } from '@/api/api.types'
 import { cn } from '@/lib/utils'
 import { formatDate } from 'date-fns'
 
-// const data = [
-//     {
-//         date : '01/01',
-//         present : true,
-//         bilan : {
-//             subject : 'Mathématiques',
-//             lessons : ['Nombres relatifs'],
-//             summary : 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus vero sapiente modi corrupti, repellat, reiciendis debitis dolorum porro voluptatem ipsum consectetur odit eum eos illo quas obcaecati, similique amet officiis?'
-//         }
-//     },
-//     {
-//         date : '02/01',
-//         present : false,
-//     },
-//     {
-//         date : '03/01',
-//         present : true,
-//         bilan : {
-//             subject : 'Mathématiques',
-//             lessons : ['Nombres relatifs'],
-//             summary : 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus vero sapiente modi corrupti, repellat, reiciendis debitis dolorum porro voluptatem ipsum consectetur odit eum eos illo quas obcaecati, similique amet officiis?'
-//         }
-//     },
-//     {
-//         date : '04/01',
-//         present : false,
-//     },
-//     {
-//         date : '05/01',
-//         present : true,
-//         bilan : {
-//             subject : 'Mathématiques',
-//             lessons : ['Nombres relatifs'],
-//             summary : 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus vero sapiente modi corrupti, repellat, reiciendis debitis dolorum porro voluptatem ipsum consectetur odit eum eos illo quas obcaecati, similique amet officiis?'
-//         }
-//     },
-//     {
-//         date : '06/01',
-//         present : false,
-//     },
-//     {
-//         date : '07/01',
-//         present : true,
-//         bilan : {
-//             subject : 'Mathématiques',
-//             lessons : ['Nombres relatifs'],
-//             summary : 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus vero sapiente modi corrupti, repellat, reiciendis debitis dolorum porro voluptatem ipsum consectetur odit eum eos illo quas obcaecati, similique amet officiis?'
-//         }
-//     },
-//     {
-//         date : '08/01',
-//         present : true,
-//         bilan : {
-//             subject : 'Mathématiques',
-//             lessons : ['Nombres relatifs'],
-//             summary : 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus vero sapiente modi corrupti, repellat, reiciendis debitis dolorum porro voluptatem ipsum consectetur odit eum eos illo quas obcaecati, similique amet officiis?'
-//         }
-//     },
-//     {
-//         date : '09/01',
-//         present : true,
-//         bilan : {
-//             subject : 'Mathématiques',
-//             lessons : ['Nombres relatifs'],
-//             summary : 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus vero sapiente modi corrupti, repellat, reiciendis debitis dolorum porro voluptatem ipsum consectetur odit eum eos illo quas obcaecati, similique amet officiis?'
-//         }
-//     },
-//     {
-//         date : '10/01',
-//         present : false,
-//     },
-//     {
-//         date : '11/01',
-//         present : false,
-//     },
-//     {
-//         date : '12/01',
-//         present : true,
-//         bilan : {
-//             subject : 'Mathématiques',
-//             lessons : ['Nombres relatifs'],
-//             summary : 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus vero sapiente modi corrupti, repellat, reiciendis debitis dolorum porro voluptatem ipsum consectetur odit eum eos illo quas obcaecati, similique amet officiis?'
-//         }
-//     },
-//     {
-//         date : '13/01',
-//         present : false,
-//     },
-// ]
-
 interface BilanCardProps {
     className? : string,
     bilans : Bilan[];
@@ -121,7 +31,7 @@ const BilanCard = ({className, bilans} : BilanCardProps) => {
                             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                                 <div className='flex flex-col'>
                                     <span className='uppercase font-bold opacity-75 text-sm'>Matière</span>
-                                    <span className='text-lg font-medium'>{selectedBilan.subject!}</span>
+                                    <span className='text-lg font-medium'>{selectedBilan.lesson!.subject!.label!}</span>
                                 </div>
                                 <div className='flex flex-col'>
                                     <span className='uppercase font-bold opacity-75 text-sm'>Leçon(s)</span>
@@ -148,7 +58,7 @@ const BilanCard = ({className, bilans} : BilanCardProps) => {
         bilans.length <=0 && 
         <Card className='bg-white shadow-md rounded-xl border border-zinc-200 mt-4'>
             <CardContent className='flex items-center justify-center'>
-                <p className='text-xl font-medium text-pretty text-shadow-2xs'>Aucun bilan n'a été encore soumis</p>
+                <p className='text-lg font-medium text-pretty opacity-75'>Aucun bilan n'a été encore soumis</p>
             </CardContent>
         </Card>
     }

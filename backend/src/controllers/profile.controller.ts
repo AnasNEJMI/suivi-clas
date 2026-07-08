@@ -18,16 +18,7 @@ export async function profileHandler(
         return sendSuccess<profileSuccessResponse>(
             res,
             {
-                user : {
-                    id : user.id,
-                    username : user.username,
-                    firstName : user.firstName,
-                    lastName : user.lastName,
-                    gender : user.gender,
-                    class : user.class? {label : user.class.label} : null,
-                    createdAt : user.createdAt,
-                    role : user.role
-                }
+                user
             }
         )
     }catch(error){

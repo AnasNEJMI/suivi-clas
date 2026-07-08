@@ -7,12 +7,13 @@ import { createSession } from '../utils/session.utils.js';
 import { SESSION_CONFIG } from '../configs/session.config.js';
 import { sendSuccess } from '../utils/response.utils.js';
 import { PrismaClientKnownRequestError } from '../generated/prisma/internal/prismaNamespace.js';
-import { UserGender, UserRole } from '../generated/prisma/enums.js';
-import { User } from '../types/data.types.js';
+import { User, UserType } from '../types/data.types.js';
+import { Gender } from '../generated/prisma/enums.js';
 
 type loginInput = {
     username : string,
     password : string,
+    userType : UserType
 }
 
 type loginSuccessResponse = {
@@ -26,67 +27,218 @@ export async function loginHandler(
     next : NextFunction
 ){
     try{
-        const {username, password} = req.body as loginInput;
+        const {username, password, userType} = req.body as loginInput;
         console.log('username :', username);
         console.log('password :', password);
+        
+        //animator login
+        if(userType === 'animator'){
+            const animator = await prisma.animator.findUnique({
+                where : {
+                    username : username
+                }
+            });
 
-        //validate email
-        const user = await prisma.user.findUnique({
-            where : {
-                username : username
-            },
-            include : {
-                class : {
-                    select : {
-                        label : true,
+            console.log('animator retrieved : ', animator);
+
+            if(!animator){
+                throw ApiError.invalidCredentials();
+            }
+
+            const isPasswordValid = await comparePassword(password, animator.passwordHash);
+
+            if(!isPasswordValid){
+                throw ApiError.invalidCredentials();
+            }
+
+            //create session
+            const session = await createSession(
+                'animator',
+                animator.id,
+                req.ip,
+                req.headers['user-agent']
+            )
+
+            //set cookie
+            res.cookie(
+                SESSION_CONFIG.COOKIE_NAME,
+                session.id,
+                SESSION_CONFIG.COOKIE_OPTIONS
+            )
+
+             //return response
+            return sendSuccess<loginSuccessResponse>(
+                res,
+                {
+                    user : {
+                        id : animator.id,
+                        username : animator.username,
+                        firstName : animator.firstName,
+                        lastName : animator.lastName,
+                        userType : 'animator',
+                        gender : animator.gender === Gender.f? 'f' : 'm',
+                        class : null,
+                        level : null,
+                        association : null,
+                        createdAt : animator.createdAt,
                     }
                 }
-            }
-        });
-
-        console.log('user retrieved : ',user);
-        
-        if(!user){
-            throw ApiError.invalidCredentials();
-        }
-        
-        //validate password
-        const isPasswordValid = await comparePassword(password, user.passwordHash);
-        
-        if(!isPasswordValid){
-            throw ApiError.invalidCredentials();
+            )
         }
 
-        //create session
-        const session = await createSession(
-            user.id,
-            req.ip,
-            req.headers['user-agent']
-        )
-
-        //set cookie
-        res.cookie(
-            SESSION_CONFIG.COOKIE_NAME,
-            session.id,
-            SESSION_CONFIG.COOKIE_OPTIONS
-        )
-
-        //return response
-        return sendSuccess<loginSuccessResponse>(
-            res,
-            {
-                user : {
-                    id : user.id,
-                    username : user.username,
-                    firstName : user.firstName,
-                    lastName : user.lastName,
-                    gender : user.gender === UserGender.f? 'f' : 'm',
-                    class : user.class,
-                    createdAt : user.createdAt,
-                    role : user.role === UserRole.admin ? 'admin' : user.role === UserRole.org? 'org' : 'student',
+        //student login
+        if(userType === 'student'){
+            const student = await prisma.student.findUnique({
+                where : {
+                    username : username
+                },
+                include : {
+                    class : {
+                        select : {
+                            id : true,
+                            label : true,
+                            association : {
+                                select : {
+                                    id : true,
+                                    label : true,
+                                }
+                            }
+                        }
+                    },
+                    level : {
+                        select : {
+                            id : true,
+                            label : true,
+                        }
+                    }
                 }
+            });
+
+            console.log('student retrieved : ', student);
+
+            if(!student){
+                throw ApiError.invalidCredentials();
             }
-        )
+
+            if(!student.class){
+                throw ApiError.invalidCredentials();
+            }
+
+            if(!student.level){
+                throw ApiError.invalidCredentials();
+            }
+
+            if(!student.class.association){
+                throw ApiError.invalidCredentials();
+            }
+
+            const isPasswordValid = await comparePassword(password, student.passwordHash);
+
+            if(!isPasswordValid){
+                throw ApiError.invalidCredentials();
+            }
+
+            //create session
+            const session = await createSession(
+                'student',
+                student.id,
+                req.ip,
+                req.headers['user-agent']
+            )
+
+            //set cookie
+            res.cookie(
+                SESSION_CONFIG.COOKIE_NAME,
+                session.id,
+                SESSION_CONFIG.COOKIE_OPTIONS
+            )
+
+             //return response
+            return sendSuccess<loginSuccessResponse>(
+                res,
+                {
+                    user : {
+                        id : student.id,
+                        username : student.username,
+                        firstName : student.firstName,
+                        lastName : student.lastName,
+                        userType : 'student',
+                        gender : student.gender === Gender.f? 'f' : 'm',
+                        class : {id : student.class.id, label : student.class.label}, //todo
+                        level : {id : student.level.id, label : student.level.label},
+                        association : {id : student.class.association.id, label : student.class.association.label},
+                        createdAt : student.createdAt,
+                    }
+                }
+            )
+        }
+
+        //associationMember login
+        if(userType === 'associationMember'){
+            const associationMember = await prisma.associationMember.findUnique({
+                where : {
+                    username : username
+                },
+                include : {
+                    association : {
+                        select : {
+                            id : true,
+                            label : true,
+                        }
+                    }
+                }
+            });
+
+            console.log('associationMember retrieved : ', associationMember);
+
+            if(!associationMember){
+                throw ApiError.invalidCredentials();
+            }
+
+            if(!associationMember.association){
+                throw ApiError.invalidCredentials();
+            }
+
+            const isPasswordValid = await comparePassword(password, associationMember.passwordHash);
+
+            if(!isPasswordValid){
+                throw ApiError.invalidCredentials();
+            }
+
+            //create session
+            const session = await createSession(
+                'associationMember',
+                associationMember.id,
+                req.ip,
+                req.headers['user-agent']
+            )
+
+            //set cookie
+            res.cookie(
+                SESSION_CONFIG.COOKIE_NAME,
+                session.id,
+                SESSION_CONFIG.COOKIE_OPTIONS
+            )
+
+             //return response
+            return sendSuccess<loginSuccessResponse>(
+                res,
+                {
+                    user : {
+                        id : associationMember.id,
+                        username : associationMember.username,
+                        firstName : associationMember.firstName,
+                        lastName : associationMember.lastName,
+                        userType : 'associationMember',
+                        gender : associationMember.gender === Gender.f? 'f' : 'm',
+                        class : null, //todo
+                        level : null,
+                        association : {id : associationMember.association.id, label : associationMember.association.label},
+                        createdAt : associationMember.createdAt,
+                    }
+                }
+            )
+        }
     }catch(error){
         if(error instanceof PrismaClientKnownRequestError){
             console.log('prisma error : ', error);

@@ -1,5 +1,6 @@
 import z from "zod";
 import { validationMessages } from "../utils/auth.utils.js";
+import { UserType } from "../types/data.types.js";
 
 /////////////////CREATE USER///////////////////////
 
@@ -33,9 +34,11 @@ const loginPasswordSchema = z
   .string()
   .min(1, validationMessages.login.pwError);
 
+const userTypeSchema = z.enum(UserType, {error : validationMessages.login.userTypeError});
 export const loginSchema = z.object({
   username : loginUsernameSchema,
-  password : loginPasswordSchema
+  password : loginPasswordSchema,
+  userType : userTypeSchema
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;

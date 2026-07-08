@@ -14,7 +14,9 @@ export async function profileRouteLoader(){
             gcTime : 10 * 60 * 1000
         })
 
-        if(!user || user.role !== 'student'){
+        console.log('profile user : ', user);
+
+        if(!user || user.userType !== 'student'){
             throw replace(`/`);
         }
 

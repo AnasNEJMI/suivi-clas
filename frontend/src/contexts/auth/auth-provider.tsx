@@ -8,6 +8,7 @@ import ErrorToast from '@/components/toasts/error-toast';
 import { ApiError } from '@/lib/errors/apiError.class';
 import { queryKeys } from '@/lib/query/keys';
 import { useNavigate } from 'react-router';
+import type { UserType } from '@/api/api.types';
 
 
 const AuthProvider = ({children} : {children : React.ReactNode}) => {
@@ -33,12 +34,12 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
           message : `Bienvenue ${data.user.firstName}`,
         });
 
-        if(data.user.role === 'admin'){
-          navigate('/admin', {replace : true});
-        }else if(data.user.role === 'org'){
+        if(data.user.userType === 'student'){
+          navigate('/etudiant', {replace : true});
+        }else if(data.user.userType === 'animator'){
+          navigate('/animateur', {replace : true});
+        }else if(data.user.userType === 'associationMember'){
           navigate('/association', {replace : true});
-        }else if(data.user.role === 'student'){
-          navigate('/profile', {replace : true});
         }
       },
       onError : (error) => {
@@ -83,8 +84,8 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
     }
   )
 
-  const requestLogin = async (username : string, password : string) : Promise<void> => {
-    await loginMutation.mutateAsync({username, password})
+  const requestLogin = async (username : string, password : string, userType : UserType) : Promise<void> => {
+    await loginMutation.mutateAsync({username, password, userType})
   }
   const requestLogout = async () : Promise<void> => {
     await logoutMutation.mutateAsync()

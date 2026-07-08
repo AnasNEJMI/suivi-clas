@@ -33,6 +33,7 @@ export const validationMessages = {
     login : {
         usernameError : "Veuiller renseigner un identifiant et un mot de passe valides.",
         pwError : "Veuiller renseigner une adresse email et un mot de passe valides.",
+        userTypeError : "Veuillez renseigner un type d'utilisateur valide."
     }
 }
 

@@ -8,6 +8,7 @@ import {
   ANIMATORS_SEED,
   LEVELS,
   LESSONS_SEED,
+  SKILL_SEED,
 } from "../src/db/seed.users.data.js";
 
 import {PrismaClient} from '../src/generated/prisma/client.js'
@@ -100,8 +101,8 @@ async function seedAssociations(levelIdByLabel: Map<string, number>): Promise<Ma
     for (const assocSeed of ASSOCIATIONS_SEED) {
         console.log(`\n Seeding → Association "${assocSeed.name}"`);
 
-        const assoc = await prisma.association.create({data : {name : assocSeed.name}});
-        associationIdByName.set(assoc.name, assoc.id);
+        const assoc = await prisma.association.create({data : {label : assocSeed.name}});
+        associationIdByName.set(assoc.label, assoc.id);
 
         for(const classSeed of assocSeed.classes){
             console.log(`Seeding la classe "${classSeed.label} de l'association ${assocSeed.name}" — ${classSeed.students.length} élèves`);
@@ -121,16 +122,30 @@ async function seedAssociations(levelIdByLabel: Map<string, number>): Promise<Ma
                 }))
             )
 
-            await prisma.class.create({
+            const associationClass = await prisma.class.create({
                 data : {
                     label : classSeed.label,
                     associationId : assoc.id,
                     students : {create : studentData},
+                },
+                include : {
+                    students : true,
                 }
             })
 
+            //seeding skills
+            const skillsData = await Promise.all(
+                associationClass.students.map(async (student) => ({
+                    studentId : student.id,
+                    ...SKILL_SEED
+                }))
+            )
+            await prisma.skill.createMany({
+                data : skillsData
+            })
+
             if (assocSeed.members.length > 0) {
-                console.log(`Seeding les membres de l'association ${assoc.name} : ${assocSeed.members.length} membres`);
+                console.log(`Seeding les membres de l'association ${assoc.label} : ${assocSeed.members.length} membres`);
                 const membersData = await Promise.all(
                     assocSeed.members.map(async (m) => ({
                     username:      m.username,

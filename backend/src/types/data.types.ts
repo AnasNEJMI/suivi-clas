@@ -1,29 +1,31 @@
-import { AnswerChoice, Difficulty } from "../generated/prisma/enums.js"
+import { AnswerChoice, Difficulty, Gender } from "../generated/prisma/enums.js"
 
 export type User = {
     id  : number,
     username : string,
     firstName : string,
-    lastName : string,
-    gender : 'm' | 'f',
-    class : {label : string} | null,
+    lastName : string
+    userType : UserType,
+    gender : Gender,
+    class : {id : number, label : string} | null,
+    level : {id : number, label : string} | null,
+    association : {id : number, label : string} | null,
     createdAt : Date,
-    role : 'admin' | 'org' | 'student',
 }
 
 export type Bilan = {
-    id : number,
-    user : {id : number, firstName : string, lastName : string},
-    lesson : {id : number, label:string, subject : string} | null,
-    date : Date,
-    presence : boolean,
-    subject : string | null,
-    summary : string | null,
+    id: number;
+    createdAt: Date;
+    date: Date;
+    presence: boolean;
+    summary: string | null;
+    seance: {id: number;date: Date};
+    submittedBy: {username: string; id: number; firstName: string; lastName: string;} | null;
+    lesson: {id: number; label: string; subject: {id: number; label: string;};} | null;
 }
 
 export type Skill = {
     id : number,
-    user : {id : number, firstName : string, lastName : string},
     autonomy : number,
     discipline : number,
     organisation : number,
@@ -75,4 +77,18 @@ export type QcmWithQuestions = {
             correctAnswer: AnswerChoice;
         };
     }[];
+}
+
+export const UserType = {
+    student : "student",
+    associationMember : "associationMember",
+    animator : "animator",
+} as const;
+
+export const USER_TYPES = ["student", "associationMember","animator", "admin"]
+export type UserType = (typeof UserType)[keyof typeof UserType]
+export const USER_TYPE_LABELS : Record<UserType, string> = {
+    "animator" : "Animateur(trice)",
+    "student" : "Élève",
+    "associationMember" : "Membre d'association",
 }

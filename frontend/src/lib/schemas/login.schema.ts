@@ -1,3 +1,4 @@
+import { UserType } from "@/api/api.types";
 import z from "zod";
 
 const usernameErrorMessage = "Veuiller renseigner un identifiant valide.";
@@ -6,6 +7,7 @@ const pwMaxLengthErrorMessage = "Le mot de passe doit être composé d'au plus 2
 const pwUppercaseErrorMessage = "Le mot de passe doit être contenir au moins une lettre majuscule.";
 const pwLowercaseErrorMessage = "Le mot de passe doit être contenir au moins une lettre miniscule.";
 const pwNumberErrorMessage = "Le mot de passe doit être contenir au moins un chiffre.";
+const userTypeError = "Veuillez sélectionner un type d'utilisateur valide."
 // const pwSpecialCharacterErrorMessage = "Le mot de passe doit être contenir au moins un caractère spécial.";
 
 const passwordSchema = z
@@ -23,11 +25,15 @@ const passwordSchema = z
   //   message: pwSpecialCharacterErrorMessage,
   // });
 
+
+
 const usernameSchema = z
   .string().min(1, {error : usernameErrorMessage})
 
+const userTypeSchema = z.enum(UserType, {error : userTypeError});
 
 export const createLoginFormSchema = z.object({
   username: usernameSchema,
   password: passwordSchema,
+  userType : userTypeSchema,
 });

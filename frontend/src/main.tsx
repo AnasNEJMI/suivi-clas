@@ -12,7 +12,7 @@ import AdminboardUsers from './pages/adminboard/adminboard-users.tsx'
 import { guestRouteLoader } from './router/loaders/guest-route-loader.ts'
 import About from './pages/about.tsx'
 import Contact from './pages/contact.tsx'
-import Profile from './pages/profile.tsx'
+import StudentProfile from './pages/student-profile.tsx'
 import { RootErrorBoundary } from './pages/root-error-boundry.tsx'
 import { adminRouteLoader } from './router/loaders/admin-route-loader.tsx'
 import { profileRouteLoader } from './router/loaders/profile-route-loader.tsx'
@@ -38,9 +38,9 @@ const router = createBrowserRouter([
       {path : 'login', Component : Login, loader : guestRouteLoader,  shouldRevalidate: () => true,},
       {path : 'signup', Component : SignUp},
       {
-        id : 'profile',
-        path : 'profile',
-        Component : Profile,
+        id : 'student',
+        path : 'etudiant',
+        Component : StudentProfile,
         loader : profileRouteLoader,
         shouldRevalidate: () => true,
       },

@@ -79,7 +79,7 @@ model AssociationMember {
 
 model Association {
   id      Int    @id @default(autoincrement())
-  name    String @unique
+  label    String @unique
 
   members AssociationMember[]
   classes Class[]
@@ -171,6 +171,8 @@ model ScolarYear {
 
 model Bilan {
   id            Int       @id @default(autoincrement())
+
+  date          DateTime
 
   studentId     Int
   student       Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)

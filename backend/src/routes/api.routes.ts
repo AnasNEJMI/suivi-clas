@@ -11,7 +11,7 @@ import { requireAdminHandler } from '../middleware/admin.middleware.js';
 import { getAdminBaseHandler } from '../controllers/getAdminBase.controller.js';
 import { addBilanSchema } from '../schemas/addBilan.schema.js';
 import { addBilanHandler } from '../controllers/addBilan.controller.js';
-import { studentProfileHandler } from '../controllers/studentProfile.controller.js';
+import { studentProfileHandler } from '../controllers/profile.student.controller.js';
 import { addSkillSchema } from '../schemas/addSkill.schema.js';
 import { addSkillHandler } from '../controllers/addSkill.controller.js';
 import { addDocHandler } from '../controllers/addDoc.controller.js';
