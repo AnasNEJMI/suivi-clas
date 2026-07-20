@@ -1,7 +1,7 @@
 import type { Bilan, Doc, QcmWithQuestions, Skill } from "./api.types";
 import { apiRequest } from "./client";
 
-export type StudentProfileData = {
+export type StudentData = {
     bilans : Bilan[],
     skill : Skill,
     docs : Doc[],
@@ -9,6 +9,6 @@ export type StudentProfileData = {
 }
 
 
-export async function fetchStudentProfile() : Promise<StudentProfileData>{
-    return apiRequest<StudentProfileData>('/api/student/profile');
+export async function fetchStudentProfile() : Promise<StudentData>{
+    return apiRequest<StudentData>('/api/student/data');
 }

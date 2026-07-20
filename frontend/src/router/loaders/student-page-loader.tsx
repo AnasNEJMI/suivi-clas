@@ -1,11 +1,12 @@
 import { fetchUser } from "@/api/auth";
+import { fetchStudentProfile as fetchStudentData } from "@/api/student";
 import {queryClient } from "@/lib/query/client";
 import { queryKeys } from "@/lib/query/keys";
 import {replace} from "react-router";
 
-export async function orgRouteLoader(){
+export async function studentPageLoader(){
     try{
-        const user = await queryClient.fetchQuery({
+        const user = await queryClient.ensureQueryData({
             queryKey : queryKeys.auth.user,
             queryFn : fetchUser,
             retry : false,
@@ -13,11 +14,21 @@ export async function orgRouteLoader(){
             gcTime : 10 * 60 * 1000
         })
 
-        if(!user || user.role !== 'org'){
+        console.log('profile user : ', user);
+
+        if(!user || user.userType !== 'student'){
             throw replace(`/`);
         }
 
-        return user;
+        const studentData = await queryClient.ensureQueryData({
+            queryKey : queryKeys.student.data,
+            queryFn : fetchStudentData,
+            staleTime : 24* 60 * 60 * 1000,
+        });
+
+        console.log('loaded student Data : ', studentData);
+
+        return {user : user, bilans : studentData.bilans, docs : studentData.docs, skill : studentData.skill, qcmWithQuestions : studentData.qcmWithQuestions};
     }catch(error){
         if(error instanceof Response && error.status === 302){
             throw error;

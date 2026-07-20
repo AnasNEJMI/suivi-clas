@@ -1,34 +1,29 @@
+import { fetchAdminBaseDate } from "@/api/admin";
 import { fetchUser } from "@/api/auth";
-import { fetchStudentProfile } from "@/api/profile";
 import {queryClient } from "@/lib/query/client";
 import { queryKeys } from "@/lib/query/keys";
 import {replace} from "react-router";
 
-export async function profileRouteLoader(){
+export async function adminRouteLoader(){
     try{
         const user = await queryClient.ensureQueryData({
             queryKey : queryKeys.auth.user,
             queryFn : fetchUser,
-            retry : false,
             staleTime : 10 * 60 * 1000,
-            gcTime : 10 * 60 * 1000
         })
 
-        console.log('profile user : ', user);
-
-        if(!user || user.userType !== 'student'){
+        if(!user || user.userType !== 'admin'){
             throw replace(`/`);
         }
 
-        const profile = await queryClient.ensureQueryData({
-            queryKey : queryKeys.student.profile,
-            queryFn : fetchStudentProfile,
-            staleTime : 24* 60 * 60 * 1000,
-        });
+        const data = await queryClient.ensureQueryData({
+            queryKey : queryKeys.admin.base,
+            queryFn : fetchAdminBaseDate,
+            staleTime : 10 * 60 * 1000,
+        }) 
 
-        console.log('loaded profile : ', profile);
-
-        return {user : user, bilans : profile.bilans, docs : profile.docs, skill : profile.skill, qcmWithQuestions : profile.qcmWithQuestions};
+        console.log('data received : ', JSON.stringify(data.skills, null));
+        return data;
     }catch(error){
         if(error instanceof Response && error.status === 302){
             throw error;

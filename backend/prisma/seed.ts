@@ -2,7 +2,7 @@ import "dotenv/config";
 import { PrismaPg } from '@prisma/adapter-pg';
 import {hashPassword} from '../src/utils/auth.utils.js'
 import {
-  SCOLAR_YEAR_TAGS,
+  SCOLAR_YEARS,
   SUBJECTS,
   ASSOCIATIONS_SEED,
   ANIMATORS_SEED,
@@ -29,14 +29,20 @@ function resolveId(map: Map<string, number>, key: string, context: string): numb
 // 1. ANNÉE SCOLAIRE
 // ─────────────────────────────────────────────
 async function seedScolarYears(): Promise<Map<string, number>> {
-  console.log(`Seeding scolar years  → "${SCOLAR_YEAR_TAGS.length}"`);
-  for (let i = 0; i < SCOLAR_YEAR_TAGS.length; i++) {
-    const scolarYear = SCOLAR_YEAR_TAGS[i];
-    await prisma.scolarYear.create({ data: { tag: scolarYear } });
+  console.log(`Seeding scolar years  → "${SCOLAR_YEARS.length}"`);
+  const scolarYearIdByLabel : Map<string, number> = new Map();
+  
+  for (let i = 0; i < SCOLAR_YEARS.length; i++) {
+    const sy = SCOLAR_YEARS[i];
+    const scolarYear = await prisma.scolarYear.create({ data: { label: sy.label} });
+    if(!scolarYear){
+        throw new Error(`Error creating scolar year → "${sy.label}"`);
+    }
+
+        scolarYearIdByLabel.set(scolarYear.label, scolarYear.id);
   }
   
-  const rows = await prisma.scolarYear.findMany({ select: { id: true, tag: true } });
-  return new Map(rows.map((s) => [s.tag, s.id]));
+  return scolarYearIdByLabel;
 }
 
 // ─────────────────────────────────────────────
@@ -96,13 +102,32 @@ async function seedLessons(levelIdByLabel : Map<string, number>, subjectIdByLabe
 // ─────────────────────────────────────────────
 // 4. ASSOCIATIONS → CLASSES → ÉLÈVES → MEMBRES
 // ─────────────────────────────────────────────
-async function seedAssociations(levelIdByLabel: Map<string, number>): Promise<Map<string, number>> {
+async function seedAssociations(levelIdByLabel: Map<string, number>): Promise<{associationIdByName : Map<string, number>, classIdByName : Map<string, number>}> {
     const associationIdByName = new Map<string, number>();
+    const classIdByName = new Map<string, number>();
     for (const assocSeed of ASSOCIATIONS_SEED) {
         console.log(`\n Seeding → Association "${assocSeed.name}"`);
 
         const assoc = await prisma.association.create({data : {label : assocSeed.name}});
         associationIdByName.set(assoc.label, assoc.id);
+
+        if (assocSeed.members.length > 0) {
+            console.log(`Seeding les membres de l'association ${assoc.label} : ${assocSeed.members.length} membres`);
+            const membersData = await Promise.all(
+                assocSeed.members.map(async (m) => ({
+                username:      m.username,
+                firstName:     m.firstName,
+                lastName:      m.lastName,
+                gender:        m.gender,
+                passwordHash:  await hashPassword(m.password),
+                associationId: assoc.id,
+                }))
+            );
+
+            console.log("membres : ",...membersData);
+
+            await prisma.associationMember.createMany({ data: membersData });
+        }
 
         for(const classSeed of assocSeed.classes){
             console.log(`Seeding la classe "${classSeed.label} de l'association ${assocSeed.name}" — ${classSeed.students.length} élèves`);
@@ -133,6 +158,8 @@ async function seedAssociations(levelIdByLabel: Map<string, number>): Promise<Ma
                 }
             })
 
+            classIdByName.set(assoc.label+associationClass.label,associationClass.id)
+
             //seeding skills
             const skillsData = await Promise.all(
                 associationClass.students.map(async (student) => ({
@@ -143,57 +170,53 @@ async function seedAssociations(levelIdByLabel: Map<string, number>): Promise<Ma
             await prisma.skill.createMany({
                 data : skillsData
             })
-
-            if (assocSeed.members.length > 0) {
-                console.log(`Seeding les membres de l'association ${assoc.label} : ${assocSeed.members.length} membres`);
-                const membersData = await Promise.all(
-                    assocSeed.members.map(async (m) => ({
-                    username:      m.username,
-                    firstName:     m.firstName,
-                    lastName:      m.lastName,
-                    gender:        m.gender,
-                    passwordHash:  await hashPassword(m.password),
-                    associationId: assoc.id,
-                    }))
-                );
-
-                await prisma.associationMember.createMany({ data: membersData });
-            }
-
         }
     }
 
-    return associationIdByName;
+    return {associationIdByName, classIdByName};
 }
 
 
 // ─────────────────────────────────────────────
 // 5. ANIMATEURS + LIAISON MANY-TO-MANY
 // ─────────────────────────────────────────────
-async function seedAnimators(associationIdByName: Map<string, number>): Promise<void> {
+async function seedAnimators(associationIdByName: Map<string, number>, classIdByName : Map<string, number>, scolarYearIdByLabel : Map<string, number>): Promise<void> {
     for (const animSeed of ANIMATORS_SEED) {
-        const assocCount = animSeed.associations.length;
+        const assocCount = animSeed.contracts.length;
         console.log(`Seeding les animateurs  → ${animSeed.username} (${assocCount} association${assocCount > 1 ? "s" : ""})`);
-
-        const connectIds = animSeed.associations.map((name) => {
-            const id = associationIdByName.get(name);
-            if(!id){
-                throw new Error(`Association introuvable : "${name}" — vérifie l'orthographe dans ANIMATORS_SEED`);
-            }
-
-            return {id};
-        });
-
-        await prisma.animator.create({
+        
+        const animator = await prisma.animator.create({
             data : {
                 username : animSeed.username,
                 firstName:    animSeed.firstName,
                 lastName:     animSeed.lastName,
                 gender:       animSeed.gender,
                 passwordHash: await hashPassword(animSeed.password),
-                associations : {connect : connectIds},
             }
         })
+        
+        if(!animator){
+            throw new Error(`Problème survenu lors de la création d'animateur : ${animSeed.firstName}`);
+        }
+        
+        const animatorContractData = animSeed.contracts.map(({associationLabel, classLabel, scolarYearLabel}) => {
+            const classId = classIdByName.get(associationLabel+classLabel);
+            console.log("classId By Name : ", classIdByName, " assoLabel, class id", classId )
+            const scolarYearId = scolarYearIdByLabel.get(scolarYearLabel);
+            
+            if(!classId) throw new Error(`Class introuvable : " Association : ${associationLabel}, Classe : ${classLabel}" — vérifie l'orthographe dans ANIMATORS_SEED`);
+            if(!scolarYearId) throw new Error(`Année scolaire introuvable : "${scolarYearLabel}" — vérifie l'orthographe dans ANIMATORS_SEED`);
+            
+
+            return {
+                animatorId : animator.id,
+                classId,
+                scolarYearId,
+            }
+        });
+
+        await prisma.animatorContract.createMany({data : animatorContractData})
+        
     }
 }
 
@@ -204,7 +227,7 @@ async function main(): Promise<void> {
     console.log("\n Démarrage du seed...");
 
     console.log("\n[ 1/5 ] Année scolaire");
-    await seedScolarYears();
+    const scolarYearIdByLabel = await seedScolarYears();
 
     console.log("\n[ 2/5 ] Niveaux scolaires");
     const levelIdByLabel = await seedLevels();
@@ -216,10 +239,10 @@ async function main(): Promise<void> {
     await seedLessons(levelIdByLabel, subjectIdByLabel);
 
     console.log("\n[ 4/5 ] Associations, classes & utilisateurs");
-    const associationIdByName = await seedAssociations(levelIdByLabel);
+    const {associationIdByName, classIdByName} = await seedAssociations(levelIdByLabel);
 
     console.log("\n[ 5/5 ] Animateurs");
-    await seedAnimators(associationIdByName);
+    await seedAnimators(associationIdByName, classIdByName, scolarYearIdByLabel);
 
     console.log("\n✅ Seed terminé avec succès.\n");
 }

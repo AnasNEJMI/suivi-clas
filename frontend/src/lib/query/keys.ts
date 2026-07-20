@@ -6,6 +6,9 @@ export const queryKeys = {
     base : ['admin, base'] as const,
   },
   student : {
-    profile : ['student', 'profile'] as const,
+    data : ['student', 'data'] as const,
+  },
+  associationMember : {
+    data : ['associationMember', 'data'] as const,
   }
 }

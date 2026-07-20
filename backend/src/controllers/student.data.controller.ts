@@ -4,14 +4,14 @@ import { Bilan, Doc, QcmWithQuestions, Skill, User } from "../types/data.types.j
 import { ApiError } from "../classes/ApiError.class.js";
 import { prisma } from "../db/prisma.js";
 
-type profileSuccessResponse = {
+type StudentDataSuccessResponse = {
     bilans : Bilan[],
     skill : Skill,
     docs : Doc[],
     // qcmWithQuestions : QcmWithQuestions[],
 }
 
-export async function studentProfileHandler(
+export async function studentDataHandler(
     req : Request,
     res : Response,
     next : NextFunction
@@ -140,7 +140,7 @@ export async function studentProfileHandler(
             }
         })
 
-        return sendSuccess<profileSuccessResponse>(
+        return sendSuccess<StudentDataSuccessResponse>(
             res,
             {
                 bilans,

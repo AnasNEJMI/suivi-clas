@@ -1,4 +1,5 @@
-import { UserGender, UserRole } from "../generated/prisma/enums.js";
+import { Gender } from "../generated/prisma/enums.js";
+import { UserType } from "../types/data.types.js";
 
 ///////////////////CLASSNAMES//////////////////////
 export const CLASS_NAMES = ['4ème'] as const;
@@ -12,9 +13,9 @@ export type userData = {
     firstName: string,
     lastName: string,
     username: string,
-    gender: UserGender,
+    gender: Gender,
     password: string,
-    role: UserRole;
+    role: UserType;
 }
 
 

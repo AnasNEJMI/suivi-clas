@@ -1,11 +1,11 @@
 import type { Bilan, Doc, QcmWithQuestions, Skill } from '@/api/api.types';
 import type { User } from '@/api/auth';
 import Header from '@/components/header';
-import BilanCard from '@/components/profile/bilan';
-import { CompetencesMethodologiques } from '@/components/profile/competences-transversales';
-import Presence from '@/components/profile/presence';
-import SubjectsHistory from '@/components/profile/subjets-history';
-import Todo from '@/components/profile/todo';
+import BilanCard from '@/components/student-profile/bilan';
+import { CompetencesMethodologiques } from '@/components/student-profile/competences-transversales';
+import Presence from '@/components/student-profile/presence';
+import SubjectsHistory from '@/components/student-profile/subjets-history';
+import Todo from '@/components/student-profile/todo';
 import BaseLayout from '@/layouts/base-layout';
 import { Navigate, useRouteLoaderData } from 'react-router';
 
@@ -16,16 +16,15 @@ const todoLinks = {
     exercices : ''
 }
 
-const profileDesc = "Cet espace personnel met à votre disponibilité toutes les informations importantes et utiles concernant le déroulement des séances, les commentaires et les retours de nos animateurs(trices), ainsi que l'évolution de vos compétences."
+const studentPageDescription = "Cet espace personnel met à votre disponibilité toutes les informations importantes et utiles concernant le déroulement des séances, les commentaires et les retours de nos animateurs(trices), ainsi que l'évolution de vos compétences."
 
-const StudentProfile = () => {
+const StudentPage = () => {
     const loaderData = useRouteLoaderData('student') as {user : User, bilans : Bilan[], docs : Doc[], skill : Skill, qcmWithQuestions : QcmWithQuestions[]};
     const {user, bilans,skill} = loaderData;
     if(!user){
         return <Navigate to='/' replace/>;
     }
 
-    console.log(loaderData.qcmWithQuestions);
   return (
     <BaseLayout>
         <Header/>
@@ -36,7 +35,7 @@ const StudentProfile = () => {
                 <p className='text-md opacity-75 px-4 py-2 rounded-full bg-sky-100 text-indigo-700'><span className='font-bold opacity-90'>{user.class?.label}</span></p>
             </div>
             <p className='text-md opacity-75 px-4 py-1 rounded-full bg-zinc-100 text-zinc-700 mt-4'>Dernière connexion : <span className='font-bold'>01/05/2026</span></p>
-            <p className='text-base mt-4 w-full text-balance font-medium opacity-65 max-w-md text-justify'>{profileDesc}</p>
+            <p className='text-base mt-4 w-full text-balance font-medium opacity-65 max-w-md text-justify'>{studentPageDescription}</p>
         </section>
         <section className='relative w-full max-w-7xl mt-12 lg:mt-20 px-6 py-2 flex flex-col'>
             <SubjectsHistory bilans={bilans}/>
@@ -57,4 +56,4 @@ const StudentProfile = () => {
   )
 }
 
-export default StudentProfile
+export default StudentPage

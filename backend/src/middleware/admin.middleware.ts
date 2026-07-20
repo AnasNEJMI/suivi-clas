@@ -1,6 +1,6 @@
 import express from 'express';
 import { ApiError } from '../classes/ApiError.class.js';
-import { User } from '../types/data.types.js';
+import { User, UserType } from '../types/data.types.js';
 
 declare global {
   namespace Express {
@@ -19,7 +19,7 @@ export async function requireAdminHandler(
     try{
         const user = req.user!;
 
-        if(user.role !== UserRole.admin){
+        if(user.userType !== 'admin'){
             throw ApiError.unauthorized('Accès non autorisé.')
         }
          

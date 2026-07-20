@@ -83,6 +83,7 @@ export const UserType = {
     student : "student",
     associationMember : "associationMember",
     animator : "animator",
+    admin : "admin",
 } as const;
 
 export const USER_TYPES = ["student", "associationMember","animator", "admin"]
@@ -91,4 +92,5 @@ export const USER_TYPE_LABELS : Record<UserType, string> = {
     "animator" : "Animateur(trice)",
     "student" : "Élève",
     "associationMember" : "Membre d'association",
+    "admin" : "Administrateur",
 }

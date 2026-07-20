@@ -38,6 +38,7 @@ model Student {
   skill        Skill?
   qcms         Qcm[]
 
+  visits Visit[]
   @@index([classId])
 }
 
@@ -55,6 +56,7 @@ model Animator {
   associations    Association[]
   sessions        Session[]
   seances         Seance[]
+  animatorContracts AnimatorContract[]
   bilansSubmitted Bilan[]  @relation("BilanSubmittedBy")
 }
 
@@ -112,6 +114,26 @@ model Session {
   @@index([expiresAt])
 }
 
+//////////////////// ANIMATOR CONTRACT ////////////////////
+model AnimatorContract{
+  id            Int      @id @default(autoincrement())
+  
+  classId Int?
+  class   Class? @relation(fields: [classId], references: [id], onDelete: SetNull)
+
+  animatorId Int?
+  animator   Animator? @relation(fields: [animatorId], references: [id], onDelete: SetNull)
+  
+  scolarYearId Int?
+  scolarYear   ScolarYear? @relation(fields: [scolarYearId], references: [id], onDelete: SetNull)
+
+  createdAt    DateTime @default(now())
+
+  @@index([classId])
+  @@index([animatorId])
+  @@index([scolarYearId])
+}
+
 //////////////////// ACADEMIC STRUCTURE ////////////////////
 
 model Class {
@@ -126,6 +148,7 @@ model Class {
 
   students Student[]
   seances  Seance[]
+  animatorContracts AnimatorContract[]
 
   @@index([associationId])
 }
@@ -164,9 +187,12 @@ model Seance {
 
 model ScolarYear {
   id      Int      @id @default(autoincrement())
-  tag     String   @unique
+  label     String   @unique
 
   seances Seance[]
+  visits Visit[]
+  animatorContracts AnimatorContract[]
+
 }
 
 model Bilan {
@@ -220,6 +246,22 @@ model Skill {
   updatedAt     DateTime @updatedAt
 
   @@index([studentId])
+}
+
+model Visit {
+  id            Int      @id @default(autoincrement())
+
+  studentId     Int      
+  student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  
+  scolarYearId  Int     
+  scolarYear ScolarYear @relation(fields: [scolarYearId], references: [id], onDelete : Cascade)
+
+  numVisits   Int
+  lastVisit    DateTime
+
+  @@index([studentId])
+  @@index([scolarYearId])
 }
 
 model Subject {

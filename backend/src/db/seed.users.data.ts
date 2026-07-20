@@ -1,10 +1,15 @@
 // ─────────────────────────────────────────────
 // ANNÉE SCOLAIRE
+
+import { scolarYears } from "./seed.data.js";
+
 // ─────────────────────────────────────────────
-export const SCOLAR_YEAR_TAGS = [
-  "2025-2026",
-  "2026-2027",
-]
+export const SCOLAR_YEARS = [
+  {label : "2025-2026"},
+  {label : "2026-2027"},
+] as const;
+
+export type ScolarYear = (typeof SCOLAR_YEARS)[number]["label"];
 
 // ─────────────────────────────────────────────
 // NIVEAUX SCOLAIRES
@@ -79,7 +84,7 @@ export interface AnimatorSeed {
   lastName:         string;
   password:         string;
   gender:           "m" | "f";
-  associations: string[];
+  contracts : {associationLabel : string, classLabel : string, scolarYearLabel : ScolarYear}[],
 }
 
 export interface LessonSeed {
@@ -114,7 +119,15 @@ export const ASSOCIATIONS_SEED : AssociationSeed[] = [
                     {username : "Yosor-MARZOUK", firstName : "Yosor", lastName : "MARZOUK", password : "Yoso-MARZ-FdL-CLAS-38", gender : "f", level : "3ème"},
                     {username : "Safya-LABIDI", firstName : "Safya", lastName : "LABIDI", password : "Safy-LABID-FdL-CLAS-39", gender : "f", level : "3ème"},
                 ]
-            }
+            },
+            {
+                label : "Groupe Lycée",
+                students : [
+                    {username : "XXXX-YYYY", firstName : "Bilal", lastName : "BENHIDA", password : "XXXX-YYYY", gender : "m", level : "2nde"},
+                    {username : "AAAA-ZZZZ", firstName : "Nasrinne", lastName : "ZIOUCH", password : "ZZZZ-AAAA", gender : "f", level : "1ère"},
+                    {username : "BBBB-CCCC", firstName : "Imran", lastName : "ABDELMOUMNI", password : "BBBB-CCCC", gender : "m", level : "Terminale"},
+                ]
+            },
         ]
     }
 ]
@@ -146,7 +159,9 @@ export const ANIMATORS_SEED: AnimatorSeed[] = [
     lastName: "NEJMI",
     password: "Anas-NEJ-CLAS-FdL-77",
     gender: "m",
-    associations: ["Fleurs Du Lys"],
+    contracts: [
+      {associationLabel : "Fleurs Du Lys", classLabel : "Groupe 3ème", scolarYearLabel : '2026-2027'},
+      {associationLabel : "Fleurs Du Lys", classLabel : "Groupe Lycée", scolarYearLabel : '2026-2027'}],
   }
 ];
 

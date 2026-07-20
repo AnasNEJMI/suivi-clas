@@ -50,18 +50,28 @@ export type QcmWithQuestions = {
     }[];
 }
 
+export type Level = {
+    id : number,
+    label : string
+}
+export type Subject = {
+
+    id : number,
+    label : string
+}
+
 export type Lesson = {
     id : number,
-    class : {id : number, label : string},
+    level : Level,
+    subject : Subject,
     label : string,
-    subject : string,
 }
 
 export type Doc = {
     id : number,
-    lesson : {id : number, label : string},
+    lesson : Lesson,
     link : string,
-    type : string,
+    type : 'qcm' | 'summary' | 'exercices',
 }
 
 
@@ -86,6 +96,7 @@ export const UserType = {
     student : "student",
     associationMember : "associationMember",
     animator : "animator",
+    admin : "admin",
 } as const;
 
 export const USER_TYPES = ["student", "associationMember","animator"]
@@ -94,4 +105,5 @@ export const USER_TYPE_LABELS : Record<UserType, string> = {
     "animator" : "Animateur(trice)",
     "student" : "Élève",
     "associationMember" : "Membre d'association",
+    "admin" : "Administrateur",
 }

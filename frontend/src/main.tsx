@@ -4,25 +4,22 @@ import { createBrowserRouter, RouterProvider } from 'react-router'
 import Home from './pages/home.tsx'
 import Login from './pages/login.tsx'
 import RootLayout from './layouts/root-layout.tsx'
-import OrgBoardSettings from './pages/orgboard/orgboard-settings.tsx'
 import SignUp from './pages/signup.tsx'
-import Orgboard from './pages/orgboard/orgboard.tsx'
-import Adminboard from './pages/adminboard/adminboard.tsx'
-import AdminboardUsers from './pages/adminboard/adminboard-users.tsx'
+import AssociationPage from './pages/association-page/association-page.tsx'
 import { guestRouteLoader } from './router/loaders/guest-route-loader.ts'
 import About from './pages/about.tsx'
 import Contact from './pages/contact.tsx'
-import StudentProfile from './pages/student-profile.tsx'
+import StudentPage from './pages/student-page.tsx'
 import { RootErrorBoundary } from './pages/root-error-boundry.tsx'
-import { adminRouteLoader } from './router/loaders/admin-route-loader.tsx'
-import { profileRouteLoader } from './router/loaders/profile-route-loader.tsx'
-import { orgRouteLoader } from './router/loaders/org-route-loader.tsx'
-import OrgboardUsers from './pages/orgboard/orgboard-users.tsx'
-import AdminboardBilans from './pages/adminboard/adminboard-bilans.tsx'
-import AdminboardSkills from './pages/adminboard/adminboard-skills.tsx'
-import AdminboardLessons from './pages/adminboard/adminboard-lessons.tsx'
-import AdminboardStatistics from './pages/adminboard/adminboard-statistics.tsx'
-import AdminboardDownloads from './pages/adminboard/adminboard-downloads.tsx'
+import { studentPageLoader } from './router/loaders/student-page-loader.tsx'
+import OrgboardUsers from './pages/association-page/orgboard-users.tsx'
+import AnimatorPage from './pages/animator-page/animator-page.tsx'
+import { AnimatorPageLoader } from './router/loaders/animator.loader.ts'
+import AnimatorBilans from './pages/animator-page/animator-bilans.tsx'
+import AnimatorSkills from './pages/animator-page/animator-skills.tsx'
+import AnimatorLessonDocuments from './pages/animator-page/animator-lesson-documents.tsx'
+import AnimatorStatistics from './pages/animator-page/animator-statisics.tsx'
+import { associationPageLoader } from './router/loaders/association-page-loader.ts'
 
 
 
@@ -40,36 +37,47 @@ const router = createBrowserRouter([
       {
         id : 'student',
         path : 'etudiant',
-        Component : StudentProfile,
-        loader : profileRouteLoader,
+        Component : StudentPage,
+        loader : studentPageLoader,
         shouldRevalidate: () => true,
       },
       {
+        id : 'association',
         path : 'association',
-        Component : Orgboard,
-        loader : orgRouteLoader,
+        Component : AssociationPage,
+        loader : associationPageLoader,
         shouldRevalidate: () => true,
-        children : [
-          {index : true, Component : OrgboardUsers},
-          {path : 'settings', Component : OrgBoardSettings}
-        ]
       },
       {
-        id: "admin",
-        path : 'admin',
-        Component : Adminboard,
-        loader : adminRouteLoader,
+        id: "animator",
+        path : 'animateur',
+        Component : AnimatorPage,
+        loader : AnimatorPageLoader,
         shouldRevalidate: () => true,
         children : [
           {index : true, Component : OrgboardUsers},
-          {path : 'users', Component : AdminboardUsers},
-          {path : 'bilans', Component : AdminboardBilans},
-          {path : 'skills', Component : AdminboardSkills},
-          {path : 'lessons', Component : AdminboardLessons},
-          {path : 'statistics', Component : AdminboardStatistics},
-          {path : 'downloads', Component : AdminboardDownloads},
+          {path : 'bilans', Component : AnimatorBilans},
+          {path : 'skills', Component : AnimatorSkills},
+          {path : 'lesson-documents', Component : AnimatorLessonDocuments},
+          {path : 'statistics', Component : AnimatorStatistics},
         ]
       },
+      // {
+      //   id: "admin",
+      //   path : 'admin',
+      //   Component : Adminboard,
+      //   loader : adminRouteLoader,
+      //   shouldRevalidate: () => true,
+      //   children : [
+      //     {index : true, Component : OrgboardUsers},
+      //     {path : 'users', Component : AdminboardUsers},
+      //     {path : 'bilans', Component : AdminboardBilans},
+      //     {path : 'skills', Component : AdminboardSkills},
+      //     {path : 'lessons', Component : AdminboardLessons},
+      //     {path : 'statistics', Component : AdminboardStatistics},
+      //     {path : 'downloads', Component : AdminboardDownloads},
+      //   ]
+      // },
     ],
   }
 ])
