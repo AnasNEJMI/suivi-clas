@@ -45,15 +45,10 @@ export type StudentEntry = {
     firstName: string;
     lastName:  string;
     gender:    'f' | 'm';
-    // level est null si l'élève n'a pas encore de niveau assigné
     level: {
         id:      number;
         label:   string;
         order:   number;
-        // on embarque les leçons dans le niveau de l'élève
-        // → quand l'animateur sélectionne un élève, il a déjà
-        //   tous les chapitres disponibles pour ce niveau sans requête supplémentaire
-        lessons: LessonEntry[];
     } | null;
     bilans: BilanEntry[];
     skill:  SkillEntry;
@@ -68,8 +63,8 @@ export type ClassEntry = {
 };
 
 export type ScolarYearEntry = {
-    id:           number;
-    label:          string;
+    id: number;
+    label: string;
     classes: ClassEntry[];
 };
 
@@ -104,4 +99,49 @@ type StudentData = {
     level : Level,
     bilans : Bilan[]
     skill : Skill,
+}
+
+
+export type SeanceEntry = {
+    id : number,
+    animatorId : number,
+    classId : number,
+    date : Date,
+    scolarYearId : number,
+    students : SeanceStudentEntry[],
+}
+
+export type SeanceStudentEntry = {
+    id : number,
+    firstName : string,
+    lastName : string,
+    gender : 'm' | 'f',
+    level : {id : number, label : string},
+    bilan : SeanceBilanEntry | null,
+}
+
+export type SeanceBilanEntry = {
+    date: Date;
+    presence: boolean;
+    summary: string;
+    lesson: {
+        id: number;
+        label: string;
+        subject: {
+            id: number;
+            label: string;
+        };
+    } | null;
+    id: number;
+    studentId: number;
+    seanceId: number;
+    submittedById: number;
+}
+
+
+export type SeancePayload = {
+    scolarYearId : number,
+    animatorId : number,
+    classId : number,
+    date : Date,
 }

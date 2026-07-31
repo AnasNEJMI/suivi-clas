@@ -12,10 +12,10 @@ import Contact from './pages/contact.tsx'
 import StudentPage from './pages/student-page.tsx'
 import { RootErrorBoundary } from './pages/root-error-boundry.tsx'
 import { studentPageLoader } from './router/loaders/student-page-loader.tsx'
-import OrgboardUsers from './pages/association-page/orgboard-users.tsx'
+import AnimatorWelcome from './pages/animator-page/animator-welcome.tsx'
 import AnimatorPage from './pages/animator-page/animator-page.tsx'
 import { AnimatorPageLoader } from './router/loaders/animator.loader.ts'
-import AnimatorBilans from './pages/animator-page/animator-bilans.tsx'
+import AnimatorBilansPage from './pages/animator-page/animator-bilans/animator-bilans-page.tsx'
 import AnimatorSkills from './pages/animator-page/animator-skills.tsx'
 import AnimatorLessonDocuments from './pages/animator-page/animator-lesson-documents.tsx'
 import AnimatorStatistics from './pages/animator-page/animator-statisics.tsx'
@@ -55,10 +55,10 @@ const router = createBrowserRouter([
         loader : AnimatorPageLoader,
         shouldRevalidate: () => true,
         children : [
-          {index : true, Component : OrgboardUsers},
-          {path : 'bilans', Component : AnimatorBilans},
-          {path : 'skills', Component : AnimatorSkills},
-          {path : 'lesson-documents', Component : AnimatorLessonDocuments},
+          {index : true, Component : AnimatorWelcome},
+          {path : 'bilans', Component : AnimatorBilansPage},
+          {path : 'evaluation-competences', Component : AnimatorSkills},
+          {path : 'liens-documents', Component : AnimatorLessonDocuments},
           {path : 'statistics', Component : AnimatorStatistics},
         ]
       },

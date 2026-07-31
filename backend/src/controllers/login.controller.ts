@@ -10,7 +10,7 @@ import { PrismaClientKnownRequestError } from '../generated/prisma/internal/pris
 import { User, UserType } from '../types/data.types.js';
 import { Gender } from '../generated/prisma/enums.js';
 
-type loginInput = {
+type LoginInput = {
     username : string,
     password : string,
     userType : UserType
@@ -27,7 +27,7 @@ export async function loginHandler(
     next : NextFunction
 ){
     try{
-        const {username, password, userType} = req.body as loginInput;
+        const {username, password, userType} = req.body as LoginInput;
         console.log('username :', username);
         console.log('password :', password);
         

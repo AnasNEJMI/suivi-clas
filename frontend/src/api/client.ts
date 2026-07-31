@@ -63,6 +63,7 @@ export async function apiRequest<T>(
         }
 
         if(err instanceof TypeError && err.message.includes('fetch')){
+            console.error(err);
             throw new ApiError(
                 ErrorCodes.NETWORK_ERROR,
                 ErrorMessagesMap[ErrorCodes.NETWORK_ERROR],

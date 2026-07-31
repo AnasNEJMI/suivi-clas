@@ -206,15 +206,15 @@ model Bilan {
   seanceId      Int
   seance        Seance    @relation(fields: [seanceId], references: [id], onDelete: Restrict)
 
-  submittedById Int?
-  submittedBy   Animator? @relation("BilanSubmittedBy", fields: [submittedById], references: [id], onDelete: SetNull)
+  submittedById Int
+  submittedBy   Animator @relation("BilanSubmittedBy", fields: [submittedById], references: [id], onDelete: SetNull)
 
   presence      Boolean   @default(false)
 
   lessonId      Int?
   lesson        Lesson?   @relation(fields: [lessonId], references: [id], onDelete: SetNull)
 
-  summary       String?
+  summary       String
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -222,7 +222,7 @@ model Bilan {
   @@index([studentId])
   @@index([seanceId])
   @@index([submittedById])
-  @@unique([studentId, seanceId])
+  @@unique(name : "bilanId", [studentId, seanceId])
 }
 
 model Skill {

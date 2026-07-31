@@ -19,6 +19,12 @@ import { addDocSchema } from '../schemas/addDoc.schema.js';
 import { associationDataHandler } from '../controllers/association.data.controller.js';
 import { animatorProfileHandler } from '../controllers/animator/profile.controller.js';
 import { animatorBaseDataHandler } from '../controllers/animator/base-data.controller.js';
+import { seanceSchema } from '../schemas/seance.schema.js';
+import { animatorFetchSeanceHandler } from '../controllers/animator/fetchSeance.controller.js';
+import { animatorSubmitSeanceHandler } from '../controllers/animator/submitSeance.controller.js';
+import { animatorDeleteSeanceHandler } from '../controllers/animator/deleteSeance.controller.js';
+import { bilanSchema } from '../schemas/bilan.schema.js';
+import { animatorSubmitBilanHandler } from '../controllers/animator/submitBilan.controller.js';
 
 const router = Router();
 
@@ -32,6 +38,12 @@ router.get('/admin/base', requireAuthHandler, requireAdminHandler, asyncHandler(
 
 router.get('/animator/me', requireAuthHandler, asyncHandler(animatorProfileHandler));
 router.get('/animator/base-data', requireAuthHandler, asyncHandler(animatorBaseDataHandler));
+
+router.get('/animator/seance', requireAuthHandler, asyncHandler(animatorFetchSeanceHandler));
+router.delete('/animator/seance', requireAuthHandler, asyncHandler(animatorDeleteSeanceHandler));
+router.post('/animator/seance',validateBody(seanceSchema), requireAuthHandler, asyncHandler(animatorSubmitSeanceHandler));
+
+router.post('/animator/bilan',validateBody(bilanSchema), requireAuthHandler, asyncHandler(animatorSubmitBilanHandler));
 
 router.post('/admin/add-bilan', validateBody(addBilanSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addBilanHandler))
 router.post('/admin/add-skill', validateBody(addSkillSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addSkillHandler))
