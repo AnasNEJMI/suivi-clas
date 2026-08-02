@@ -1,200 +1,83 @@
 import { animatorApiCalls } from '@/api/animator/apiCalls'
-import type { LessonEntry, LessonsByLevelEntry, ScolarYearEntry, SeanceEntry, SeanceStudentEntry, StudentEntry, SubjectEntry } from '@/api/animator/types'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { bilanFormSchema } from '@/lib/schemas/bilans-bilan.schema'
-import { cn } from '@/lib/utils'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { CheckIcon } from 'lucide-react'
-import { useState, type Dispatch, type SetStateAction} from 'react'
-import { Controller, useForm, useWatch } from 'react-hook-form'
+import { animatorKeys } from '@/api/animator/query-keys'
+import type {LessonsByLevelEntry, SeanceBilanEntry, SeanceEntry, SeanceQueryParams,} from '@/api/animator/types'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import type z from 'zod'
+import SeanceStatusCards from './seance-status-cards'
+import BilansSection from './bilans-section'
 
 interface BilansFormProps{
-  className ?: string,
-  lessonsByLevel : LessonsByLevelEntry[],
-  isGeneralInfoFormEnabled : boolean,
-  isDeletingSeance : boolean,
-  isSubmittingSeance : boolean,
-  isFetchingSeance : boolean,
-  animatorId : number,
-  scolarYears : ScolarYearEntry[],
-  currentSeance : SeanceEntry | null,
-  setCurrentSeance :  Dispatch<SetStateAction<SeanceEntry | null>>
+  params:        SeanceQueryParams,
+  lessonsByLevel: LessonsByLevelEntry[]
 }
 
-const BilansForm = ({
-  className,
-  lessonsByLevel,
-  isGeneralInfoFormEnabled,
-  isDeletingSeance,
-  isSubmittingSeance,
-  isFetchingSeance,
-  scolarYears,
-  animatorId,
-  currentSeance,
-  setCurrentSeance,
+const SeancePanel = ({
+  params,
+  lessonsByLevel
 } : BilansFormProps) => {
-  const [isSubmittingBilan, setIsSubmittingBilan] = useState(false);
-  const [selectedSubjects, setSelectedSubjects] = useState<SubjectEntry[]>([])
-  const [selectedLessons, setSelectedLessons] = useState<LessonEntry[]>([])
-  const [selectedStudent, setSelectedStudent] = useState<SeanceStudentEntry | undefined>(undefined)
-  const form = useForm<z.infer<typeof bilanFormSchema>>({
-    resolver : zodResolver(bilanFormSchema),
-    defaultValues : {
-      studentId : -1,
-      subjectId : -1,
-      lessonId : -1,
-      summary : '',
-      presence : true,
-    }
+  
+  const queryClient = useQueryClient();
+  const queryKey = animatorKeys.detail(params);
+
+  const {data : seance, isLoading, isError} = useQuery({
+    queryKey,
+    queryFn : () => animatorApiCalls.fetchSeance(params),
+    staleTime : 0,
+    gcTime : 45 * 60 * 1000
   })
 
-  async function onSubmit(data : z.infer<typeof bilanFormSchema>){
-    try{
-      setIsSubmittingBilan(true);
-      console.log('submitting this data : ', data);
-      const bilan = await animatorApiCalls.submitBilan({
-        animatorId,
-        lessonId : data.lessonId,
-        seanceId : currentSeance!.id,
-        studentId : data.studentId,
-        date : currentSeance!.date,
-        presence : data.presence,
-        summary: data.summary
-      })
-
-      if(bilan){
-        console.log('submitted bilan successfully : ',bilan);
-      }
-
-      
-      toast.success("Bilan soumis avec succès !")
-      
-      const newSeance = {
-        id : currentSeance!.id,
-        animatorId : currentSeance!.animatorId,
-        classId : currentSeance!.classId,
-        date : currentSeance!.date,
-        scolarYearId : currentSeance!.scolarYearId,
-        students : currentSeance!.students.map(student => {
-          if(student.id === data.studentId){
-            student.bilan = bilan;
-          }
-          return student;
-        })
-      }
-
-      setCurrentSeance(newSeance);
-
-    }catch(error){
-      console.error(error);
-    }finally{
-      setIsSubmittingBilan(false);
-    }
-  }
-
-
-  function updateFormValue<T extends string | number | boolean>(
-    label :  "studentId" | "subjectId" | "lessonId" | "summary" | "presence",
-    value : T,
-    isInvalid : () => boolean = () => !value){
-
-      console.log(`${label} : `, value);
-      if(isInvalid()) return;
-      form.setValue(label, value);
-      console.log('form updated : ', form.getValues())
-  }
+  const submitMutation = useMutation({
+    mutationFn : () => animatorApiCalls.submitSeance(params),
+    onSuccess : () => {
+      queryClient.invalidateQueries({queryKey});
+      toast.success('Séance supprimée avec succès.');
+    },
+    onError : () => toast.error('Erreur lors de l\'enregistrement de la séance.'),
+  })
   
-  const setStudentId = (value : string) => {
-    const studentId = parseInt(value);
+  const deleteMutation = useMutation({
+    mutationFn : () => animatorApiCalls.deleteSeance(params),
+    onSuccess : () => {
+      queryClient.setQueryData(queryKey, null);
+      toast.success('Séance supprimée avec succès.');
+    },
+    onError : () => toast.error('Erreur lors de la suppression de la séance.'),
+  })
 
-    updateFormValue<number>('studentId', studentId);
-
-    const studentEntry = currentSeance!.students.find((student) => student.id === studentId);
-    console.log('studentEntry :',studentEntry)
-    setSelectedStudent(studentEntry)
-    if(studentEntry){
-      const levelId = studentEntry.level.id
-      const subjects = lessonsByLevel.find(l => l.id = levelId)!.subjects;
-      setSelectedSubjects(subjects);
-      
-      if(studentEntry.bilan){
-        form.setValue('summary', studentEntry.bilan.summary);
-        form.setValue('presence', studentEntry.bilan.presence);
-        if(studentEntry.bilan.lesson){
-          const lessonId = studentEntry.bilan.lesson.id;
-          const subjectId = studentEntry.bilan.lesson.subject!.id;
-          const subjectEntry = subjects.find((sub) => sub.id === subjectId);
-          console.log('subjectEntry : ',subjectEntry);
-          if(subjectEntry){
-            setSelectedLessons(subjectEntry.lessons);
-            form.setValue('lessonId', lessonId);
-            form.setValue('subjectId', subjectId);
-          }
-        }else{
-          form.setValue('lessonId', -1);
-          form.setValue('subjectId', -1);
-        }
-      }else{
-        form.setValue('lessonId', -1);
-        form.setValue('subjectId', -1);
-        form.setValue('presence', true);
-        form.setValue('summary', '');
+  function handleBilanSubmitted(studentId : number, bilan : SeanceBilanEntry){
+    queryClient.setQueryData<SeanceEntry | null>(queryKey, (prev) => 
+      prev 
+      ? {
+        ...prev,
+        students : prev.students.map(s => 
+          s.id === studentId ? {...s, bilan} : s
+        ),
       }
-    }
+      : null
+    )
   }
-  const setPresence = (value : string) => {
-    updateFormValue<boolean>('presence', value === 'présent'? true : false, () => false);
-    form.setValue('lessonId', -1);
-    form.setValue('subjectId', -1);
-    form.setValue('summary', '');
-  }
-
-  const setSubjectId = (value : string) => {
-    const subjectId = parseInt(value);
-    updateFormValue('subjectId', parseInt(value));
-    form.setValue('lessonId', -1);
-    form.setValue('summary', '');
-
-    const subjectEntry = selectedSubjects.find((sub) => sub.id === subjectId);
-
-    if(subjectEntry){
-      setSelectedLessons(subjectEntry.lessons);
-    }
-    
-  }
-
-  const updatelessonId = (value : string) => updateFormValue<number>('lessonId', parseInt(value));
-
-  const bilanStudentId = useWatch({
-    control: form.control,
-    name: "studentId",
-  });
-
-  const bilanPresence = useWatch({
-    control: form.control,
-    name: "presence",
-  });
-
-  const bilanSubjectId = useWatch({
-    control: form.control,
-    name: "subjectId",
-  });
-
-  const bilanLessonId = useWatch({
-    control: form.control,
-    name: "lessonId",
-  });
 
   return (
     <>
+      <SeanceStatusCards
+        seance = {seance ?? null}
+        isLoading = {isLoading}
+        isError = {isError}
+        isSubmitting = {submitMutation.isPending}
+        isDeleting = {deleteMutation.isPending}
+        onSubmit = {() => submitMutation.mutate()}
+        onDelete = {() => deleteMutation.mutate()}
+        />
       {
+        !isLoading && seance &&
+        <BilansSection
+          seance = {seance ?? null}
+          animatorId = {params.animatorId}
+          lessonsByLevel = {lessonsByLevel}
+          onBilanSubmitted = {handleBilanSubmitted}  
+        />
+      }
+      {/* {
         !isGeneralInfoFormEnabled && !isSubmittingSeance && !isFetchingSeance && !isDeletingSeance && currentSeance &&
         <Card className={cn(className, `font-outfit border-none shadow-card mt-6`)}>
           <CardHeader>
@@ -393,9 +276,9 @@ const BilansForm = ({
             </Field>
           </CardFooter>
         </Card>
-      }
+      } */}
     </>
   )
 }
 
-export default BilansForm
+export default SeancePanel

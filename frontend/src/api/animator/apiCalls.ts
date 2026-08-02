@@ -28,9 +28,9 @@ type BilanPayload = {
     animatorId : number,
     studentId : number,
     seanceId : number,
-    lessonId : number,
     presence : boolean,
-    summary : string
+    lessonId? : number,
+    summary? : string
 }
 
 

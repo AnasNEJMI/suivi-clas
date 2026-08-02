@@ -3,23 +3,13 @@ import { PrismaClientKnownRequestError } from "../../generated/prisma/internal/p
 import { ApiError } from "../../classes/ApiError.class.js";
 import { prisma } from '../../db/prisma.js';
 import { sendSuccess } from '../../utils/response.utils.js';
-import z from 'zod';
-import { Gender } from '../../generated/prisma/enums.js';
+import { BilanInput } from '../../schemas/bilan.schema.js';
 
-type BilanInput = {
-    date : Date,
-    animatorId : number,
-    studentId : number,
-    seanceId : number,
-    lessonId : number,
-    presence : boolean,
-    summary : string
-}
 
 export type BilanEntry = {
     date: Date;
     presence: boolean;
-    summary: string;
+    summary: string | null;
     lesson: {
         id: number;
         label: string;
@@ -65,17 +55,26 @@ export async function animatorSubmitBilanHandler(
             },
             update : {
                 presence,
-                summary,
-                lessonId,
+                ...(presence && {
+                    lessonId, summary
+                }),
+                ...(!presence && {
+                    lessonId : null, summary : null
+                }),
+                
             },
             create : {
                 submittedById : animatorId,
-                lessonId,
-                studentId,
                 seanceId,              
+                studentId,
                 date,
                 presence,
-                summary
+                ...(presence && {
+                    lessonId, summary
+                }),
+                ...(!presence && {
+                    lessonId : null, summary : null
+                }),
             },
             select : {
                 id : true,

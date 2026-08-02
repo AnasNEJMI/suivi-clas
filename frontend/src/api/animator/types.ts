@@ -123,7 +123,7 @@ export type SeanceStudentEntry = {
 export type SeanceBilanEntry = {
     date: Date;
     presence: boolean;
-    summary: string;
+    summary: string | null;
     lesson: {
         id: number;
         label: string;
@@ -144,4 +144,11 @@ export type SeancePayload = {
     animatorId : number,
     classId : number,
     date : Date,
+}
+
+export type SeanceQueryParams = {
+    animatorId:   number
+    scolarYearId: number
+    classId:      number
+    date:         Date
 }

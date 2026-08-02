@@ -9,13 +9,7 @@ import { profileHandler } from '../controllers/profile.controller.js';
 import { logoutHandler } from '../controllers/logout.controller.js';
 import { requireAdminHandler } from '../middleware/admin.middleware.js';
 import { getAdminBaseHandler } from '../controllers/getAdminBase.controller.js';
-import { addBilanSchema } from '../schemas/addBilan.schema.js';
-import { addBilanHandler } from '../controllers/addBilan.controller.js';
 import { studentDataHandler } from '../controllers/student.data.controller.js';
-import { addSkillSchema } from '../schemas/addSkill.schema.js';
-import { addSkillHandler } from '../controllers/addSkill.controller.js';
-import { addDocHandler } from '../controllers/addDoc.controller.js';
-import { addDocSchema } from '../schemas/addDoc.schema.js';
 import { associationDataHandler } from '../controllers/association.data.controller.js';
 import { animatorProfileHandler } from '../controllers/animator/profile.controller.js';
 import { animatorBaseDataHandler } from '../controllers/animator/base-data.controller.js';
@@ -45,8 +39,8 @@ router.post('/animator/seance',validateBody(seanceSchema), requireAuthHandler, a
 
 router.post('/animator/bilan',validateBody(bilanSchema), requireAuthHandler, asyncHandler(animatorSubmitBilanHandler));
 
-router.post('/admin/add-bilan', validateBody(addBilanSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addBilanHandler))
-router.post('/admin/add-skill', validateBody(addSkillSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addSkillHandler))
-router.post('/admin/add-doc', validateBody(addDocSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addDocHandler))
+// router.post('/admin/add-bilan', validateBody(addBilanSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addBilanHandler))
+// router.post('/admin/add-skill', validateBody(addSkillSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addSkillHandler))
+// router.post('/admin/add-doc', validateBody(addDocSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addDocHandler))
 
 export default router

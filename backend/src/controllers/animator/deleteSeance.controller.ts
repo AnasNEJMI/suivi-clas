@@ -77,34 +77,36 @@ export async function animatorDeleteSeanceHandler(
         const endOfDay = new Date(date);
         endOfDay.setUTCHours(23, 59, 59, 999);
 
-        const seance = await prisma.seance.deleteMany({
-            where : {
-                scolarYearId,
-                animatorId,
-                classId,                
-                date : {
-                    gte : startOfDay,
-                    lt : endOfDay
-                }
-            }
+        const whereSeance = {
+            animatorId,
+            classId,
+            scolarYearId,
+            date: { gte: startOfDay, lt: endOfDay },
+        };
+
+        const seance = await prisma.seance.findFirst({
+            where:  whereSeance,
+            select: { id: true },
         });
 
-        if(!seance){
-            throw ApiError.internalError('Une erreur serveur est survenue.')
+        if (!seance) {
+            throw ApiError.internalError('Séance introuvable.');
         }
+
+        await prisma.$transaction([
+            prisma.bilan.deleteMany({
+                where : {seanceId : seance.id}
+            }),
+            prisma.seance.delete({
+                where : {id : seance.id}
+            })
+        ]);
 
 
         return sendSuccess<SeanceResponse>(
             res,
             {
-                data : {
-                    id : -1,
-                    animatorId,
-                    classId,
-                    scolarYearId,
-                    date,
-                    students : []
-                }
+                data : null
             }
         )
     }catch(error){
