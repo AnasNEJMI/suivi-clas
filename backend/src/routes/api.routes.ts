@@ -19,6 +19,9 @@ import { animatorSubmitSeanceHandler } from '../controllers/animator/submitSeanc
 import { animatorDeleteSeanceHandler } from '../controllers/animator/deleteSeance.controller.js';
 import { bilanSchema } from '../schemas/bilan.schema.js';
 import { animatorSubmitBilanHandler } from '../controllers/animator/submitBilan.controller.js';
+import { animatorFetchLessonEvalsHandler } from '../controllers/animator/fetchLessonEvals.controller.js';
+import { animatorSubmitLessonEvalHandler } from '../controllers/animator/submitLessonEval.controller.js';
+import { lessonEvalSchema } from '../schemas/lessonEval.schema.js';
 
 const router = Router();
 
@@ -36,6 +39,10 @@ router.get('/animator/base-data', requireAuthHandler, asyncHandler(animatorBaseD
 router.get('/animator/seance', requireAuthHandler, asyncHandler(animatorFetchSeanceHandler));
 router.delete('/animator/seance', requireAuthHandler, asyncHandler(animatorDeleteSeanceHandler));
 router.post('/animator/seance',validateBody(seanceSchema), requireAuthHandler, asyncHandler(animatorSubmitSeanceHandler));
+
+router.get('/animator/lesson-evals', requireAuthHandler, asyncHandler(animatorFetchLessonEvalsHandler));
+router.post('/animator/lesson-eval', validateBody(lessonEvalSchema), requireAuthHandler, asyncHandler(animatorSubmitLessonEvalHandler));
+//todo create post route and handler for /animator/lesson-eval for receiving eval submissions
 
 router.post('/animator/bilan',validateBody(bilanSchema), requireAuthHandler, asyncHandler(animatorSubmitBilanHandler));
 

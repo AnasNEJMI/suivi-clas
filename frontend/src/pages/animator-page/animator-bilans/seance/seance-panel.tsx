@@ -3,8 +3,8 @@ import { animatorKeys } from '@/api/animator/query-keys'
 import type {LessonsByLevelEntry, SeanceBilanEntry, SeanceEntry, SeanceQueryParams,} from '@/api/animator/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import SeanceStatusCards from './seance-status-cards'
-import BilansSection from './bilans-section'
+import SeanceStatusCards from './cards/seance-status-cards'
+import BilansSection from '../bilan/bilans-section'
 
 interface BilansFormProps{
   params:        SeanceQueryParams,
@@ -17,7 +17,7 @@ const SeancePanel = ({
 } : BilansFormProps) => {
   
   const queryClient = useQueryClient();
-  const queryKey = animatorKeys.detail(params);
+  const queryKey = animatorKeys.seance(params);
 
   const {data : seance, isLoading, isError} = useQuery({
     queryKey,

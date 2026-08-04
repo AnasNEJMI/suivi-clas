@@ -61,10 +61,12 @@ const StudentBilanForm = ({
                 }),
             }),
         onSuccess: (bilan) => {
-            if (bilan) {
-                onSuccess(bilan)
-                toast.success(`Bilan de ${student.firstName} soumis !`)
+            if(!bilan){
+                toast.error('Erreur lors de la soumission du bilan.');
+                return;
             }
+            onSuccess(bilan)
+            toast.success(`Bilan de ${student.firstName} soumis !`)
         },
         onError: () => toast.error('Erreur lors de la soumission du bilan.'),
     }) 

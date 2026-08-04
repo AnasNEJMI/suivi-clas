@@ -1,7 +1,7 @@
 import { ApiError } from "@/lib/errors/apiError.class";
 import { apiRequest } from "../client";
 import { ErrorCodes, ErrorStatusMap } from "@/lib/errors/errors.constants";
-import type { AnimatorBaseDataResponse, Animator as AnimatorProfile, SeanceBilanEntry, SeanceEntry } from "./types";
+import { type LessonEvalsEntry, type AnimatorBaseDataResponse, type Animator as AnimatorProfile, type SeanceBilanEntry, type SeanceEntry, type LessonEval, type LessonEvalEntry } from "./types";
 
 const animatorEndpoints = {
     me : 'me',
@@ -9,7 +9,9 @@ const animatorEndpoints = {
     skills : 'skills',
     qcmsWithQuestions : 'qcmWithQuestions',
     seance : 'seance',
-    bilan : 'bilan'
+    bilan : 'bilan',
+    lessonEvals : 'lesson-evals',
+    lessonEval : 'lesson-eval'
 }
 
 type AnimatorProfileResponse = {
@@ -21,6 +23,18 @@ type SeancePayload = {
     animatorId : number,
     classId : number,
     scolarYearId : number,
+}
+
+type LessonEvalsPayload = {
+    animatorId : number,
+    studentId : number,
+}
+
+type LessonEvalPayload = {
+    animatorId : number,
+    studentId : number,
+    lessonId : number,
+    evaluation : LessonEval
 }
 
 type BilanPayload = {
@@ -130,4 +144,7 @@ export const animatorApiCalls = {
     deleteSeance : (payload : SeancePayload) =>  deleteData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
     fetchSeance : (payload : SeancePayload) => fetchData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
     submitBilan : (payload : BilanPayload) => submitData<BilanPayload, SeanceBilanEntry | null>(payload, animatorEndpoints.bilan),
+
+    fetchLessonEvals : (payload : LessonEvalsPayload) => fetchData<LessonEvalsPayload, LessonEvalsEntry>(payload, animatorEndpoints.lessonEvals),
+    submitLessonEval : (payload : LessonEvalPayload) => submitData<LessonEvalPayload, LessonEvalEntry | null>(payload, animatorEndpoints.lessonEval)
 }

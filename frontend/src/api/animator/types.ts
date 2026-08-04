@@ -152,3 +152,37 @@ export type SeanceQueryParams = {
     classId:      number
     date:         Date
 }
+
+export type LessonEvalQueryParams = {
+    animatorId:   number
+    scolarYearId: number
+    classId:      number
+    studentId : number
+}
+
+export type LessonEvalsEntry = {
+    animatorId : number,
+    studentId : number,
+    evaluations : LessonEvalEntry[]
+}
+
+export type LessonEvalEntry = {
+    id : number,
+    lesson : {
+        id : number,
+        label : string,
+        subject : {
+            id : number, 
+            label : string
+        },
+    },
+    evaluation : LessonEval
+}
+export const LessonEvalLabels : Record <LessonEval, string> = {
+    'notAcquired' : 'Non Acquis',
+    'acquiring' : 'En cours d\'acquisition',
+    'acquired' : 'Acquis',
+    'expert' : 'Expertise',
+}
+export const LESSON_EVALS = ['notAcquired', 'acquiring', 'acquired', 'expert'] as const;
+export type LessonEval = typeof LESSON_EVALS[number];

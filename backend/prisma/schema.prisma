@@ -35,6 +35,7 @@ model Student {
 
   sessions     Session[]
   bilans       Bilan[]
+  lessonEvaluations LessonEvaluation[]
   skill        Skill?
   qcms         Qcm[]
 
@@ -58,6 +59,7 @@ model Animator {
   seances         Seance[]
   animatorContracts AnimatorContract[]
   bilansSubmitted Bilan[]  @relation("BilanSubmittedBy")
+  lessonEvalsSubmitted LessonEvaluation[] @relation("LessonEvalsSubmittedBy")
 }
 
 model AssociationMember {
@@ -286,12 +288,36 @@ model Lesson {
   updatedAt DateTime @updatedAt
 
   bilans           Bilan[]
+  lessonEvaluations LessonEvaluation[]
   documents        Document[]
   qcms             Qcm[]
   qcmBankQuestions QcmBankQuestion[]
 
   @@unique([levelId, subjectId, label])
   @@index([subjectId])
+}
+
+model LessonEvaluation{
+  id         Int      @id @default(autoincrement())
+  
+  submittedById       Int
+  submittedBy         Animator @relation("LessonEvalsSubmittedBy", fields: [submittedById], references : [id], onDelete : Restrict)
+  
+  studentId       Int
+  student         Student @relation(fields: [studentId], references : [id], onDelete : Restrict)
+  
+  lessonId       Int
+  lesson         Lesson @relation(fields: [lessonId], references : [id], onDelete : Restrict)
+  
+  evaluation     LessonEval
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, lessonId, submittedById])
+  @@index([studentId])
+  @@index([submittedById])
+  @@unique(name : "lessonEvalId", [submittedById, studentId, lessonId])
 }
 
 model Document {
@@ -384,4 +410,11 @@ enum AnswerChoice {
   b
   c
   d
+}
+
+enum LessonEval{
+  notAcquired
+  acquiring
+  acquired
+  expert
 }

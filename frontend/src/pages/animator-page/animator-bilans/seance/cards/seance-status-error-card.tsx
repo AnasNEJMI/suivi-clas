@@ -1,7 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card'
-import React from 'react'
 
-const SeanceStatusError = () => {
+const SeanceStatusErrorCard = () => {
   return (
     <Card className='font-outfit border-none shadow-card border-red-200'>
         <CardContent className='pt-6'>
@@ -13,4 +12,4 @@ const SeanceStatusError = () => {
   )
 }
 
-export default SeanceStatusError
+export default SeanceStatusErrorCard

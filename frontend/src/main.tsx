@@ -15,11 +15,12 @@ import { studentPageLoader } from './router/loaders/student-page-loader.tsx'
 import AnimatorWelcome from './pages/animator-page/animator-welcome.tsx'
 import AnimatorPage from './pages/animator-page/animator-page.tsx'
 import { AnimatorPageLoader } from './router/loaders/animator.loader.ts'
-import BilansPage from './pages/animator-page/animator-bilans/page.tsx'
+import AnimatorBilansPage from './pages/animator-page/animator-bilans/page.tsx'
 import AnimatorSkills from './pages/animator-page/animator-skills.tsx'
 import AnimatorLessonDocuments from './pages/animator-page/animator-lesson-documents.tsx'
 import AnimatorStatistics from './pages/animator-page/animator-statisics.tsx'
 import { associationPageLoader } from './router/loaders/association-page-loader.ts'
+import AnimatorLessonEvaluationsPage from './pages/animator-page/animator-lesson-evaluations/page.tsx'
 
 
 
@@ -56,7 +57,8 @@ const router = createBrowserRouter([
         shouldRevalidate: () => true,
         children : [
           {index : true, Component : AnimatorWelcome},
-          {path : 'bilans', Component : BilansPage},
+          {path : 'bilans', Component : AnimatorBilansPage},
+          {path : 'evaluation-lecons', Component : AnimatorLessonEvaluationsPage},
           {path : 'evaluation-competences', Component : AnimatorSkills},
           {path : 'liens-documents', Component : AnimatorLessonDocuments},
           {path : 'statistics', Component : AnimatorStatistics},

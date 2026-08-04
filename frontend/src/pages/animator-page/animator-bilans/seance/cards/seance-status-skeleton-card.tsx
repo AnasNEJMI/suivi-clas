@@ -1,5 +1,5 @@
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-const SeanceStatusSkeleton = () => {
+const SeanceStatusSkeletonCard = () => {
   return (
     <Card className='font-outfit border-none shadow-card'>
         <CardHeader>
@@ -13,4 +13,4 @@ const SeanceStatusSkeleton = () => {
 )
 }
 
-export default SeanceStatusSkeleton
+export default SeanceStatusSkeletonCard
