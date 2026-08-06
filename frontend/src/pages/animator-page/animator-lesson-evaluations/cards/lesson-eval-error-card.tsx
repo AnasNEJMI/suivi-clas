@@ -1,8 +1,16 @@
-import React from 'react'
+import { Card, CardContent } from '@/components/ui/card'
+import {CircleXIcon } from 'lucide-react'
 
 const LessonEvalErrorCard = () => {
   return (
-    <div>LessonEvalErrorCard</div>
+    <Card className='font-outfit border-none shadow-card border-red-200'>
+        <CardContent className='mt-0'>
+            <p className='text-red-600 text-base flex flex-col gap-2 items-center justify-center py-6 text-center'>
+              <CircleXIcon size={48}/>
+                Erreur lors du chargement de du formulaire d'évaluation. Veuillez rafraîchir la page.
+            </p>
+        </CardContent>
+    </Card>
   )
 }
 

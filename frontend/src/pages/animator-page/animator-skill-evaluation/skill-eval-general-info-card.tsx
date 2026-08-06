@@ -18,7 +18,7 @@ interface GeneralInfoCardProps{
   scolarYears : ScolarYearEntry[],
 }
 
-const LessonEvalGeneralInfoCard = ({
+const SkillEvalGeneralInfoCard = ({
     className,
     scolarYears
 } : GeneralInfoCardProps) => {
@@ -219,4 +219,4 @@ const LessonEvalGeneralInfoCard = ({
   )
 }
 
-export default LessonEvalGeneralInfoCard
+export default SkillEvalGeneralInfoCard

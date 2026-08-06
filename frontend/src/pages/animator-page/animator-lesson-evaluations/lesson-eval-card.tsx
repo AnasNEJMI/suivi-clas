@@ -35,6 +35,14 @@ const LessonEvalCard = ({
     const queryClient = useQueryClient();
     const queryKey = animatorKeys.lessonEval(params);
 
+    
+    const {data : lessonEvals, isLoading, isError} = useQuery({
+        queryKey,
+        queryFn : () => animatorApiCalls.fetchLessonEvals(params),
+        staleTime : 0,
+        gcTime : 45 * 60 * 1000
+    })
+    
     const form = useForm<LessonEvalFormValues>({
         resolver : zodResolver(lessonEvalFormSchema),
         defaultValues : {
@@ -42,13 +50,6 @@ const LessonEvalCard = ({
             lessonId : -1,
             evaluation : 'notAcquired',
         }
-    })
-
-    const {data : lessonEvals, isLoading, isError} = useQuery({
-        queryKey,
-        queryFn : () => animatorApiCalls.fetchLessonEvals(params),
-        staleTime : 0,
-        gcTime : 45 * 60 * 1000
     })
 
     const submitMutation = useMutation({

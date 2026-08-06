@@ -160,6 +160,11 @@ export type LessonEvalQueryParams = {
     studentId : number
 }
 
+export type SkillEvalQueryParams = {
+    animatorId:   number
+    studentId : number
+}
+
 export type LessonEvalsEntry = {
     animatorId : number,
     studentId : number,
@@ -186,3 +191,39 @@ export const LessonEvalLabels : Record <LessonEval, string> = {
 }
 export const LESSON_EVALS = ['notAcquired', 'acquiring', 'acquired', 'expert'] as const;
 export type LessonEval = typeof LESSON_EVALS[number];
+
+
+export type SkillEvalEntry = {
+    id : number,
+    studentId : number,
+    animatorId : number,
+    autonomy : number,
+    discipline : number,
+    organisation : number,
+    ponctuality : number,
+    regularity : number,
+    respect : number,
+    preparation : number,
+    positive : string,
+    negative : string,
+    improvements : string,
+    updatedAt : Date,
+}
+
+
+
+export const SKILL_FIELDS = ['autonomy', 'discipline', 'organisation', 'ponctuality', 'regularity', 'respect', 'preparation', 'positive', 'negative', 'improvements'] as const
+export const SkillFieldLabels : Record <SkillFieldType, string> = {
+    'autonomy' : 'Autonomie',
+    'discipline' : 'Discipline',
+    'organisation' : 'Organisation',
+    'ponctuality' : 'Ponctualité',
+    'regularity' : 'Régularité',
+    'respect' : 'Respect',
+    'preparation' : 'Préparation',
+    'positive' : 'Points positifs',
+    'negative' : 'Points négatifs',
+    'improvements' : 'Axes d\'amélioration',
+}
+
+export type SkillFieldType = typeof SKILL_FIELDS[number];

@@ -58,7 +58,7 @@ export type StudentEntry = {
         order:   number;
     } | null;
     bilans: BilanEntry[];
-    skill:  SkillEntry;
+    skills:  SkillEntry[];
 };
 
 export type ClassEntry = {
@@ -137,8 +137,9 @@ export async function animatorBaseDataHandler(
                                         lesson : {select : {id : true, label : true, subject : {select : {id : true, label : true}}}}
                                     }
                                 },
-                                skill : {
+                                skills : {
                                     select : {
+                                        animatorId : true,
                                         ponctuality:  true,
                                         preparation:  true,
                                         autonomy:     true,
@@ -265,19 +266,20 @@ export async function animatorBaseDataHandler(
                         seance:   { id: bilan.seance.id, date: bilan.seance.date },
                         lesson:   bilan.lesson?{ id: bilan.lesson!.id, label: bilan.lesson!.label} : null,
                     })),
-                    skill : {
-                        ponctuality:  student.skill!.ponctuality,
-                        preparation:  student.skill!.preparation,
-                        autonomy:     student.skill!.autonomy,
-                        organisation: student.skill!.organisation,
-                        regularity:   student.skill!.regularity,
-                        discipline:   student.skill!.discipline,
-                        respect:      student.skill!.respect,
-                        positive:     student.skill!.positive,
-                        negative:     student.skill!.negative,
-                        improvements: student.skill!.improvements,
-                        updatedAt:    student.skill!.updatedAt
-                    }
+                    skills : student.skills.map(skill => ({
+                        animatorId : skill.ponctuality,
+                        ponctuality:  skill.ponctuality,
+                        preparation:  skill.preparation,
+                        autonomy:     skill.autonomy,
+                        organisation: skill.organisation,
+                        regularity:   skill.regularity,
+                        discipline:   skill.discipline,
+                        respect:      skill.respect,
+                        positive:     skill.positive,
+                        negative:     skill.negative,
+                        improvements: skill.improvements,
+                        updatedAt:    skill.updatedAt
+                    })) 
                 }))
             }
 

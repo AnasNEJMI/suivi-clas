@@ -1,7 +1,7 @@
 import { ApiError } from "@/lib/errors/apiError.class";
 import { apiRequest } from "../client";
 import { ErrorCodes, ErrorStatusMap } from "@/lib/errors/errors.constants";
-import { type LessonEvalsEntry, type AnimatorBaseDataResponse, type Animator as AnimatorProfile, type SeanceBilanEntry, type SeanceEntry, type LessonEval, type LessonEvalEntry } from "./types";
+import { type LessonEvalsEntry, type AnimatorBaseDataResponse, type Animator as AnimatorProfile, type SeanceBilanEntry, type SeanceEntry, type LessonEval, type LessonEvalEntry, type SkillEvalEntry } from "./types";
 
 const animatorEndpoints = {
     me : 'me',
@@ -11,7 +11,8 @@ const animatorEndpoints = {
     seance : 'seance',
     bilan : 'bilan',
     lessonEvals : 'lesson-evals',
-    lessonEval : 'lesson-eval'
+    lessonEval : 'lesson-eval',
+    skillEval : 'skill-eval',
 }
 
 type AnimatorProfileResponse = {
@@ -25,7 +26,7 @@ type SeancePayload = {
     scolarYearId : number,
 }
 
-type LessonEvalsPayload = {
+type StudentAnimatorPayload = {
     animatorId : number,
     studentId : number,
 }
@@ -35,6 +36,21 @@ type LessonEvalPayload = {
     studentId : number,
     lessonId : number,
     evaluation : LessonEval
+}
+
+export type SkillEvalPayload = {
+    studentId : number,
+    animatorId : number,
+    autonomy : number,
+    discipline : number,
+    organisation : number,
+    ponctuality : number,
+    regularity : number,
+    respect : number,
+    preparation : number,
+    positive : string,
+    negative : string,
+    improvements : string,
 }
 
 type BilanPayload = {
@@ -145,6 +161,9 @@ export const animatorApiCalls = {
     fetchSeance : (payload : SeancePayload) => fetchData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
     submitBilan : (payload : BilanPayload) => submitData<BilanPayload, SeanceBilanEntry | null>(payload, animatorEndpoints.bilan),
 
-    fetchLessonEvals : (payload : LessonEvalsPayload) => fetchData<LessonEvalsPayload, LessonEvalsEntry>(payload, animatorEndpoints.lessonEvals),
-    submitLessonEval : (payload : LessonEvalPayload) => submitData<LessonEvalPayload, LessonEvalEntry | null>(payload, animatorEndpoints.lessonEval)
+    fetchLessonEvals : (payload : StudentAnimatorPayload) => fetchData<StudentAnimatorPayload, LessonEvalsEntry>(payload, animatorEndpoints.lessonEvals),
+    submitLessonEval : (payload : LessonEvalPayload) => submitData<LessonEvalPayload, LessonEvalEntry | null>(payload, animatorEndpoints.lessonEval),
+
+    fetchSkillEval : (payload : StudentAnimatorPayload) => fetchData<StudentAnimatorPayload, SkillEvalEntry | null>(payload, animatorEndpoints.skillEval),
+    submitSkillEval : (payload : SkillEvalPayload) => submitData<SkillEvalPayload, SkillEvalEntry | null>(payload, animatorEndpoints.skillEval)
 }

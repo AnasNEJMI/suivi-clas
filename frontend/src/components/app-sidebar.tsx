@@ -19,42 +19,39 @@ import { IconLogout } from "@tabler/icons-react"
 import { ApiError } from "@/lib/errors/apiError.class"
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
+  welcome : [
+    {
+      title: "Acceuil",
+      url: "/animateur",
+      icon: UserIcon,
+    } 
+  ],
   navMain: [
     {
-      title: "Utilisateurs",
-      url: "/admin/users",
-      icon: UserIcon,
-    },
-    {
       title: "Bilans",
-      url: "/admin/bilans",
+      url: "/animateur/bilans",
       icon: NotebookTextIcon,
     },
     {
       title: "Compétences",
-      url: "/admin/skills",
+      url: "/animateur/evaluation-competences",
       icon: BicepsFlexedIcon,
     },
     {
-      title: "Sujets",
-      url: "/admin/lessons",
+      title: "Évaluation de leçons",
+      url: "/animateur/evaluation-lecons",
       icon: BookOpenIcon,
     },
   ],
-  analytics: [
+  usefulLinks: [
     {
-      title: "Statistiques",
-      url: "/admin/statistics",
+      title: "Liens utiles",
+      url: "/animateur/liens-utiles",
       icon: ChartNoAxesCombinedIcon,
     },
     {
       title: "Téléchargements",
-      url: "/admin/downloads",
+      url: "/animateur/liens-telechargements",
       icon: DownloadIcon,
     },
   ],
@@ -96,9 +93,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
       <Separator className="mb-4"/>
-        <NavMain title="Suivi" items={data.navMain} />
+        <NavMain title="" items={data.welcome} />
         <Separator className="my-4"/>
-        <NavMain title="Statistiques" items={data.analytics}/>
+        <NavMain title="Soumettre" items={data.navMain} />
+        <Separator className="my-4"/>
+        <NavMain title="Supports" items={data.usefulLinks}/>
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>

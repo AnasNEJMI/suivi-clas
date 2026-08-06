@@ -57,37 +57,36 @@ const AddSkillForm = ({className, users, skills} : AddSkillFormProps) => {
     });
 
     useEffect(() => {
-      const skill = skills.find(skill => skill.user.id === skillStudentId);
 
-      if(skill){
-        form.reset({
-          ...form.getValues(),
-          autonomy : skill.autonomy,
-          discipline : skill.discipline,
-          organisation : skill.organisation,
-          ponctuality : skill.ponctuality,
-          regularity : skill.regularity,
-          respect : skill.respect,
-          preparation : skill.preparation,
-          positive : skill.positive,
-          negative : skill.negative,
-          improvements : skill.improvements,
-        })
-      }else{
-        form.reset({
-          ...form.getValues(),
-          autonomy : 0,
-          discipline : 0,
-          organisation : 0,
-          ponctuality : 0,
-          regularity : 0,
-          respect : 0,
-          preparation : 0,
-          positive : '',
-          negative : '',
-          improvements : '',
-        })
-      }
+      // if(skill){
+      //   form.reset({
+      //     ...form.getValues(),
+      //     autonomy : skill.autonomy,
+      //     discipline : skill.discipline,
+      //     organisation : skill.organisation,
+      //     ponctuality : skill.ponctuality,
+      //     regularity : skill.regularity,
+      //     respect : skill.respect,
+      //     preparation : skill.preparation,
+      //     positive : skill.positive,
+      //     negative : skill.negative,
+      //     improvements : skill.improvements,
+      //   })
+      // }else{
+      //   form.reset({
+      //     ...form.getValues(),
+      //     autonomy : 0,
+      //     discipline : 0,
+      //     organisation : 0,
+      //     ponctuality : 0,
+      //     regularity : 0,
+      //     respect : 0,
+      //     preparation : 0,
+      //     positive : '',
+      //     negative : '',
+      //     improvements : '',
+      //   })
+      // }
     }, [skills, form, skillStudentId])
 
     useEffect(() => {
@@ -105,7 +104,7 @@ const AddSkillForm = ({className, users, skills} : AddSkillFormProps) => {
         negative : '',
         improvements : '',
       })
-      filterAndUpdate(users,(user : User) => user.role === 'student' && user.class?.label === skillClassName, setSelectedStudents);
+      filterAndUpdate(users,(user : User) => user.userType === 'student' && user.class?.label === skillClassName, setSelectedStudents);
     }, [form, skillClassName, users])
 
 

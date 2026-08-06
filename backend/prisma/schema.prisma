@@ -36,7 +36,7 @@ model Student {
   sessions     Session[]
   bilans       Bilan[]
   lessonEvaluations LessonEvaluation[]
-  skill        Skill?
+  skills        Skill[]
   qcms         Qcm[]
 
   visits Visit[]
@@ -57,6 +57,7 @@ model Animator {
   associations    Association[]
   sessions        Session[]
   seances         Seance[]
+  skills          Skill[]
   animatorContracts AnimatorContract[]
   bilansSubmitted Bilan[]  @relation("BilanSubmittedBy")
   lessonEvalsSubmitted LessonEvaluation[] @relation("LessonEvalsSubmittedBy")
@@ -229,8 +230,11 @@ model Bilan {
 
 model Skill {
   id            Int      @id @default(autoincrement())
-  studentId     Int      @unique
+  studentId     Int     
   student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  
+  animatorId     Int     
+  animator       Animator  @relation(fields: [animatorId], references: [id], onDelete: Cascade)
 
   ponctuality   Int      @default(0)
   preparation   Int      @default(0)
@@ -248,6 +252,8 @@ model Skill {
   updatedAt     DateTime @updatedAt
 
   @@index([studentId])
+  @@index([animatorId])
+  @@unique(name : "skillId", [studentId, animatorId])
 }
 
 model Visit {

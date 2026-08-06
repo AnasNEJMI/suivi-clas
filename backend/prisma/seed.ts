@@ -160,16 +160,17 @@ async function seedAssociations(levelIdByLabel: Map<string, number>): Promise<{a
 
             classIdByName.set(assoc.label+associationClass.label,associationClass.id)
 
-            //seeding skills
-            const skillsData = await Promise.all(
-                associationClass.students.map(async (student) => ({
-                    studentId : student.id,
-                    ...SKILL_SEED
-                }))
-            )
-            await prisma.skill.createMany({
-                data : skillsData
-            })
+            // //seeding skills
+            // const skillsData = await Promise.all(
+            //     associationClass.students.map(async (student) => ({
+            //         studentId : student.id,
+            //         animatorId : 
+            //         ...SKILL_SEED
+            //     }))
+            // )
+            // await prisma.skill.createMany({
+            //     data : skillsData
+            // })
         }
     }
 

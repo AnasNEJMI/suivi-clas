@@ -1,26 +1,25 @@
 import type { Bilan } from '@/api/api.types';
 import { cn } from '@/lib/utils';
-import { formatDate } from 'date-fns';
 
 interface SubjectsHistoryProps {
     className? : string,
     bilans : Bilan[],
 }
 
-const subjectCard : Record<string, {label : string, bgColor : string}> = {
-    'math' : {
-        label : 'Mathématiques',
-        bgColor : 'bg-linear-135 from-25% from-amber-400 to-75% to-yellow-400'
-    },
-    'pc' : {
-        label : 'Physique/Chimie',
-        bgColor : 'bg-linear-135 from-25% from-red-400 to-75% to-rose-500'
-    },
-    'svt' : {
-        label : 'Mathématiques',
-        bgColor : 'bg-linear-135 from-25% from-indigo-400 to-75% to-blue-500 text-white'
-    },
-}
+// const subjectCard : Record<string, {label : string, bgColor : string}> = {
+//     'math' : {
+//         label : 'Mathématiques',
+//         bgColor : 'bg-linear-135 from-25% from-amber-400 to-75% to-yellow-400'
+//     },
+//     'pc' : {
+//         label : 'Physique/Chimie',
+//         bgColor : 'bg-linear-135 from-25% from-red-400 to-75% to-rose-500'
+//     },
+//     'svt' : {
+//         label : 'Mathématiques',
+//         bgColor : 'bg-linear-135 from-25% from-indigo-400 to-75% to-blue-500 text-white'
+//     },
+// }
 
 const SubjectsHistory = ({className, bilans} : SubjectsHistoryProps) => {
 
@@ -29,7 +28,8 @@ const SubjectsHistory = ({className, bilans} : SubjectsHistoryProps) => {
         <h2 className='text-xl md:text-2xl font-bold bg'>Derniers sujets étudiés</h2>
         <div className={cn('relative z-10 overflow-x-auto py-4 w-full', className)}>
             <div className='inline-flex gap-6'>
-                {
+                <pre>{JSON.stringify(bilans, null, 2)}</pre>
+                {/* {
                     bilans && bilans.length>0 &&
                     bilans.map((bilan, index) => {
                         if(!bilan.presence) return;
@@ -40,7 +40,7 @@ const SubjectsHistory = ({className, bilans} : SubjectsHistoryProps) => {
                             <span className='uppercase font-bold text-base opacity-50'>{formatDate(bilan.date, 'd/MM/y')}</span>
                         </div>
                     })
-                }
+                } */}
             </div>
         </div>
     </>
