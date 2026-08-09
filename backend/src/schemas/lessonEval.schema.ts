@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const LESSON_EVALS = ['notAquired', 'acquiring', 'acquired', 'expert'] as const;
+export const LESSON_EVALS = ['notAcquired', 'acquiring', 'acquired', 'expert'] as const;
 
 export const lessonEvalSchema = z.object({
     animatorId : z.int().positive({error : 'Identifiant animateur pas valide.'}),
