@@ -107,3 +107,12 @@ export const USER_TYPE_LABELS : Record<UserType, string> = {
     "associationMember" : "Membre d'association",
     "admin" : "Administrateur",
 }
+
+export const LessonEvalLabels : Record <LessonEval, string> = {
+    'notAcquired' : 'Non Acquis',
+    'acquiring' : 'En cours d\'acquisition',
+    'acquired' : 'Acquis',
+    'expert' : 'Expertise',
+}
+export const LESSON_EVALS = ['notAcquired', 'acquiring', 'acquired', 'expert'] as const;
+export type LessonEval = typeof LESSON_EVALS[number];

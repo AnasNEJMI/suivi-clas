@@ -17,10 +17,10 @@ export function CompetencesAccordian({positive, negative, improvements} : Compet
       type="single"
       collapsible
       defaultValue="bilan"
-      className="max-w-lg w-full"
+      className="flex-1 w-full"
     >
       <AccordionItem value="bilan">
-        <AccordionTrigger className="font-semibold text-lg">Bilan Global</AccordionTrigger>
+        <AccordionTrigger className="font-semibold text-lg pt-0">Bilan Global</AccordionTrigger>
         <AccordionContent>
             <div className="flex gap-2">
                 <CheckCircleIcon className="text-green-500 size-6"/>

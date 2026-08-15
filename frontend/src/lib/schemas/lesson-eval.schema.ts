@@ -1,4 +1,4 @@
-import { LESSON_EVALS } from "@/api/animator/types";
+import { LESSON_EVALS } from "@/api/api.types";
 import z from "zod";
 
 export const lessonEvalFormSchema = z.object({

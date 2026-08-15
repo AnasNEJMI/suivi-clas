@@ -1,14 +1,14 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from '../ui/select'
 import { SelectValue } from '@radix-ui/react-select'
 import { cn } from '@/lib/utils'
-import type { Bilan } from '@/api/api.types'
 import { formatDate } from 'date-fns'
+import type { BilanEntry } from '@/api/student/apiCalls'
 
 interface BilanDropdownProps {
     className? : string,
-    bilans : Bilan[],
+    bilans : BilanEntry[],
     selectedValue : string,
-    onValueChange : React.Dispatch<React.SetStateAction<Bilan>>
+    onValueChange : React.Dispatch<React.SetStateAction<BilanEntry | null>>
 }
 const BilanDropdown = ({className, bilans, selectedValue, onValueChange} : BilanDropdownProps) => {
     

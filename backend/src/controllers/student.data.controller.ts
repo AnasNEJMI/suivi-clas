@@ -6,7 +6,7 @@ import { prisma } from "../db/prisma.js";
 
 type StudentDataSuccessResponse = {
     bilans : Bilan[],
-    skill : Skill,
+    skills : Skill[],
     docs : Doc[],
     // qcmWithQuestions : QcmWithQuestions[],
 }
@@ -121,12 +121,19 @@ export async function studentDataHandler(
         //DOES NOT EXIST : CREATE qcm, create the 10 questions attached to it
         //
 
-        const skill = await prisma.skill.findUniqueOrThrow({
+        const skills = await prisma.skill.findMany({
             where : {
                 studentId : user.id
             },
             select : {
                 id : true,
+                animator : {
+                    select : {
+                        id : true,
+                        firstName : true,
+                        lastName : true
+                    }
+                },
                 autonomy : true,
                 discipline : true,
                 organisation : true,
@@ -144,7 +151,7 @@ export async function studentDataHandler(
             res,
             {
                 bilans,
-                skill,
+                skills,
                 docs : [],
                 // qcmWithQuestions
             }

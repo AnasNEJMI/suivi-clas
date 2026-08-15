@@ -2,7 +2,7 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { Field, FieldError, FieldLabel }        from '@/components/ui/field'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import type { LessonEvalFormValues } from '@/lib/schemas/lesson-eval.schema'
-import { LESSON_EVALS, LessonEvalLabels } from '@/api/animator/types'
+import { LESSON_EVALS, LessonEvalLabels } from '@/api/api.types'
 
 
 export default function EvaluationField() {

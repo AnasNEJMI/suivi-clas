@@ -9,7 +9,6 @@ import AssociationPage from './pages/association-page/association-page.tsx'
 import { guestRouteLoader } from './router/loaders/guest-route-loader.ts'
 import About from './pages/about.tsx'
 import Contact from './pages/contact.tsx'
-import StudentPage from './pages/student-page.tsx'
 import { RootErrorBoundary } from './pages/root-error-boundry.tsx'
 import { studentPageLoader } from './router/loaders/student-page-loader.tsx'
 import AnimatorWelcome from './pages/animator-page/animator-welcome.tsx'
@@ -21,6 +20,7 @@ import AnimatorLessonDocuments from './pages/animator-page/animator-lesson-docum
 import AnimatorStatistics from './pages/animator-page/animator-statisics.tsx'
 import { associationPageLoader } from './router/loaders/association-page-loader.ts'
 import AnimatorLessonEvaluationsPage from './pages/animator-page/animator-lesson-evaluations/page.tsx'
+import StudentPage from './pages/student-page/page.tsx'
 
 
 

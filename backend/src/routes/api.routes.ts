@@ -25,6 +25,9 @@ import { lessonEvalSchema } from '../schemas/lessonEval.schema.js';
 import { animatorFetchSkillEvalHandler } from '../controllers/animator/fetchSkillEval.controller.js';
 import { skillEvalSchema } from '../schemas/skillEval.schema.js';
 import { animatorSubmitSkillEvalHandler } from '../controllers/animator/submitSkillEval.controller.js';
+import { studentBilansHandler } from '../controllers/student/fetchBilans.controller.js';
+import { studentSkillsEvalsHandler } from '../controllers/student/fetchSkillsEvals.controller.js';
+import { studentLessonEvalsHandler } from '../controllers/student/fetchLessonEvals.controller.js';
 
 const router = Router();
 
@@ -35,6 +38,10 @@ router.get('/auth/profile', requireAuthHandler, asyncHandler(profileHandler));
 router.get('/student/data', requireAuthHandler, asyncHandler(studentDataHandler));
 router.get('/association/data', requireAuthHandler, asyncHandler(associationDataHandler));
 router.get('/admin/base', requireAuthHandler, requireAdminHandler, asyncHandler(getAdminBaseHandler))
+
+router.get('/student/bilans', requireAuthHandler, asyncHandler(studentBilansHandler));
+router.get('/student/skills-evals', requireAuthHandler, asyncHandler(studentSkillsEvalsHandler));
+router.get('/student/lesson-evals', requireAuthHandler, asyncHandler(studentLessonEvalsHandler));
 
 router.get('/animator/me', requireAuthHandler, asyncHandler(animatorProfileHandler));
 router.get('/animator/base-data', requireAuthHandler, asyncHandler(animatorBaseDataHandler));
@@ -48,7 +55,6 @@ router.post('/animator/lesson-eval', validateBody(lessonEvalSchema), requireAuth
 
 router.get('/animator/skill-eval', requireAuthHandler, asyncHandler(animatorFetchSkillEvalHandler));
 router.post('/animator/skill-eval', validateBody(skillEvalSchema), requireAuthHandler, asyncHandler(animatorSubmitSkillEvalHandler));
-//todo create post route and handler for /animator/lesson-eval for receiving eval submissions
 
 router.post('/animator/bilan',validateBody(bilanSchema), requireAuthHandler, asyncHandler(animatorSubmitBilanHandler));
 

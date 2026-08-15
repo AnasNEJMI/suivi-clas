@@ -3,7 +3,7 @@ import { apiRequest } from "./client";
 
 export type StudentData = {
     bilans : Bilan[],
-    skill : Skill,
+    skills : Skill[],
     docs : Doc[],
     qcmWithQuestions : QcmWithQuestions[],
 }

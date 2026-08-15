@@ -29,12 +29,11 @@ const chartConfig = {
 
 
 interface CompetencesMethodologiquesProps{
-    className? : string,
-    skill : Skill
+    skills : Skill[]
 }
 
 
-export function CompetencesMethodologiques({className, skill} : CompetencesMethodologiquesProps) {
+export function CompetencesMethodologiques({ skills} : CompetencesMethodologiquesProps) {
 
   const chartData = useMemo(() => {
     if (skill){
@@ -89,7 +88,7 @@ export function CompetencesMethodologiques({className, skill} : CompetencesMetho
             </RadarChart>
             </ChartContainer>
         </CardContent>
-        <CardFooter className="text-sm flex-col items-start w-full">
+        <CardFooter className="text-sm flex-col items-start w-full">  
             <CompetencesAccordian positive= {skill.positive} negative= {skill.negative} improvements= {skill.improvements}/>
         </CardFooter>
         </Card>

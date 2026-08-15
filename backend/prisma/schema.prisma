@@ -294,7 +294,7 @@ model Lesson {
   updatedAt DateTime @updatedAt
 
   bilans           Bilan[]
-  lessonEvaluations LessonEvaluation[]
+  lessonEvals LessonEvaluation[]
   documents        Document[]
   qcms             Qcm[]
   qcmBankQuestions QcmBankQuestion[]

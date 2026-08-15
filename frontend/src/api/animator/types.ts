@@ -1,4 +1,4 @@
-import type { Bilan, Lesson, Level, Skill } from "../api.types";
+import type { Bilan, Lesson, LessonEval, Level, Skill } from "../api.types";
 
 export type LessonEntry = {
     id:      number;
@@ -183,14 +183,7 @@ export type LessonEvalEntry = {
     },
     evaluation : LessonEval
 }
-export const LessonEvalLabels : Record <LessonEval, string> = {
-    'notAcquired' : 'Non Acquis',
-    'acquiring' : 'En cours d\'acquisition',
-    'acquired' : 'Acquis',
-    'expert' : 'Expertise',
-}
-export const LESSON_EVALS = ['notAcquired', 'acquiring', 'acquired', 'expert'] as const;
-export type LessonEval = typeof LESSON_EVALS[number];
+
 
 
 export type SkillEvalEntry = {

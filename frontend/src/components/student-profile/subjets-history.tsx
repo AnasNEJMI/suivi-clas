@@ -25,7 +25,7 @@ const SubjectsHistory = ({className, bilans} : SubjectsHistoryProps) => {
 
   return (
     <>
-        <h2 className='text-xl md:text-2xl font-bold bg'>Derniers sujets étudiés</h2>
+      <h2 className='text-xl md:text-2xl font-bold bg'>Derniers sujets étudiés</h2>  <h2 className='text-xl md:text-2xl font-bold bg'>Derniers sujets étudiés</h2>
         <div className={cn('relative z-10 overflow-x-auto py-4 w-full', className)}>
             <div className='inline-flex gap-6'>
                 <pre>{JSON.stringify(bilans, null, 2)}</pre>
