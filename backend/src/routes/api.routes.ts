@@ -28,6 +28,7 @@ import { animatorSubmitSkillEvalHandler } from '../controllers/animator/submitSk
 import { studentBilansHandler } from '../controllers/student/fetchBilans.controller.js';
 import { studentSkillsEvalsHandler } from '../controllers/student/fetchSkillsEvals.controller.js';
 import { studentLessonEvalsHandler } from '../controllers/student/fetchLessonEvals.controller.js';
+import { associationMemberFetchPresenceStatsHandler } from '../controllers/association-member/fetchPresenceStats.controller.js';
 
 const router = Router();
 
@@ -58,6 +59,8 @@ router.post('/animator/skill-eval', validateBody(skillEvalSchema), requireAuthHa
 
 router.post('/animator/bilan',validateBody(bilanSchema), requireAuthHandler, asyncHandler(animatorSubmitBilanHandler));
 
+
+router.get('/association-member/presence-stats', requireAuthHandler, asyncHandler(associationMemberFetchPresenceStatsHandler))
 // router.post('/admin/add-bilan', validateBody(addBilanSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addBilanHandler))
 // router.post('/admin/add-skill', validateBody(addSkillSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addSkillHandler))
 // router.post('/admin/add-doc', validateBody(addDocSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addDocHandler))

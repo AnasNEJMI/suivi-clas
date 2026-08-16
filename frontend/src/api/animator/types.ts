@@ -136,6 +136,7 @@ export type SeanceBilanEntry = {
     studentId: number;
     seanceId: number;
     submittedById: number;
+    includeQcm : boolean;
 }
 
 

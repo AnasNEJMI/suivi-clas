@@ -7,9 +7,9 @@ import { Suspense } from 'react';
 import BilansSkeleton from './bilans/bilans-skeleton';
 import BilansSection from './bilans/bilans-section';
 import SectionError from './section-error';
-import BilansHeader from './bilans/bilans-header';
 import SkillsEvalSection from './skills-eval/Skills-eval-section';
 import LessonEvalSection from './lesson-eval/lesson-eval-section';
+import StudentPageHeroSection from './hero-section';
 
 
 const StudentPage = () => {
@@ -18,7 +18,7 @@ const StudentPage = () => {
   return (
     <BaseLayout>
         <Header/>
-        <BilansHeader student={user}/>
+        <StudentPageHeroSection student={user}/>
         {/* <BilansSkeleton/> */}
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
             <Suspense fallback = {<BilansSkeleton/>}>

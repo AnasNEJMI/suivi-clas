@@ -15,8 +15,6 @@ export async function studentPageLoader(){
             gcTime : 10 * 60 * 1000
         })
 
-        console.log('profile user : ', user);
-
         if(!user || user.userType !== 'student'){
             throw replace(`/`);
         }
@@ -29,15 +27,7 @@ export async function studentPageLoader(){
 
         return {user};
 
-        // const studentData = await queryClient.ensureQueryData({
-        //     queryKey : queryKeys.student.data,
-        //     queryFn : fetchStudentData,
-        //     staleTime : 24* 60 * 60 * 1000,
-        // });
-
-        // console.log('loaded student Data : ', studentData);
-
-        // return {user : user, bilans : studentData.bilans, docs : studentData.docs, skill : studentData.skills, qcmWithQuestions : studentData.qcmWithQuestions};
+        //todo : for skill evals and lesson evals as well.
     }catch(error){
         if(error instanceof Response && error.status === 302){
             throw error;

@@ -5,6 +5,7 @@ export const bilanFormSchema = z.object({
     lessonId : z.number().int(),
     presence : z.boolean(),
     summary : z.string(),
+    includeQcm : z.boolean(),
 }).superRefine((data, ctx) => {
     if (!data.presence) return;
     if (data.subjectId < 0)   ctx.addIssue({ code: 'custom', path: ['subjectId'], message: 'Matière requise.'});

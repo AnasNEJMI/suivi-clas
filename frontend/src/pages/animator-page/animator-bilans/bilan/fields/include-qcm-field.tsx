@@ -1,33 +1,32 @@
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import type { BilanFormValues } from '@/lib/schemas/bilans-bilan.schema'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
 
-const PresenceField = () => {
-    const { control, setValue } = useFormContext<BilanFormValues>()
+const IncludeQcmField = () => {
+    const { control } = useFormContext<BilanFormValues>()
+    const summary    = useWatch({ control, name: 'summary' })
+    
+    if (summary.length === 0) return null
   return (
     <Controller
-        name='presence'
+        name='includeQcm'
         control={control}
         render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
                 <div className='flex justify-between gap-6'>
-                    <FieldLabel>Présence</FieldLabel>
+                    <FieldLabel>Générer un QCM</FieldLabel>
                     <ToggleGroup
                         type='single'
-                        value={field.value ? 'présent' : 'absent'}
+                        value={field.value ? 'oui' : 'non'}
                         onValueChange={(v) => {
                             if (!v) return
-                            field.onChange(v === 'présent')
-                            setValue('subjectId', -1)
-                            setValue('lessonId',  -1)
-                            setValue('summary',   '')
-                            setValue('includeQcm',   false);
+                            field.onChange(v === 'oui')
                         }}
                         variant='outline'
                         className='w-full md:max-w-xs justify-end gap-4'
                     >
-                        {(['présent', 'absent'] as const).map(p => (
+                        {(['oui', 'non'] as const).map(p => (
                             <ToggleGroupItem
                                 key={p}
                                 value={p}
@@ -45,4 +44,4 @@ const PresenceField = () => {
   )
 }
 
-export default PresenceField
+export default IncludeQcmField

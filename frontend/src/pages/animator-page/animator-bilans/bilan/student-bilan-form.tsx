@@ -12,6 +12,7 @@ import PresenceField from './fields/presence-field'
 import SubjectField from './fields/subject-field'
 import LessonField from './fields/lesson-field'
 import SummaryField from './fields/summary-field'
+import IncludeQcmField from './fields/include-qcm-field'
 
 interface StudentBilanFormProps {
     student:       SeanceStudentEntry
@@ -42,7 +43,8 @@ const StudentBilanForm = ({
             presence : student.bilan?.presence ?? true,
             subjectId : student.bilan?.lesson?.subject.id ?? -1,
             lessonId : student.bilan?.lesson?.id ?? -1,
-            summary : student.bilan?.summary ?? ''
+            summary : student.bilan?.summary ?? '',
+            includeQcm : student.bilan?.includeQcm ?? false,
         }
     })
 
@@ -58,6 +60,7 @@ const StudentBilanForm = ({
                 ...(data.presence && {
                     lessonId: data.lessonId,
                     summary:  data.summary,
+                    includeQcm : data.includeQcm
                 }),
             }),
         onSuccess: (bilan) => {
@@ -67,6 +70,7 @@ const StudentBilanForm = ({
             }
             onSuccess(bilan)
             toast.success(`Bilan de ${student.firstName} soumis !`)
+            console.log('bilan soumis : ', bilan)
         },
         onError: () => toast.error('Erreur lors de la soumission du bilan.'),
     }) 
@@ -78,6 +82,7 @@ const StudentBilanForm = ({
                 <SubjectField availableSubjects={availableSubjects} />
                 <LessonField  availableSubjects={availableSubjects} />
                 <SummaryField />
+                <IncludeQcmField />
             </div>
             <Field className='flex flex-row gap-2 mt-8'>
                 <Button

@@ -1,7 +1,11 @@
 import { ApiError } from "@/lib/errors/apiError.class";
 import { apiRequest } from "../client";
 import { ErrorCodes, ErrorStatusMap } from "@/lib/errors/errors.constants";
-import { type LessonEvalsEntry, type AnimatorBaseDataResponse, type Animator as AnimatorProfile, type SeanceBilanEntry, type SeanceEntry, type LessonEval, type LessonEvalEntry, type SkillEvalEntry } from "./types";
+import { type LessonEvalsEntry, type AnimatorBaseDataResponse, type Animator as AnimatorProfile, type SeanceBilanEntry, type SeanceEntry, type LessonEvalEntry, type SkillEvalEntry } from "./types";
+import {type LessonEval } from "../api.types";
+import { fetchPayloadlessData } from "../helper-functions";
+
+const ANIMATOR_API_ENDPOINT = '/api/animator/';
 
 const animatorEndpoints = {
     me : 'me',
@@ -60,7 +64,8 @@ type BilanPayload = {
     seanceId : number,
     presence : boolean,
     lessonId? : number,
-    summary? : string
+    summary? : string,
+    includeQcm? : boolean,
 }
 
 
@@ -78,10 +83,6 @@ async function fetchAnimatorProfile():Promise<AnimatorProfile | null>{
 
         throw error;
     }
-}
-
-function fetchPayloadlessData<T>(endpoint : string) {
-    return () =>  apiRequest<T>(`/api/animator/${endpoint}`);
 }
 
 export async function fetchData<T extends Record<string, unknown>, K>(payload : T, endpoint : string){
@@ -155,7 +156,7 @@ export async function submitData<T, K>(payload : T, endpoint : string) : Promise
 
 export const animatorApiCalls = {
     fetchProfile : fetchAnimatorProfile,
-    fetchBaseData : fetchPayloadlessData<AnimatorBaseDataResponse>(animatorEndpoints.baseData),
+    fetchBaseData : fetchPayloadlessData<AnimatorBaseDataResponse>(animatorEndpoints.baseData, ANIMATOR_API_ENDPOINT),
     submitSeance : (payload : SeancePayload) =>  submitData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
     deleteSeance : (payload : SeancePayload) =>  deleteData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
     fetchSeance : (payload : SeancePayload) => fetchData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),

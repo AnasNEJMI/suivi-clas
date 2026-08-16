@@ -4,6 +4,7 @@ import { ApiError } from "../../classes/ApiError.class.js";
 import { prisma } from '../../db/prisma.js';
 import { sendSuccess } from '../../utils/response.utils.js';
 import { BilanInput } from '../../schemas/bilan.schema.js';
+import { generateQcmForBilan } from '../lib/qcm/generate-qcm-for-bilan.js';
 
 
 export type BilanEntry = {
@@ -22,6 +23,7 @@ export type BilanEntry = {
     studentId: number;
     seanceId: number;
     submittedById: number;
+    qcmId : number | null;
 }
 
 type BilanResponse = {
@@ -35,7 +37,7 @@ export async function animatorSubmitBilanHandler(
 ){
     try{
 
-        const {date, animatorId, studentId, seanceId, lessonId, presence, summary} = req.body as BilanInput;
+        const {date, animatorId, studentId, seanceId, lessonId, presence, summary, includeQcm} = req.body as BilanInput;
         console.log('seanceId : ', seanceId,' | animatorId : ',animatorId, ' | studentId : ', studentId, ' | date : ',date);
 
         if(animatorId !== req.user!.id){
@@ -100,10 +102,16 @@ export async function animatorSubmitBilanHandler(
             throw ApiError.internalError('Une erreur est survenue.')
         }
 
+        let qcm : {id : number} | null = null;
+        //create qcm
+        if(bilan.presence && bilan.lesson?.id && includeQcm){
+            qcm = await generateQcmForBilan(bilan.id, studentId, bilan.lesson.id)
+        }
+
         return sendSuccess<BilanResponse>(
             res,
             {
-                data : bilan
+                data : {...bilan, qcmId : qcm?.id?? null}
             }
         )
     }catch(error){

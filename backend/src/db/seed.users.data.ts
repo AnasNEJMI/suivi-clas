@@ -41,8 +41,6 @@ export const SUBJECTS = [
   "Sciences de la Vie et de la Terre",
   "Physique-Chimie",
   "Anglais",
-  "Philosophie",
-  "Informatique",
 ] as const;
 
 export type Subject = (typeof SUBJECTS)[number];
@@ -196,14 +194,14 @@ export const LESSONS_SEED : LessonSeed[] = [
         subject: "Anglais",
         lessons: ["Se présenter", "Parler de sa famille", "Décrire une personne", "Les nombres", "La date et l'heure", "Les couleurs", "Les vêtements", "La maison", "L'école", "Les loisirs", "Les sports", "Les animaux", "La nourriture", "Les goûts et préférences", "La ville", "Demander et indiquer son chemin", "Les vacances", "Le présent simple", "Le présent en BE + ING", "Le passé de BE", "Les verbes modaux", "Les comparatifs", "Les superlatifs"]
       },
-      {
-        subject: "Philosophie",
-        lessons: []
-      },
-      {
-        subject: "Informatique",
-        lessons: ["Découvrir un ordinateur", "Les composants d'un ordinateur", "Les systèmes d'exploitation", "Les fichiers et dossiers", "Internet et le Web", "Les moteurs de recherche", "La sécurité numérique", "Les données personnelles", "Les réseaux informatiques", "Introduction à l'algorithmique", "Les variables", "Les conditions", "Les boucles", "Découverte de Scratch"]
-      }
+      // {
+      //   subject: "Philosophie",
+      //   lessons: []
+      // },
+      // {
+      //   subject: "Informatique",
+      //   lessons: ["Découvrir un ordinateur", "Les composants d'un ordinateur", "Les systèmes d'exploitation", "Les fichiers et dossiers", "Internet et le Web", "Les moteurs de recherche", "La sécurité numérique", "Les données personnelles", "Les réseaux informatiques", "Introduction à l'algorithmique", "Les variables", "Les conditions", "Les boucles", "Découverte de Scratch"]
+      // }
     ]
   },
   {
@@ -233,14 +231,14 @@ export const LESSONS_SEED : LessonSeed[] = [
         subject: "Anglais",
         lessons: ["Parler de soi", "Décrire une personne", "Parler de ses habitudes", "Les activités quotidiennes", "Les loisirs", "Les voyages", "La nourriture", "Les fêtes et traditions", "Les animaux", "Les médias", "Le prétérit", "Le présent perfect", "Le futur", "Les verbes modaux", "Les adverbes", "Les comparatifs", "Les superlatifs", "Exprimer l'obligation", "Exprimer la permission", "Compréhension écrite", "Expression écrite", "Compréhension orale", "Expression orale"]
       },
-      {
-        subject: "Philosophie",
-        lessons: []
-      },
-      {
-        subject: "Informatique",
-        lessons: ["Les objets connectés", "Les réseaux informatiques", "Internet", "Les données numériques", "La cybersécurité", "Les moteurs de recherche", "Les algorithmes", "Les variables", "Les conditions", "Les boucles", "Les événements", "Les fonctions", "Programmer avec Scratch", "Déboguer un programme"]
-      }
+      // {
+      //   subject: "Philosophie",
+      //   lessons: []
+      // },
+      // {
+      //   subject: "Informatique",
+      //   lessons: ["Les objets connectés", "Les réseaux informatiques", "Internet", "Les données numériques", "La cybersécurité", "Les moteurs de recherche", "Les algorithmes", "Les variables", "Les conditions", "Les boucles", "Les événements", "Les fonctions", "Programmer avec Scratch", "Déboguer un programme"]
+      // }
     ]
   },
   {
@@ -270,14 +268,14 @@ export const LESSONS_SEED : LessonSeed[] = [
         subject: "Anglais",
         lessons: ["Parler de ses expériences", "Les voyages", "L'environnement", "Les nouvelles technologies", "Les médias", "La santé", "Les métiers", "Le present perfect", "Le prétérit", "Le futur", "Les verbes modaux", "La voix passive", "Le discours indirect", "Les propositions relatives", "Les connecteurs logiques", "Compréhension écrite", "Expression écrite", "Compréhension orale", "Expression orale"]
       },
-      {
-        subject: "Philosophie",
-        lessons: []
-      },
-      {
-        subject: "Informatique",
-        lessons: ["Les réseaux et Internet", "Les données personnelles", "La cybersécurité", "Les algorithmes", "Les variables", "Les conditions", "Les boucles", "Les fonctions", "Les listes", "Programmer avec Scratch", "Initiation à Python", "Déboguer un programme", "L'intelligence artificielle", "La citoyenneté numérique"]
-      }
+      // {
+      //   subject: "Philosophie",
+      //   lessons: []
+      // },
+      // {
+      //   subject: "Informatique",
+      //   lessons: ["Les réseaux et Internet", "Les données personnelles", "La cybersécurité", "Les algorithmes", "Les variables", "Les conditions", "Les boucles", "Les fonctions", "Les listes", "Programmer avec Scratch", "Initiation à Python", "Déboguer un programme", "L'intelligence artificielle", "La citoyenneté numérique"]
+      // }
     ]
   },
   {
@@ -307,14 +305,14 @@ export const LESSONS_SEED : LessonSeed[] = [
         subject: "Anglais",
         lessons: ["Parler de son avenir", "Les études et les métiers", "L'environnement", "Les nouvelles technologies", "Les médias", "Les voyages", "L'engagement citoyen", "Le present perfect", "Le past perfect", "Le futur", "La voix passive", "Le discours indirect", "Les propositions relatives", "Les verbes modaux", "Les connecteurs logiques", "Compréhension écrite", "Expression écrite", "Compréhension orale", "Expression orale", "Préparation au brevet"]
       },
-      {
-        subject: "Philosophie",
-        lessons: []
-      },
-      {
-        subject: "Informatique",
-        lessons: ["Les réseaux informatiques", "Internet et le Web", "La cybersécurité", "Les données personnelles", "Les algorithmes", "Les variables", "Les conditions", "Les boucles", "Les fonctions", "Les listes", "Programmer en Python", "Déboguer un programme", "L'intelligence artificielle", "Les bases de données", "Les objets connectés"]
-      }
+      // {
+      //   subject: "Philosophie",
+      //   lessons: []
+      // },
+      // {
+      //   subject: "Informatique",
+      //   lessons: ["Les réseaux informatiques", "Internet et le Web", "La cybersécurité", "Les données personnelles", "Les algorithmes", "Les variables", "Les conditions", "Les boucles", "Les fonctions", "Les listes", "Programmer en Python", "Déboguer un programme", "L'intelligence artificielle", "Les bases de données", "Les objets connectés"]
+      // }
     ]
   },
   {
@@ -344,14 +342,14 @@ export const LESSONS_SEED : LessonSeed[] = [
         subject: "Anglais",
         lessons: ["Se présenter et parler de soi", "Les relations sociales", "L'école et les études", "Le monde du travail", "Les voyages", "L'environnement", "Les médias", "Les nouvelles technologies", "La culture anglophone", "Le présent", "Le prétérit", "Le present perfect", "Le futur", "Les verbes modaux", "La voix passive", "Le discours indirect", "Les propositions relatives", "L'expression de l'opinion", "Compréhension écrite", "Expression écrite", "Compréhension orale", "Expression orale"]
       },
-      {
-        subject: "Philosophie",
-        lessons: []
-      },
-      {
-        subject: "Informatique",
-        lessons: ["Internet", "Le Web", "Les réseaux", "Les réseaux sociaux", "Les données structurées", "Les bases de données", "La géolocalisation", "La photographie numérique", "L'informatique embarquée", "Les objets connectés", "Algorithmique", "Programmation en Python", "Les variables", "Les conditions", "Les boucles", "Les fonctions", "La cybersécurité", "Les données personnelles"]
-      }
+      // {
+      //   subject: "Philosophie",
+      //   lessons: []
+      // },
+      // {
+      //   subject: "Informatique",
+      //   lessons: ["Internet", "Le Web", "Les réseaux", "Les réseaux sociaux", "Les données structurées", "Les bases de données", "La géolocalisation", "La photographie numérique", "L'informatique embarquée", "Les objets connectés", "Algorithmique", "Programmation en Python", "Les variables", "Les conditions", "Les boucles", "Les fonctions", "La cybersécurité", "Les données personnelles"]
+      // }
     ]
   },
   {
@@ -381,14 +379,14 @@ export const LESSONS_SEED : LessonSeed[] = [
         subject: "Anglais",
         lessons: ["Communication", "Société", "Culture anglophone", "Le monde du travail", "Les voyages", "L'environnement", "Les sciences et technologies", "Les médias", "Grammaire", "Vocabulaire", "Compréhension écrite", "Compréhension orale", "Expression écrite", "Expression orale"]
       },
-      {
-        subject: "Philosophie",
-        lessons: []
-      },
-      {
-        subject: "Informatique",
-        lessons: ["Représentation des données", "Bases de données", "SQL", "Algorithmique", "Programmation Python", "Structures de données", "Architecture des ordinateurs", "Réseaux", "Internet", "Cybersécurité", "Cryptographie", "Intelligence artificielle", "Graphes"]
-      }
+      // {
+      //   subject: "Philosophie",
+      //   lessons: []
+      // },
+      // {
+      //   subject: "Informatique",
+      //   lessons: ["Représentation des données", "Bases de données", "SQL", "Algorithmique", "Programmation Python", "Structures de données", "Architecture des ordinateurs", "Réseaux", "Internet", "Cybersécurité", "Cryptographie", "Intelligence artificielle", "Graphes"]
+      // }
     ]
   },
   {
@@ -414,18 +412,18 @@ export const LESSONS_SEED : LessonSeed[] = [
         subject: "Français",
         lessons: []
       },
-      {
-        subject: "Philosophie",
-        lessons: ["La conscience", "La liberté", "Le bonheur", "La vérité", "La justice", "La politique", "La morale", "Le travail", "La technique", "La nature", "L'art", "Le langage", "La religion", "La raison et le réel"]
-      },
-      {
-        subject: "Anglais",
-        lessons: ["Identité et échanges", "Espaces et interactions", "Art et pouvoir", "Citoyenneté et monde", "Science et innovations", "Environnement et société", "Temps et transformations", "Communication orale", "Compréhension écrite", "Expression écrite", "Argumentation", "Grammaire avancée", "Lexique thématique"]
-      },
-      {
-        subject: "Informatique",
-        lessons: ["Algorithmique avancée", "Structures de données", "Programmation Python avancée", "Bases de données", "SQL avancé", "Réseaux et protocoles", "Internet et Web", "Cybersécurité", "Cryptographie", "Intelligence artificielle", "Apprentissage automatique", "Graphes", "Complexité algorithmique", "Systèmes informatiques"]
-      }
+      // {
+      //   subject: "Philosophie",
+      //   lessons: ["La conscience", "La liberté", "Le bonheur", "La vérité", "La justice", "La politique", "La morale", "Le travail", "La technique", "La nature", "L'art", "Le langage", "La religion", "La raison et le réel"]
+      // },
+      // {
+      //   subject: "Anglais",
+      //   lessons: ["Identité et échanges", "Espaces et interactions", "Art et pouvoir", "Citoyenneté et monde", "Science et innovations", "Environnement et société", "Temps et transformations", "Communication orale", "Compréhension écrite", "Expression écrite", "Argumentation", "Grammaire avancée", "Lexique thématique"]
+      // },
+      // {
+      //   subject: "Informatique",
+      //   lessons: ["Algorithmique avancée", "Structures de données", "Programmation Python avancée", "Bases de données", "SQL avancé", "Réseaux et protocoles", "Internet et Web", "Cybersécurité", "Cryptographie", "Intelligence artificielle", "Apprentissage automatique", "Graphes", "Complexité algorithmique", "Systèmes informatiques"]
+      // }
     ]
   }
 ]

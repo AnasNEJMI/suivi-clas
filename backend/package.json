@@ -11,9 +11,11 @@
     "dev": "npm run prisma:generate && tsx --watch src/server.ts",
     "build": "npm run prisma:generate && tsc",
     "start": "node dist/server.js",
-    "reseed-db" : "npx prisma migrate reset && npx prisma migrate dev && npx prisma generate && npx prisma db seed",
-    "seed-animator-submissions" : "tsx prisma/seed.animator-submissions.ts",
-    "clear-animator-submissions" : "tsx prisma/seed.animator-submissions.ts --clear"
+    "reseed-db": "npx prisma migrate reset && npx prisma migrate dev && npx prisma generate && npx prisma db seed",
+    "seed-animator-submissions": "tsx prisma/seed.animator-submissions.ts",
+    "clear-animator-submissions": "tsx prisma/seed.animator-submissions.ts --clear",
+    "seed-qcm-bank-questions": "tsx prisma/seed.qcm-questions.ts",
+    "clear-qcm-bank-questions": "tsx prisma/seed.qcm-questions.ts --clear"
   },
   "keywords": [],
   "author": "AnasNEJMI",
@@ -34,15 +36,20 @@
     "vitest": "^4.0.17"
   },
   "dependencies": {
-    "dotenv": "^17.2.3",
+    "@google/genai": "^2.17.1",
+    "@google/generative-ai": "^0.24.1",
+    "@mistralai/mistralai": "^2.6.3",
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "groq-sdk": "^1.5.0",
     "helmet": "^8.1.0",
+    "openai": "^7.4.0",
     "uuid": "^13.0.0",
     "zod": "^4.3.5"
   }

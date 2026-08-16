@@ -2,7 +2,7 @@ import type { User } from '@/api/auth'
 
 const studentPageDescription = "Cet espace personnel met à votre disponibilité toutes les informations importantes et utiles concernant le déroulement des séances, les commentaires et les retours de nos animateurs(trices), ainsi que l'évolution de vos compétences."
 
-const BilansHeader = ({student} : {student : User}) => {
+const StudentPageHeroSection = ({student} : {student : User}) => {
   return (
     <section className='max-w-7xl pt-32 md:pt-48 px-6 flex flex-col items-center'>
         <h1 className='font-semibold text-3xl md:text-4xl mt-4'>Bienvenue {student.firstName} !👋</h1>
@@ -16,4 +16,4 @@ const BilansHeader = ({student} : {student : User}) => {
   )
 }
 
-export default BilansHeader
+export default StudentPageHeroSection

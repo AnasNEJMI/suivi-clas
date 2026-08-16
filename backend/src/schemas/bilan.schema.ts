@@ -18,6 +18,7 @@ const presentBilanSchema = z.object({
     presence: z.literal(true),
     lessonId: z.int().min(1, { error: lessonIdError }),
     summary:  z.string().min(1, { error: 'Résumé de séance invalide.' }),
+    includeQcm : z.boolean()
 })
 
 const absentBilanSchema = z.object({
@@ -25,6 +26,7 @@ const absentBilanSchema = z.object({
     presence: z.literal(false),
     lessonId: z.never().optional(),
     summary:  z.never().optional(),
+    includeQcm : z.boolean().optional()
 })
 
 export const bilanSchema = z.discriminatedUnion('presence', [

@@ -1,4 +1,5 @@
-import { fetchAssociationData } from "@/api/association";
+import { associationMemberApiCalls } from "@/api/association-member/apiCalls";
+import { associationMemberQueryKeys } from "@/api/association-member/query-keys";
 import { fetchUser } from "@/api/auth";
 import {queryClient } from "@/lib/query/client";
 import { queryKeys } from "@/lib/query/keys";
@@ -18,15 +19,13 @@ export async function associationPageLoader(){
             throw replace(`/`);
         }
 
-        const associationData = await queryClient.ensureQueryData({
-            queryKey : queryKeys.associationMember.data,
-            queryFn : fetchAssociationData,
-            staleTime : 24* 60 * 60 * 1000,
-        });
+        void queryClient.prefetchQuery({
+            queryKey : associationMemberQueryKeys.presenceStats,
+            queryFn : associationMemberApiCalls.fetchPresenceStats,
+            staleTime : 2 * 60 * 1000,
+        })
 
-        console.log('loaded association Data : ', associationData);
-
-        return {user : user, animators : associationData.animators, seances : associationData.seances, classes : associationData.classes};
+        return {user : user};
     }catch(error){
         if(error instanceof Response && error.status === 302){
             throw error;

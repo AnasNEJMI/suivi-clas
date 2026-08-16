@@ -116,3 +116,11 @@ export const LessonEvalLabels : Record <LessonEval, string> = {
 }
 export const LESSON_EVALS = ['notAcquired', 'acquiring', 'acquired', 'expert'] as const;
 export type LessonEval = typeof LESSON_EVALS[number];
+
+
+export const ApiEndpoint : Record<UserType, string> = {
+    'student' : '/api/student/',
+    'animator' : '/api/animator/',
+    'associationMember' : '/api/association-member/',
+    'admin' : '/api/admin/',
+} as const;
