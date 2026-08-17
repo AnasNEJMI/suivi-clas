@@ -6,10 +6,12 @@ import { Mistral } from '@mistralai/mistralai';
 import { GoogleGenAI, Type, Schema } from '@google/genai';
 import OpenAI from 'openai';
 
-const ai = process.env.GEMINI_API_KEY
-  ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
-  : null;
-
+// const GEMINI_MODELS = [
+//   'gemini-3.7-flash',
+//   'gemini-3.6-flash',
+//   'gemini-3.5-flash',
+//   'gemini-3.0-flash',
+// ]
 
 // Initialize SDKs safely
 const gemini = process.env.GEMINI_API_KEY
@@ -38,7 +40,7 @@ if (mistral) console.log('✓ Mistral setup success');
 
 const CONFIG = {
   questionsPerDifficulty: 10,
-  delayBetweenCalls: 6500, // 6.5s delay is optimal for Gemini Free Tier (~9.2 RPM)
+  delayBetweenCalls: 15000, // 6.5s delay is optimal for Gemini Free Tier (~9.2 RPM)
   maxRetries: 3,
   model: {
     gemini: 'gemini-3.7-flash', // Updated model ID
@@ -127,10 +129,10 @@ function stripFences(text: string): string {
 
 // 3. Gemini Direct Generator
 async function generateQCM(prompt: string) {
-  if (!ai) throw new Error('GEMINI_API_KEY is not defined');
+  if (!gemini) throw new Error('GEMINI_API_KEY is not defined');
 
-  const interaction = await ai.interactions.create({
-    model: 'gemini-3.5-flash', // Free tier supported model
+  const interaction = await gemini.interactions.create({
+    model: 'gemini-3.1-flash-lite', // Free tier supported model
     input: prompt,
   });
 

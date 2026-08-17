@@ -6,12 +6,12 @@ import PresenceStatsTable from "./presence-stats-table"
 const PresenceStatsCard = ({presenceStatsPerScolarYear} : {presenceStatsPerScolarYear : PresenceStatsPerScolarYear[]}) => {
   const [selectedScolarYear, setSelectedScolarYear] = useState(presenceStatsPerScolarYear[0])
     return (
-    <section className='mt-16 w-full px-6 max-w-7xl'>
+    <section className='mt-16 w-full px-6 max-w-5xl'>
         <div className='flex items-start justify-between'>
             <h2 className='text-xl md:text-2xl font-bold bg'>Bilan présence</h2>
             <PresenceStatsDropdown presenceStatsPerScolarYear = {presenceStatsPerScolarYear} selectedValue={selectedScolarYear.scolarYear.id.toString()} onValueChange = {setSelectedScolarYear}/>
         </div>
-        <PresenceStatsTable selectedScolarYear = {selectedScolarYear}/>
+        <PresenceStatsTable key={selectedScolarYear.scolarYear.id} selectedScolarYear = {selectedScolarYear}/>
     </section>
   )
 }

@@ -11,11 +11,13 @@
     "dev": "npm run prisma:generate && tsx --watch src/server.ts",
     "build": "npm run prisma:generate && tsc",
     "start": "node dist/server.js",
-    "reseed-db": "npx prisma migrate reset && npx prisma migrate dev && npx prisma generate && npx prisma db seed",
+    "reseed-db": "npx prisma migrate reset && npx prisma migrate dev && npx prisma generate && npx prisma db seed && npm run seed-animator-submissions && npm run restore-qcm-bank-questions",
     "seed-animator-submissions": "tsx prisma/seed.animator-submissions.ts",
     "clear-animator-submissions": "tsx prisma/seed.animator-submissions.ts --clear",
     "seed-qcm-bank-questions": "tsx prisma/seed.qcm-questions.ts",
-    "clear-qcm-bank-questions": "tsx prisma/seed.qcm-questions.ts --clear"
+    "clear-qcm-bank-questions": "tsx prisma/seed.qcm-questions.ts --clear",
+    "extract-qcm-bank-questions": "tsx prisma/extract-qcm-bank-questions.ts",
+    "restore-qcm-bank-questions": "tsx prisma/restore-qcm-bank-questions.ts"
   },
   "keywords": [],
   "author": "AnasNEJMI",

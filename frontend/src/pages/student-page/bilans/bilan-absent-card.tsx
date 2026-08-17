@@ -1,13 +1,14 @@
 import type { User } from '@/api/auth'
 import type { BilanEntry } from '@/api/student/apiCalls'
 import { Card, CardContent } from '@/components/ui/card'
+import { format } from 'date-fns'
+import { fr } from 'date-fns/locale'
 
 const BilanAbsentCard = ({bilan, student} : {bilan : BilanEntry, student : User}) => {
   return (
-    <Card className='bg-linear-330 from-25% from-orange-700 to-75% to-red-500 shadow-md rounded-xl border border-red-400 mt-4'>
-        <CardContent className='text-white'>
-            <div className='mt-6'><span className='opacity-75 uppercase font-bold text-base '>Animée par : </span> <span className='capitalize text-base font-medium opacity-100!'>{bilan.submittedBy.firstName} {bilan.submittedBy.lastName}</span></div>
-            <div className='mt-6'><span className='opacity-75 uppercase font-bold text-base '>Bilan : </span> <p className='text-base font-medium opacity-100!'><span className='capitalize'>{student.firstName}</span> était {student.gender === 'm'? 'absent' : 'absente'} lors de cette séance.</p></div>
+    <Card className='bg-white mt-4 border-2 border-red-500 shadow-card '>
+        <CardContent>
+            <p className='font-medium text-base text-red-600'><span className='font-bold capitalize'>{student.firstName}</span> <span className='font-bold uppercase'>{student.lastName}</span> était {student.gender === 'm'? 'absent':'absente'} durant la séeance du <span className='font-bold capitalize underline underline-offset-2'>{format(bilan.date, 'PPP', {locale : fr})}</span> animée par <span className='font-bold capitalize'>{bilan.submittedBy.firstName}</span> <span className='font-bold uppercase'>{bilan.submittedBy.lastName}</span>.</p>
         </CardContent>
     </Card>
   )

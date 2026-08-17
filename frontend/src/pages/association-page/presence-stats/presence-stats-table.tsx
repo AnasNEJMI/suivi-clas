@@ -21,7 +21,7 @@ const PresenceStatsTable = ({selectedScolarYear} : {selectedScolarYear : Presenc
       const  isBigScreen = useIsBigScreen();
       const [selectedClassStats, setSelectedClassStats] = useState<ClassPresenceStats>(selectedScolarYear.classes[0])
     return (
-    <Card className='mt-6'>
+    <Card className='mt-6 border-none shadow-card'>
         <CardContent>
             <div className='flex items-center justify-between'>
                 <h2 className='text-lg md:text-lg font-bold bg'>Groupe</h2>

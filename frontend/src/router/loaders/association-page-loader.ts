@@ -25,6 +25,12 @@ export async function associationPageLoader(){
             staleTime : 2 * 60 * 1000,
         })
 
+        void queryClient.prefetchQuery({
+            queryKey : associationMemberQueryKeys.visitStats,
+            queryFn : associationMemberApiCalls.fetchVisitStats,
+            staleTime : 2 * 60 * 1000,
+        })
+
         return {user : user};
     }catch(error){
         if(error instanceof Response && error.status === 302){

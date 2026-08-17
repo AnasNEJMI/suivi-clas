@@ -29,6 +29,8 @@ import { studentBilansHandler } from '../controllers/student/fetchBilans.control
 import { studentSkillsEvalsHandler } from '../controllers/student/fetchSkillsEvals.controller.js';
 import { studentLessonEvalsHandler } from '../controllers/student/fetchLessonEvals.controller.js';
 import { associationMemberFetchPresenceStatsHandler } from '../controllers/association-member/fetchPresenceStats.controller.js';
+import { studentVisitHandler } from '../controllers/student/visit.controller.js';
+import { associationVisitStatsHandler } from '../controllers/association-member/fetchVisitStats.controller.js';
 
 const router = Router();
 
@@ -43,6 +45,7 @@ router.get('/admin/base', requireAuthHandler, requireAdminHandler, asyncHandler(
 router.get('/student/bilans', requireAuthHandler, asyncHandler(studentBilansHandler));
 router.get('/student/skills-evals', requireAuthHandler, asyncHandler(studentSkillsEvalsHandler));
 router.get('/student/lesson-evals', requireAuthHandler, asyncHandler(studentLessonEvalsHandler));
+router.get('/student/visit',requireAuthHandler,asyncHandler(studentVisitHandler))
 
 router.get('/animator/me', requireAuthHandler, asyncHandler(animatorProfileHandler));
 router.get('/animator/base-data', requireAuthHandler, asyncHandler(animatorBaseDataHandler));
@@ -61,6 +64,7 @@ router.post('/animator/bilan',validateBody(bilanSchema), requireAuthHandler, asy
 
 
 router.get('/association-member/presence-stats', requireAuthHandler, asyncHandler(associationMemberFetchPresenceStatsHandler))
+router.get('/association-member/visit-stats', requireAuthHandler, asyncHandler(associationVisitStatsHandler))
 // router.post('/admin/add-bilan', validateBody(addBilanSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addBilanHandler))
 // router.post('/admin/add-skill', validateBody(addSkillSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addSkillHandler))
 // router.post('/admin/add-doc', validateBody(addDocSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addDocHandler))

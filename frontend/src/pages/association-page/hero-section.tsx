@@ -5,7 +5,7 @@ const pageDescription = "Cet espace personnel met à votre disposition des infor
 
 const AssociationMemberHeroSection = ({assocMember} : {assocMember : User}) => {
   return (
-    <section className='w-full max-w-7xl pt-32 md:pt-48 px-6 flex flex-col items-start'>
+    <section className='w-full max-w-5xl pt-32 md:pt-48 px-6 flex flex-col items-start'>
         <h1 className='font-semibold text-3xl md:text-4xl mt-4'>Bienvenue {assocMember.firstName} !👋</h1>
         <div className='flex flex-row flex-wrap items-center justify-start gap-2 mt-4'>
             <p className='text-md opacity-75 px-4 py-1 rounded-full bg-sky-100 text-indigo-700 border border-indigo-200'><span className='font-bold opacity-90'>{assocMember.association?.label}</span></p>

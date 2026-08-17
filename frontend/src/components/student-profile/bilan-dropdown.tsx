@@ -21,7 +21,7 @@ const BilanDropdown = ({className, bilans, selectedValue, onValueChange} : Bilan
     }
     return (
     <Select value={selectedValue} onValueChange={(value) => updateValue(value)}>
-        <SelectTrigger className="w-45 bg-white text-lg font-medium font-outfit">
+        <SelectTrigger className="w-45 bg-white text-lg font-medium font-outfit border-none shadow-card">
             <SelectValue/>
         </SelectTrigger>
         <SelectContent className={cn(className, '')}>

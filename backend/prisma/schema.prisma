@@ -191,11 +191,13 @@ model Seance {
 model ScolarYear {
   id      Int      @id @default(autoincrement())
   label     String   @unique
+  startDate DateTime
+  endDate   DateTime
 
   seances Seance[]
   visits Visit[]
   animatorContracts AnimatorContract[]
-
+  
 }
 
 model Bilan {
@@ -263,13 +265,14 @@ model Visit {
 
   studentId     Int      
   student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  
-  scolarYearId  Int     
-  scolarYear ScolarYear @relation(fields: [scolarYearId], references: [id], onDelete : Cascade)
 
-  numVisits   Int
-  lastVisit    DateTime
+  scolarYearId Int
+  scolarYear   ScolarYear @relation(fields: [scolarYearId], references: [id], onDelete: Cascade)
 
+  numVisits   Int @default(0)
+  lastVisit    DateTime @default(now())
+
+  @@unique(name : "visitId", [studentId, scolarYearId])
   @@index([studentId])
   @@index([scolarYearId])
 }

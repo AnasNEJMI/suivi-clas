@@ -1,10 +1,11 @@
 import type { SkillsEvalEntry } from '@/api/student/apiCalls'
 import { CompetencesAccordian } from '@/components/student-profile/competences-accordians'
-import { Card, CardContent, CardFooter} from '@/components/ui/card'
+import { Card, CardContent} from '@/components/ui/card'
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart'
 import { useMemo, useState } from 'react'
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from 'recharts'
 import SkillsEvalAnimatorDropdown from './skills-eval-animator-dropdown'
+import { Separator } from '@/components/ui/separator'
 
 const chartConfig = {
   niveau: {
@@ -28,13 +29,14 @@ const SkillsEvalCard = ({skillsEvals} : {skillsEvals : SkillsEvalEntry[]}) => {
       }, [skillsEval])
 
   return (
-    <Card className="mt-4">
+    <Card className="mt-6 border-none shadow-card">
         <CardContent className="pb-0">
           <div className='w-full flex flex-col lg:flex-row items-start gap-6'>
             <div className='flex-1 w-full'>
-              <h3 className='font-semibold text-lg'>Bilan des compétences méthodologiques</h3>
+              <h3 className='font-semibold text-lg'>Bilan de méthodologie</h3>
+              <Separator className='my-6'/>
               <div className='flex justify-between items-center mt-2'>
-                  <h2 className='text-base md:text-2xl font-bold'>Soumis par</h2>
+                  <h2 className='text-lg md:text-xl font-medium'>Soumis par</h2>
                   <SkillsEvalAnimatorDropdown skillsEvals = {skillsEvals} selectedValue={skillsEval.animator.id.toString()} onValueChange = {setskillsEval}/>
               </div>
               <div className='w-full '>
@@ -60,11 +62,8 @@ const SkillsEvalCard = ({skillsEvals} : {skillsEvals : SkillsEvalEntry[]}) => {
               </div>
             </div>
             <CompetencesAccordian positive= {skillsEval.positive} negative= {skillsEval.negative} improvements= {skillsEval.improvements}/>
-
           </div>
         </CardContent>
-        <CardFooter className="text-sm flex-col items-start w-full">  
-        </CardFooter>
     </Card>
   )
 }

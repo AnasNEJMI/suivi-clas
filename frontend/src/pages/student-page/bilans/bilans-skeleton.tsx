@@ -3,7 +3,7 @@ import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 import { ChevronDown } from 'lucide-react'
 
-const BilansSkeleton = () => {
+const Skeleton = () => {
   return (
     <>
       <section className='mt-12 w-full px-6 max-w-7xl'>
@@ -54,4 +54,4 @@ const BilansSkeleton = () => {
   )
 }
 
-export default BilansSkeleton
+export default Skeleton

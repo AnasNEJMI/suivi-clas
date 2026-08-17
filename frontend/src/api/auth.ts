@@ -22,7 +22,6 @@ export type User = {
 export async function fetchUser():Promise<User | null>{
     try{
         const response =  await apiRequest<{user : User}>('/api/auth/profile')
-        console.log('fetchUser response : ', response);
         return response.user;
     }catch(error){
         if(error instanceof ApiError

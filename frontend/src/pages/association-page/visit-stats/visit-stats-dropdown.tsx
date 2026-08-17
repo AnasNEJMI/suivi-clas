@@ -1,16 +1,16 @@
-import type { PresenceStatsPerScolarYear } from "@/api/association-member/apiCalls"
+import type { VisitStatsPerScolarYear } from "@/api/association-member/apiCalls"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 
-interface PresenceStatsDropdownProps {
+interface VisitStatsDropdownProps {
     className? : string,
-    presenceStatsPerScolarYear : PresenceStatsPerScolarYear[],
+    visitStatsPerScolarYear : VisitStatsPerScolarYear[],
     selectedValue : string,
-    onValueChange : React.Dispatch<React.SetStateAction<PresenceStatsPerScolarYear>>
+    onValueChange : React.Dispatch<React.SetStateAction<VisitStatsPerScolarYear>>
 }
-const PresenceStatsDropdown = ({className, presenceStatsPerScolarYear, selectedValue, onValueChange} : PresenceStatsDropdownProps) => {
+const VisitStatsDropdown = ({className, visitStatsPerScolarYear, selectedValue, onValueChange} : VisitStatsDropdownProps) => {
     const updateValue = (value : string) => {
-        const scolarYearStats = presenceStatsPerScolarYear.find((s) => s.scolarYear.id === parseInt(value));
+        const scolarYearStats = visitStatsPerScolarYear.find((s) => s.scolarYear.id === parseInt(value));
         if(!scolarYearStats){
         throw Error(`Couldn't find scolarYear with id : ${value}`);
         }
@@ -24,8 +24,8 @@ const PresenceStatsDropdown = ({className, presenceStatsPerScolarYear, selectedV
         <SelectContent className={cn(className, '')}>
             <SelectGroup>
                 {
-                    presenceStatsPerScolarYear.length>0 && 
-                    presenceStatsPerScolarYear.map((yearStats, index) => {
+                    visitStatsPerScolarYear.length>0 && 
+                    visitStatsPerScolarYear.map((yearStats, index) => {
                         return (
                             <SelectItem key={index} value={yearStats.scolarYear.id.toString()} className='text-lg font-medium font-outfit'>{yearStats.scolarYear.label}</SelectItem>
                         )
@@ -38,4 +38,4 @@ const PresenceStatsDropdown = ({className, presenceStatsPerScolarYear, selectedV
   )
 }
 
-export default PresenceStatsDropdown
+export default VisitStatsDropdown

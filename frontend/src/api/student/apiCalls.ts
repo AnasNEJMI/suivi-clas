@@ -85,6 +85,10 @@ export type LessonEvalEntry = {
     updatedAt : Date,
 }
 
+export type VisitTrackingResponse = {
+    tracked : boolean
+}
+
 const studentEndpoints = {
     me : 'me',
     bilans : 'bilans',
@@ -104,4 +108,5 @@ export const studentApiCalls = {
     fetchSkillEvals : fetchStudentData<SkillsEvalsResponse>(studentEndpoints.skillsEvals),
     fetchLessonEvals : fetchStudentData<LessonEvalsResponse>(studentEndpoints.lessonEvals),
     fetchQcms : fetchStudentData<QcmWithQuestions[]>(studentEndpoints.qcmsWithQuestions),
+    trackVisit : fetchStudentData<VisitTrackingResponse | null>('visit'),
 }

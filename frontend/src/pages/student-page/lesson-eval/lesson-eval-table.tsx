@@ -24,7 +24,7 @@ const lessonEvalBars : Record<LessonEval, {label : string, level : number}> = {
 const LessonEvalTable = ({selectedSubject} : {selectedSubject : LessonsBySubject}) => {
     const  isBigScreen = useIsBigScreen();
   return (
-    <Card className='mt-6'>
+    <Card className='mt-6 border-none shadow-card'>
         <CardContent>
             <Table>
                 <TableHeader>

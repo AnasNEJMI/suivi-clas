@@ -5,8 +5,8 @@ import { scolarYears } from "./seed.data.js";
 
 // ─────────────────────────────────────────────
 export const SCOLAR_YEARS = [
-  {label : "2025-2026"},
-  {label : "2026-2027"},
+  {label : "2025-2026", startDate: new Date('2025-09-01T00:00:00.000Z'),endDate: new Date('2026-07-16T00:00:00.000Z'),},
+  {label : "2026-2027", startDate: new Date('2026-09-01T00:00:00.000Z'),endDate: new Date('2027-07-16T00:00:00.000Z'),},
 ] as const;
 
 export type ScolarYear = (typeof SCOLAR_YEARS)[number]["label"];

@@ -24,6 +24,49 @@ function resolveId(map: Map<string, number>, key: string, context: string): numb
   return id;
 }
 
+function randomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+function randomDateBetween(start: Date, end: Date): Date {
+  const startMs = start.getTime()
+  const endMs   = end.getTime()
+  return new Date(startMs + Math.random() * (endMs - startMs))
+}
+
+async function seedVisits() {
+  // Both are small tables — parallel fetch is fine
+  const [students, scolarYears] = await Promise.all([
+    prisma.student.findMany({ select: { id: true } }),
+    prisma.scolarYear.findMany({
+      select: { id: true, startDate: true, endDate: true },
+    }),
+  ])
+
+  const data = students.flatMap((student) =>
+    scolarYears.map((year) => {
+      const numVisits = randomInt(0, 40)
+
+      return {
+        studentId:    student.id,
+        scolarYearId: year.id,
+        numVisits,
+        // If numVisits is 0, lastVisit defaults to startDate — avoids
+        // a misleading recent date on a student who never actually visited
+        lastVisit: numVisits > 0
+          ? randomDateBetween(year.startDate, year.endDate)
+          : year.startDate,
+      }
+    })
+  )
+
+  const { count } = await prisma.visit.createMany({
+    data,
+    skipDuplicates: true,
+  })
+
+  console.log(`  ✓ Visits — ${count} rows`)
+}
 
 // ─────────────────────────────────────────────
 // 1. ANNÉE SCOLAIRE
@@ -34,7 +77,7 @@ async function seedScolarYears(): Promise<Map<string, number>> {
   
   for (let i = 0; i < SCOLAR_YEARS.length; i++) {
     const sy = SCOLAR_YEARS[i];
-    const scolarYear = await prisma.scolarYear.create({ data: { label: sy.label} });
+    const scolarYear = await prisma.scolarYear.create({ data: { label: sy.label, startDate : sy.startDate, endDate : sy.endDate} });
     if(!scolarYear){
         throw new Error(`Error creating scolar year → "${sy.label}"`);
     }
@@ -159,18 +202,6 @@ async function seedAssociations(levelIdByLabel: Map<string, number>): Promise<{a
             })
 
             classIdByName.set(assoc.label+associationClass.label,associationClass.id)
-
-            // //seeding skills
-            // const skillsData = await Promise.all(
-            //     associationClass.students.map(async (student) => ({
-            //         studentId : student.id,
-            //         animatorId : 
-            //         ...SKILL_SEED
-            //     }))
-            // )
-            // await prisma.skill.createMany({
-            //     data : skillsData
-            // })
         }
     }
 
@@ -227,23 +258,26 @@ async function seedAnimators(associationIdByName: Map<string, number>, classIdBy
 async function main(): Promise<void> {
     console.log("\n Démarrage du seed...");
 
-    console.log("\n[ 1/5 ] Année scolaire");
+    console.log("\n[ 1/6 ] Année scolaire");
     const scolarYearIdByLabel = await seedScolarYears();
 
-    console.log("\n[ 2/5 ] Niveaux scolaires");
+    console.log("\n[ 2/6 ] Niveaux scolaires");
     const levelIdByLabel = await seedLevels();
 
-    console.log("\n[ 3/5 ] Matières");
+    console.log("\n[ 3/6 ] Matières");
     const subjectIdByLabel = await seedSubjects();
 
-    console.log("\n[ 3/5 ] Leçons");
+    console.log("\n[ 3/6 ] Leçons");
     await seedLessons(levelIdByLabel, subjectIdByLabel);
 
-    console.log("\n[ 4/5 ] Associations, classes & utilisateurs");
+    console.log("\n[ 4/6 ] Associations, classes & utilisateurs");
     const {associationIdByName, classIdByName} = await seedAssociations(levelIdByLabel);
 
-    console.log("\n[ 5/5 ] Animateurs");
+    console.log("\n[ 5/6 ] Animateurs");
     await seedAnimators(associationIdByName, classIdByName, scolarYearIdByLabel);
+    
+    console.log("\n[ 6/6 ] Visites");
+    await seedVisits();
 
     console.log("\n✅ Seed terminé avec succès.\n");
 }
