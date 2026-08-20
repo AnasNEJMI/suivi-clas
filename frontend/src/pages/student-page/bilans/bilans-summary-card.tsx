@@ -1,5 +1,5 @@
 import type { BilanEntry } from '@/api/student/apiCalls'
-import BilanDropdown from '@/components/student-profile/bilan-dropdown';
+import BilanDropdown from '@/pages/student-page/bilans/bilan-dropdown';
 import { formatDate } from 'date-fns';
 import { useState } from 'react'
 import NoBilanFoundCard from './no-bilan-found-card';

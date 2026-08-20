@@ -1,4 +1,4 @@
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from '../ui/select'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from '../../../components/ui/select'
 import { SelectValue } from '@radix-ui/react-select'
 import { cn } from '@/lib/utils'
 import { formatDate } from 'date-fns'
