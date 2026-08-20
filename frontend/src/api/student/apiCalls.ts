@@ -1,13 +1,85 @@
 import type { Bilan, LessonEval, QcmWithQuestions} from "../api.types";
 import { apiRequest } from "../client";
 
+export const AnswerChoice = {
+  a: 'a',
+  b: 'b',
+  c: 'c',
+  d: 'd'
+} as const
+
+export type AnswerChoice = (typeof AnswerChoice)[keyof typeof AnswerChoice]
+
+export const Difficulty = {
+  e: 'e',
+  m: 'm',
+  h: 'h'
+} as const
+
+export const Gender = {
+  m: 'm',
+  f: 'f'
+} as const
+
+export type Gender = (typeof Gender)[keyof typeof Gender]
+
+export type Difficulty = (typeof Difficulty)[keyof typeof Difficulty]
 
 export type BilansPayload = {
     studentId : number
 }
 
+export type QcmEntry = {
+    id : number,
+    completed : boolean,
+    score : number | null,
+    qcmQuestions : QcmQuestionsEntry[]
+}
+
+export type QcmQuestionsEntry = {
+    id : number,
+    correct : boolean,
+    selectedChoice : AnswerChoice | null,
+    bankQuestion : BankQuestionEntry
+}
+export type BankQuestionEntry = {
+    id : number,
+    question : string,
+    difficulty : Difficulty,
+    answerA : string,
+    answerB : string,
+    answerC : string,
+    answerD : string,
+    correctAnswer : AnswerChoice,
+    explanation : string,
+}
+
+export type BilanEntry  = {
+    date: Date;
+    presence: boolean;
+    summary: string | null;
+    lesson: {
+        id: number;
+        label: string;
+        subject: {
+            id: number;
+            label: string;
+        };
+    } | null;
+    id: number;
+    studentId: number;
+    seanceId: number;
+    submittedBy : {
+        id : number,
+        firstName : string,
+        lastName : string,
+        gender : Gender
+    }
+    qcm : QcmEntry | null
+}
+
 export type BilansResponse = {
-   bilans : BilanEntry[]
+    bilans : BilanEntry[]
 }
 
 export type SkillsEvalsResponse = {
@@ -33,29 +105,6 @@ export type SkillsEvalEntry = {
     positive : string,
     negative : string,
     improvements : string,
-}
-
-export type BilanEntry = {
-    date: Date;
-    presence: boolean;
-    summary: string | null;
-    lesson: {
-        id: number;
-        label: string;
-        subject: {
-            id: number;
-            label: string;
-        };
-    } | null;
-    id: number;
-    studentId: number;
-    seanceId: number;
-    submittedBy : {
-        id : number,
-        firstName : string,
-        lastName : string,
-        gender : 'm' | 'f'
-    }
 }
 
 export type LessonEvalsResponse = {

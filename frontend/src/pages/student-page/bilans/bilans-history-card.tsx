@@ -16,7 +16,7 @@ export const SUBJECTS = [
 type Subject = (typeof SUBJECTS)[number];
 
 const cardStyle : Record<Subject, string> = {
-  'Anglais' : 'bg-linear-330 from-25% to-75% from-orange-600 to-red-700 text-black',
+  'Anglais' : 'bg-linear-330 from-25% to-75% from-orange-600 to-red-700 text-white',
   'Français' : 'bg-linear-330 from-25% to-75% from-fuchsia-600 to-sky-600 text-white',
   'Histoire-Géographie' : 'bg-linear-330 from-25% to-75% from-teal-600 to-emerald-600 text-white',
   'Mathématiques' : 'bg-linear-330 from-25% to-75% from-blue-500 to-indigo-600 text-white',

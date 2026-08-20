@@ -2,13 +2,35 @@ import { Request, Response, NextFunction } from "express";
 import { sendSuccess } from "../../utils/response.utils.js";
 import { prisma } from "../../db/prisma.js";
 import { ApiError } from "../../classes/ApiError.class.js";
-import { ScolarYear } from "../../db/seed.users.data.js";
-import { number } from "zod";
 import { PrismaClientKnownRequestError } from "../../generated/prisma/internal/prismaNamespace.js";
-import { BilanEntry } from "../animator/submitBilan.controller.js";
-import { Gender } from "../../generated/prisma/enums.js";
+import { AnswerChoice, Difficulty, Gender } from "../../generated/prisma/enums.js";
 
-type BilansEntry  = {
+type QcmEntry = {
+    id : number,
+    completed : boolean,
+    score : number | null,
+    qcmQuestions : QcmQuestionsEntry[]
+}
+
+type QcmQuestionsEntry = {
+    id : number,
+    correct : boolean,
+    selectedChoice : AnswerChoice | null,
+    bankQuestion : BankQuestionEntry
+}
+type BankQuestionEntry = {
+    id : number,
+    question : string,
+    difficulty : Difficulty,
+    answerA : string,
+    answerB : string,
+    answerC : string,
+    answerD : string,
+    correctAnswer : AnswerChoice,
+    explanation : string,
+}
+
+type BilanEntry  = {
     date: Date;
     presence: boolean;
     summary: string | null;
@@ -29,10 +51,11 @@ type BilansEntry  = {
         lastName : string,
         gender : Gender
     }
+    qcm : QcmEntry | null
 }
 
 type BilansResponse = {
-    bilans : BilansEntry[]
+    bilans : BilanEntry[]
 }
 export async function studentBilansHandler(
     req : Request,
@@ -74,6 +97,33 @@ export async function studentBilansHandler(
                         firstName : true,
                         lastName : true,
                         gender : true
+                    }
+                },
+                qcm : {
+                    select : {
+                        id : true,
+                        score : true,
+                        completed : true,
+                        qcmQuestions : {
+                            select : {
+                                id : true,
+                                correct : true,
+                                selectedChoice : true,
+                                bankQuestion : {
+                                    select : {
+                                        id : true,
+                                        question : true,
+                                        difficulty : true,
+                                        answerA : true,
+                                        answerB : true,
+                                        answerC : true,
+                                        answerD : true,
+                                        correctAnswer : true,
+                                        explanation : true
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

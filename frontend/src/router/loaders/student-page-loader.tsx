@@ -25,6 +25,17 @@ export async function studentPageLoader(){
             staleTime : 2 * 60 * 1000,
         })
 
+        void queryClient.prefetchQuery({
+            queryKey : studentKeys.skillEvals({studentId : user.id}),
+            queryFn : studentApiCalls.fetchSkillEvals,
+            staleTime : 2 * 60 * 100
+        })
+
+        void queryClient.prefetchQuery({
+            queryKey : studentKeys.lessonEvals({studentId : user.id}),
+            queryFn : studentApiCalls.fetchLessonEvals,
+            staleTime : 2 * 60 * 100
+        })
         return {user};
 
         //todo : for skill evals and lesson evals as well.
