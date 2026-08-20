@@ -6,6 +6,7 @@ export const associationMemberEndpoints = {
     me : 'me',
     presenceStats : 'presence-stats',
     visitStats : 'visit-stats',
+    animatorStats : 'animator-stats',
 }
 
 export type PresenceStatsResponse = {
@@ -36,8 +37,14 @@ export type VisitStatsPerScolarYear = { scolarYear: { id: number; label: string 
 export type ClassVisitStats = { class : {id: number; label: string},students: StudentVisitStats[] }
 export type StudentVisitStats = { id: number; firstName: string; lastName: string; gender: 'm' | 'f'; numVisits: number; lastVisit: Date | null }
 
+export type AnimatorStatsResponse = { animatorStatsPerScolarYear: AnimatorStatsPerScolarYear[] }
+export type AnimatorStatsPerScolarYear = { scolarYear: { id: number; label: string }; animators: AnimatorStats[]}
+export type AnimatorStats = { animator : {id: number; firstName: string;  lastName: string; gender : 'm' | 'f'},classes: AnimatorClassStats[], totalSeances : number, totalBilans : number};
+export type AnimatorClassStats = { class : {id : number, label : string}, seances : SeanceStats[], seancesCount : number; bilansSubmitted : number}
+export type SeanceStats = {id : number, duration : string, date : Date}
 
 export const associationMemberApiCalls = {
     fetchPresenceStats : fetchPayloadlessData<PresenceStatsResponse>(associationMemberEndpoints.presenceStats, ASSOCIATION_MEMBER_API_ENDPOINT),
     fetchVisitStats : fetchPayloadlessData<VisitStatsResponse>(associationMemberEndpoints.visitStats, ASSOCIATION_MEMBER_API_ENDPOINT),
+    fetchAnimatorStats : fetchPayloadlessData<AnimatorStatsResponse>(associationMemberEndpoints.animatorStats, ASSOCIATION_MEMBER_API_ENDPOINT),
 }

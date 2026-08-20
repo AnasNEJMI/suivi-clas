@@ -31,6 +31,7 @@ import { studentLessonEvalsHandler } from '../controllers/student/fetchLessonEva
 import { associationMemberFetchPresenceStatsHandler } from '../controllers/association-member/fetchPresenceStats.controller.js';
 import { studentVisitHandler } from '../controllers/student/visit.controller.js';
 import { associationVisitStatsHandler } from '../controllers/association-member/fetchVisitStats.controller.js';
+import { associationAnimatorStatsHandler } from '../controllers/association-member/fetchAnimatorStats.js';
 
 const router = Router();
 
@@ -65,6 +66,7 @@ router.post('/animator/bilan',validateBody(bilanSchema), requireAuthHandler, asy
 
 router.get('/association-member/presence-stats', requireAuthHandler, asyncHandler(associationMemberFetchPresenceStatsHandler))
 router.get('/association-member/visit-stats', requireAuthHandler, asyncHandler(associationVisitStatsHandler))
+router.get('/association-member/animator-stats', requireAuthHandler, asyncHandler(associationAnimatorStatsHandler))
 // router.post('/admin/add-bilan', validateBody(addBilanSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addBilanHandler))
 // router.post('/admin/add-skill', validateBody(addSkillSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addSkillHandler))
 // router.post('/admin/add-doc', validateBody(addDocSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addDocHandler))

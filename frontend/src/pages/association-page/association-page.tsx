@@ -9,6 +9,7 @@ import Skeleton from '../student-page/bilans/bilans-skeleton';
 import { Suspense } from 'react';
 import PresenceStatsSection from './presence-stats/presence-section';
 import VisitStatsSection from './visit-stats/visit-section';
+import AnimatorSection from './animator-stats/animator-section';
 
 
 const AssociationPage = () => {
@@ -27,6 +28,11 @@ const AssociationPage = () => {
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans de consultation'/>}>
             <Suspense fallback = {<Skeleton/>}>
                 <VisitStatsSection/>
+            </Suspense>
+        </ErrorBoundary>
+        <ErrorBoundary fallback = {<SectionError desc = 'des bilans de consultation'/>}>
+            <Suspense fallback = {<Skeleton/>}>
+                <AnimatorSection/>
             </Suspense>
         </ErrorBoundary>
     </BaseLayout>
