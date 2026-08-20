@@ -1,8 +1,8 @@
 import "dotenv/config"
 import { PrismaPg } from '@prisma/adapter-pg';
 import {LessonEval, PrismaClient} from '../src/generated/prisma/client.js'
-import {subWeeks, addWeeks, setMilliseconds, setSeconds, setHours, setMinutes} from 'date-fns';
-
+import {subWeeks, addWeeks, setMilliseconds, setSeconds, setHours, setMinutes, addDays} from 'date-fns';
+import {generateQcmForBilan} from '../src/controllers/lib/qcm/generate-qcm-for-bilan.js'
 //PRISMA CLIENT
 const connectionString = `${process.env.DATABASE_URL}`
 
@@ -134,8 +134,10 @@ function pickSkillValue(){
 
 //by default we set the fixed day time to 14:00
 function generateSeanceDates(count : number, weeksBetween : number){
+    const now = new Date();
+    const randDate = addDays(now, Math.floor(Math.random()*30));
     return Array.from({length : count}, (_,i) => {
-        const d = addWeeks(new Date(), (i+1) * weeksBetween);
+        const d = addWeeks(randDate, (i+1) * weeksBetween);
         return setMilliseconds(setSeconds(setMinutes(setHours(d, 14), 0), 0), 0)
     })
 }
@@ -216,7 +218,8 @@ function printSeedResult(label : string, seedResult : SeedResult){
 //SEED FUNCTIONS
 async function seedBilans(contracts : Contracts){
     const result = emptySeedResult();
-    const dates = generateSeanceDates(CONFIG.bilans.bilansPerStudent, CONFIG.bilans.weeksBetween);
+    let qcmsCreated = 0;
+    let qcmsSkipped = 0;
 
     for(const contract of contracts){
         if(!contract.animatorId || !contract.scolarYearId || !contract.class) continue;
@@ -231,8 +234,8 @@ async function seedBilans(contracts : Contracts){
         }
         
         
+        const dates = generateSeanceDates(CONFIG.bilans.bilansPerStudent, CONFIG.bilans.weeksBetween);
         console.log(`⚠ ${cls.label} : ${eligibleStudents.length} students - ${dates.length} seances`);
-        
         for(const date of dates){
             try{
                 const {gte, lt} = dayRange(date);
@@ -282,10 +285,20 @@ async function seedBilans(contracts : Contracts){
                     }
                 })
                 
-                const {count} = await prisma.bilan.createMany({data : bilansData, skipDuplicates : true});
+                const bilans = await prisma.bilan.createManyAndReturn({data : bilansData, skipDuplicates : true,});
                 
-                result.created += count;
-                result.skipped += eligibleStudents.length - count;
+                result.created += bilans.length;
+                result.skipped += eligibleStudents.length - bilans.length;
+
+                const presentBilans = bilans.filter(bilan => bilan.presence);
+
+                for (let i = 0; i < presentBilans.length; i++) {
+                    const bilan = presentBilans[i]!;
+                    const qcm = await generateQcmForBilan(bilan.id, bilan.studentId, bilan.lessonId!);
+                    if(qcm) qcmsCreated++;
+                    else qcmsSkipped++;
+                }
+
             }catch(err){
                 result.errors.push(`${cls.label}  | ${date.toDateString()} : ${String(err)}`)
             }
