@@ -11,7 +11,6 @@ export async function trackStudentVisit(studentId: number): Promise<{
     numVisits: number;
 } | null> {
   const now = new Date('2026-09-16T00:00:00.000Z')
-  console.log('now : ', now);
 
   const scolarYear = await prisma.scolarYear.findFirst({
     where: {
@@ -43,7 +42,6 @@ export async function trackStudentVisit(studentId: number): Promise<{
     },
   })
 
-  console.log('visit : ',visit)
   return visit;
 }
 
@@ -57,9 +55,7 @@ export async function studentVisitHandler(
 
     // Don't await in the response chain — tracking is a side effect.
     // If it fails (e.g. DB hiccup), log it but don't surface an error to the student.
-    trackStudentVisit(studentId).then((visit) => {
-      console.log('visit updated', visit)
-    }).catch(err =>
+    trackStudentVisit(studentId).catch(err =>
       console.error(`[trackStudentVisit] studentId=${studentId}`, err)
     )
 

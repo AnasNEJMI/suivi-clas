@@ -1,8 +1,6 @@
 // ─────────────────────────────────────────────
 // ANNÉE SCOLAIRE
 
-import { scolarYears } from "./seed.data.js";
-
 // ─────────────────────────────────────────────
 export const SCOLAR_YEARS = [
   {label : "2025-2026", startDate: new Date('2025-09-01T00:00:00.000Z'),endDate: new Date('2026-07-16T00:00:00.000Z'),},

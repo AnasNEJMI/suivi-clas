@@ -23,9 +23,6 @@ export async function requireAuthHandler(
     try{
         const sessionId = req.cookies[SESSION_CONFIG.COOKIE_NAME];
 
-        console.log("sessionId valid ? ", !sessionId)
-        console.log('sessionId', sessionId)
-
         if (!sessionId)                         throw ApiError.unauthorized('Aucune session trouvée.');
         if (typeof sessionId !== 'string')      throw ApiError.unauthorized('Format de session invalide.');
         if (sessionId.trim().length === 0)      throw ApiError.unauthorized('Session vide.');
@@ -34,8 +31,7 @@ export async function requireAuthHandler(
         //get the session from the db
         const session = await getSession(sessionId);
         if (!session) throw ApiError.unauthorized('Session invalide ou expirée.');
-        console.log('session : ', session);
-
+        
         if(session.student){
             const { student } = session;
 

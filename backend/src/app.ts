@@ -14,9 +14,6 @@ import jsonSyntaxHandler from "./middleware/jsonSyntaxHandler.middleware.js";
 import routeNotFoundHandler from "./middleware/routeNotFound.middleware.js";
 import { helmetConfig } from "./configs/helmet.config.js";
 
-
-console.log('FRONTEND_ORIGIN', FRONTEND_ORIGIN)
-
 const app = express();
 
 app.use(helmetConfig)

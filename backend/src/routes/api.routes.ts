@@ -1,14 +1,11 @@
 import { Router } from 'express';
-import { createUserHandler } from '../controllers/createUser.controller.js';
 import {validateBody } from '../middleware/validate.middleware.js';
-import { createUserSchema, loginSchema } from '../schemas/auth.schema.js';
+import { loginSchema } from '../schemas/auth.schema.js';
 import { asyncHandler } from '../middleware/asyncHandler.middleware.js';
 import { loginHandler } from '../controllers/login.controller.js';
 import { requireAuthHandler } from '../middleware/auth.middleware.js';
 import { profileHandler } from '../controllers/profile.controller.js';
 import { logoutHandler } from '../controllers/logout.controller.js';
-import { requireAdminHandler } from '../middleware/admin.middleware.js';
-import { getAdminBaseHandler } from '../controllers/getAdminBase.controller.js';
 import { studentDataHandler } from '../controllers/student.data.controller.js';
 import { associationDataHandler } from '../controllers/association.data.controller.js';
 import { animatorProfileHandler } from '../controllers/animator/profile.controller.js';
@@ -35,13 +32,11 @@ import { associationAnimatorStatsHandler } from '../controllers/association-memb
 
 const router = Router();
 
-router.post('/users', validateBody(createUserSchema), asyncHandler(createUserHandler));
 router.post('/auth/login',validateBody(loginSchema), loginHandler);
 router.post('/auth/logout', requireAuthHandler, asyncHandler(logoutHandler));
 router.get('/auth/profile', requireAuthHandler, asyncHandler(profileHandler));
 router.get('/student/data', requireAuthHandler, asyncHandler(studentDataHandler));
 router.get('/association/data', requireAuthHandler, asyncHandler(associationDataHandler));
-router.get('/admin/base', requireAuthHandler, requireAdminHandler, asyncHandler(getAdminBaseHandler))
 
 router.get('/student/bilans', requireAuthHandler, asyncHandler(studentBilansHandler));
 router.get('/student/skills-evals', requireAuthHandler, asyncHandler(studentSkillsEvalsHandler));
@@ -50,25 +45,19 @@ router.get('/student/visit',requireAuthHandler,asyncHandler(studentVisitHandler)
 
 router.get('/animator/me', requireAuthHandler, asyncHandler(animatorProfileHandler));
 router.get('/animator/base-data', requireAuthHandler, asyncHandler(animatorBaseDataHandler));
-
 router.get('/animator/seance', requireAuthHandler, asyncHandler(animatorFetchSeanceHandler));
-router.delete('/animator/seance', requireAuthHandler, asyncHandler(animatorDeleteSeanceHandler));
+router.get('/animator/lesson-evals', requireAuthHandler, asyncHandler(animatorFetchLessonEvalsHandler));
+router.get('/animator/skill-eval', requireAuthHandler, asyncHandler(animatorFetchSkillEvalHandler));
+
+router.post('/animator/lesson-eval', validateBody(lessonEvalSchema), requireAuthHandler, asyncHandler(animatorSubmitLessonEvalHandler));
+router.post('/animator/skill-eval', validateBody(skillEvalSchema), requireAuthHandler, asyncHandler(animatorSubmitSkillEvalHandler));
+router.post('/animator/bilan',validateBody(bilanSchema), requireAuthHandler, asyncHandler(animatorSubmitBilanHandler));
 router.post('/animator/seance',validateBody(seanceSchema), requireAuthHandler, asyncHandler(animatorSubmitSeanceHandler));
 
-router.get('/animator/lesson-evals', requireAuthHandler, asyncHandler(animatorFetchLessonEvalsHandler));
-router.post('/animator/lesson-eval', validateBody(lessonEvalSchema), requireAuthHandler, asyncHandler(animatorSubmitLessonEvalHandler));
-
-router.get('/animator/skill-eval', requireAuthHandler, asyncHandler(animatorFetchSkillEvalHandler));
-router.post('/animator/skill-eval', validateBody(skillEvalSchema), requireAuthHandler, asyncHandler(animatorSubmitSkillEvalHandler));
-
-router.post('/animator/bilan',validateBody(bilanSchema), requireAuthHandler, asyncHandler(animatorSubmitBilanHandler));
-
+router.delete('/animator/seance', requireAuthHandler, asyncHandler(animatorDeleteSeanceHandler));
 
 router.get('/association-member/presence-stats', requireAuthHandler, asyncHandler(associationMemberFetchPresenceStatsHandler))
 router.get('/association-member/visit-stats', requireAuthHandler, asyncHandler(associationVisitStatsHandler))
 router.get('/association-member/animator-stats', requireAuthHandler, asyncHandler(associationAnimatorStatsHandler))
-// router.post('/admin/add-bilan', validateBody(addBilanSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addBilanHandler))
-// router.post('/admin/add-skill', validateBody(addSkillSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addSkillHandler))
-// router.post('/admin/add-doc', validateBody(addDocSchema), requireAuthHandler, requireAdminHandler, asyncHandler(addDocHandler))
 
 export default router

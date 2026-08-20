@@ -8,7 +8,6 @@ type AsyncRequestHandler = (
 
 export function asyncHandler(fn: AsyncRequestHandler) {
   return (req: Request, res: Response, next: NextFunction) => {
-    console.log('ps ps')
     Promise.resolve(fn(req, res, next)).catch(next);
   };
 }

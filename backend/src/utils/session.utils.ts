@@ -123,18 +123,12 @@ export async function getSession(sessionId : string){
             },
         },
     });
-
-    console.log("retrieved session is : ", session);
     
     if (!session){
         return null;
     }
     
     const now = new Date();
-    
-    console.log("now : ", now);
-    console.log("retrieved session expiresAt : ", session?.expiresAt);
-    console.log("retrieved session is : ", session);
 
     if(session.expiresAt < now){
         await prisma.session.delete({ where: { id: sessionId } }).catch(() => {});
@@ -155,19 +149,4 @@ export async function getSession(sessionId : string){
 
 export async function deleteSession(sessionId: string) {
     await prisma.session.delete({ where: { id: sessionId } }).catch(() => {});
-}
-
-export async function deleteAllSessions(userType: UserType, userId: number) {
-    const whereClause = {
-        student:           { studentId:           userId },
-        animator:          { animatorId:          userId },
-        associationMember: { associationMemberId: userId },
-    }[userType];
-
-    if (!whereClause) {
-        console.error(`[deleteAllSessions] userType inconnu : ${userType}`);
-        return;
-    }
-
-    await prisma.session.deleteMany({ where: whereClause }).catch(() => {});
 }
