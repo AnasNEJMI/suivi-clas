@@ -1,9 +1,9 @@
-import type { BilanEntry } from '@/api/student/apiCalls'
+import type { BilanEntry, QcmEntry } from '@/api/student/apiCalls'
 import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import QcmOverlay from './qcm-overlay'
 
-const BilanPresentCard = ({bilan} : {bilan : BilanEntry}) => {
+const BilanPresentCard = ({bilan, onQcmSubmit} : {bilan : BilanEntry, onQcmSubmit : (qcm: QcmEntry) => void}) => {
   return (
     <>
         <Card className={cn('bg-white mt-4 border-lime-500 border-2 shadow-card')}>
@@ -26,7 +26,7 @@ const BilanPresentCard = ({bilan} : {bilan : BilanEntry}) => {
                     </div>
                 </div>
                 
-                <QcmOverlay qcm={bilan.qcm} />
+                <QcmOverlay qcm={bilan.qcm} onQcmSubmit = {onQcmSubmit}/>
             </CardContent>
         </Card>
     </>

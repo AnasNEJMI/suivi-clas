@@ -1,5 +1,7 @@
-import type { Bilan, LessonEval, QcmWithQuestions} from "../api.types";
+import { ApiError } from "@/lib/errors/apiError.class";
+import type { Bilan, LessonEval} from "../api.types";
 import { apiRequest } from "../client";
+import { ErrorCodes, ErrorStatusMap } from "@/lib/errors/errors.constants";
 
 export const AnswerChoice = {
   a: 'a',
@@ -33,10 +35,14 @@ export type QcmEntry = {
     id : number,
     completed : boolean,
     score : number | null,
-    qcmQuestions : QcmQuestionsEntry[]
+    studentId : number,
+    lesson : {id : number, label : string} | null,
+    qcmQuestions : QcmQuestionEntry[],
+    createdAt : Date,
+    updatedAt : Date,
 }
 
-export type QcmQuestionsEntry = {
+export type QcmQuestionEntry = {
     id : number,
     correct : boolean,
     selectedChoice : AnswerChoice | null,
@@ -142,20 +148,42 @@ const studentEndpoints = {
     me : 'me',
     bilans : 'bilans',
     skillsEvals : 'skills-evals',
-    qcmsWithQuestions : 'qcmWithQuestions',
-    lessonEvals : 'lesson-evals'
+    lessonEvals : 'lesson-evals',
+    qcm : 'qcm'
+}
+
+export type QcmSubmitResponse = {
+    id : number,
+    completed : boolean,
+    score : number | null,
 }
 
 export function fetchStudentData<T>(studentEndpoint : string){
     return () => apiRequest<T>(`/api/student/${studentEndpoint}`);
 }
 
+export async function submitData<T, K>(payload : T, endpoint : string) : Promise<K | null>{
+    try{
+        const response =  await apiRequest<{data : K}>(`/api/student/${endpoint}`,{
+            method : 'POST',
+            body : JSON.stringify(payload)
+        })
+        return response.data;
+    }catch(error){
+        if(error instanceof ApiError
+        && error.statusCode === ErrorStatusMap[ErrorCodes.UNAUTHORIZED]){
+            return null;
+        }
+
+        throw error;
+    }
+}
 
 export const studentApiCalls = {
     fetchProfile : fetchStudentData<Bilan>(studentEndpoints.me),
     fetchBilans : fetchStudentData<BilansResponse>(studentEndpoints.bilans),
     fetchSkillEvals : fetchStudentData<SkillsEvalsResponse>(studentEndpoints.skillsEvals),
     fetchLessonEvals : fetchStudentData<LessonEvalsResponse>(studentEndpoints.lessonEvals),
-    fetchQcms : fetchStudentData<QcmWithQuestions[]>(studentEndpoints.qcmsWithQuestions),
     trackVisit : fetchStudentData<VisitTrackingResponse | null>('visit'),
+    submitQcm : (payload : QcmEntry) => submitData<QcmEntry, QcmEntry | null>(payload, studentEndpoints.qcm)
 }

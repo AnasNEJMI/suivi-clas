@@ -8,7 +8,7 @@ interface BilanDropdownProps {
     className? : string,
     bilans : BilanEntry[],
     selectedValue : string,
-    onValueChange : React.Dispatch<React.SetStateAction<BilanEntry | null>>
+    onValueChange : React.Dispatch<React.SetStateAction<number | null>>
 }
 const BilanDropdown = ({className, bilans, selectedValue, onValueChange} : BilanDropdownProps) => {
     
@@ -17,7 +17,7 @@ const BilanDropdown = ({className, bilans, selectedValue, onValueChange} : Bilan
         if(!bilan){
         throw Error(`Couldn't find bilan for the date : ${value}`);
         }
-        onValueChange(bilan);
+        onValueChange(bilan.id);
     }
     return (
     <Select value={selectedValue} onValueChange={(value) => updateValue(value)}>

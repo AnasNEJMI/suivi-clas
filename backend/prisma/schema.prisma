@@ -386,6 +386,7 @@ model Qcm {
   completed Boolean  @default(false)
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
   qcmQuestions QcmQuestion[]
 

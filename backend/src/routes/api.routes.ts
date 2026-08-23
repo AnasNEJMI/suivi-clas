@@ -29,6 +29,8 @@ import { associationMemberFetchPresenceStatsHandler } from '../controllers/assoc
 import { studentVisitHandler } from '../controllers/student/visit.controller.js';
 import { associationVisitStatsHandler } from '../controllers/association-member/fetchVisitStats.controller.js';
 import { associationAnimatorStatsHandler } from '../controllers/association-member/fetchAnimatorStats.js';
+import { qcmSchema } from '../schemas/qcm.schema.js';
+import { submitStudentQcmHandler } from '../controllers/student/submitQcm.controller.js';
 
 const router = Router();
 
@@ -42,6 +44,7 @@ router.get('/student/bilans', requireAuthHandler, asyncHandler(studentBilansHand
 router.get('/student/skills-evals', requireAuthHandler, asyncHandler(studentSkillsEvalsHandler));
 router.get('/student/lesson-evals', requireAuthHandler, asyncHandler(studentLessonEvalsHandler));
 router.get('/student/visit',requireAuthHandler,asyncHandler(studentVisitHandler))
+router.post('/student/qcm', validateBody(qcmSchema),requireAuthHandler, asyncHandler(submitStudentQcmHandler));
 
 router.get('/animator/me', requireAuthHandler, asyncHandler(animatorProfileHandler));
 router.get('/animator/base-data', requireAuthHandler, asyncHandler(animatorBaseDataHandler));

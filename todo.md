@@ -6,6 +6,11 @@
 
 ---
 
+## UPDATED TODOs
+1-1 fix questionnaire height on small screens (make buttons absolutely positionned and make the rest of the page scrollable to allow for no explanation clipping)
+
+
+
 ## Table of Contents
 
 - [1-1 Student Page — Lesson Evaluations Card](#1-1-student-page--lesson-evaluations-card)

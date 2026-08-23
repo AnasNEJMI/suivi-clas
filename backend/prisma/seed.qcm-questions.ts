@@ -39,7 +39,7 @@ if (groq) console.log('✓ Groq setup success');
 if (mistral) console.log('✓ Mistral setup success');
 
 const CONFIG = {
-  maxQuestionsPerDifficulty: 30,
+  maxQuestionsPerDifficulty: 60,
   generatedQuestionsPerDifficulty: 20,
   delayBetweenCalls: 15000, // 6.5s delay is optimal for Gemini Free Tier (~9.2 RPM)
   maxRetries: 3,
@@ -458,7 +458,7 @@ async function generateQCM(prompt: string) {
   if (!gemini) throw new Error('GEMINI_API_KEY is not defined');
 
   const interaction = await gemini.interactions.create({
-    model: 'gemini-3.1-flash-lite', // Free tier supported model
+    model: 'gemini-3.5-flash-lite', // Free tier supported model
     input: prompt,
   });
 

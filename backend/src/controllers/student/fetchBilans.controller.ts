@@ -9,7 +9,10 @@ type QcmEntry = {
     id : number,
     completed : boolean,
     score : number | null,
-    qcmQuestions : QcmQuestionsEntry[]
+    lesson : {id : number, label : string} | null,
+    qcmQuestions : QcmQuestionsEntry[],
+    createdAt : Date,
+    updatedAt : Date,
 }
 
 type QcmQuestionsEntry = {
@@ -104,6 +107,10 @@ export async function studentBilansHandler(
                         id : true,
                         score : true,
                         completed : true,
+                        studentId : true,
+                        createdAt : true,
+                        updatedAt : true,
+                        lesson : {select : {id : true, label : true}},
                         qcmQuestions : {
                             select : {
                                 id : true,

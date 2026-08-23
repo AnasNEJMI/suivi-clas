@@ -24,8 +24,10 @@ const cardStyle : Record<Subject, string> = {
   'Sciences de la Vie et de la Terre' : 'bg-linear-330 from-25% to-75% from-green-600 to-lime-600 text-white',
 }
 
+const DISPLAYED_CARDS_COUNT = 10;
+
 const BilansHistoryCard = ({bilans} : BilansResponse) => {
-    const eligibleBilans = bilans.filter(b => b.presence === true && b.lesson);
+    const eligibleBilans = bilans.filter(b => b.presence === true && b.lesson).slice(0, DISPLAYED_CARDS_COUNT);
     console.log('eligibleBilans', eligibleBilans)
     if(eligibleBilans.length === 0){
       return (

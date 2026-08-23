@@ -12,7 +12,8 @@ export function validate(schema : z.ZodType, target : ValidationTarget = 'body')
     ) => {
         try{
             const data = req[target];
-
+            
+            console.log('qcm data : ', data);
             const result = schema.safeParse(data);
             if(!result.success){
                 throw result.error;

@@ -11,6 +11,7 @@ export function errorHandler(
     next : express.NextFunction,
 ){
 
+    console.error('err ', err)
     //handle ApiError
     if(err instanceof ApiError){
         return sendError(
