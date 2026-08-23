@@ -65,7 +65,7 @@ const PresenceStatsTable = ({selectedScolarYear} : {selectedScolarYear : Presenc
                                             <TableCell className="font-medium text-center">{absenceLabel}</TableCell>
                                         </>
                                     }
-                                    <TableCell className={cn("text-right capitalize font-bold", pct >= IDEAL_PRESENCE_PCT ? 'text-lime-500' : 'text-rose-500')}>{pctLabel}</TableCell>
+                                    <TableCell className={cn("text-right capitalize font-bold", pct >= IDEAL_PRESENCE_PCT ? 'text-lime-600' : 'text-rose-500')}>{pctLabel}</TableCell>
                                 </TableRow>
                             )}
                         )

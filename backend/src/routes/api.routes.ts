@@ -28,9 +28,10 @@ import { studentLessonEvalsHandler } from '../controllers/student/fetchLessonEva
 import { associationMemberFetchPresenceStatsHandler } from '../controllers/association-member/fetchPresenceStats.controller.js';
 import { studentVisitHandler } from '../controllers/student/visit.controller.js';
 import { associationVisitStatsHandler } from '../controllers/association-member/fetchVisitStats.controller.js';
-import { associationAnimatorStatsHandler } from '../controllers/association-member/fetchAnimatorStats.js';
+import { associationAnimatorStatsHandler } from '../controllers/association-member/fetchAnimatorStats.controller.js';
 import { qcmSchema } from '../schemas/qcm.schema.js';
 import { submitStudentQcmHandler } from '../controllers/student/submitQcm.controller.js';
+import { associationQcmStatsHandler } from '../controllers/association-member/fetchQcmStats.controller.js';
 
 const router = Router();
 
@@ -59,8 +60,9 @@ router.post('/animator/seance',validateBody(seanceSchema), requireAuthHandler, a
 
 router.delete('/animator/seance', requireAuthHandler, asyncHandler(animatorDeleteSeanceHandler));
 
-router.get('/association-member/presence-stats', requireAuthHandler, asyncHandler(associationMemberFetchPresenceStatsHandler))
-router.get('/association-member/visit-stats', requireAuthHandler, asyncHandler(associationVisitStatsHandler))
-router.get('/association-member/animator-stats', requireAuthHandler, asyncHandler(associationAnimatorStatsHandler))
+router.get('/association/stats/presence', requireAuthHandler, asyncHandler(associationMemberFetchPresenceStatsHandler))
+router.get('/association/stats/visits', requireAuthHandler, asyncHandler(associationVisitStatsHandler))
+router.get('/association/stats/animators', requireAuthHandler, asyncHandler(associationAnimatorStatsHandler))
+router.get('/association/stats/qcms', requireAuthHandler, asyncHandler(associationQcmStatsHandler))
 
 export default router

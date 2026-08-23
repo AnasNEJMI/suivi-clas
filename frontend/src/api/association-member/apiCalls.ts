@@ -1,12 +1,13 @@
 import { fetchPayloadlessData } from "../helper-functions";
 
-const ASSOCIATION_MEMBER_API_ENDPOINT = '/api/association-member/';
+const ASSOCIATION_API_STATS_ENDPOINT = '/api/association/stats/';
 
 export const associationMemberEndpoints = {
     me : 'me',
-    presenceStats : 'presence-stats',
-    visitStats : 'visit-stats',
-    animatorStats : 'animator-stats',
+    presenceStats : 'presence',
+    visitStats : 'visits',
+    animatorStats : 'animators',
+    qcmStats : 'qcms',
 }
 
 export type PresenceStatsResponse = {
@@ -43,8 +44,14 @@ export type AnimatorStats = { animator : {id: number; firstName: string;  lastNa
 export type AnimatorClassStats = { class : {id : number, label : string}, seances : SeanceStats[], seancesCount : number; bilansSubmitted : number}
 export type SeanceStats = {id : number, duration : string, date : Date}
 
+export type QcmStatsResponse = { qcmStatsPerScolarYear: QcmStatsPerScolarYear[] }
+export type QcmStatsPerScolarYear = { scolarYear: { id: number; label: string }; classes: ClassQcmStats[]}
+export type ClassQcmStats = { class : {id: number; label: string}, students: StudentQcmStats[]};
+export type StudentQcmStats = {id: number; firstName: string;  lastName: string; gender : 'm' | 'f', qcmCompletedCount : number, totalQcms : number, qcmCompletedTotalPoints : number};
+
 export const associationMemberApiCalls = {
-    fetchPresenceStats : fetchPayloadlessData<PresenceStatsResponse>(associationMemberEndpoints.presenceStats, ASSOCIATION_MEMBER_API_ENDPOINT),
-    fetchVisitStats : fetchPayloadlessData<VisitStatsResponse>(associationMemberEndpoints.visitStats, ASSOCIATION_MEMBER_API_ENDPOINT),
-    fetchAnimatorStats : fetchPayloadlessData<AnimatorStatsResponse>(associationMemberEndpoints.animatorStats, ASSOCIATION_MEMBER_API_ENDPOINT),
+    fetchPresenceStats : fetchPayloadlessData<PresenceStatsResponse>(associationMemberEndpoints.presenceStats, ASSOCIATION_API_STATS_ENDPOINT),
+    fetchVisitStats : fetchPayloadlessData<VisitStatsResponse>(associationMemberEndpoints.visitStats, ASSOCIATION_API_STATS_ENDPOINT),
+    fetchAnimatorStats : fetchPayloadlessData<AnimatorStatsResponse>(associationMemberEndpoints.animatorStats, ASSOCIATION_API_STATS_ENDPOINT),
+    fetchQcmStats : fetchPayloadlessData<QcmStatsResponse>(associationMemberEndpoints.qcmStats, ASSOCIATION_API_STATS_ENDPOINT),
 }

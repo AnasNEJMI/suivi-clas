@@ -10,6 +10,7 @@ import { Suspense } from 'react';
 import PresenceStatsSection from './presence-stats/presence-section';
 import VisitStatsSection from './visit-stats/visit-section';
 import AnimatorSection from './animator-stats/animator-section';
+import QcmStatsSection from './qcm-stats/qcm-stats-section';
 
 
 const AssociationPage = () => {
@@ -30,7 +31,12 @@ const AssociationPage = () => {
                 <VisitStatsSection/>
             </Suspense>
         </ErrorBoundary>
-        <ErrorBoundary fallback = {<SectionError desc = 'des bilans de consultation'/>}>
+        <ErrorBoundary fallback = {<SectionError desc = 'des bilans de qcms'/>}>
+            <Suspense fallback = {<Skeleton/>}>
+                <QcmStatsSection/>
+            </Suspense>
+        </ErrorBoundary>
+        <ErrorBoundary fallback = {<SectionError desc = 'des données des animateur(trice)s participants'/>}>
             <Suspense fallback = {<Skeleton/>}>
                 <AnimatorSection/>
             </Suspense>
