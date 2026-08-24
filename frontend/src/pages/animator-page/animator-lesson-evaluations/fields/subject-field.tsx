@@ -13,7 +13,7 @@ export default function SubjectField({ availableSubjects }: { availableSubjects:
             name='subjectId'
             control={control}
             render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
+                <Field data-invalid={fieldState.invalid} className='gap-2'>
                     <FieldLabel>Matière</FieldLabel>
                     <ToggleGroup
                         type='single'
@@ -30,9 +30,9 @@ export default function SubjectField({ availableSubjects }: { availableSubjects:
                             <ToggleGroupItem
                                 key={subject.id}
                                 value={subject.id.toString()}
-                                className='h-10 rounded-xl'
+                                className='h-10 rounded-md'
                             >
-                                <span className='text-sm uppercase'>{subject.label}</span>
+                                <span className='text-sm capitalize'>{subject.label}</span>
                             </ToggleGroupItem>
                         ))}
                     </ToggleGroup>

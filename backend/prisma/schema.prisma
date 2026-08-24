@@ -177,7 +177,10 @@ model Seance {
 
   scolarYearId Int?
   scolarYear   ScolarYear? @relation(fields: [scolarYearId], references: [id], onDelete: SetNull)
-
+  
+  seanceDurationId Int
+  seanceDuration   SeanceDuration @relation(fields: [seanceDurationId], references: [id], onDelete: SetNull)
+  
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 
@@ -186,6 +189,14 @@ model Seance {
   @@unique([classId, date])
   @@index([animatorId])
   @@index([scolarYearId])
+}
+
+model SeanceDuration{
+  id          Int         @id @default(autoincrement())
+  label       String  @unique
+  durationMin Int @unique
+
+  seances Seance[]
 }
 
 model ScolarYear {

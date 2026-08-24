@@ -6,6 +6,12 @@ import { ScolarYear } from "../../db/seed.users.data.js";
 import { number } from "zod";
 import { PrismaClientKnownRequestError } from "../../generated/prisma/internal/prismaNamespace.js";
 
+export type SeanceDurationEntry = {
+    id : number,
+    label : string,
+    durationMin : number
+}
+
 export type LessonEntry = {
     id:      number;
     label:   string;
@@ -78,6 +84,7 @@ export type ScolarYearEntry = {
 export type AnimatorBaseDataResponse = {
     scolarYears: ScolarYearEntry[];
     lessonsByLevel : LessonsByLevelEntry[],
+    seanceDurations : SeanceDurationEntry[],
 };
 
 export async function animatorBaseDataHandler(
@@ -89,76 +96,81 @@ export async function animatorBaseDataHandler(
         const user = req.user!;
         const animatorId = user.id;
 
-        const contracts = await prisma.animatorContract.findMany({
-            where : {animatorId},
-            orderBy : { scolarYear : {label : 'desc'}},
-            select : {
-                id : true,
-                scolarYear : {select : {id : true, label : true}},
-                class : {
-                    select : {
-                        id : true, label : true, 
-                        association : {select : {id : true, label : true}},
-                        students : {
-                            orderBy : [
-                                {lastName : 'asc'},
-                                {firstName : 'asc'},
-                            ],
-                            select : {
-                                id : true,
-                                username:  true,
-                                firstName: true,
-                                lastName:  true,
-                                gender:    true,
-                                level : {
-                                    select : {
-                                        id : true,
-                                        label : true,
-                                        order : true,
-                                        lessons : {
-                                            orderBy : {label : 'asc'},
-                                            select : {
-                                                id : true,
-                                                label : true,
-                                                subject : {
-                                                    select : {id : true, label : true}
+        const [contracts, seanceDurations] = await prisma.$transaction(
+            [
+            prisma.animatorContract.findMany({
+                where : {animatorId},
+                orderBy : { scolarYear : {label : 'desc'}},
+                select : {
+                    id : true,
+                    scolarYear : {select : {id : true, label : true}},
+                    class : {
+                        select : {
+                            id : true, label : true, 
+                            association : {select : {id : true, label : true}},
+                            students : {
+                                orderBy : [
+                                    {lastName : 'asc'},
+                                    {firstName : 'asc'},
+                                ],
+                                select : {
+                                    id : true,
+                                    username:  true,
+                                    firstName: true,
+                                    lastName:  true,
+                                    gender:    true,
+                                    level : {
+                                        select : {
+                                            id : true,
+                                            label : true,
+                                            order : true,
+                                            lessons : {
+                                                orderBy : {label : 'asc'},
+                                                select : {
+                                                    id : true,
+                                                    label : true,
+                                                    subject : {
+                                                        select : {id : true, label : true}
+                                                    }
                                                 }
                                             }
+                                        },
+                                    },
+                                    bilans : {
+                                        orderBy : {seance : {date : 'desc'}},
+                                        select : {
+                                            id : true,
+                                            presence: true,
+                                            summary:  true,
+                                            seance : {select : {id : true, date : true,}},
+                                            lesson : {select : {id : true, label : true, subject : {select : {id : true, label : true}}}}
                                         }
                                     },
-                                },
-                                bilans : {
-                                    orderBy : {seance : {date : 'desc'}},
-                                    select : {
-                                        id : true,
-                                        presence: true,
-                                        summary:  true,
-                                        seance : {select : {id : true, date : true,}},
-                                        lesson : {select : {id : true, label : true, subject : {select : {id : true, label : true}}}}
-                                    }
-                                },
-                                skills : {
-                                    select : {
-                                        animatorId : true,
-                                        ponctuality:  true,
-                                        preparation:  true,
-                                        autonomy:     true,
-                                        organisation: true,
-                                        regularity:   true,
-                                        discipline:   true,
-                                        respect:      true,
-                                        positive:     true,
-                                        negative:     true,
-                                        improvements: true,
-                                        updatedAt:    true,
+                                    skills : {
+                                        select : {
+                                            animatorId : true,
+                                            ponctuality:  true,
+                                            preparation:  true,
+                                            autonomy:     true,
+                                            organisation: true,
+                                            regularity:   true,
+                                            discipline:   true,
+                                            respect:      true,
+                                            positive:     true,
+                                            negative:     true,
+                                            improvements: true,
+                                            updatedAt:    true,
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                },
-            }
-        });
+                    },
+                }
+            }),
+            prisma.seanceDuration.findMany()]
+        )
+
 
         const scolarYearMap = new Map<number, ScolarYearEntry>();
         const levelIdSet = new Set<number>();
@@ -288,7 +300,7 @@ export async function animatorBaseDataHandler(
 
         const scolarYears = Array.from(scolarYearMap.values());
 
-        return sendSuccess<AnimatorBaseDataResponse>(res, {scolarYears, lessonsByLevel})
+        return sendSuccess<AnimatorBaseDataResponse>(res, {scolarYears, lessonsByLevel, seanceDurations})
 
     }catch(error){
         if (error instanceof PrismaClientKnownRequestError) {

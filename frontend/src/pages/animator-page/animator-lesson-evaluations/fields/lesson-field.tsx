@@ -39,7 +39,7 @@ export default function LessonField({lessonEvals, availableSubjects }: {lessonEv
                                 setValue('evaluation', lessonEval?.evaluation ?? "notAcquired")
                             }}
                         >
-                            <SelectTrigger className='w-full md:max-w-xs text-base h-10!'>
+                            <SelectTrigger className='w-full max-w-48 md:max-w-72 truncate text-base h-10!'>
                                 <SelectValue placeholder='Choisir une leçon' />
                             </SelectTrigger>
                             <SelectContent>

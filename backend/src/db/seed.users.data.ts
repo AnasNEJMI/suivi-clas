@@ -43,6 +43,45 @@ export const SUBJECTS = [
 
 export type Subject = (typeof SUBJECTS)[number];
 
+
+// ─────────────────────────────────────────────
+// SEANCE DURATION
+// ─────────────────────────────────────────────
+
+export const SEANCE_DURATION_LABELS = [
+  "1 heure",
+  "1 heure et 15 min",
+  "1 heure et 30 min",
+  "1 heure et 45 min",
+  "2 heures",
+  "2 heures et 15 min",
+  "2 heures et 30 min",
+  "2 heures et 45 min",
+  "3 heures",
+  "3 heures et 15 min",
+  "3 heures et 30 min",
+  "3 heures et 45 min",
+  "4 heures",
+] as const;
+
+export type SeanceDurationLabel = typeof SEANCE_DURATION_LABELS[number];
+
+export const SEANCE_DURATIONS : Record <SeanceDurationLabel, number> = {
+  '1 heure' : 60,
+  '1 heure et 15 min' : 75,
+  '1 heure et 30 min' : 90,
+  '1 heure et 45 min' : 105,
+  '2 heures' : 120,
+  '2 heures et 15 min' : 135,
+  '2 heures et 30 min' : 150,
+  '2 heures et 45 min' : 165,
+  '3 heures' : 180,
+  '3 heures et 15 min' : 195,
+  '3 heures et 30 min' : 210,
+  '3 heures et 45 min' : 225,
+  '4 heures' : 240,
+}
+
 // ─────────────────────────────────────────────
 // INTERFACES
 // ─────────────────────────────────────────────

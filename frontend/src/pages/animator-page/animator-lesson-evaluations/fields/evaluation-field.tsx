@@ -23,8 +23,8 @@ export default function EvaluationField() {
                                 field.onChange(v)
                             }}
                         >
-                            <SelectTrigger className='w-full md:max-w-xs text-base h-10!'>
-                                <SelectValue placeholder='Choisir une leçon' />
+                            <SelectTrigger className='w-full max-w-48 md:max-w-72 text-base h-10!'>
+                                <SelectValue placeholder='Choisir le niveau de maîtrise' />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>

@@ -16,11 +16,10 @@ import AnimatorPage from './pages/animator-page/animator-page.tsx'
 import { AnimatorPageLoader } from './router/loaders/animator.loader.ts'
 import AnimatorBilansPage from './pages/animator-page/animator-bilans/page.tsx'
 import AnimatorSkillEvaluationPage from './pages/animator-page/animator-skill-evaluation/page.tsx'
-import AnimatorLessonDocuments from './pages/animator-page/animator-lesson-documents.tsx'
-import AnimatorStatistics from './pages/animator-page/animator-statisics.tsx'
 import { associationPageLoader } from './router/loaders/association-page-loader.ts'
 import AnimatorLessonEvaluationsPage from './pages/animator-page/animator-lesson-evaluations/page.tsx'
 import StudentPage from './pages/student-page/page.tsx'
+import AnimatorQcmPage from './pages/animator-page/animator-qcm-page/page.tsx'
 
 
 
@@ -60,8 +59,7 @@ const router = createBrowserRouter([
           {path : 'bilans', Component : AnimatorBilansPage},
           {path : 'evaluation-lecons', Component : AnimatorLessonEvaluationsPage},
           {path : 'evaluation-competences', Component : AnimatorSkillEvaluationPage},
-          {path : 'liens-documents', Component : AnimatorLessonDocuments},
-          {path : 'statistics', Component : AnimatorStatistics},
+          {path : 'qcms', Component : AnimatorQcmPage},
         ]
       },
       // {

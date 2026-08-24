@@ -3,7 +3,6 @@ import { PrismaClientKnownRequestError } from "../../generated/prisma/internal/p
 import { ApiError } from "../../classes/ApiError.class.js";
 import { prisma } from '../../db/prisma.js';
 import { sendSuccess } from '../../utils/response.utils.js';
-import z from 'zod';
 import { Gender } from '../../generated/prisma/enums.js';
 
 type SeanceInput = {
@@ -11,6 +10,7 @@ type SeanceInput = {
     animatorId : number,
     classId : number,
     date : Date,
+    seanceDurationId : number,
 }
 
 export type SeanceEntry = {
@@ -19,6 +19,7 @@ export type SeanceEntry = {
     animatorId : number,
     classId : number,
     scolarYearId : number,
+    seanceDuration : {label : string, durationMin : number};
     students : {
         id : number,
         firstName : string,
@@ -47,24 +48,27 @@ export async function animatorSubmitSeanceHandler(
     next : NextFunction
 ){
     try{
-
-        const {scolarYearId, animatorId, classId, date} = req.body as SeanceInput;
-        console.log('scolarYearId : ', scolarYearId,' | animatorId : ',animatorId, ' | classId : ', classId, ' | date : ',date);
+        const {scolarYearId, animatorId, classId, date, seanceDurationId} = req.body as SeanceInput;
 
         if(animatorId !== req.user!.id){
             throw ApiError.unauthorized('Accès non autorisé.');
         }
 
-        // La date arrivée en query param a perdu la précision horaire (souvent minuit UTC).
-        // Pour éviter les faux négatifs si la séance a été créée avec une heure précise,
-        // on cherche dans toute la journée avec gte/lt plutôt qu'une égalité stricte.
+        const seanceDuration = await prisma.seanceDuration.findFirst({
+            where : {id : seanceDurationId},
+        });
+
+        if(!seanceDuration){
+            throw ApiError.unauthorized('Données de séance invalides.');
+        }
 
         const seance = await prisma.seance.create({
             data : {
                 scolarYearId,
                 animatorId,
                 classId,                
-                date
+                date,
+                seanceDurationId : seanceDuration.id
             }
         });
 
@@ -112,6 +116,7 @@ export async function animatorSubmitSeanceHandler(
                     classId : seance.classId!,
                     date : seance.date,
                     scolarYearId : seance.scolarYearId!,
+                    seanceDuration : {label : seanceDuration.label, durationMin : seanceDuration.durationMin},
                     students : studentEntries
                 }
             }

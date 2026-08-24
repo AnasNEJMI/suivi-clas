@@ -8,7 +8,6 @@ import {
   ANIMATORS_SEED,
   LEVELS,
   LESSONS_SEED,
-  SKILL_SEED,
 } from "../src/db/seed.users.data.js";
 
 import {PrismaClient} from '../src/generated/prisma/client.js'

@@ -19,6 +19,7 @@ export type SeanceEntry = {
     animatorId : number,
     classId : number,
     scolarYearId : number,
+    seanceDuration : {label : string, durationMin : number},
     students : {
         id : number,
         firstName : string,
@@ -88,6 +89,7 @@ export async function animatorFetchSeanceHandler(
                 }
             },
             include : {
+                seanceDuration : {select : {label : true, durationMin : true}},
                 bilans : {
                     where: {
                         student: { classId },
@@ -159,6 +161,7 @@ export async function animatorFetchSeanceHandler(
                     classId : seance.classId!,
                     date : seance.date,
                     scolarYearId : seance.scolarYearId!,
+                    seanceDuration :{label : seance.seanceDuration.label, durationMin : seance.seanceDuration.durationMin},
                     students : studentEntries.map((studentEntry) => ({
                         id : studentEntry.id,
                         firstName : studentEntry.firstName,

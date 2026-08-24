@@ -4,6 +4,7 @@ import { ErrorCodes, ErrorStatusMap } from "@/lib/errors/errors.constants";
 import { type LessonEvalsEntry, type AnimatorBaseDataResponse, type Animator as AnimatorProfile, type SeanceBilanEntry, type SeanceEntry, type LessonEvalEntry, type SkillEvalEntry } from "./types";
 import {type LessonEval } from "../api.types";
 import { fetchPayloadlessData } from "../helper-functions";
+import type { QcmEntry } from "../student/apiCalls";
 
 const ANIMATOR_API_ENDPOINT = '/api/animator/';
 
@@ -17,6 +18,7 @@ const animatorEndpoints = {
     lessonEvals : 'lesson-evals',
     lessonEval : 'lesson-eval',
     skillEval : 'skill-eval',
+    qcms : 'qcms',
 }
 
 type AnimatorProfileResponse = {
@@ -28,6 +30,14 @@ type SeancePayload = {
     animatorId : number,
     classId : number,
     scolarYearId : number,
+}
+
+type SeanceSubmitPayload = {
+    date : Date,
+    animatorId : number,
+    classId : number,
+    scolarYearId : number,
+    seanceDurationId : number,
 }
 
 type StudentAnimatorPayload = {
@@ -157,7 +167,7 @@ export async function submitData<T, K>(payload : T, endpoint : string) : Promise
 export const animatorApiCalls = {
     fetchProfile : fetchAnimatorProfile,
     fetchBaseData : fetchPayloadlessData<AnimatorBaseDataResponse>(animatorEndpoints.baseData, ANIMATOR_API_ENDPOINT),
-    submitSeance : (payload : SeancePayload) =>  submitData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
+    submitSeance : (payload : SeanceSubmitPayload) =>  submitData<SeanceSubmitPayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
     deleteSeance : (payload : SeancePayload) =>  deleteData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
     fetchSeance : (payload : SeancePayload) => fetchData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
     submitBilan : (payload : BilanPayload) => submitData<BilanPayload, SeanceBilanEntry | null>(payload, animatorEndpoints.bilan),
@@ -166,5 +176,8 @@ export const animatorApiCalls = {
     submitLessonEval : (payload : LessonEvalPayload) => submitData<LessonEvalPayload, LessonEvalEntry | null>(payload, animatorEndpoints.lessonEval),
 
     fetchSkillEval : (payload : StudentAnimatorPayload) => fetchData<StudentAnimatorPayload, SkillEvalEntry | null>(payload, animatorEndpoints.skillEval),
-    submitSkillEval : (payload : SkillEvalPayload) => submitData<SkillEvalPayload, SkillEvalEntry | null>(payload, animatorEndpoints.skillEval)
+    submitSkillEval : (payload : SkillEvalPayload) => submitData<SkillEvalPayload, SkillEvalEntry | null>(payload, animatorEndpoints.skillEval),
+    
+    fetchQcms : (payload : StudentAnimatorPayload) => fetchData<StudentAnimatorPayload, QcmEntry[]>(payload, animatorEndpoints.qcms),
+    
 }

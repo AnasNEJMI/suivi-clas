@@ -77,8 +77,8 @@ const StudentBilanForm = ({
   return (
     <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit((data) => submitMutation.mutate(data))}>
-            <div className='flex flex-col gap-4'>
-                <PresenceField />
+            <div className='flex flex-col gap-2'>
+                <PresenceField student = {student}/>
                 <SubjectField availableSubjects={availableSubjects} />
                 <LessonField  availableSubjects={availableSubjects} />
                 <SummaryField />

@@ -30,7 +30,7 @@ const IncludeQcmField = () => {
                             <ToggleGroupItem
                                 key={p}
                                 value={p}
-                                className='flex-1 h-10 rounded-xl capitalize'
+                                className='flex-1 h-10 rounded-md capitalize'
                             >
                                 {p}
                             </ToggleGroupItem>

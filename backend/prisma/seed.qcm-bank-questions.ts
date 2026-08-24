@@ -1,266 +1,293 @@
-import "dotenv/config"
-import { PrismaPg } from '@prisma/adapter-pg';
-import {Difficulty, PrismaClient} from '../src/generated/prisma/client.js'
-import Groq from 'groq-sdk';
-import { Mistral } from '@mistralai/mistralai';
-
+import "dotenv/config";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "../src/generated/prisma/client";
 import { GoogleGenAI } from "@google/genai";
-import { Type, Schema } from '@google/genai';
+import { error } from "node:console";
+import { appendFileSync, writeFileSync } from "node:fs";
 
-// const gemini    = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null
-const gemini = process.env.GEMINI_API_KEY ? new GoogleGenAI({apiKey : process.env.GEMINI_API_KEY}) : null;
+// Prisma Client Setup
+const connectionString = `${process.env.DATABASE_URL}`;
+const adapter = new PrismaPg({ connectionString });
+const prisma = new PrismaClient({ adapter });
 
+const gemini = process.env.GEMINI_API_KEY
+  ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
+  : null;
 
-// TypeScript Interface for your output
-export interface QCMQuestion {
-  question: string;
-  answerA: string;
-  answerB: string;
-  answerC: string;
-  answerD: string;
-  correctAnswer: 'a' | 'b' | 'c' | 'd';
-  explanation: string;
-}
+if (gemini) console.log('✓ Gemini SDK setup success');
 
-export interface QCMResponse {
-  questions: QCMQuestion[];
-}
-
-// 1. Defined Schema for Gemini Structured Outputs
-const batchQcmSchema: Schema = {
-  type: Type.OBJECT,
-  properties: {
-    questions: {
-      type: Type.ARRAY,
-      items: {
-        type: Type.OBJECT,
-        properties: {
-          difficulty: { type: Type.STRING, enum: ['e', 'm', 'h'] },
-          question: { type: Type.STRING },
-          answerA: { type: Type.STRING },
-          answerB: { type: Type.STRING },
-          answerC: { type: Type.STRING },
-          answerD: { type: Type.STRING },
-          correctAnswer: { type: Type.STRING, enum: ['a', 'b', 'c', 'd'] },
-          explanation: { type: Type.STRING },
-        },
-        required: [
-          'difficulty',
-          'question',
-          'answerA',
-          'answerB',
-          'answerC',
-          'answerD',
-          'correctAnswer',
-          'explanation',
-        ],
-      },
-    },
-  },
-  required: ['questions'],
+const CONFIG = {
+  maxQuestionsPerDifficulty: 100,
+  generatedQuestionsPerDifficulty: 20,
+  delayBetweenCalls: 15000,
+  maxRetries: 3,
 };
 
-// 2. Updated Prompt Generator requesting all 3 difficulties at once
-function buildBatchedPrompt(
+
+const GEMINI_MODELS = [
+  // 'gemini-3.7-flash',
+  // 'gemini-3.6-flash',
+  // 'gemini-3.5-flash',
+  'gemini-3.5-flash-lite',
+  'gemini-3.1-flash-lite',
+] as const;
+
+type GeminiModel = typeof GEMINI_MODELS[number];
+
+const ModelExausted : Record<GeminiModel, boolean> = {
+  // 'gemini-3.7-flash' : false,
+  // 'gemini-3.6-flash' : false,
+  // 'gemini-3.5-flash' : false,
+  'gemini-3.5-flash-lite' : false,
+  'gemini-3.1-flash-lite' : false,
+}
+
+function buildBatchedPromptEvenMoreEnhanced(
   lesson: string,
   subject: string,
   level: string,
-  countPerDifficulty: number
+  countPerDifficulty: number,
 ): string {
   const total = countPerDifficulty * 3;
-  return `Tu es un professeur de ${subject} niveau ${level} (programme Éducation Nationale française).
-Génère exactement ${total} questions QCM pour la leçon : "${lesson}".
 
-RÉPARTITION OBLIGATOIRE :
-- ${countPerDifficulty} questions de difficulté "e" (facile : rappel direct du cours, réponse évidente).
-- ${countPerDifficulty} questions de difficulté "m" (intermédiaire : comprendre et appliquer).
-- ${countPerDifficulty} questions de difficulté "h" (difficile : analyser, raisonner, combiner plusieurs notions).
+  return `Tu es un professeur expert de ${subject} niveau ${level} (programme Éducation Nationale française), spécialisé dans la création de QCM de haute qualité pédagogique.
 
-RÈGLES :
-1. 4 propositions par question (A,B,C,D), 1 seule correcte.
-2. Renseigne impérativement le champ "difficulty" ("e", "m", ou "h") pour chaque question.
-3. Explication claire de 2-3 phrases par question.
-4. Tout le contenu doit être rédigé en français.`;
+Ta mission : générer exactement ${total} questions QCM pour la leçon "${lesson}".
+
+═══════════════════════════════════════════════════════════
+RÉPARTITION OBLIGATOIRE (${countPerDifficulty} questions par niveau) :
+═══════════════════════════════════════════════════════════
+— ${countPerDifficulty} questions de difficulté "e" (FACILE)
+    → Rappel direct d'une définition, d'une formule ou d'un résultat du cours.
+    → Un élève ayant suivi le cours trouve la réponse sans calcul complexe.
+    → Exemples de formulations : "Laquelle de ces affirmations est vraie ?",
+      "Quelle est la formule de... ?", "Que vaut... dans le cas où... ?"
+
+— ${countPerDifficulty} questions de difficulté "m" (INTERMÉDIAIRE)
+    → Compréhension et application : l'élève doit effectuer un ou deux calculs,
+      ou reconnaître dans quel cas appliquer une propriété.
+    → Exemples de formulations : "Calculer...", "Déterminer...",
+      "Parmi ces expressions, laquelle est équivalente à... ?"
+
+— ${countPerDifficulty} questions de difficulté "h" (DIFFICILE)
+    → Analyse, raisonnement, combinaison de plusieurs notions du chapitre,
+      ou transfert vers un contexte nouveau.
+    → Exemples de formulations : "On considère... Que peut-on conclure ?",
+      "Laquelle de ces démarches est correcte ?", "Quelle est l'erreur dans... ?"
+
+═══════════════════════════════════════════════════════════
+CATALOGUE DES TYPES DE QUESTIONS — 14 TYPES DISPONIBLES :
+═══════════════════════════════════════════════════════════
+Chaque question doit appartenir à exactement UN type.
+Répartis les ${total} questions sur AU MINIMUM 7 types différents.
+NE PAS générer deux questions du même type consécutivement.
+
+─────────────────────────────────────────────────────────
+[TYPE 1 — CALCUL NUMÉRIQUE]
+  Application directe d'une formule avec des valeurs numériques données.
+  L'élève substitue les valeurs et calcule.
+  Exemple : "Si a = 3 et b = 4, que vaut a² + b² ?"
+
+[TYPE 2 — RAISONNEMENT LOGIQUE]
+  L'élève doit déduire une conclusion à partir d'hypothèses,
+  ou évaluer la validité d'un raisonnement.
+  Formulations : "Laquelle de ces affirmations est NÉCESSAIREMENT vraie ?",
+  "Quelle condition est suffisante pour que... ?"
+
+[TYPE 3 — IDENTIFICATION D'ERREUR]
+  Un raisonnement ou calcul erroné est présenté étape par étape.
+  L'élève identifie précisément quelle étape est incorrecte et pourquoi.
+  Formulation : "Un élève résout ce problème ainsi : [étapes]. À quelle étape commet-il une erreur ?"
+
+[TYPE 4 — INTERPRÉTATION DE RÉSULTAT]
+  Un résultat, une valeur ou une expression est donné.
+  L'élève doit expliquer ce qu'il signifie dans le contexte.
+  Formulation : "On trouve x = −3. Que signifie ce résultat dans le contexte du problème ?"
+
+[TYPE 5 — CONTEXTE RÉEL / MODÉLISATION]
+  Situation de la vie quotidienne, d'une autre discipline
+  (physique, économie, géographie, sport, architecture) ou d'un problème pratique.
+  L'élève modélise la situation avec les outils mathématiques de la leçon.
+
+[TYPE 6 — COMPARAISON / CLASSEMENT]
+  Plusieurs expressions, valeurs ou résultats sont donnés.
+  L'élève les ordonne, identifie le plus grand, le plus petit,
+  ou détermine s'ils sont équivalents.
+  Formulation : "Classifie ces trois expressions par ordre croissant."
+
+[TYPE 7 — CONTRE-EXEMPLE / PIÈGE]
+  Une propriété ou affirmation apparemment vraie est présentée.
+  L'élève identifie dans quel cas elle ne s'applique pas.
+  Formulation : "Dans laquelle de ces situations la propriété X est-elle invalide ?"
+
+[TYPE 8 — DÉFINITION / VOCABULAIRE]
+  Maîtrise précise du vocabulaire mathématique du chapitre.
+  Formulations : "Laquelle de ces définitions est correcte ?",
+  "Comment appelle-t-on... ?", "Quel terme désigne... ?"
+
+[TYPE 9 — COMPLÉTION D'UNE DÉMONSTRATION]
+  Une démonstration ou un calcul est présenté avec une étape manquante
+  (indiquée par "...").
+  L'élève choisit quelle expression ou justification complète correctement le trou.
+  Formulation : "Dans cette démonstration, l'étape manquante est :"
+  Exemple :
+    "Ligne 1 : AB² = ...
+     Ligne 2 : AB² = 9 + 16
+     Ligne 3 : AB = 5
+     L'étape manquante à la ligne 1 est :"
+
+[TYPE 10 — ORDRE DES ÉTAPES / PROCÉDURE]
+  Les étapes d'une résolution ou d'une démonstration sont données dans le désordre.
+  L'élève identifie l'ordre logique correct.
+  Formulation : "Voici les étapes pour résoudre ce problème, dans le désordre.
+  Quelle est la séquence correcte ?"
+  Les propositions sont des séquences : "1→3→2→4", "2→1→3→4", etc.
+
+[TYPE 11 — CAS PARTICULIER / CAS LIMITE]
+  L'élève applique la notion à un cas extrême, nul, ou spécial
+  pour tester sa compréhension des conditions d'application.
+  Formulations : "Que se passe-t-il lorsque x = 0 ?",
+  "Dans le cas particulier où le triangle est équilatéral, que vaut... ?",
+  "Que devient la formule si n tend vers l'infini ?"
+
+[TYPE 12 — ÉQUIVALENCE DE REPRÉSENTATIONS]
+  Plusieurs représentations d'un même objet mathématique sont proposées
+  (écriture fractionnaire, décimale, pourcentage ; forme développée et factorisée ;
+  équation et graphe ; tableau et formule...).
+  L'élève identifie lesquelles sont équivalentes.
+  Formulation : "Laquelle de ces écritures est équivalente à [expression] ?"
+
+[TYPE 13 — CONDITION NÉCESSAIRE ET SUFFISANTE]
+  L'élève doit identifier quelle condition doit être vérifiée
+  pour qu'une propriété, un théorème ou une conclusion soit valide.
+  Formulation : "Pour que la formule X soit applicable, il faut impérativement que :",
+  "Laquelle de ces conditions garantit que... ?"
+
+[TYPE 14 — LECTURE DE DONNÉES / REPRÉSENTATION]
+  Un jeu de données est décrit : tableau de valeurs, liste de mesures,
+  description verbale d'un graphe ou d'une figure géométrique.
+  L'élève extrait une information, calcule une grandeur dérivée,
+  ou tire une conclusion à partir de ces données.
+  Formulation : "Le tableau suivant donne les valeurs de f(x).
+  D'après ces données, laquelle de ces affirmations est correcte ?"
+─────────────────────────────────────────────────────────
+
+RÈGLE DE DISTRIBUTION :
+  — Minimum 7 types différents utilisés sur les ${total} questions.
+  — Aucun type utilisé plus de ${Math.ceil(total / 5)} fois.
+  — Les types 9, 10, 11, 12, 13, 14 sont nouveaux et moins courants :
+    chacun doit apparaître au moins UNE FOIS dans les ${total} questions.
+
+═══════════════════════════════════════════════════════════
+RÈGLES DE QUALITÉ — PROPOSITIONS (A, B, C, D) :
+═══════════════════════════════════════════════════════════
+— 4 propositions par question, 1 seule correcte.
+— Les 3 distracteurs DOIVENT être PLAUSIBLES :
+    • Au moins 1 correspond à une erreur de calcul classique
+      (signe oublié, mauvais ordre des opérations, confusion de formule).
+    • Au moins 1 correspond à une confusion conceptuelle fréquente
+      (ex : confondre diamètre et rayon, périmètre et aire, nécessaire et suffisant).
+    • Aucun distracteur ne doit être trivialement faux ou absurde.
+— Les 4 propositions doivent être de longueur et de forme comparables.
+— Ne jamais utiliser "Toutes les réponses" ou "Aucune de ces réponses".
+— Varier la position de la bonne réponse : répartir équitablement entre a, b, c, d.
+
+═══════════════════════════════════════════════════════════
+RÈGLES DE QUALITÉ — EXPLICATIONS :
+═══════════════════════════════════════════════════════════
+— 2 à 3 phrases par explication.
+— Structure obligatoire en 3 points :
+    1. Nommer la propriété / formule / règle utilisée.
+    2. Montrer brièvement pourquoi la bonne réponse est correcte.
+    3. Identifier l'erreur qui conduit au distracteur le plus courant.
+— Exemple d'explication de qualité :
+  "Le théorème de Pythagore s'applique uniquement aux triangles rectangles.
+   Ici, AC² = AB² + BC² = 9 + 16 = 25, donc AC = 5 cm.
+   L'erreur fréquente est d'additionner AB + BC directement sans élever au carré."
+— Ne jamais écrire une explication qui se contente de répéter la bonne réponse.
+
+═══════════════════════════════════════════════════════════
+RÈGLES ABSOLUES :
+═══════════════════════════════════════════════════════════
+— Les ${total} questions DOIVENT couvrir des aspects différents de "${lesson}".
+— Tout le contenu en FRANÇAIS.
+— Chaque question est autonome et compréhensible sans les autres.
+— Le champ "difficulty" contient exactement "e", "m", ou "h".
+— Le champ "correctAnswer" contient exactement "a", "b", "c", ou "d".
+
+Réponds UNIQUEMENT avec du JSON valide, sans backticks ni texte avant ou après.
+Format :
+{
+  "questions": [
+    {
+      "difficulty": "e",
+      "question": "...",
+      "answerA": "...",
+      "answerB": "...",
+      "answerC": "...",
+      "answerD": "...",
+      "correctAnswer": "a",
+      "explanation": "..."
+    }
+  ]
+}`;
+}
+
+// Helper to identify rate limit errors
+function isRateLimitError(error: any): boolean {
+  const msg = String(error).toLowerCase();
+  return (
+    msg.includes('429') ||
+    msg.includes('quota') ||
+    msg.includes('resource_exhausted') ||
+    msg.includes('rate limit')
+  );
 }
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// 3. Gemini Direct Generator
-async function generateQCM(prompt: string) {
-    if(!gemini) return;
-  const response = await gemini.models.generateContent({
-    model: 'gemini-2.5-flash',
-    contents: prompt,
-    config: {
-      responseMimeType: 'application/json',
-      responseSchema: batchQcmSchema,
-      temperature: 0.3,
-    },
-  });
-
-  if (!response.text) throw new Error('Empty response from Gemini API');
-  return JSON.parse(response.text);
-}
-
-
-
-//PRISMA CLIENT
-const connectionString = `${process.env.DATABASE_URL}`
-
-const adapter = new PrismaPg({ connectionString });
-const prisma = new PrismaClient({ adapter });
-
-const groq      = process.env.GROQ_API_KEY ? new Groq({ apiKey: process.env.GROQ_API_KEY }) : null
-const mistral      = process.env.MISTRAL_API_KEY ? new Mistral({ apiKey: process.env.GROQ_API_KEY }) : null
-
-if(gemini){
-    console.log('gemini setup success')
-}
-if(groq){
-    console.log('groc setup success')
-}
-if(mistral){
-    console.log('mistral setup success')
-}
-
-const CONFIG = {
-    currentDifficulity : 'e' as Difficulty,
-    questionsPerDifficulty: 10,
-    delayBetweenCalls:      1000 * 30,
-    maxRetries:             3,
-    model: {
-        gemini:    "gemini-2.5-flash-lite",
-        groq:      'llama-3.3-70b-versatile',
-        mistral: 'mistral-large-latest',
-    },
-}
-
-const DIFFICULTIES = ['e'] as const;
-
-
-function buildPrompt(lesson: string, subject: string, level: string, difficulty: 'e'|'m'|'h', count: number): string {
-  const difficultyDesc = {
-    e: 'niveau facile : rappel direct du cours, réponse évidente pour un élève ayant bien suivi.',
-    m: 'niveau intermédiaire : comprendre et appliquer, pas seulement mémoriser.',
-    h: 'niveau difficile : analyser, raisonner, combiner plusieurs notions.',
-  }
-  return `Tu es un professeur de ${subject} niveau ${level} (programme Éducation Nationale française).
-Génère exactement ${count} questions QCM pour : "${lesson}"
-Difficulté : ${difficultyDesc[difficulty]}
-RÈGLES : 4 propositions (A,B,C,D), 1 seule correcte, mauvaises réponses plausibles, explication 2-3 phrases, tout en français.
-Réponds UNIQUEMENT avec du JSON valide, sans backticks ni texte.
-Format : {"questions":[{"question":"...","answerA":"...","answerB":"...","answerC":"...","answerD":"...","correctAnswer":"a","explanation":"..."}]}`
-}
-
 function stripFences(text: string): string {
-  return text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim()
+  return text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
 }
 
-// Provider exhaustion tracker — persists across the session
-const exhausted = {gemini: false, groq: false, mistral : false}
-
-// Wrapper to retry API calls with exponentially increasing delays
-async function retryWithBackoff<T>(
-  fn: () => Promise<T>,
-  maxRetries = 3,
-  initialDelayMs = 2000
-): Promise<T> {
-  let delay = initialDelayMs;
-
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      return await fn();
-    } catch (error: any) {
-      const errorMsg = String(error).toLowerCase();
-      const isRateLimit =
-        errorMsg.includes('429') ||
-        errorMsg.includes('quota') ||
-        errorMsg.includes('resource_exhausted') ||
-        errorMsg.includes('rate limit');
-
-      // Rethrow immediately if it's the last attempt OR not a transient/rate-limit error
-      if (attempt === maxRetries || !isRateLimit) {
-        throw error;
-      }
-
-      console.warn(
-        `[Attempt ${attempt}/${maxRetries}] Hit rate limit. Retrying in ${delay / 1000}s...`
-      );
-      await sleep(delay);
-      delay *= 2; // Exponential backoff: 2s -> 4s -> 8s
-    }
-  }
-
-  throw new Error('Max retries exceeded');
-}
-
-// 4. Multi-Provider Fallback Function
-// Updated Provider Selector with Exponential Backoff
 async function callBestAvailableProvider(
   prompt: string,
-  totalExpectedCount: number
-): Promise<any[]> {
-  // 1. Try Gemini (with 3 retries: wait 2s, then 4s, then 8s)
-  if (gemini && !exhausted.gemini) {
-    try {
-      return await retryWithBackoff(async () => {
-        const qcmData = await generateQCM(prompt);
-        console.log('qcm data : ', qcmData)
-        if (qcmData.questions?.length) return qcmData.questions;
-        throw new Error('Invalid output structure from Gemini');
-    });
-} catch (e) {
-    console.log('gemini error : ', e)
-    exhausted.gemini = true;
-      console.log('⚠ Gemini daily quota exhausted (or failed after retries) → switching provider');
+) : Promise<any[]>{
+    console.log('Calling best Gemini provider.')
+    if(!gemini) {
+      throw error('Please setup Gemini correctly before attempting to call API.'); 
     }
-  }
+    for(const model of GEMINI_MODELS){
+      console.log(`calling model ${model} ...`)
+      if(!ModelExausted[model]){
+        console.log(`Model ${model} not exausted yet ...`)
+        try{
+          const interaction = await gemini.interactions.create({
+            model,
+            input: prompt,
+          });
 
-  // 2. Fallback: Groq (with retries)
-  if (groq && !exhausted.groq) {
-    try {
-      return await retryWithBackoff(async () => {
-        const completion = await groq.chat.completions.create({
-          model: CONFIG.model.groq,
-          messages: [{ role: 'user', content: prompt }],
-          temperature: 0.3,
-          max_tokens: 8192,
-          response_format: { type: 'json_object' },
-        });
-        const parsed = JSON.parse(stripFences(completion.choices[0]?.message?.content ?? ''));
-        if (parsed.questions?.length) return parsed.questions;
-        throw new Error('Invalid output structure from Groq');
-      });
-    } catch (e) {
-      exhausted.groq = true;
-      console.log('⚠ Groq daily quota exhausted → switching provider');
+          const rawText = interaction.output_text ?? '';
+          console.log('Gemini Output : ', rawText);
+          const qcmData = JSON.parse(stripFences(rawText));
+          if (qcmData.questions?.length) return qcmData.questions;
+          throw new Error('Invalid output structure from Gemini');
+        }catch(e){
+          appendFileSync('prisma/qcm-invalid-output.json', JSON.stringify(e, null, 2));
+          console.error('Gemini error:', String(e).slice(0, 120));
+          if (isRateLimitError(e)) {
+            ModelExausted[model] = true;
+            console.log(`⚠ Gemini model ${model} daily quota exhausted → switching to next model.`);
+          } else {
+            throw e; // Rethrow non-quota errors immediately
+          }
+        }
+      }
     }
-  }
 
-  // 3. Fallback: Mistral (with retries)
-  if (mistral && !exhausted.mistral) {
-    try {
-      return await retryWithBackoff(async () => {
-        const completion = await mistral.chat.complete({
-          model: CONFIG.model.mistral,
-          messages: [{ role: 'user', content: prompt }],
-          responseFormat: { type: 'json_object' },
-        });
-        const parsed = JSON.parse(stripFences(completion.choices[0]?.message?.content?.toString() ?? ''));
-        if (parsed.questions?.length) return parsed.questions;
-        throw new Error('Invalid output structure from Mistral');
-      });
-    } catch (e) {
-      exhausted.mistral = true;
-      console.log('⚠ Mistral daily quota exhausted → switching provider');
-    }
-  }
-
-  throw new Error('All providers exhausted for today. Re-run tomorrow.');
+    throw new Error('All providers exhausted for today. Re-run tomorrow.');
 }
 
-
-// 5. Refactored Main Function
 async function main() {
   const lessons = await prisma.lesson.findMany({
     select: {
@@ -272,7 +299,7 @@ async function main() {
     orderBy: { id: 'asc' },
   });
 
-  const totalPerLesson = CONFIG.questionsPerDifficulty * 3; // e.g., 10 * 3 = 30
+   const totalPerLesson = CONFIG.maxQuestionsPerDifficulty * 3;
   console.log(`\n🤖 Generating QCM for ${lessons.length} lessons (${totalPerLesson} questions each in batched requests)\n`);
 
   let created = 0;
@@ -282,7 +309,6 @@ async function main() {
     const lesson = lessons[i]!;
     const existing = await prisma.qcmBankQuestion.count({ where: { lessonId: lesson.id } });
 
-    // Skip if all 30 questions already exist
     if (existing >= totalPerLesson) {
       console.log(`[${i + 1}/${lessons.length}] ⏭ ${lesson.label} (already generated)`);
       continue;
@@ -290,25 +316,23 @@ async function main() {
 
     console.log(`[${i + 1}/${lessons.length}] ${lesson.level.label} | ${lesson.subject.label} | ${lesson.label}`);
 
-    // Pause between calls to respect rate limits (~6.5s recommended for Gemini Free Tier)
-    await new Promise((r) => setTimeout(r, CONFIG.delayBetweenCalls));
+    await sleep(CONFIG.delayBetweenCalls);
 
     try {
-      const prompt = buildBatchedPrompt(
+      const prompt = buildBatchedPromptEvenMoreEnhanced(
         lesson.label,
         lesson.subject.label,
         lesson.level.label,
-        CONFIG.questionsPerDifficulty
+        CONFIG.generatedQuestionsPerDifficulty
       );
 
-      // Single call generates all 30 questions across all difficulties
-      const questions = await callBestAvailableProvider(prompt, totalPerLesson);
+      const questions = await callBestAvailableProvider(prompt);
 
       const { count } = await prisma.qcmBankQuestion.createMany({
         data: questions.map((q: any) => ({
           lessonId: lesson.id,
           question: q.question,
-          difficulty: q.difficulty, // Extracted directly from generated question object
+          difficulty: q.difficulty,
           answerA: q.answerA,
           answerB: q.answerB,
           answerC: q.answerC,
@@ -325,9 +349,8 @@ async function main() {
       errors.push(`${lesson.label}: ${String(e).slice(0, 80)}`);
       console.error(`✗ Error processing ${lesson.label}:`, e);
 
-      // Halt execution if all LLM providers hit daily quotas
-      if (Object.values(exhausted).every(Boolean)) {
-        console.log('⚠ All providers exhausted. Stopping run.');
+      if (Object.values(ModelExausted).every(Boolean)) {
+        console.log('⚠ All Gemini models exhausted. Stopping run.');
         break;
       }
     }
@@ -336,40 +359,10 @@ async function main() {
   console.log(`\n✅ Done — ${created} questions created, ${errors.length} errors`);
   if (errors.length) errors.forEach((e) => console.log(`  ✗ ${e}`));
 }
-// async function main(){
-//     const lesson = await prisma.lesson.findFirst({
-//         where : { levelId : {in : [9,10,11,12]}},
-//         select: { id: true, label: true, subject: { select: { label: true } }, level: { select: { label: true } } },
-//         orderBy: { id: 'asc' },
-//     })
-    
-//     if(!lesson) return;
-//     let created = 0; const errors: string[] = []
 
-//     for (const difficulty of DIFFICULTIES) {
-//         console.log('diff :', difficulty);
-//         await new Promise(r => setTimeout(r, CONFIG.delayBetweenCalls))
-//         try {
-//             const prompt = buildPrompt(lesson.label, lesson.subject.label, lesson.level.label, difficulty, CONFIG.questionsPerDifficulty)
-//             const questions = await callBestAvailableProvider(prompt, CONFIG.questionsPerDifficulty)
-//             console.log('questions : ', questions)
-//             const { count } = await prisma.qcmBankQuestion.createMany({
-//             data: questions.map((q: any) => {
-//                 const question = {lessonId: lesson.id, question: q.question, difficulty, answerA: q.answerA, answerB: q.answerB, answerC: q.answerC, answerD: q.answerD, correctAnswer: q.correctAnswer, explanation: q.explanation };
-//                 console.log(question);
-//                 return question;
-//             }),
-//             skipDuplicates: true,
-//             })
-//             created += count; 
-//             console.log(`✓ ${difficulty.toUpperCase()} — ${count} questions`)
-//         } catch (e) {
-//             console.error(e);
-//             errors.push(`${lesson.label} (${difficulty}): ${String(e).slice(0, 80)}`)
-//             if (String(e).includes('All providers')) return;
-//         }
-//     }
-//     if (Object.values(exhausted).every(Boolean)) return;
-// }
-main().catch(e => { console.error(e); process.exit(1) }).finally(() => prisma.$disconnect())
-
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(() => prisma.$disconnect());

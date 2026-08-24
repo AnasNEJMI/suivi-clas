@@ -14,7 +14,7 @@ const SkillSliderField = ({name} : {name : SkillFieldType}) => {
         control={control}
         render = {({field, fieldState}) => (
         <Field data-invalid = {fieldState.invalid} className='flex-row lg:flex-col lg:w-min'>
-            <FieldLabel ><span className='text-sm'>{SkillFieldLabels[name]}</span></FieldLabel>
+            <FieldLabel ><span className='text-base lg:text-sm'>{SkillFieldLabels[name]}</span></FieldLabel>
             <Slider
                 value={[field.value as number]}
                 step={1}

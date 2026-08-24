@@ -68,9 +68,16 @@ export type ScolarYearEntry = {
     classes: ClassEntry[];
 };
 
+export type SeanceDurationEntry = {
+    id : number,
+    label : string,
+    durationMin : number
+}
+
 export type AnimatorBaseDataResponse = {
     scolarYears: ScolarYearEntry[];
     lessonsByLevel : LessonsByLevelEntry[],
+    seanceDurations : SeanceDurationEntry[],
 };
 
 export type Animator = {
@@ -108,6 +115,7 @@ export type SeanceEntry = {
     classId : number,
     date : Date,
     scolarYearId : number,
+    seanceDuration : {label : string, durationMin : number},
     students : SeanceStudentEntry[],
 }
 
@@ -162,6 +170,11 @@ export type LessonEvalQueryParams = {
 }
 
 export type SkillEvalQueryParams = {
+    animatorId:   number
+    studentId : number
+}
+
+export type QcmEvalQueryParams = {
     animatorId:   number
     studentId : number
 }

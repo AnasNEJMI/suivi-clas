@@ -4,6 +4,7 @@ import { ToggleGroup } from '@/components/ui/toggle-group'
 import { useState } from 'react'
 import StudentToggleItem from './student-toggle-item'
 import StudentBilanForm from './student-bilan-form'
+import { Separator } from '@/components/ui/separator'
 
 interface BilansSectionProps {
     seance:            SeanceEntry
@@ -31,7 +32,7 @@ const BilansSection = ({
                 <div className='w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm'>
                     2
                 </div>
-                <span className='text-xl lg:text-2xl'>Bilans</span>
+                <span className='text-lg lg:text-xl'>Bilans</span>
             </CardTitle>
         </CardHeader>
         <CardContent className='flex flex-col gap-6'>
@@ -49,15 +50,18 @@ const BilansSection = ({
             </ToggleGroup>
             {
                 selectedStudent && 
-                <StudentBilanForm
-                    key = {selectedStudent.id}
-                    student = {selectedStudent}
-                    seanceId = {seance.id}
-                    seanceDate = {seance.date}
-                    animatorId = {animatorId}
-                    lessonsByLevel = {lessonsByLevel}
-                    onSuccess = {(bilan : SeanceBilanEntry) => onBilanSubmitted(selectedStudent.id, bilan)}
-                />
+                <>
+                    <Separator/>
+                    <StudentBilanForm
+                        key = {selectedStudent.id}
+                        student = {selectedStudent}
+                        seanceId = {seance.id}
+                        seanceDate = {seance.date}
+                        animatorId = {animatorId}
+                        lessonsByLevel = {lessonsByLevel}
+                        onSuccess = {(bilan : SeanceBilanEntry) => onBilanSubmitted(selectedStudent.id, bilan)}
+                    />
+                </>
 
             }
         </CardContent>

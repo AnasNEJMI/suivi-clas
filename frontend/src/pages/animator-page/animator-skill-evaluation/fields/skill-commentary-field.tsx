@@ -2,6 +2,7 @@ import { SkillFieldLabels, type SkillFieldType } from '@/api/animator/types'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Textarea } from '@/components/ui/textarea'
 import type { SkillEvalFormValues } from '@/lib/schemas/skill-eval.schema'
+import { CheckIcon, RocketIcon, XIcon } from 'lucide-react'
 import { Controller, useFormContext } from 'react-hook-form'
 
 const SkillCommentaryField = ({name} : {name : SkillFieldType}) => {
@@ -12,11 +13,13 @@ const SkillCommentaryField = ({name} : {name : SkillFieldType}) => {
             name={name}
             control={control}
             render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel>{SkillFieldLabels[name]}</FieldLabel>
-                    {/* Using Controller (not register) because Textarea may be a
-                        custom component that doesn't forward refs correctly.
-                        If it's a plain <textarea>, {...field} with register works too. */}
+                <Field data-invalid={fieldState.invalid} className='gap-2'>
+                    <FieldLabel className='flex items-center justify-start'>
+                        {SkillFieldLabels[name]}
+                        {name === 'positive' && <CheckIcon className='text-lime-500'/>}
+                        {name === 'negative' && <XIcon className='text-red-500'/>}
+                        {name === 'improvements' && <RocketIcon className='text-indigo-500'/>}
+                    </FieldLabel>
                     <Textarea
                         {...field}
                         placeholder='Résumé de la séance'

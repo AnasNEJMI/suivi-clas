@@ -1,6 +1,6 @@
 import { animatorApiCalls } from '@/api/animator/apiCalls';
 import { animatorKeys } from '@/api/animator/query-keys';
-import type { SkillEvalEntry, SkillEvalQueryParams } from '@/api/animator/types'
+import type { SkillEvalEntry, QcmEvalQueryParams } from '@/api/animator/types'
 import { type SkillEvalFormValues } from '@/lib/schemas/skill-eval.schema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -9,7 +9,7 @@ import SkillEvalErrorCard from './cards/skill-eval-error-card';
 import SkillEvalForm from './skill-eval-form';
 
 interface SkillEvalCardProps{
-  params: SkillEvalQueryParams,
+  params: QcmEvalQueryParams,
 }
 
 const   SkillEvalCard = ({

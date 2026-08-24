@@ -75,19 +75,21 @@ const SkillEvalGeneralInfoCard = ({
     <Card className={cn(className, `font-outfit border-none shadow-card`)}>
         <CardHeader>
           <CardTitle className='flex items-center justify-between'>
-            <div className='flex justify-center gap-2'>
-              <div className='w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white border border-white'>1</div>
-              <span className='text-xl lg:text-2xl'>Élève</span>
+            <div className='flex items-center justify-center gap-2'>
+              <div className='w-8 aspect-square rounded-full bg-primary flex items-center justify-center text-white text-sm'>
+                  1
+              </div>
+              <span className='text-lg lg:text-xl'>Choisir l'élève</span>
             </div>
             {isLocked && <Button variant={'outline'} onClick={OnEdit}><EditIcon/></Button>}
           </CardTitle>
-          <CardDescription>
+          <CardDescription className='text-sm lg:text-base'>
             Sélectionnez l'élève concerné et appuyez sur 'Confirmer'.
           </CardDescription>
         </CardHeader>
         <CardContent className="mt-2">
           <form id = 'form-general-info' onSubmit={form.handleSubmit(onConfirm)} className={cn(isLocked && 'pointer-events-none opacity-70')}>
-            <FieldGroup className='gap-4!'>
+            <FieldGroup className='gap-2!'>
               <Controller
                 name = 'scolarYearId'
                 control={form.control}
@@ -103,7 +105,7 @@ const SkillEvalGeneralInfoCard = ({
                         }}
                       >
                         <SelectTrigger
-                          className="w-full md:flex-1 md:max-w-xs text-base truncate h-10!">
+                          className="w-full md:flex-1 max-w-36 lg:max-w-48  text-base truncate h-10!">
                           <SelectValue placeholder = {field.value}/>
                         </SelectTrigger>
                         <SelectContent>
@@ -128,7 +130,7 @@ const SkillEvalGeneralInfoCard = ({
                 name = 'classId'
                 control={form.control}
                 render = {({field, fieldState}) => (
-                  <Field data-invalid = {fieldState.invalid}>
+                  <Field data-invalid = {fieldState.invalid} className='gap-2'>
                     <FieldLabel htmlFor="form-general-info-class">Classe</FieldLabel>
                     <ToggleGroup
                       type="single"
@@ -146,10 +148,10 @@ const SkillEvalGeneralInfoCard = ({
                             key={studentClass.id}  
                             value={studentClass.id.toString()}
                             aria-label={`${studentClass.label}`}
-                            className="flex h-16 px-4 flex-col gap-2 items-center justify-center rounded-lg"
+                            className="flex h-14 px-4 flex-col gap-2 items-center justify-center rounded-lg"
                           >
                             <span className="text-base font-bold leading-none">{studentClass.label}</span>
-                            <span className="text-sm leading-none">{studentClass.association.label}</span>
+                            <span className="text-sm font-light leading-none">{studentClass.association.label}</span>
                           </ToggleGroupItem>
                         ))
                       }
@@ -186,10 +188,10 @@ const SkillEvalGeneralInfoCard = ({
                                 key={s.id}  
                                 value={s.id.toString()}
                                 aria-label={`${s.username}`}
-                                className="flex h-10 px-4 gap-2 items-center justify-center rounded-lg"
+                                className="flex h-10 px-4 gap-2 items-center justify-center rounded-md"
                             >
-                                <span className="text-base leading-none capitalize">{s.firstName}</span>
-                                <span className="text-base leading-none uppercase">{s.lastName}</span>
+                                <span className="text-sm leading-none capitalize">{s.firstName}</span>
+                                <span className="text-sm leading-none uppercase">{s.lastName}</span>
                             </ToggleGroupItem>
                             ))
                         }
@@ -204,7 +206,7 @@ const SkillEvalGeneralInfoCard = ({
                 </Controller>
               }
             </FieldGroup>
-            <Field orientation="horizontal" className="flex mt-12">
+            <Field orientation="horizontal" className="flex mt-6">
               <Button type="submit" size='lg' form="form-general-info" className="font-medium text-base py-6 flex-1">
                   {
                     isLocked

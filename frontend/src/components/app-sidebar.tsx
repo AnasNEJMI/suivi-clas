@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { Link, useNavigate } from "react-router"
-import { BicepsFlexedIcon, BookOpenIcon, ChartNoAxesCombinedIcon, DownloadIcon, NotebookTextIcon, UserIcon,} from "lucide-react"
+import { BicepsFlexedIcon, BookOpenIcon, ChartNoAxesCombinedIcon, CircleQuestionMarkIcon, DownloadIcon, NotebookTextIcon, UserIcon,} from "lucide-react"
 import { Separator } from "./ui/separator"
 import { useAuth } from "@/contexts/auth/use-auth"
 import { Button } from "./ui/button"
@@ -41,6 +41,11 @@ const data = {
       title: "Évaluation de leçons",
       url: "/animateur/evaluation-lecons",
       icon: BookOpenIcon,
+    },
+    {
+      title: "Qcms",
+      url: "/animateur/qcms",
+      icon: CircleQuestionMarkIcon,
     },
   ],
   usefulLinks: [

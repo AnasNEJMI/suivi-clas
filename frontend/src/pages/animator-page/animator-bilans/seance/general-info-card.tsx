@@ -79,19 +79,19 @@ const BilansGeneralInfoCard = ({
     <Card className={cn(className, `font-outfit border-none shadow-card`)}>
       <CardHeader>
         <CardTitle className='flex items-center justify-between'>
-          <div className='flex justify-center gap-2'>
+          <div className='flex items-center justify-center gap-2'>
             <div className='w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white border border-white'>1</div>
-            <span className='text-xl lg:text-2xl'>Informations Générales</span>
+            <span className='text-lg lg:text-xl'>Informations Générales</span>
           </div>
-          {isLocked && <Button variant={'outline'} onClick={OnEdit}><EditIcon/></Button>}
+          {isLocked && <Button variant={'outline'} onClick={OnEdit} className='size-10'><EditIcon/></Button>}
         </CardTitle>
-        <CardDescription>
+        <CardDescription className='text-sm lg:text-base'>
           Renseigner les informations générales suivantes et confirmez.
         </CardDescription>
       </CardHeader>
       <CardContent className="mt-2">
         <form id = 'form-general-info' onSubmit={form.handleSubmit(onConfirm)} className={cn(isLocked && 'pointer-events-none opacity-70')}>
-          <FieldGroup className='gap-4!'>
+          <FieldGroup className='gap-2!'>
             <Controller
               name = 'scolarYearId'
               control={form.control}
@@ -107,7 +107,7 @@ const BilansGeneralInfoCard = ({
                       }}
                     >
                       <SelectTrigger
-                        className="w-full md:flex-1 md:max-w-xs text-base truncate h-10!">
+                        className="w-full md:flex-1 max-w-36 lg:max-w-48 text-base truncate h-10!">
                         <SelectValue placeholder = {field.value}/>
                       </SelectTrigger>
                       <SelectContent>
@@ -134,15 +134,15 @@ const BilansGeneralInfoCard = ({
               render = {({field, fieldState}) => (
                 <Field data-invalid = {fieldState.invalid}>
                   <div className='flex justify-between gap-6'>
-                    <FieldLabel htmlFor="form-general-info-date">Date</FieldLabel>
+                    <FieldLabel htmlFor="form-general-info-date">Date de séance</FieldLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
                           size='lg'
                           variant="outline"
-                          className="flex-1 md:w-full md:max-w-xs data-[empty=true]:text-muted-foreground justify-between text-left font-normal text-base capitalize"
+                          className="flex-1 md:w-full max-w-36 data-[empty=true]:text-muted-foreground justify-between text-left font-normal text-base capitalize"
                         >
-                          {field.value  && isValid(field.value) ? format(field.value, "PPP", {locale : fr}) : <span>Choisir une date</span>}
+                          {field.value  && isValid(field.value) ? <span className='truncate'>{format(field.value, "PPP", {locale : fr})}</span> : <span>Choisir une date</span>}
                           <ChevronDownIcon />
                         </Button>
                       </PopoverTrigger>
@@ -173,7 +173,7 @@ const BilansGeneralInfoCard = ({
               name = 'classId'
               control={form.control}
               render = {({field, fieldState}) => (
-                <Field data-invalid = {fieldState.invalid}>
+                <Field data-invalid = {fieldState.invalid} className='gap-2'>
                   <FieldLabel htmlFor="form-general-info-class">Classe</FieldLabel>
                   <ToggleGroup
                     type="single"
@@ -191,10 +191,10 @@ const BilansGeneralInfoCard = ({
                           key={studentClass.id}  
                           value={studentClass.id.toString()}
                           aria-label={`${studentClass.label}`}
-                          className="flex h-16 px-4 flex-col gap-2 items-center justify-center rounded-lg"
+                          className="flex h-14 px-4 flex-col gap-2 items-center justify-center rounded-lg"
                         >
                           <span className="text-base font-bold leading-none">{studentClass.label}</span>
-                          <span className="text-sm leading-none">{studentClass.association.label}</span>
+                          <span className="text-sm font-light leading-none">{studentClass.association.label}</span>
                         </ToggleGroupItem>
                       ))
                     }
@@ -208,7 +208,7 @@ const BilansGeneralInfoCard = ({
 
             </Controller>
           </FieldGroup>
-          <Field orientation="horizontal" className="flex mt-12">
+          <Field orientation="horizontal" className="flex mt-6">
             <Button type="submit" size='lg' form="form-general-info" className="font-medium text-base py-6 flex-1">
                 {
                   isLocked

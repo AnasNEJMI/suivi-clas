@@ -37,23 +37,23 @@ const SkillEvalForm = ({ skillEval, isPending, onSubmit }: SkillEvalFormProps) =
         <Card className='font-outfit border-none shadow-card'>
             <CardHeader>
                 <CardTitle className='flex items-center gap-2'>
-                    <div className='w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm'>
+                    <div className='w-12 lg:w-8 aspect-square rounded-full bg-primary flex items-center justify-center text-white text-sm'>
                         2
                     </div>
-                    <span className='text-xl lg:text-2xl'>Évaluation des compétences méthodologiques</span>
+                    <span className='text-lg lg:text-xl'>Évaluation de la méthodologie</span>
                 </CardTitle>
                 {
                     skillEval &&  
-                    <CardDescription className='flex gap-2'>
+                    <CardDescription className='flex flex-col lg:flex-row gap-2 text-sm lg:text-base'>
                         <span>Dernière mise à jour : </span>
-                        <span className='px-2 bg-lime-200 border border-lime-400 rounded-full capitalize'>{format(skillEval.updatedAt, 'PPPp', {locale : fr})}</span>
+                        <span className='px-2 bg-lime-600 border border-lime-700 text-lime-50 rounded-sm capitalize text-nowrap w-fit'>{format(skillEval.updatedAt, 'PPPp', {locale : fr})}</span>
                     </CardDescription>
                 }
             </CardHeader>
-            <CardContent className='flex flex-col gap-6'>
+            <CardContent className='flex flex-col gap-2'>
                 <FormProvider {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
-                        <div className='flex flex-col lg:flex-row justify-evenly gap-4 mt-12'>
+                        <div className='flex flex-col lg:flex-row justify-evenly gap-4 mt-6'>
                             <SkillSliderField name='autonomy' />
                             <SkillSliderField name='discipline' />
                             <SkillSliderField name='organisation' />
@@ -62,7 +62,7 @@ const SkillEvalForm = ({ skillEval, isPending, onSubmit }: SkillEvalFormProps) =
                             <SkillSliderField name='respect' />
                             <SkillSliderField name='preparation' />
                         </div>
-                        <div className='mt-12 flex flex-col gap-4'>
+                        <div className='mt-6 flex flex-col gap-4'>
                             <SkillCommentaryField name='positive' />
                             <SkillCommentaryField name='negative' />
                             <SkillCommentaryField name='improvements' />

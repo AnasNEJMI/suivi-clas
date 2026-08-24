@@ -1,7 +1,7 @@
 import "dotenv/config"
 import { PrismaPg } from '@prisma/adapter-pg';
 import {LessonEval, PrismaClient} from '../src/generated/prisma/client.js'
-import {subWeeks, addWeeks, setMilliseconds, setSeconds, setHours, setMinutes, addDays} from 'date-fns';
+import {addWeeks, setMilliseconds, setSeconds, setHours, setMinutes, addDays} from 'date-fns';
 import {generateQcmForBilan} from '../src/controllers/lib/qcm/generate-qcm-for-bilan.js'
 //PRISMA CLIENT
 const connectionString = `${process.env.DATABASE_URL}`
@@ -221,6 +221,13 @@ async function seedBilans(contracts : Contracts){
     let qcmsCreated = 0;
     let qcmsSkipped = 0;
 
+    const seanceDurations = await prisma.seanceDuration.findMany();
+
+    if(!seanceDurations || seanceDurations.length ===0){
+        console.error("⚠ Please seed seance durations before seeding bilans");
+        return result;
+    }
+
     for(const contract of contracts){
         if(!contract.animatorId || !contract.scolarYearId || !contract.class) continue;
 
@@ -237,6 +244,7 @@ async function seedBilans(contracts : Contracts){
         const dates = generateSeanceDates(CONFIG.bilans.bilansPerStudent, CONFIG.bilans.weeksBetween);
         console.log(`⚠ ${cls.label} : ${eligibleStudents.length} students - ${dates.length} seances`);
         for(const date of dates){
+            const seanceDuration = pickRandom(seanceDurations);
             try{
                 const {gte, lt} = dayRange(date);
                 const existing = await prisma.seance.findFirst({
@@ -256,7 +264,8 @@ async function seedBilans(contracts : Contracts){
                         animatorId,
                         classId : cls.id,
                         date,
-                        scolarYearId
+                        scolarYearId,
+                        seanceDurationId : seanceDuration.id
                     },
                     select : {id : true}
                 })).id

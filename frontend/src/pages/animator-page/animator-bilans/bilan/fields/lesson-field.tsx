@@ -31,7 +31,7 @@ export default function LessonField({ availableSubjects }: { availableSubjects: 
                                 setValue('summary', '')
                             }}
                         >
-                            <SelectTrigger className='w-full md:max-w-xs text-base h-10!'>
+                            <SelectTrigger className='w-full max-w-48 md:max-w-72 truncate text-base h-10!'>
                                 <SelectValue placeholder='Choisir une leçon' />
                             </SelectTrigger>
                             <SelectContent>

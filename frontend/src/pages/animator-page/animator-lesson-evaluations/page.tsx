@@ -24,12 +24,12 @@ const AnimatorLessonEvaluationsPage = () => {
     
     return (
     <>
-        <SiteHeader title='Bilans'/>
+        <SiteHeader title='Leçons'/>
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-6">
-              <h1 className='font-semibold text-3xl md:text-4xl mt-4'>Évaluez le niveau de maîtrise des élèves sur chacune des leçons abordées.</h1>
-              <div className='mt-12 flex flex-col gap-6'>
+            <div className="flex flex-col gap-6 py-4 md:gap-6 md:py-6 px-6">
+              <h1 className='font-semibold text-2xl md:text-3xl mt-4'>Évaluation du niveau de maîtrise des leçons</h1>
+              <div className='flex flex-col gap-6'>
                 <LessonEvalGeneralInfoCard
                   scolarYears={baseData.scolarYears}
                 />

@@ -11,7 +11,7 @@ const StudentToggleItem = memo(function StudentToggleItem({
     return (
         <ToggleGroupItem
             value={student.id.toString()}
-            className='flex h-8 px-3 items-center gap-1.5 rounded-lg'
+            className='flex h-8 px-3 items-center gap-1.5 rounded-sm'
         >
             <span className='text-sm'>{student.firstName} {student.lastName}</span>
             {student.bilan && <CheckIcon size={12} className='text-lime-500' />}

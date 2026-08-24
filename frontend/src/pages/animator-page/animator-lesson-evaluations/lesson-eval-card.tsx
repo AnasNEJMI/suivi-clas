@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import LessonEvalSkeletonCard from './cards/lesson-eval-skeleton-card'
 import LessonEvalErrorCard from './cards/lesson-eval-error-card'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FormProvider, useForm } from 'react-hook-form'
 import { lessonEvalFormSchema, type LessonEvalFormValues } from '@/lib/schemas/lesson-eval.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -101,17 +101,20 @@ const LessonEvalCard = ({
     return (
         <Card className='font-outfit border-none shadow-card'>
             <CardHeader>
-                <CardTitle className='flex items-center gap-2'>
+                <CardTitle className='flex items-center justify-start gap-2'>
                     <div className='w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm'>
                         2
                     </div>
-                    <span className='text-xl lg:text-2xl'>Évaluation de maîtrise</span>
+                    <span className='text-lg lg:text-xl'>Évaluation de maîtrise</span>
                 </CardTitle>
+                <CardDescription className='text-sm lg:text-base'>
+                    Sélectionner la matière puis la leçon pour accéder à l'évaluation.
+                </CardDescription>
             </CardHeader>
-            <CardContent className='flex flex-col gap-6'>
+            <CardContent className='flex flex-col gap-2'>
                 <FormProvider {...form }>
                     <form onSubmit={form.handleSubmit((data) => submitMutation.mutate(data))}>
-                        <div className='flex flex-col gap-4'>
+                        <div className='flex flex-col gap-2'>
                             <SubjectField availableSubjects = {availableSubjects}/>
                             <LessonField lessonEvals = {lessonEvals?? null} availableSubjects = {availableSubjects}/>
                             <EvaluationField/>
