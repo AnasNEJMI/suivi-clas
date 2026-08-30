@@ -47,7 +47,7 @@ const PresenceSummaryCard = ({bilans, student} : {bilans : BilanEntry[], student
                 </div>
                 <Separator className='my-6'/>
                 <div className='font-bold text-lg'>Historique de présence</div>
-                <div className='relative z-30 flex flex-row flex-nowrap gap-2 overflow-x-auto w-full p-4 bg-zinc-50 border border-zinc-200 rounded-lg pb-4 mt-6'>
+                <div className='relative z-30 flex flex-row flex-nowrap gap-2 overflow-x-auto brand-h-scrollbar w-full p-4 bg-zinc-50 border border-zinc-200 rounded-lg pb-4 mt-6'>
                     {
                         bilans.map((bilan, index) => (
                             <div key={index} className='flex flex-col items-center gap-2'>

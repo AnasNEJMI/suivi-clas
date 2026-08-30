@@ -1,6 +1,5 @@
 import { animatorApiCalls } from '@/api/animator/apiCalls'
 import type { LessonsByLevelEntry, SeanceBilanEntry, SeanceStudentEntry } from '@/api/animator/types'
-import { Button } from '@/components/ui/button'
 import { Field } from '@/components/ui/field'
 import { bilanFormSchema, type BilanFormValues } from '@/lib/schemas/bilans-bilan.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -13,6 +12,7 @@ import SubjectField from './fields/subject-field'
 import LessonField from './fields/lesson-field'
 import SummaryField from './fields/summary-field'
 import IncludeQcmField from './fields/include-qcm-field'
+import { BrandButton } from '@/components/brand-button'
 
 interface StudentBilanFormProps {
     student:       SeanceStudentEntry
@@ -85,7 +85,7 @@ const StudentBilanForm = ({
                 <IncludeQcmField />
             </div>
             <Field className='flex flex-row gap-2 mt-8'>
-                <Button
+                <BrandButton
                     type='button'
                     variant='outline'
                     size='lg'
@@ -94,15 +94,15 @@ const StudentBilanForm = ({
                     className='flex-1 py-6 text-base font-medium'
                 >
                     Annuler
-                </Button>
-                <Button
+                </BrandButton>
+                <BrandButton
                     type='submit'
                     size='lg'
                     disabled={submitMutation.isPending}
                     className='flex-1 py-6 text-base font-medium'
                 >
                     {submitMutation.isPending ? 'Chargement...' : 'Soumettre'}
-                </Button>
+                </BrandButton>
             </Field>
         </form>
     </FormProvider>

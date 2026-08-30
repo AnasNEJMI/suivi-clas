@@ -1,8 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
-import Home from './pages/home.tsx'
-import Login from './pages/login.tsx'
 import RootLayout from './layouts/root-layout.tsx'
 import SignUp from './pages/signup.tsx'
 import AssociationPage from './pages/association-page/association-page.tsx'
@@ -20,6 +18,8 @@ import { associationPageLoader } from './router/loaders/association-page-loader.
 import AnimatorLessonEvaluationsPage from './pages/animator-page/animator-lesson-evaluations/page.tsx'
 import StudentPage from './pages/student-page/page.tsx'
 import AnimatorQcmPage from './pages/animator-page/animator-qcm-page/page.tsx'
+import HomePage from './pages/home-page/page.tsx'
+import LoginPage from './pages/login-page/page.tsx'
 
 
 
@@ -29,10 +29,10 @@ const router = createBrowserRouter([
     Component : RootLayout,
     ErrorBoundary: RootErrorBoundary,
     children : [
-      {index : true, Component : Home, loader : guestRouteLoader,  shouldRevalidate: () => true,},
+      {index : true, Component : HomePage, loader : guestRouteLoader,  shouldRevalidate: () => true,},
       {path : 'contact', Component : Contact},
       {path : 'a-propos', Component : About},
-      {path : 'login', Component : Login, loader : guestRouteLoader,  shouldRevalidate: () => true,},
+      {path : 'connexion', Component : LoginPage, loader : guestRouteLoader,  shouldRevalidate: () => true,},
       {path : 'signup', Component : SignUp},
       {
         id : 'student',

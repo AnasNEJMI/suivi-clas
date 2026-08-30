@@ -9,7 +9,7 @@ interface navLinkProps extends React.ComponentProps<typeof Link> {
 
 const NavLink = ({children, className, ...props} : navLinkProps) => {
   return (
-    <Link {...props} className={cn(className, 'text-xl font-bold py-2 w-full hover:bg-lime-100')}>
+    <Link {...props} className={cn(className, 'text-xl font-medium py-2 w-full hover:bg-lime-100/15')}>
         {children}
     </Link>
   )

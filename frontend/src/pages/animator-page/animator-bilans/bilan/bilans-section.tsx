@@ -42,7 +42,7 @@ const BilansSection = ({
                 onValueChange={(v) => setSelectedStudentId(v ? parseInt(v) : null)}
                 variant='outline'
                 spacing={1}
-                className='w-full items-center justify-start flex-wrap'
+                className='w-full items-center justify-start flex-wrap gap-4'
             >
                 {seance.students.map(student => (
                     <StudentToggleItem key={student.id} student={student} />

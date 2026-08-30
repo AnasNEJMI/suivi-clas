@@ -1,33 +1,62 @@
 import { Link} from 'react-router'
 import NavBar from './navbar'
 import { useAuth } from '@/contexts/auth/use-auth';
+import BrandLink from './brand-link';
+import { MoveUpRightIcon, UserIcon } from 'lucide-react';
+import { BrandButton } from './brand-button';
 
 const Header = () => {
   const {user, isAuthenticated} = useAuth();
+
   return (
-    <header className='fixed z-50 top-2 left-2 w-[calc(100%-1rem)] max-w-7xl md:left-1/2 md:-translate-x-1/2 h-16 md:h-20 rounded-xl flex items-center justify-between gap-16 px-2 '>
-        <Link to='/' className='w-12 h-12 md:w-16 md:h-16 bg-lime-100 rounded-lg'></Link>
-        <div className='hidden md:flex items-center justify-center gap-4 rounded-xl bg-lime-200 h-16 px-4 font-outfit font-bold border border-lime-300/50 shadow-md text-shadow-2xs text-shadow-white'>
-          <Link to='/a-propos' className='text-nowrap  px-4 py-2 border rounded-xl border-lime-500/30 bg-white/40 hover:bg-white/60 hover:border-lime-500/50'>À propos</Link>
-          {
-            isAuthenticated && user && user.userType === 'admin' &&
-            <Link to='/admin' className='px-4 py-2 border rounded-xl border-lime-500/30 bg-white/40 hover:bg-white/60 hover:border-lime-500/50'>Page Admin</Link>
-          }
-          {
-            isAuthenticated && user && user.userType === 'associationMember' &&
-            <Link to='/association' className='px-4 py-2 border rounded-xl border-lime-500/30 bg-white/40 hover:bg-white/60 hover:border-lime-500/50'>Association</Link>
-          }
-          {
-            isAuthenticated && user && user.userType === 'student' &&
-            <Link to='/etudiant' className='px-4 py-2 border rounded-xl border-lime-500/30 bg-white/40 hover:bg-white/60 hover:border-lime-500/50'>Profile</Link>
-          }
-          {
-            isAuthenticated && user && user.userType === 'animator' &&
-            <Link to='/animateur' className='px-4 py-2 border rounded-xl border-lime-500/30 bg-white/40 hover:bg-white/60 hover:border-lime-500/50'>Profile</Link>
-          }
-          <Link to='/contact' className='px-4 py-2 border rounded-xl border-lime-500/30 bg-white/40 hover:bg-white/60 hover:border-lime-500/50'>Contact</Link>
+    <header className='fixed z-50 w-full md:left-1/2 md:-translate-x-1/2 rounded-xl flex items-center justify-between gap-16 pt-6 px-6'>
+        <Link to='/' className='w-12 h-12 md:w-16 md:h-16 bg-black text-white rounded-md flex items-center justify-center font-outfit font-bold'>LOGO</Link>
+        {/* <div className='hidden lg:flex lg:items-center lg:justify-center lg:gap-2'>
+          <BrandLink to='/a-propos' label='A Propos'/>
+          <BrandLink to='/methode' label='Notre méthode'/>
+          <BrandLink to='/contact' label='Contact'/>
+        </div> */}
+        <div className='flex gap-2 items-center'>
+          <div className='flex items-center justify-center gap-4 '>
+            {
+              user && isAuthenticated && user.userType === 'student' &&
+              <Link to='/etudiant' className='rounded-md flex items-center justify-center font-outfit font-bold  text-white gap-px'>
+                <BrandButton variant={'black'}>
+                  Mon Espace
+                  <UserIcon className='size-6'/>
+                </BrandButton>
+              </Link>
+            }
+            {
+              user && isAuthenticated && user.userType === 'animator' &&
+              <Link to='/animateur' className='rounded-md flex items-center justify-center font-outfit font-bold  text-white gap-px'>
+                <BrandButton variant={'black'}>
+                  Mon Espace
+                  <UserIcon className='size-6'/>
+                </BrandButton>
+              </Link>
+            }
+            {
+              user && isAuthenticated && user.userType === 'associationMember' &&
+              <Link to='/association' className='rounded-md flex items-center justify-center font-outfit font-bold  text-white gap-px'>
+                <BrandButton variant={'black'}>
+                  Mon Espace
+                  <UserIcon className='size-6'/>
+                </BrandButton>
+              </Link>
+            }
+            {
+              (!user || !isAuthenticated) &&
+              <Link to='/connexion' className='rounded-md flex items-center justify-center font-outfit font-bold  text-white gap-px'>
+                <BrandButton variant={'black'}>
+                  Connexion
+                  <MoveUpRightIcon className='size-6'/>
+                </BrandButton>
+              </Link>
+            }
+          </div>
+          <NavBar/>
         </div>
-        <NavBar className='inline-block md:hidden'/>
     </header>
   )
 }

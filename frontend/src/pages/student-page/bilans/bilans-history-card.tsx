@@ -36,22 +36,24 @@ const BilansHistoryCard = ({bilans} : BilansResponse) => {
     }
     
   return (
-    <div className={cn("flex flex-row gap-2 mt-6 flex-nowrap overflow-x-auto px-6 py-6")}>
-        {
-          eligibleBilans.map((bilan, index) => (
-            <Card key={index} className={cn("py-6 rounded-3xl border-none shadow-card", index === 0 && 'ml-6', bilan.lesson?.subject.label? cardStyle[bilan.lesson.subject.label as Subject] : '')}>
-                <CardContent className="w-52! min-h-72! flex flex-col items-center justify-center h-full">
-                    <span className='uppercase font-bold text-sm text-center'>{bilan.lesson!.subject.label}</span>
-                    <Separator className="opacity-20 mt-2"/>
-                    <span className='flex-1 text-lg font-bold md:text-xl text-center px-4 flex items-center justify-center mt-4'>{bilan.lesson!.label}</span>
-                    <Separator className="opacity-20  mt-4"/>
-                    <span className='uppercase font-bold text-base mt-2'>{formatDate(bilan.date, 'd/MM/y')}</span>
-                    <span className='uppercase font-bold text-sm mt-2'>Par {bilan.submittedBy.firstName} {bilan.submittedBy.lastName}</span>
-                </CardContent>
-            </Card>
-          ))
-        }
+    <div className="pl-6">
+      <div className={cn("flex flex-row gap-2 mt-6 flex-nowrap overflow-x-auto py-6 brand-h-scrollbar")}>
+          {
+            eligibleBilans.slice(0,Math.min(eligibleBilans.length, 10)).map((bilan, index) => (
+              <Card key={index} className={cn("py-6 rounded-3xl border-none shadow-card", index === 0 && 'ml-6', bilan.lesson?.subject.label? cardStyle[bilan.lesson.subject.label as Subject] : '')}>
+                  <CardContent className="w-52! min-h-72! flex flex-col items-center justify-center h-full">
+                      <span className='uppercase font-bold text-sm text-center'>{bilan.lesson!.subject.label}</span>
+                      <Separator className="opacity-20 mt-2"/>
+                      <span className='flex-1 text-lg font-bold md:text-xl text-center px-4 flex items-center justify-center mt-4'>{bilan.lesson!.label}</span>
+                      <Separator className="opacity-20  mt-4"/>
+                      <span className='uppercase font-bold text-base mt-2'>{formatDate(bilan.date, 'd/MM/y')}</span>
+                      <span className='uppercase font-bold text-sm mt-2'>Par {bilan.submittedBy.firstName} {bilan.submittedBy.lastName}</span>
+                  </CardContent>
+              </Card>
+            ))
+          }
 
+      </div>
     </div>
   )
 }

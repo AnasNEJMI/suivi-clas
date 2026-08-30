@@ -1,7 +1,7 @@
 import { AnswerChoice } from '@/api/api.types'
 import { studentApiCalls, type QcmEntry } from '@/api/student/apiCalls'
+import { BrandButton } from '@/components/brand-button'
 
-import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogClose,
@@ -131,7 +131,7 @@ const QcmQuestionnaire = ({qcm, onQcmSubmit} : {qcm : QcmEntry, onQcmSubmit : (q
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="qcm" className='w-full mt-2 text-base h-12'>Compléter le QCM</Button>
+        <BrandButton className='w-full mt-4 text-base h-12'>Compléter le QCM</BrandButton>
       </DialogTrigger>
       <DialogContent className='w-full h-dvh md:max-w-4xl md:h-fit'>
         {open &&
@@ -196,9 +196,9 @@ const QcmQuestionnaire = ({qcm, onQcmSubmit} : {qcm : QcmEntry, onQcmSubmit : (q
             }
           <DialogFooter className='flex flex-row'>
             <DialogClose asChild className='flex-1 p-0'>
-              <Button type="button" variant="outline" className='h-12'>
+              <BrandButton type="button" variant="outline" className='h-12'>
                 Annuler
-              </Button>
+              </BrandButton>
             </DialogClose>
             <QuestionnaireActions className='flex-1 flex'>
               <QuestionnaireNext className='w-full h-12'>Confimer</QuestionnaireNext>

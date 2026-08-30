@@ -8,7 +8,7 @@ interface AnimatorCardProps {
 }
 const AnimatorCard = ({title, num, subTitle, date} : AnimatorCardProps) => {
   return (
-    <Card className="@container/card w-full grow">
+    <Card className="@container/card w-full grow border-none shadow-md">
         <CardHeader>
           <CardDescription>{title}</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">

@@ -1,4 +1,5 @@
 import type { ScolarYearEntry } from '@/api/animator/types'
+import { BrandButton } from '@/components/brand-button'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -174,12 +175,11 @@ const BilansGeneralInfoCard = ({
               control={form.control}
               render = {({field, fieldState}) => (
                 <Field data-invalid = {fieldState.invalid} className='gap-2'>
-                  <FieldLabel htmlFor="form-general-info-class">Classe</FieldLabel>
+                  <FieldLabel>Classe</FieldLabel>
                   <ToggleGroup
                     type="single"
                     value={field.value > 0 ? field.value.toString() : ''}
                     onValueChange={(v) => field.onChange(v ? parseInt(v) : -1)}
-                    id="form-general-info-class"
                     aria-invalid={fieldState.invalid}
                     variant="outline"
                     spacing={1}
@@ -191,10 +191,12 @@ const BilansGeneralInfoCard = ({
                           key={studentClass.id}  
                           value={studentClass.id.toString()}
                           aria-label={`${studentClass.label}`}
-                          className="flex h-14 px-4 flex-col gap-2 items-center justify-center rounded-lg"
+                          className='h-14'
                         >
-                          <span className="text-base font-bold leading-none">{studentClass.label}</span>
-                          <span className="text-sm font-light leading-none">{studentClass.association.label}</span>
+                          <div className='flex flex-col items-center justify-center px-4 gap-2'>
+                            <span className="text-base font-bold leading-none">{studentClass.label}</span>
+                            <span className="text-sm font-light leading-none">{studentClass.association.label}</span>
+                          </div>
                         </ToggleGroupItem>
                       ))
                     }
@@ -209,13 +211,13 @@ const BilansGeneralInfoCard = ({
             </Controller>
           </FieldGroup>
           <Field orientation="horizontal" className="flex mt-6">
-            <Button type="submit" size='lg' form="form-general-info" className="font-medium text-base py-6 flex-1">
+            <BrandButton type="submit" size='lg' form="form-general-info" className="font-medium text-base py-6 flex-1">
                 {
                   isLocked
                   ?<span className='flex items-center gap-2'>Confirmé <CheckIcon size={16} /></span>
                   :'Confirmer'
                 }
-            </Button>
+            </BrandButton>
           </Field>
         </form>
       </CardContent>

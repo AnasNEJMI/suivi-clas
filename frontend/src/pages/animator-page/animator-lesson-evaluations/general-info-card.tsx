@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { CheckIcon, EditIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ScolarYearEntry } from '@/api/animator/types';
+import { BrandButton } from '@/components/brand-button';
 
 interface GeneralInfoCardProps{
   className ?: string,
@@ -146,10 +147,12 @@ const LessonEvalGeneralInfoCard = ({
                             key={studentClass.id}  
                             value={studentClass.id.toString()}
                             aria-label={`${studentClass.label}`}
-                            className="flex h-14 px-4 flex-col gap-2 items-center justify-center rounded-lg"
+                            className="h-14 px-6 rounded-lg"
                           >
-                            <span className="text-base font-bold leading-none">{studentClass.label}</span>
-                            <span className="text-sm font-light leading-none">{studentClass.association.label}</span>
+                            <div className='flex flex-col gap-2 items-center justify-center '>
+                              <span className="text-base font-bold leading-none">{studentClass.label}</span>
+                              <span className="text-sm font-light leading-none">{studentClass.association.label}</span>
+                            </div>
                           </ToggleGroupItem>
                         ))
                       }
@@ -178,7 +181,7 @@ const LessonEvalGeneralInfoCard = ({
                         aria-invalid={fieldState.invalid}
                         variant="outline"
                         spacing={1}
-                        className='w-full items-center justify-start flex-wrap'
+                        className='w-full items-center justify-start flex-wrap gap-4'
                         >
                         {
                             selectedClass.students.map((s) => (
@@ -205,13 +208,13 @@ const LessonEvalGeneralInfoCard = ({
               }
             </FieldGroup>
             <Field orientation="horizontal" className="flex mt-6">
-              <Button type="submit" size='lg' form="form-general-info" className="font-medium text-base py-6 flex-1">
+              <BrandButton type="submit" size='lg' form="form-general-info" className="font-medium text-base py-6 flex-1">
                   {
                     isLocked
                     ?<span className='flex items-center gap-2'>Confirmé <CheckIcon size={16} /></span>
                     :'Confirmer'
                   }
-              </Button>
+              </BrandButton>
             </Field>
           </form>
         </CardContent>

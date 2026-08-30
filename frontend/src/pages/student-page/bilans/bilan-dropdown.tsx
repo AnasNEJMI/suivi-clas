@@ -24,7 +24,7 @@ const BilanDropdown = ({className, bilans, selectedValue, onValueChange} : Bilan
         <SelectTrigger className="w-45 bg-white text-lg font-medium font-outfit border-none shadow-card">
             <SelectValue/>
         </SelectTrigger>
-        <SelectContent className={cn(className, '')}>
+        <SelectContent className={cn(className, 'max-h-72')}>
             <SelectGroup>
                 {
                     bilans && bilans.length>0 &&

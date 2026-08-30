@@ -14,9 +14,6 @@ const LessonEvalCard = ({lessonsBySubject} : {lessonsBySubject : LessonsBySubjec
             <LessonEvalDropdown lessonsBySubject = {lessonsBySubject} selectedValue={selectedSubject.id.toString()} onValueChange = {setSelectedSubject}/>
         </div>
         <LessonEvalTable selectedSubject = {selectedSubject}/>
-        {/* <pre>
-            {JSON.stringify(lessonsBySubject, null, 2)}
-        </pre> */}
     </section>
   )
 }

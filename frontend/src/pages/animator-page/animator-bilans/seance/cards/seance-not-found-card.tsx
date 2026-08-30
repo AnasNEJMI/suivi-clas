@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { XIcon } from 'lucide-react';
 import SeanceDurationDropdown from './seance-duration-dropdown';
+import { BrandButton } from '@/components/brand-button';
 
 function SeanceNotFoundCard({
     seanceDurations,
@@ -29,7 +30,7 @@ function SeanceNotFoundCard({
                 </div>
             </CardContent>
             <CardFooter>
-                <Button
+                <BrandButton
                     size='lg'
                     onClick={() => {
                         console.log('selected id : ', selectedDurationId);
@@ -39,7 +40,7 @@ function SeanceNotFoundCard({
                     className='w-full font-medium text-base py-6'
                 >
                     {isSubmitting ? 'Enregistrement...' : 'Enregistrer la séance'}
-                </Button>
+                </BrandButton>
             </CardFooter>
         </Card>
     )

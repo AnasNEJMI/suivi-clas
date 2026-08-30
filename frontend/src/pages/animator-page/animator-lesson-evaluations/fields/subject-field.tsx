@@ -24,7 +24,7 @@ export default function SubjectField({ availableSubjects }: { availableSubjects:
                             setValue('summary',  '')
                         }}
                         variant='outline'
-                        className='items-center flex-wrap gap-2'
+                        className='items-center flex-wrap gap-4'
                     >
                         {availableSubjects.map(subject => (
                             <ToggleGroupItem

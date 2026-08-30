@@ -75,7 +75,9 @@ function ToggleGroupItem({
       )}
       {...props}
     >
-      {children}
+      <div  className="relative w-full justify-between z-20 group-data-[state=on]:translate-y-0 -translate-y-1.5 group-active:translate-y-0 gap-2">
+        {children}
+      </div>
     </ToggleGroupPrimitive.Item>
   )
 }

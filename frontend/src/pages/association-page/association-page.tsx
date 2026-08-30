@@ -1,5 +1,4 @@
 import type { User } from '@/api/auth';
-import Header from '@/components/header';
 import BaseLayout from '@/layouts/base-layout';
 import {useRouteLoaderData } from 'react-router'
 import AssociationMemberHeroSection from './hero-section';
@@ -11,6 +10,7 @@ import PresenceStatsSection from './presence-stats/presence-section';
 import VisitStatsSection from './visit-stats/visit-section';
 import AnimatorSection from './animator-stats/animator-section';
 import QcmStatsSection from './qcm-stats/qcm-stats-section';
+import FooterSection from '../footer-section';
 
 
 const AssociationPage = () => {
@@ -19,7 +19,6 @@ const AssociationPage = () => {
   
   return (
     <BaseLayout>
-        <Header/>
         <AssociationMemberHeroSection assocMember={user}/>
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans de présence'/>}>
             <Suspense fallback = {<Skeleton/>}>
@@ -41,6 +40,7 @@ const AssociationPage = () => {
                 <AnimatorSection/>
             </Suspense>
         </ErrorBoundary>
+        <FooterSection/>
     </BaseLayout>
   )
 }

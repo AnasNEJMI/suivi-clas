@@ -1,14 +1,13 @@
 import Header from '@/components/header';
-import HomeHero from '@/components/home/hero';
-import BaseLayout from '@/layouts/base-layout'
+import HeroSection from '@/components/home/sections/hero-section';
 
 const Home = () => {
   
   return (
-    <BaseLayout>
+    <main className='relative z-10 w-full min-h-screen flex flex-col items-center'>
       <Header/>
-      <HomeHero/>
-    </BaseLayout>
+      <HeroSection/>
+    </main>
   )
 }
 

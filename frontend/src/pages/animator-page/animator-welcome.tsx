@@ -1,8 +1,8 @@
 import type { Animator, AnimatorBaseDataResponse, ScolarYearEntry } from '@/api/animator/types';
 import AnimatorCard from '@/components/animator-card';
+import { BrandButton } from '@/components/brand-button';
 import ScolarYearDropdown from '@/components/brand-dropdown';
 import { SiteHeader } from '@/components/site-header'
-import { Button } from '@/components/ui/button';
 import { useMemo, useState } from 'react';
 import { Link, useRouteLoaderData } from 'react-router';
 
@@ -64,24 +64,24 @@ const AnimatorWelcome = () => {
                   <h2 className='text-xl md:text-2xl font-bold'>Liens</h2>
                   <div className='grid grid-cols-1 lg:grid-cols-2 gap-2  mt-6'>
                     <Link to='/animateur/bilans' className='w-full'>
-                        <Button size='default' className='w-full py-8 text-lg  cursor-pointer'>
+                        <BrandButton size='default' className='w-full py-8 text-lg  cursor-pointer'>
                             Soumettre une séance/bilan
-                        </Button>
+                        </BrandButton>
                     </Link>
                     <Link to='/animateur/skills' className='w-full'>
-                        <Button size='default' className='w-full py-8 text-lg  cursor-pointer'>
+                        <BrandButton size='default' className='w-full py-8 text-lg  cursor-pointer'>
                             Modifier des compétences
-                        </Button>
+                        </BrandButton>
                     </Link>
                     <Link to='/animateur/bilans' className='w-full'>
-                        <Button size='default' className='w-full py-8 text-lg  cursor-pointer'>
+                        <BrandButton size='default' className='w-full py-8 text-lg  cursor-pointer'>
                             Soumettre une observation
-                        </Button>
+                        </BrandButton>
                     </Link>
                     <Link to='/animateur/bilans' className='w-full'>
-                        <Button size='default' className='w-full py-8 text-lg  cursor-pointer'>
+                        <BrandButton size='default' className='w-full py-8 text-lg  cursor-pointer'>
                             Soumettre un lien de support
-                        </Button>
+                        </BrandButton>
                     </Link>
                   </div>
                 </div>

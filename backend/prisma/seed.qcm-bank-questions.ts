@@ -210,7 +210,11 @@ RÈGLES DE QUALITÉ — EXPLICATIONS :
 RÈGLES ABSOLUES :
 ═══════════════════════════════════════════════════════════
 — Les ${total} questions DOIVENT couvrir des aspects différents de "${lesson}".
-— Tout le contenu en FRANÇAIS.
+— Tout le contenu en FRANÇAIS, sauf le sujet de l'anglais.
+- Tout le contenu généré pour les leçons d'anglais doivent être générée de la façon suivante :
+  1 - la question doit être rédigée en français, et doit porter sur une question d'anglais (grammaire, vocabulaire, orthographe, conjugaison, culture générale).
+  2 - les choix de réponse doivent être rédigés en anglais.
+  3 - l'explication doit être rédigée en français. 
 — Chaque question est autonome et compréhensible sans les autres.
 — Le champ "difficulty" contient exactement "e", "m", ou "h".
 — Le champ "correctAnswer" contient exactement "a", "b", "c", ou "d".
@@ -289,6 +293,17 @@ async function callBestAvailableProvider(
 }
 
 async function main() {
+  // const engQuestions = await prisma.qcmBankQuestion.findMany({
+  //   where : {lesson : {subjectId : 6}}
+  // });
+  // console.log('number of eng questions generated total : ', engQuestions.length);
+  // const {count} = await prisma.qcmBankQuestion.deleteMany({
+  //   where : {lesson : {subjectId : 6}}
+  // });
+  // console.log('number of eng questions deleted total : ', count);
+
+  // return;
+
   const lessons = await prisma.lesson.findMany({
     select: {
       id: true,
@@ -310,7 +325,7 @@ async function main() {
     const existing = await prisma.qcmBankQuestion.count({ where: { lessonId: lesson.id } });
 
     if (existing >= totalPerLesson) {
-      console.log(`[${i + 1}/${lessons.length}] ⏭ ${lesson.label} (already generated)`);
+      console.log(`[${i + 1}/${lessons.length}] ⏭ ${lesson.label} (already generated, number of questions generated is : ${existing})`);
       continue;
     }
 

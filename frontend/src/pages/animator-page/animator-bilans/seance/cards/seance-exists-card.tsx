@@ -1,5 +1,5 @@
 import type { SeanceEntry } from '@/api/animator/types';
-import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/brand-button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckIcon, TriangleAlertIcon } from 'lucide-react';
 
@@ -23,14 +23,15 @@ const SeanceExistsCard = ({seance, onDelete, isDeleting }: {seance : SeanceEntry
                 </div>
             </CardContent>
             <CardFooter className='flex flex-col items-start gap-3'>
-                <Button
+                <BrandButton
+                    variant='destructive'
                     size='lg'
                     onClick={onDelete}
                     disabled={isDeleting}
                     className='w-full font-medium text-base py-6'
                 >
                     {isDeleting ? 'Suppression...' : 'Supprimer la séance'}
-                </Button>
+                </BrandButton>
                 <p className='flex items-center gap-2 text-red-600 text-sm'>
                     <TriangleAlertIcon size={14} />
                     La suppression d'une séance entraîne la suppression de tous ses bilans.

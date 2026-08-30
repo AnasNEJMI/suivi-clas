@@ -1,12 +1,8 @@
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card"
 import {
   Field,
@@ -24,6 +20,8 @@ import { useState } from "react"
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group"
 import { USER_TYPE_LABELS, USER_TYPES, UserType } from "@/api/api.types"
 import { Separator } from "../ui/separator"
+import { BrandButton } from "../brand-button"
+import { CheckIcon } from "lucide-react"
 
 export function LoginForm({
   className,
@@ -60,15 +58,15 @@ export function LoginForm({
   }
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="bg-linear-135 from-25% from-lime-100/50 to-95% to-lime-300/75 border-lime-400 font-outfit">
-        <CardHeader>
+    <div className={cn("flex flex-col gap-6 max-w-md w-full", className)} {...props}>
+      <Card className="bg-white shadow-card border-none">
+        {/* <CardHeader>
           <CardTitle>Se connecter</CardTitle>
           <CardDescription>
             Soumettre votre identifiant et votre mot de passe pour accéder à votre espace personnel
           </CardDescription>
-        </CardHeader>
-        <CardContent className="mt-2">
+        </CardHeader> */}
+        <CardContent className="mt-2 min-h-xs">
           <form id = 'form-login' onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>
               <Controller
@@ -102,12 +100,6 @@ export function LoginForm({
                   <Field data-invalid = {fieldState.invalid}>
                     <div className="flex items-center">
                       <FieldLabel htmlFor="form-login-password">Mot de passe</FieldLabel>
-                      {/* <a
-                        href="#"
-                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                      >
-                        Mot de passe oublié?
-                      </a> */}
                     </div>
                     <Input
                       {...field}
@@ -126,7 +118,7 @@ export function LoginForm({
                 )}
               >
               </Controller>
-              <Separator className="bg-lime-400"/>
+              <Separator />
               <Controller
                 name = 'userType'
                 control={form.control}
@@ -140,8 +132,8 @@ export function LoginForm({
                         onValueChange={setUserType}
                         id="form-login-usertype"
                         aria-invalid={fieldState.invalid}
-                        variant="default"
-                        className='w-full md:max-w-xs items-center justify-end flex-col gap-2'
+                        variant="outline"
+                        className='w-full md:max-w-xs items-stretch justify-end flex-col gap-4'
                       >
                         {
                           USER_TYPES.map((userType, index) => (
@@ -149,9 +141,12 @@ export function LoginForm({
                               key={index}  
                               value={userType}
                               aria-label={userType}
-                              className="w-full flex items-center justify-center py-6 bg-white/30 rounded-md"
+                              className="w-full py-6"
                             >
-                              <span className="text-base  leading-none font-medium">{USER_TYPE_LABELS[userType as UserType]}</span>
+                              <div className="flex items-center justify-center">
+                                <div className="flex-1 text-center">{USER_TYPE_LABELS[userType as UserType]}</div>
+                                <CheckIcon className="hidden group-data-[state=on]:block text-white"/>
+                              </div>
                             </ToggleGroupItem>
                           ))
                         }
@@ -169,14 +164,15 @@ export function LoginForm({
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal" className="flex">
-            <Button size='lg' type="button" variant="outline" onClick={() => form.reset()} className="font-medium text-base py-6 flex-1">
+
+            <BrandButton type="button" variant="outline" onClick={() => form.reset()} className="flex-1 text-black">
                 Annuler
-            </Button>
-            <Button type="submit" size='lg' form="form-login" disabled = {isRequestingLoggingIn} className="font-medium text-base py-6 flex-1">
+            </BrandButton>
+            <BrandButton type="submit" form="form-login" disabled = {isRequestingLoggingIn} className="flex-1">
                 {
                   isRequestingLoggingIn ? 'Chargement ...' : 'Se Connecter'
                 }
-            </Button>
+            </BrandButton>
           </Field>
         </CardFooter>
       </Card>

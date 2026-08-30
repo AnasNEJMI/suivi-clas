@@ -6,6 +6,7 @@ import { CheckIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants, type Button } from "@/components/ui/button"
+import { brandButtonVariants } from "../brand-button"
 
 function Questionnaire({
   className,
@@ -28,7 +29,7 @@ function QuestionnaireProgress({
     <QuestionnairePrimitive.Progress
       data-slot="questionnaire-progress"
       className={cn(
-        "min-h-[1lh] w-fit min-w-[14ch] text-xs font-medium text-muted-foreground tabular-nums",
+        "min-h-1lh w-fit min-w-[14ch] text-xs font-medium text-muted-foreground tabular-nums",
         className
       )}
       {...props}
@@ -119,7 +120,7 @@ function QuestionnaireChoice({
       <span
         aria-hidden="true"
         data-slot="questionnaire-choice-indicator"
-        className="pointer-events-none relative flex size-4 shrink-0 translate-y-[--spacing(0.45)] items-center justify-center rounded-[4px] border border-input group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 group-data-[type=radio]/questionnaire-choice:rounded-full group-data-checked/questionnaire-choice:border-primary group-data-checked/questionnaire-choice:bg-primary group-data-checked/questionnaire-choice:text-primary-foreground dark:bg-input/30 dark:group-data-checked/questionnaire-choice:bg-primary"
+        className="pointer-events-none relative flex size-4 shrink-0 translate-y-[--spacing(0.45)] items-center justify-center rounded-lg border border-input group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 group-data-[type=radio]/questionnaire-choice:rounded-full group-data-checked/questionnaire-choice:border-primary group-data-checked/questionnaire-choice:bg-primary group-data-checked/questionnaire-choice:text-primary-foreground dark:bg-input/30 dark:group-data-checked/questionnaire-choice:bg-primary"
       >
         <span
           data-slot="questionnaire-choice-indicator-dot"
@@ -138,7 +139,7 @@ function QuestionnaireChoice({
       </QuestionnairePrimitive.ChoiceLabel>
       <QuestionnairePrimitive.ChoiceShortcut
         data-slot="questionnaire-choice-shortcut"
-        className="pointer-events-none ms-auto hidden size-5 shrink-0 translate-y-[--spacing(0.45)] items-center justify-center rounded-md border border-input bg-background font-mono text-[0.625rem] leading-none font-medium text-muted-foreground group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 group-data-[shortcut]/questionnaire-choice:inline-flex"
+        className="pointer-events-none ms-auto hidden size-5 shrink-0 translate-y-[--spacing(0.45)] items-center justify-center rounded-md border border-input bg-background font-mono text-[0.625rem] leading-none font-medium text-muted-foreground group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 group-data-shortcut/questionnaire-choice:inline-flex"
       />
     </QuestionnairePrimitive.Choice>
   )
@@ -247,13 +248,15 @@ function QuestionnaireSkip({
       data-size={size}
       data-variant={variant}
       className={cn(
-        buttonVariants({ size, variant }),
+        brandButtonVariants({ size, variant }),
         "col-start-2 row-start-1 min-h-11 justify-self-end sm:min-h-0",
         className
       )}
       {...props}
     >
-      {children ?? "Skip"}
+      <div  className="relative z-20 -translate-y-1.5 group-active:translate-y-0 flex flex-row items-center gap-2">
+        {children ?? "Skip"}
+      </div>
     </QuestionnairePrimitive.Skip>
   )
 }
@@ -272,13 +275,15 @@ function QuestionnaireNext({
       data-size={size}
       data-variant={variant}
       className={cn(
-        buttonVariants({ size, variant }),
+        brandButtonVariants({ size, variant }),
         "col-start-3 row-start-1 min-h-11 justify-self-end sm:min-h-0",
         className
       )}
       {...props}
     >
-      {children ?? "Next"}
+      <div  className="relative z-20 -translate-y-1.5 group-active:translate-y-0 flex flex-row items-center gap-2">
+        {children ?? "Next"}
+      </div>
     </QuestionnairePrimitive.Next>
   )
 }
@@ -297,13 +302,15 @@ function QuestionnaireSubmit({
       data-size={size}
       data-variant={variant}
       className={cn(
-        buttonVariants({ size, variant }),
-        "col-start-3 row-start-1 min-h-11 justify-self-end sm:min-h-0",
+        brandButtonVariants({ size, variant }),
+        "col-start-3 row-start-1 min-h-11 justify-self-end sm:min-h-0 text-white",
         className
       )}
       {...props}
     >
-      {children ?? "Submit"}
+      <div  className="relative z-20 -translate-y-1.5 group-active:translate-y-0 flex flex-row items-center gap-2">
+        {children ?? "Submit"}
+      </div>
     </QuestionnairePrimitive.Submit>
   )
 }

@@ -1,14 +1,14 @@
 import type { SkillEvalEntry }    from '@/api/animator/types'
-import { Button }                 from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Field }                  from '@/components/ui/field'
+import { Field } from '@/components/ui/field'
 import { skillEvalFormSchema, type SkillEvalFormValues } from '@/lib/schemas/skill-eval.schema'
-import { zodResolver }            from '@hookform/resolvers/zod'
-import { FormProvider, useForm }  from 'react-hook-form'
-import SkillCommentaryField       from './fields/skill-commentary-field'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FormProvider, useForm } from 'react-hook-form'
+import SkillCommentaryField from './fields/skill-commentary-field'
 import SkillSliderField from './fields/skill-silder-field'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { BrandButton } from '@/components/brand-button'
 
 interface SkillEvalFormProps {
     skillEval:  SkillEvalEntry | null
@@ -46,7 +46,7 @@ const SkillEvalForm = ({ skillEval, isPending, onSubmit }: SkillEvalFormProps) =
                     skillEval &&  
                     <CardDescription className='flex flex-col lg:flex-row gap-2 text-sm lg:text-base'>
                         <span>Dernière mise à jour : </span>
-                        <span className='px-2 bg-lime-600 border border-lime-700 text-lime-50 rounded-sm capitalize text-nowrap w-fit'>{format(skillEval.updatedAt, 'PPPp', {locale : fr})}</span>
+                        <span className='px-2 bg-lime-300/20 border border-lime-300 text-lime-700 rounded-full capitalize text-nowrap w-fit'>{format(skillEval.updatedAt, 'PPPp', {locale : fr})}</span>
                     </CardDescription>
                 }
             </CardHeader>
@@ -68,7 +68,7 @@ const SkillEvalForm = ({ skillEval, isPending, onSubmit }: SkillEvalFormProps) =
                             <SkillCommentaryField name='improvements' />
                         </div>
                         <Field className='flex flex-row gap-2 mt-8'>
-                            <Button
+                            <BrandButton
                                 type='button'
                                 variant='outline'
                                 size='lg'
@@ -77,15 +77,15 @@ const SkillEvalForm = ({ skillEval, isPending, onSubmit }: SkillEvalFormProps) =
                                 className='flex-1 py-6 text-base font-medium'
                             >
                                 Annuler
-                            </Button>
-                            <Button
+                            </BrandButton>
+                            <BrandButton
                                 type='submit'
                                 size='lg'
                                 disabled={isPending}
                                 className='flex-1 py-6 text-base font-medium'
                             >
                                 {isPending ? 'Chargement...' : 'Soumettre'}
-                            </Button>
+                            </BrandButton>
                         </Field>
                     </form>
                 </FormProvider>

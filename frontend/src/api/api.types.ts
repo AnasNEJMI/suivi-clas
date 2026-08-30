@@ -104,7 +104,7 @@ export type UserType = (typeof UserType)[keyof typeof UserType]
 export const USER_TYPE_LABELS : Record<UserType, string> = {
     "animator" : "Animateur(trice)",
     "student" : "Élève",
-    "associationMember" : "Membre d'association",
+    "associationMember" : "Association",
     "admin" : "Administrateur",
 }
 
