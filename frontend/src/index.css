@@ -154,8 +154,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-image: url("/assets/checkered-2.png");
-    background-repeat: repeat;
   }
 
   h1,h2,h3,h4,h5,h6,p,span{
@@ -207,28 +205,9 @@
   .shadow-card{
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   }
-  .checkered-bg{
-    background-image: url("/assets/checkered-2.png");
-    background-repeat: repeat;
-  }
 
   .hero-clipped-left{
     clip-path: polygon(50% 75%, 100% 0, 100% 100%, 50% 100%);
   }
 
-  .noise-bg{
-    position: relative;
-    overflow: hidden;
-    ::after{
-      content: '';
-      position: absolute;
-      top : 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      background-image: url("/assets/noise-bg.png");
-      mix-blend-mode: overlay;
-      opacity:1;
-    }
-  }
 }

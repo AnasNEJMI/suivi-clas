@@ -21,7 +21,7 @@ app.use(helmetConfig)
 app.use(
     cors({
         origin : (origin, callback) => {
-            console.log(origin)
+            console.log('origin is : ', origin)
             //allow non-browser origins
             if (!origin) {
                 return callback(null, true)

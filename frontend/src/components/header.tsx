@@ -1,7 +1,6 @@
 import { Link} from 'react-router'
 import NavBar from './navbar'
 import { useAuth } from '@/contexts/auth/use-auth';
-import BrandLink from './brand-link';
 import { MoveUpRightIcon, UserIcon } from 'lucide-react';
 import { BrandButton } from './brand-button';
 

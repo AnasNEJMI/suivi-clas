@@ -1,7 +1,6 @@
 import NavLink from './navlink'
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from './ui/popover'
 import { MenuIcon, XIcon } from 'lucide-react'
-import { Separator } from './ui/separator'
 import { cn } from '@/lib/utils'
 import { BrandButton } from './brand-button'
 

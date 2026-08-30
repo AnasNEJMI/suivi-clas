@@ -1,5 +1,3 @@
-import * as React from "react"
-
 import { NavMain } from "@/components/nav-main"
 import {
   Sidebar,
@@ -11,12 +9,12 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { Link, useNavigate } from "react-router"
-import { BicepsFlexedIcon, BookOpenIcon, ChartNoAxesCombinedIcon, CircleQuestionMarkIcon, DownloadIcon, NotebookTextIcon, UserIcon,} from "lucide-react"
+import { BicepsFlexedIcon, BookOpenIcon, ChartNoAxesCombinedIcon, CircleQuestionMarkIcon, DownloadIcon, LogOutIcon, NotebookTextIcon, UserIcon,} from "lucide-react"
 import { Separator } from "./ui/separator"
 import { useAuth } from "@/contexts/auth/use-auth"
-import { IconLogout } from "@tabler/icons-react"
 import { ApiError } from "@/lib/errors/apiError.class"
 import { BrandButton } from "./brand-button"
+import { useState } from "react"
 
 const data = {
   welcome : [
@@ -64,7 +62,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const {requestLogout} = useAuth();
-  const [isRequestingLoggingOut, setIsRequestingLoggingOut] = React.useState(false);
+  const [isRequestingLoggingOut, setIsRequestingLoggingOut] = useState(false);
   const navigate = useNavigate();
 
   async function onLogout(){
@@ -107,7 +105,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <BrandButton variant={'destructive'} className="w-full" disabled = {isRequestingLoggingOut} onClick={onLogout}>
-          <IconLogout className="text-background"/>
+          <LogOutIcon className="text-background"/>
           {isRequestingLoggingOut ? 'Déconnexion ...' : 'Se déconnecter'}
         </BrandButton>
       </SidebarFooter>

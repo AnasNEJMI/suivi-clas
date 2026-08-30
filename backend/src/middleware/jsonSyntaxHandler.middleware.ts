@@ -7,6 +7,7 @@ export default async function syntaxHandler(
     res : Response,
     next : NextFunction,
 ){
+    console.log('error : ', err);
     if(err instanceof SyntaxError){
         next(ApiError.invalidJsonBodyError())
     }else{
