@@ -3,10 +3,9 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import RootLayout from './layouts/root-layout.tsx'
-import SignUp from './pages/signup.tsx'
 import { guestRouteLoader } from './router/loaders/guest-route-loader.ts'
-import About from './pages/about.tsx'
-import Contact from './pages/contact.tsx'
+import AboutPage from './pages/about-page.tsx'
+import ContactPage from './pages/contact-page.tsx'
 import { RootErrorBoundary } from './pages/root-error-boundry.tsx'
 import { studentPageLoader } from './router/loaders/student-page-loader.tsx'
 import AnimatorWelcome from './pages/animator-page/animator-welcome.tsx'
@@ -18,6 +17,7 @@ import AnimatorLessonEvaluationsPage from './pages/animator-page/animator-lesson
 import AnimatorQcmPage from './pages/animator-page/animator-qcm-page/page.tsx'
 import { lazy, Suspense, type FunctionComponent } from 'react'
 import PageSkeleton from './pages/page-skeleton.tsx'
+import MethodPage from './pages/method-page.tsx'
 
 
 function lazify<T extends FunctionComponent<any>>(
@@ -44,10 +44,10 @@ const router = createBrowserRouter([
     ErrorBoundary: RootErrorBoundary,
     children : [
       {index : true, Component : HomePage, loader : guestRouteLoader,  shouldRevalidate: () => true,},
-      {path : 'contact', Component : Contact},
-      {path : 'a-propos', Component : About},
+      {path : 'contact', Component : ContactPage, loader : guestRouteLoader,  shouldRevalidate: () => true,},
+      {path : 'a-propos', Component : AboutPage, loader : guestRouteLoader,  shouldRevalidate: () => true,},
       {path : 'connexion', Component : LoginPage, loader : guestRouteLoader,  shouldRevalidate: () => true,},
-      {path : 'signup', Component : SignUp},
+      {path : 'methode', Component : MethodPage, loader : guestRouteLoader,  shouldRevalidate: () => true,},
       {
         id : 'student',
         path : 'etudiant',
@@ -99,5 +99,6 @@ const router = createBrowserRouter([
 
 const container = document.getElementById('root')
 const root = createRoot(container!);
-root.render(<RouterProvider router={router} />)
+root.render(<RouterProvider router={router} />
+)
 

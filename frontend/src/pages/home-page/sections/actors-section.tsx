@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils"
 import { Building2, GraduationCap, PenLine, RefreshCw } from "lucide-react"
-import studentIllustration from '@/../public/student-illus.png';
-import teacherIllustration from '@/../public/teacher-illus.png';
-import associationIllustration from '@/../public/assoc-illus.png';
+import studentIllustration from '@/./assets/images/student-illus.png';
+import teacherIllustration from '@/./assets/images/teacher-illus.png';
+import associationIllustration from '@/./assets/images/assoc-illus.png';
 
 const forces = [
   {

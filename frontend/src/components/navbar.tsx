@@ -37,7 +37,7 @@ const links = [
 const NavBar = ({className, ...props} : NavBarProps) => {
   return (
     <Popover {...props}>
-        <PopoverTrigger className='group size-12' asChild>
+        <PopoverTrigger className='group' asChild>
             <BrandButton>
                 <MenuIcon className='size-6 group-data-[state=open]:hidden'/>
                 <XIcon className='size-6 group-data-[state=closed]:hidden'/>

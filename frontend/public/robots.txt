@@ -1,0 +1,16 @@
+User-agent: *
+
+# Public pages — index these
+Allow: /$
+Allow: /connexion$
+Aloow: /contact$
+Aloow: /a-propos$
+Aloow: /methode$
+
+# Authenticated dashboards — never index
+Disallow: /etudiant
+Disallow: /animateur
+Disallow: /association
+Disallow: /api/
+
+Sitemap: https://coursparcours.vercel.app/sitemap.xml

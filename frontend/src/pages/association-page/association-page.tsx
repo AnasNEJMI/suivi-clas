@@ -11,6 +11,7 @@ import VisitStatsSection from './visit-stats/visit-section';
 import AnimatorSection from './animator-stats/animator-section';
 import QcmStatsSection from './qcm-stats/qcm-stats-section';
 import FooterSection from '../footer-section';
+import { SEOHead } from '@/components/seo-head';
 
 
 const AssociationPage = () => {
@@ -18,30 +19,33 @@ const AssociationPage = () => {
     
   
   return (
-    <BaseLayout>
-        <AssociationMemberHeroSection assocMember={user}/>
-        <ErrorBoundary fallback = {<SectionError desc = 'des bilans de présence'/>}>
-            <Suspense fallback = {<Skeleton/>}>
-                <PresenceStatsSection/>
-            </Suspense>
-        </ErrorBoundary>
-        <ErrorBoundary fallback = {<SectionError desc = 'des bilans de consultation'/>}>
-            <Suspense fallback = {<Skeleton/>}>
-                <VisitStatsSection/>
-            </Suspense>
-        </ErrorBoundary>
-        <ErrorBoundary fallback = {<SectionError desc = 'des bilans de qcms'/>}>
-            <Suspense fallback = {<Skeleton/>}>
-                <QcmStatsSection/>
-            </Suspense>
-        </ErrorBoundary>
-        <ErrorBoundary fallback = {<SectionError desc = 'des données des animateur(trice)s participants'/>}>
-            <Suspense fallback = {<Skeleton/>}>
-                <AnimatorSection/>
-            </Suspense>
-        </ErrorBoundary>
-        <FooterSection/>
-    </BaseLayout>
+    <>
+        <SEOHead noIndex title='Mon espace association' />
+        <BaseLayout>
+            <AssociationMemberHeroSection assocMember={user}/>
+            <ErrorBoundary fallback = {<SectionError desc = 'des bilans de présence'/>}>
+                <Suspense fallback = {<Skeleton/>}>
+                    <PresenceStatsSection/>
+                </Suspense>
+            </ErrorBoundary>
+            <ErrorBoundary fallback = {<SectionError desc = 'des bilans de consultation'/>}>
+                <Suspense fallback = {<Skeleton/>}>
+                    <VisitStatsSection/>
+                </Suspense>
+            </ErrorBoundary>
+            <ErrorBoundary fallback = {<SectionError desc = 'des bilans de qcms'/>}>
+                <Suspense fallback = {<Skeleton/>}>
+                    <QcmStatsSection/>
+                </Suspense>
+            </ErrorBoundary>
+            <ErrorBoundary fallback = {<SectionError desc = 'des données des animateur(trice)s participants'/>}>
+                <Suspense fallback = {<Skeleton/>}>
+                    <AnimatorSection/>
+                </Suspense>
+            </ErrorBoundary>
+            <FooterSection/>
+        </BaseLayout>
+    </>
   )
 }
 

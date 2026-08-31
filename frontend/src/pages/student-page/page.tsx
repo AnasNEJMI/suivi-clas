@@ -12,6 +12,7 @@ import StudentPageHeroSection from './hero-section';
 import { studentApiCalls } from '@/api/student/apiCalls';
 import FooterSection from '../footer-section';
 import LogoutSection from './logout-section';
+import { SEOHead } from '@/components/seo-head';
 
 
 const StudentPage = () => {
@@ -23,27 +24,30 @@ const StudentPage = () => {
     
 
   return (
-    <BaseLayout>
-        <StudentPageHeroSection student={user}/>
-        <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
-            <Suspense fallback = {<Skeleton/>}>
-                <BilansSection student = {user}/>
-            </Suspense>
-        </ErrorBoundary>
-        <ErrorBoundary fallback = {<SectionError desc = 'des évaluations de la méthodologie'/>}>
-            <Suspense fallback = {<Skeleton/>}>
-                <SkillsEvalSection student = {user}/>
-            </Suspense>
-        </ErrorBoundary>
+    <>
+        <SEOHead noIndex title='Mon espace étudiant' />
+        <BaseLayout>
+            <StudentPageHeroSection student={user}/>
+            <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
+                <Suspense fallback = {<Skeleton/>}>
+                    <BilansSection student = {user}/>
+                </Suspense>
+            </ErrorBoundary>
+            <ErrorBoundary fallback = {<SectionError desc = 'des évaluations de la méthodologie'/>}>
+                <Suspense fallback = {<Skeleton/>}>
+                    <SkillsEvalSection student = {user}/>
+                </Suspense>
+            </ErrorBoundary>
 
-        <ErrorBoundary fallback = {<SectionError desc = 'des évaluations des leçons'/>}>
-            <Suspense fallback = {<Skeleton/>}>
-                <LessonEvalSection student = {user}/>
-            </Suspense>
-        </ErrorBoundary>
-        <LogoutSection/>
-        <FooterSection/>
-    </BaseLayout>
+            <ErrorBoundary fallback = {<SectionError desc = 'des évaluations des leçons'/>}>
+                <Suspense fallback = {<Skeleton/>}>
+                    <LessonEvalSection student = {user}/>
+                </Suspense>
+            </ErrorBoundary>
+            <LogoutSection/>
+            <FooterSection/>
+        </BaseLayout>
+    </>
   )
 }
 

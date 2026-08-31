@@ -21,14 +21,13 @@ app.use(helmetConfig)
 app.use(
     cors({
         origin : (origin, callback) => {
-            console.log('origin is : ', origin)
             //allow non-browser origins
             if (!origin) {
                 return callback(null, true)
             }
 
             // Allow only the configured frontend origin
-            if(origin === FRONTEND_ORIGIN){
+            if(origin === FRONTEND_ORIGIN || origin === 'http://localhost:4173'){
                 return callback(null, true);
             }
 
