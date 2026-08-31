@@ -1,14 +1,29 @@
-node_modules
-# Keep environment variables out of version control
+//ENV
 .env
+.env.local
+.env.development
 .env.production
+.env.*.local
+
+node_modules/
+
+dist/
+
+src/generated/
+
+prisma/seed-scripts/
+
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+*.log
+npm-debug.log*
+pnpm-debug.log*
 
 coverage
 tests
 
-/src/generated/prisma
-
 Dockerfile
 .dockerignore
-
-/prisma/seed.data.ts

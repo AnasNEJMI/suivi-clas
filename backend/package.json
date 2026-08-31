@@ -1,5 +1,5 @@
 {
-  "name": "ready",
+  "name": "coursparcours-backend",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
@@ -15,13 +15,13 @@
     "build": "npm run prisma:generate && tsc",
     "start": "node dist/server.js",
     "reseed-db": "npx prisma migrate reset && npx prisma migrate dev && npx prisma generate && npx prisma db seed && npm run seed-seance-durations && npm run seed-animator-submissions && npm run restore-qcm-bank-questions",
-    "seed-animator-submissions": "tsx prisma/seed.animator-submissions.ts",
-    "clear-animator-submissions": "tsx prisma/seed.animator-submissions.ts --clear",
-    "seed-qcm-bank-questions": "tsx prisma/seed.qcm-bank-questions.ts",
-    "clear-qcm-bank-questions": "tsx prisma/seed.qcm-bank-questions.ts --clear",
-    "extract-qcm-bank-questions": "tsx prisma/extract-qcm-bank-questions.ts",
-    "restore-qcm-bank-questions": "tsx prisma/restore-qcm-bank-questions.ts",
-    "seed-seance-durations" : "tsx prisma/seed.seance-durations.ts"
+    "seed-animator-submissions": "tsx prisma/seed-scripts/seed.animator-submissions.ts",
+    "clear-animator-submissions": "tsx prisma/seed-scripts/seed.animator-submissions.ts --clear",
+    "seed-qcm-bank-questions": "tsx prisma/seed-scripts/seed.qcm-bank-questions.ts",
+    "clear-qcm-bank-questions": "tsx prisma/seed-scripts/seed.qcm-bank-questions.ts --clear",
+    "extract-qcm-bank-questions": "tsx prisma/seed-scripts/extract-qcm-bank-questions.ts",
+    "restore-qcm-bank-questions": "tsx prisma/seed-scripts/restore-qcm-bank-questions.ts",
+    "seed-seance-durations" : "tsx prisma/seed-scripts/seed.seance-durations.ts"
   },
   "keywords": [],
   "author": "AnasNEJMI",
