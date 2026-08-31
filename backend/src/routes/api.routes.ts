@@ -45,8 +45,8 @@ router.get('/association/data', requireAuthHandler, asyncHandler(associationData
 router.get('/student/bilans', requireAuthHandler, asyncHandler(studentBilansHandler));
 router.get('/student/skills-evals', requireAuthHandler, asyncHandler(studentSkillsEvalsHandler));
 router.get('/student/lesson-evals', requireAuthHandler, asyncHandler(studentLessonEvalsHandler));
-router.get('/student/visit', requireAuthHandler, asyncHandler(studentVisitHandler))
-router.post('/student/qcm', validateBody(qcmSchema), requireAuthHandler, asyncHandler(submitStudentQcmHandler));
+router.get('/student/visit',requireAuthHandler,asyncHandler(studentVisitHandler))
+router.post('/student/qcm', validateBody(qcmSchema),requireAuthHandler, asyncHandler(submitStudentQcmHandler));
 
 router.get('/animator/me', requireAuthHandler, asyncHandler(animatorProfileHandler));
 router.get('/animator/base-data', requireAuthHandler, asyncHandler(animatorBaseDataHandler));
@@ -57,8 +57,8 @@ router.get('/animator/qcms', requireAuthHandler, asyncHandler(animatorFetchQcmsH
 
 router.post('/animator/lesson-eval', validateBody(lessonEvalSchema), requireAuthHandler, asyncHandler(animatorSubmitLessonEvalHandler));
 router.post('/animator/skill-eval', validateBody(skillEvalSchema), requireAuthHandler, asyncHandler(animatorSubmitSkillEvalHandler));
-router.post('/animator/bilan', validateBody(bilanSchema), requireAuthHandler, asyncHandler(animatorSubmitBilanHandler));
-router.post('/animator/seance', validateBody(seanceSchema), requireAuthHandler, asyncHandler(animatorSubmitSeanceHandler));
+router.post('/animator/bilan',validateBody(bilanSchema), requireAuthHandler, asyncHandler(animatorSubmitBilanHandler));
+router.post('/animator/seance',validateBody(seanceSchema), requireAuthHandler, asyncHandler(animatorSubmitSeanceHandler));
 
 router.delete('/animator/seance', requireAuthHandler, asyncHandler(animatorDeleteSeanceHandler));
 
