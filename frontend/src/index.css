@@ -2,7 +2,7 @@
   font-family: Outfit;
   font-style: normal;
   font-display: swap;
-  src: url("../src/assets/fonts/Outfit.ttf") format("ttf");
+  src: url("../src/assets/fonts/Outfit.ttf") format('truetype');
 }
 
 @import "tailwindcss";
