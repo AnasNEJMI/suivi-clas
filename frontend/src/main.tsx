@@ -18,6 +18,7 @@ import AnimatorQcmPage from './pages/animator-page/animator-qcm-page/page.tsx'
 import { lazy, Suspense, type FunctionComponent } from 'react'
 import PageSkeleton from './pages/page-skeleton.tsx'
 import MethodPage from './pages/method-page.tsx'
+import StudentSeancesTab from './pages/student-page/tabs/seances/tab.tsx'
 
 
 function lazify<T extends FunctionComponent<any>>(
@@ -31,11 +32,11 @@ function lazify<T extends FunctionComponent<any>>(
   )
 }
 
-const HomePage        = lazify(() => import('./pages/home-page/page.tsx'))
-const StudentPage     = lazify(() => import('./pages/student-page/page.tsx'))
-const AnimatorPage    = lazify(() => import('./pages/animator-page/animator-page.tsx'))
+const HomePage = lazify(() => import('./pages/home-page/page.tsx'))
+const StudentPageLayout = lazify(() => import('./pages/student-page/layout.tsx'))
+const AnimatorPage = lazify(() => import('./pages/animator-page/animator-page.tsx'))
 const AssociationPage = lazify(() => import('./pages/association-page/association-page.tsx'))
-const LoginPage       = lazify(() => import('./pages/login-page/page.tsx'))
+const LoginPage = lazify(() => import('./pages/login-page/page.tsx'))
 
 const router = createBrowserRouter([
   {
@@ -51,9 +52,12 @@ const router = createBrowserRouter([
       {
         id : 'student',
         path : 'etudiant',
-        Component : StudentPage,
+        Component : StudentPageLayout,
         loader : studentPageLoader,
         shouldRevalidate: () => true,
+        children : [
+          {index : true, Component : StudentSeancesTab}
+        ]
       },
       {
         id : 'association',

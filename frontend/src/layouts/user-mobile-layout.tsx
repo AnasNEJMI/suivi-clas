@@ -1,0 +1,47 @@
+import { Separator } from '@/components/ui/separator'
+import type { UserLayoutTab, UserPageTheme } from '@/lib/types/data.types'
+import { cn } from '@/lib/utils'
+import React from 'react'
+import { Link, useLocation } from 'react-router'
+
+interface UserMobileLayoutProps{
+    children : React.ReactNode,
+    tabs : UserLayoutTab[],
+    theme : UserPageTheme,
+}
+
+const UserMobileLayout = ({children, tabs, theme} : UserMobileLayoutProps) => {
+    const location = useLocation();
+  return (
+    <main className='relative pb-22 font-outfit p-2 bg-white'>
+        <div className='rounded-lg bg-zinc-100 min-h-dvh w-full p-4'>
+            {children}
+        </div>
+        <nav className='fixed w-full bottom-0 left-0 bg-white z-10'>
+            <Separator/>
+            <ul className='flex items-stretch h-full'>
+                {
+                    tabs.map((tab, index)=>(
+                        <li key={index} className='p-2 rounded-md flex-1'>
+                            <Link
+                            
+                            to={tab.url}
+                            className={cn('group flex flex-col items-center justify-center gap-1 h-16 border-2 p-2 rounded-md',
+                                location.pathname === tab.url
+                                ?`${theme.tabBgSelected} ${theme.tabBorderSelected} ${theme.tabTextSelected} hover:${theme.tabBgSelected} hover:${theme.tabBorderSelected} hover:${theme.tabTextSelected}`
+                                :`border-transparent bg-transparent hover:bg-zinc-100`
+                            )}
+                            >  
+                                <tab.icon  className='size-6'/>
+                                <span className='text-xs font-medium tracking-tight'>{tab.title}</span>
+                            </Link>
+                        </li>
+                    ))
+                }
+            </ul>
+        </nav>
+    </main>
+  )
+}
+
+export default UserMobileLayout

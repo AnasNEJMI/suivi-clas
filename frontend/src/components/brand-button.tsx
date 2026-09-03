@@ -10,7 +10,7 @@ const brandButtonVariants = cva(
         default: "bg-lime-800 text-white hover:before:bg-lime-500 before:rounded-lg before:absolute before:w-full before:h-full before:left-0 before:top-0 before:bg-lime-600 before:z-10 before:-translate-y-1.5 active:before:translate-y-0",
         black: "bg-zinc-900 text-white hover:before:bg-zinc-600 before:rounded-lg before:absolute before:w-full before:h-full before:left-0 before:top-0 before:bg-zinc-700 before:z-10 before:-translate-y-1.5 active:before:translate-y-0",
         destructive:
-          "bg-red-800 text-white hover:before:bg-red-600 before:rounded-lg before:absolute before:w-full before:h-full before:left-0 before:top-0 before:bg-red-600 before:z-10 before:-translate-y-1.5 active:before:translate-y-0",
+          "bg-red-800 text-white hover:before:bg-red-600 before:rounded-lg text-base! before:absolute before:w-full before:h-full before:left-0 before:top-0 before:bg-red-600 before:z-10 before:-translate-y-1.5 active:before:translate-y-0",
         outline:
           "bg-zinc-200 text-black before:border before:border-zinc-200 hover:before:bg-white before:rounded-lg before:absolute before:w-full before:h-full before:left-0 before:top-0 before:bg-zinc-50 before:z-10 before:-translate-y-1.5 active:before:translate-y-0",
         secondary:

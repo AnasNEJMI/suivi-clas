@@ -4,17 +4,15 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Link, useNavigate } from "react-router"
+import {useNavigate } from "react-router"
 import { BicepsFlexedIcon, BookOpenIcon, ChartNoAxesCombinedIcon, CircleQuestionMarkIcon, DownloadIcon, LogOutIcon, NotebookTextIcon, UserIcon,} from "lucide-react"
 import { Separator } from "./ui/separator"
 import { useAuth } from "@/contexts/auth/use-auth"
 import { ApiError } from "@/lib/errors/apiError.class"
 import { BrandButton } from "./brand-button"
 import { useState } from "react"
+import type { UserLayoutTab, UserPageTheme } from "@/lib/types/data.types"
 
 const data = {
   welcome : [
@@ -60,7 +58,12 @@ const data = {
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar>{
+  tabs : UserLayoutTab[],
+  theme : UserPageTheme,
+}
+
+export function AppSidebar({tabs,theme, ...props }: AppSidebarProps) {
   const {requestLogout} = useAuth();
   const [isRequestingLoggingOut, setIsRequestingLoggingOut] = useState(false);
   const navigate = useNavigate();
@@ -81,24 +84,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="p-0 bg-lime-200 hover:bg-lime-100"
-            >
-              <Link to="/" className="h-16 w-min p-0 ">
-                <div className="w-16 h-16"></div>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <div className="w-full font-outfit flex items-stretch justify-start gap-2">
+          <div className="w-10 h-10 rounded-md bg-zinc-900 flex items-center font-bold text-sm justify-center text-white">CPC</div>
+          <div className="flex flex-col justify-between">
+            <span className="font-medium tracking-tight leading-4">CoursParcours</span>
+            <span className="text-sm tracking-tight">Mon espace étudiant</span>
+          </div>
+        </div>
       </SidebarHeader>
       <SidebarContent>
-      <Separator className="mb-4"/>
-        <NavMain title="" items={data.welcome} />
-        <Separator className="my-4"/>
-        <NavMain title="Soumettre" items={data.navMain} />
+      <Separator className="my-4"/>
+        <NavMain title="" items={tabs} theme = {theme}/>
+        {/* <Separator className="my-4"/>
+        <NavMain title="Soumettre" items={data.navMain} /> */}
         {/* <Separator className="my-4"/> */}
         {/* <NavMain title="Supports" items={data.usefulLinks}/> */}
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}

@@ -11,6 +11,8 @@ dist/
 
 src/generated/
 
+src/db/seed.users.data.ts
+
 prisma/seed-scripts/
 
 .vscode/settings.json
