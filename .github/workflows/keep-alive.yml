@@ -1,0 +1,53 @@
+name: Keep Render Server Alive
+
+# Two triggers:
+# 1. schedule — runs automatically every 10 minutes, 24/7
+# 2. workflow_dispatch — lets you trigger it manually from GitHub's UI
+#    (useful to wake the server immediately after a long idle period)
+on:
+  schedule:
+    # Cron syntax: minute hour day-of-month month day-of-week
+    # */10 * * * * = "every 10 minutes"
+    # GitHub Actions minimum interval is 5 minutes.
+    # 10 minutes gives comfortable headroom before Render's 15-minute threshold.
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    name: Ping Render backend
+    runs-on: ubuntu-latest    # GitHub provides this VM for free
+    timeout-minutes: 1        # kill the job if it hangs — prevents wasted minutes
+
+    steps:
+      - name: Send health check request
+        # curl flags:
+        #   -f  fail with non-zero exit code on HTTP error (4xx, 5xx)
+        #       this makes the job red in GitHub UI if server returns an error
+        #   -s  silent mode — suppress progress meter
+        #   -S  show errors even in silent mode
+        #   -o /dev/null  discard response body (we only care about status code)
+        #   -w  write-out format — prints status code after the request
+        #   --max-time 30  give up after 30s (handles the Render wake-up delay)
+        #   --retry 2  retry twice if the request fails (handles transient errors)
+        #   --retry-delay 5  wait 5 seconds between retries
+        run: |
+          echo "Pinging server at $(date -u)"
+          
+          HTTP_STATUS=$(curl \
+            -f -s -S \
+            -o /dev/null \
+            -w "%{http_code}" \
+            --max-time 30 \
+            --retry 2 \
+            --retry-delay 5 \
+            "${{ secrets.RENDER_HEALTH_URL }}")
+          
+          echo "Response status: $HTTP_STATUS"
+          
+          if [ "$HTTP_STATUS" = "200" ]; then
+            echo "✅ Server is awake and healthy"
+          else
+            echo "❌ Unexpected status code: $HTTP_STATUS"
+            exit 1
+          fi
