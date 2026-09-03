@@ -10,5 +10,6 @@ backend/dist
 backend/.env.development
 
 backend/prisma/qcm-backup.json
+backend/prisma/qcm-invalid-output.json
 
 todo.md
