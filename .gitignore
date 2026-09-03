@@ -9,6 +9,6 @@ backend/node_modules/
 backend/dist
 backend/.env.development
 
-/backend/prisma/qcm-backup.json
+backend/prisma/qcm-backup.json
 
 todo.md

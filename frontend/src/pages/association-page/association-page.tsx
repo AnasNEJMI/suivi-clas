@@ -12,6 +12,7 @@ import AnimatorSection from './animator-stats/animator-section';
 import QcmStatsSection from './qcm-stats/qcm-stats-section';
 import FooterSection from '../footer-section';
 import { SEOHead } from '@/components/seo-head';
+import LogoutSection from '../logout-section';
 
 
 const AssociationPage = () => {
@@ -43,6 +44,7 @@ const AssociationPage = () => {
                     <AnimatorSection/>
                 </Suspense>
             </ErrorBoundary>
+            <LogoutSection/>
             <FooterSection/>
         </BaseLayout>
     </>

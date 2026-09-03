@@ -11,7 +11,7 @@ import LessonEvalSection from './lesson-eval/lesson-eval-section';
 import StudentPageHeroSection from './hero-section';
 import { studentApiCalls } from '@/api/student/apiCalls';
 import FooterSection from '../footer-section';
-import LogoutSection from './logout-section';
+import LogoutSection from '../logout-section';
 import { SEOHead } from '@/components/seo-head';
 
 

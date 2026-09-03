@@ -67,4 +67,15 @@ router.get('/association/stats/visits', requireAuthHandler, asyncHandler(associa
 router.get('/association/stats/animators', requireAuthHandler, asyncHandler(associationAnimatorStatsHandler))
 router.get('/association/stats/qcms', requireAuthHandler, asyncHandler(associationQcmStatsHandler))
 
+// Health check — intentionally lightweight, no DB query, no auth.
+// Used by external keep-alive services to prevent Render from sleeping.
+// Must respond in < 1 second to be useful.
+router.get('/health', (req, res) => {
+    res.status(200).json({
+        status:    'ok',
+        timestamp: new Date().toISOString(),
+        uptime:    Math.floor(process.uptime()),   // seconds since server started
+    })
+})
+
 export default router

@@ -44,7 +44,8 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
         animator : {select : {id : true, firstName : true, lastName : true, gender : true}},
         class : {select : {id : true, label : true}},
         date : true,
-        _count : {select : {bilans : true}}
+        _count : {select : {bilans : true}},
+        seanceDuration : {select : {id : true, label : true}}
       },
       // orderBy : {
       //   scolarYear : {id : 'asc'} ,
@@ -101,7 +102,7 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
       }
 
       const classBucket = animatorBucket.classes.get(clas.id)!;
-      classBucket.seances.push({id : seance.id, date : seance.date, duration : 'todo'});
+      classBucket.seances.push({id : seance.id, date : seance.date, duration : seance.seanceDuration.label});
       classBucket.bilansSubmitted+= seance._count.bilans;
       classBucket.seancesCount++;
       animatorBucket.totalBilans+= seance._count.bilans;
