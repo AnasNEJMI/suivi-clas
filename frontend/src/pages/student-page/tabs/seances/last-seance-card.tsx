@@ -10,6 +10,7 @@ import SeanceDetailsDrawer from './seance-details-drawer';
 import QcmResultsQuestionnaire from '../../bilans/qcm-results-questionnaire';
 import QcmQuestionnaire from '../../bilans/qcm-questionnaire';
 import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/brand-button';
 
 
 const LastSeanceCard = ({bilans, onQcmSubmit} : {bilans : BilanEntry[], onQcmSubmit : (qcm: QcmEntry) => void}) => {    
@@ -123,14 +124,18 @@ const LastSeanceCard = ({bilans, onQcmSubmit} : {bilans : BilanEntry[], onQcmSub
                             </div>
                             <p className='text-sm tracking-normal font-light text-balance text-center mt-2'>{getCongralutoryMessage(recentBilan.qcm.score)}</p>
                         </div>
-                        <QcmResultsQuestionnaire qcm={recentBilan.qcm!}/>
+                        <QcmResultsQuestionnaire qcm={recentBilan.qcm!}>
+                            <BrandButton className='w-full mt-4 text-base h-12'>Voir les résultats</BrandButton>
+                        </QcmResultsQuestionnaire>
                     </>
                 }
                 {
                     recentBilan.qcm && !recentBilan.qcm.completed &&
                     <>
                         <p className='mt-2 opacity-75 w-full text-start'>Vous avez un QCM à compléter suite à cette séance.</p>
-                        <QcmQuestionnaire onQcmSubmit={onQcmSubmit} qcm={recentBilan.qcm!}/>
+                        <QcmQuestionnaire onQcmSubmit={onQcmSubmit} qcm={recentBilan.qcm!}>
+                            <BrandButton className='w-full mt-4 text-base h-12'>Compléter le QCM</BrandButton>
+                        </QcmQuestionnaire>
                     </>
                 }
                 {

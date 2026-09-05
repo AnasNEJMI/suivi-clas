@@ -20,7 +20,7 @@ const SeanceHistoryCarousel = ({bilans, onQcmSubmit} : {bilans : BilanEntry[], o
                         <RotateCwFadingClockIcon className='size-10 opacity-70'/>
                         <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>Aucune séance enregistrée pour le moment.</CardTitle>
                         <CardDescription className='text-pretty text-sm max-w-xl text-center'>Toutes les séance enregistrées seront affichées ici dès leur réalisation.</CardDescription>
-                    </CardHeader>
+                    </CardHeader>   
                 </Card>
             </div>
         )

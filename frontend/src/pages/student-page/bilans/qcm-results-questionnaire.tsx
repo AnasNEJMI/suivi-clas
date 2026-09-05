@@ -25,7 +25,7 @@ import {
 import { useMemo, useState } from 'react'
 
 
-const QcmResultsQuestionnaire = ({qcm} : {qcm : QcmEntry}) => {
+const QcmResultsQuestionnaire = ({qcm, children} : {qcm : QcmEntry, children : React.ReactNode}) => {
     const [open, setOpen] = useState(false);
     const [currentItemName, setCurrentItemName] = useState(`${qcm.qcmQuestions[0].id}-${qcm.qcmQuestions[0].bankQuestion.id}`)
     const items = useMemo(() => {
@@ -50,7 +50,7 @@ const QcmResultsQuestionnaire = ({qcm} : {qcm : QcmEntry}) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <BrandButton className='w-full mt-4 text-base h-12'>Voir les résultats</BrandButton>
+        {children}
       </DialogTrigger>
       <DialogContent className='w-full h-dvh md:max-w-4xl md:h-fit'>
         {open &&

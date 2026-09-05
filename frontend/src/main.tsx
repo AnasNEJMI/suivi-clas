@@ -18,7 +18,8 @@ import AnimatorQcmPage from './pages/animator-page/animator-qcm-page/page.tsx'
 import { lazy, Suspense, type FunctionComponent } from 'react'
 import PageSkeleton from './pages/page-skeleton.tsx'
 import MethodPage from './pages/method-page.tsx'
-import StudentSeancesTab from './pages/student-page/tabs/seances/tab.tsx'
+import SeancesTab from './pages/student-page/tabs/seances/seances-tab.tsx'
+import QcmsTab from './pages/student-page/tabs/qcms/qcms-tab.tsx'
 
 
 function lazify<T extends FunctionComponent<any>>(
@@ -56,7 +57,8 @@ const router = createBrowserRouter([
         loader : studentPageLoader,
         shouldRevalidate: () => true,
         children : [
-          {index : true, Component : StudentSeancesTab}
+          {index : true, Component : SeancesTab},
+          {path : 'qcms', Component : QcmsTab}
         ]
       },
       {

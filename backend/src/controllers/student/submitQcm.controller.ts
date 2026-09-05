@@ -4,7 +4,7 @@ import { ApiError } from "../../classes/ApiError.class.js";
 import { prisma } from '../../db/prisma.js';
 import { sendSuccess } from '../../utils/response.utils.js';
 import { QcmInput } from '../../schemas/qcm.schema.js';
-import { AnswerChoice, Difficulty } from '../../generated/prisma/enums.js';
+import { AnswerChoice, Difficulty, Gender } from '../../generated/prisma/enums.js';
 
 
 export type QcmEntry = {
@@ -12,8 +12,15 @@ export type QcmEntry = {
     completed : boolean,
     score : number | null,
     studentId : number,
-    lesson : {id : number, label : string} | null,
+    lesson : {id : number, label : string, subject : {id : number, label : string}} | null,
+    submittedBy : {
+            id : number,
+            firstName : string,
+            lastName : string,
+            gender : Gender
+    },
     qcmQuestions : QcmQuestionEntry[],
+    date : Date,
     createdAt : Date,
     updatedAt : Date,
 }
@@ -48,7 +55,7 @@ export async function submitStudentQcmHandler(
 ){
     try{
 
-        const {id, studentId, completed, score, qcmQuestions} = req.body as QcmInput;
+        const {id, studentId, completed, score, qcmQuestions, submittedBy, date} = req.body as QcmInput;
 
         console.log('studentId', studentId, ' user id : ',req.user?.id);
 
@@ -71,7 +78,7 @@ export async function submitStudentQcmHandler(
                         studentId : true,
                         createdAt : true,
                         updatedAt : true,
-                        lesson : {select : {id : true, label : true}}
+                        lesson : {select : {id : true, label : true, subject : {select : {id : true, label : true}}}}
                     }
             }),
             ...qcmQuestions.map(q =>(
@@ -96,7 +103,6 @@ export async function submitStudentQcmHandler(
                                 answerD : true,
                                 correctAnswer : true,
                                 explanation : true,
-
                             }
                         }
                     }
@@ -110,7 +116,7 @@ export async function submitStudentQcmHandler(
         return sendSuccess<QcmResponse>(
             res,
             {
-                data : {...qcm, qcmQuestions : qcmQuestionsUpdated}
+                data : {...qcm, date : new Date(date), submittedBy, qcmQuestions : qcmQuestionsUpdated}
             }
         )
     }catch(error){

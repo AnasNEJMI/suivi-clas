@@ -11,6 +11,7 @@ import { Separator } from '@/components/ui/separator'
 import QcmResultsQuestionnaire from '../../bilans/qcm-results-questionnaire'
 import QcmQuestionnaire from '../../bilans/qcm-questionnaire'
 import type { CardStyle } from '@/lib/types/data.types'
+import { BrandButton } from '@/components/brand-button'
 
 const SeanceDetailsDrawer = ({bilan, cardStyle, onQcmSubmit, children} : {bilan : BilanEntry, cardStyle : CardStyle, onQcmSubmit : (qcm: QcmEntry) => void, children : React.ReactNode}) => {
     const isMobile = useIsMobile();
@@ -73,7 +74,8 @@ const SeanceDetailsDrawer = ({bilan, cardStyle, onQcmSubmit, children} : {bilan 
                                 {bilan.qcm && bilan.qcm.completed && <span className='bg-emerald-200 border border-emerald-500 rounded-full text-sm px-2 text-emerald-700'>Complété</span>}
                                 {bilan.qcm && !bilan.qcm.completed && <span className='bg-red-200 border border-red-500 rounded-full text-sm px-2 capitalize text-nowrap text-red-700'>à faire</span>}
                             </div>
-                            {bilan.qcm && bilan.qcm.completed &&
+                            {
+                                bilan.qcm && bilan.qcm.completed &&
                                 <>
                                     <p className='mt-4 opacity-75'>Tu peux consulter les réponses aux questions.</p>
                                     <div className='p-4 mt-4 mb-2 rounded-lg bg-emerald-200'>
@@ -85,14 +87,18 @@ const SeanceDetailsDrawer = ({bilan, cardStyle, onQcmSubmit, children} : {bilan 
                                         </div>
                                         <p className='text-sm tracking-normal font-light text-balance text-center mt-2'>{getCongralutoryMessage(bilan.qcm.score)}</p>
                                     </div>
-                                    <QcmResultsQuestionnaire qcm={bilan.qcm!}/>
+                                    <QcmResultsQuestionnaire qcm={bilan.qcm!}>
+                                        <BrandButton className='w-full mt-4 text-base h-12'>Voir les résultats</BrandButton>
+                                    </QcmResultsQuestionnaire>
                                 </>
                             }
                             {
                                 bilan.qcm && !bilan.qcm.completed &&
                                 <>
                                     <p className='mt-4 opacity-75'>Vous avez un QCM à compléter suite à cette séance.</p>
-                                    <QcmQuestionnaire onQcmSubmit={onQcmSubmit} qcm={bilan.qcm!}/>
+                                    <QcmQuestionnaire onQcmSubmit={onQcmSubmit} qcm={bilan.qcm!}>
+                                        <BrandButton className='w-full mt-4 text-base h-12'>Compléter le QCM</BrandButton>
+                                    </QcmQuestionnaire>
                                 </>
                             }
                             {

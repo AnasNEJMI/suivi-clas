@@ -1,8 +1,9 @@
 import z from "zod";
-import { AnswerChoice, Difficulty } from "../generated/prisma/enums.js";
+import { AnswerChoice, Difficulty, Gender } from "../generated/prisma/enums.js";
 
 export const answerChoiceSchema = z.enum(AnswerChoice);
 export const difficultySchema = z.enum(Difficulty);
+export const genderSchema = z.enum(Gender);
 
 const bankQuestionEntrySchema = z.object({
   id: z.int().positive(),
@@ -16,6 +17,13 @@ const bankQuestionEntrySchema = z.object({
   explanation: z.string(),
 });
 
+const submittedByEntrySchema = z.object({
+  id : z.int().positive(),
+  firstName : z.string(),
+  lastName : z.string(),
+  gender : genderSchema,
+})
+
 const qcmQuestionsEntrySchema = z.object({
   id: z.int().positive(),
   correct: z.boolean(),
@@ -23,9 +31,15 @@ const qcmQuestionsEntrySchema = z.object({
   bankQuestion: bankQuestionEntrySchema,
 })
 
+export const subjectSchema = z.object({
+  id: z.int().positive(),
+  label: z.string(),
+});
+
 export const lessonSchema = z.object({
   id: z.int().positive(),
   label: z.string(),
+  subject : subjectSchema
 });
 
 export const qcmSchema = z.object({
@@ -34,6 +48,8 @@ export const qcmSchema = z.object({
   completed: z.boolean(),
   score: z.number().nullable(),
   qcmQuestions: z.array(qcmQuestionsEntrySchema),
+  submittedBy : submittedByEntrySchema,
+  date : z.iso.datetime(),
 });
 
 export type QcmInput = z.infer<typeof qcmSchema>;

@@ -36,8 +36,15 @@ export type QcmEntry = {
     completed : boolean,
     score : number | null,
     studentId : number,
-    lesson : {id : number, label : string} | null,
+    lesson : {id : number, label : string, subject : {id : number, label : string}} | null,
+    submittedBy : {
+        id : number,
+        firstName : string,
+        lastName : string,
+        gender : Gender
+    }
     qcmQuestions : QcmQuestionEntry[],
+    date : Date,
     createdAt : Date,
     updatedAt : Date,
 }

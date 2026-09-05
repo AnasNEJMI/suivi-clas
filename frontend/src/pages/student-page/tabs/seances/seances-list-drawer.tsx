@@ -6,13 +6,13 @@ import { CARD_STYLES, type Subject } from '@/lib/types/data.types'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { AlertTriangleIcon, ArrowLeftIcon, CalendarIcon, CalendarX, ChevronRightIcon, TrophyIcon, UserIcon} from 'lucide-react'
+import { AlertTriangleIcon, ArrowLeftIcon, CalendarIcon, CalendarX,TrophyIcon, UserIcon} from 'lucide-react'
 import SeanceDetailsDrawer from './seance-details-drawer'
 import { useMemo, useState } from 'react'
 
 const SeancesListDrawer = ({bilans, onQcmSubmit, children} : {bilans : BilanEntry[], onQcmSubmit : (qcm: QcmEntry) => void, children : React.ReactNode}) => {
-    const [filter, setFilter] = useState<'all' | 'present' | 'absent'>('all')
     const isMobile = useIsMobile();
+    const [filter, setFilter] = useState<'all' | 'present' | 'absent'>('all')
 
     const selectedBilans = useMemo(()=>{
         if(filter === 'all') return bilans;
@@ -59,8 +59,8 @@ const SeancesListDrawer = ({bilans, onQcmSubmit, children} : {bilans : BilanEntr
                             const cardStyle = CARD_STYLES[bilan.lesson!.subject.label as Subject];
                             
                             return (
-                                <SeanceDetailsDrawer onQcmSubmit={onQcmSubmit} bilan={bilan} cardStyle={cardStyle}>
-                                    <div className={cn('flex items-center gap-4 w-full p-4 rounded-lg bg-white shadow-sm')}>
+                                <SeanceDetailsDrawer key={bilan.id} onQcmSubmit={onQcmSubmit} bilan={bilan} cardStyle={cardStyle}>
+                                    <div className={cn('flex items-center gap-4 w-full p-4 rounded-lg bg-white shadow-sm hover:shadow-md hover:-translate-y-1 transition-all ease-out duration-100 cursor-pointer')}>
                                         <div key={bilan.id} className={cn(' flex-1')}>
                                             <div className='flex gap-2 w-full'>
                                                 <cardStyle.icon className={cn('size-14 p-3 rounded-xl', cardStyle.iconBgColor, cardStyle.highlightTextColor)}/>
@@ -68,7 +68,7 @@ const SeancesListDrawer = ({bilans, onQcmSubmit, children} : {bilans : BilanEntr
                                                     <div className='flex items-start justify-between w-full'>
                                                         <span className={cn('font-bold tracking-tight uppercase text-sm',cardStyle.highlightTextColor)}>{cardStyle.label}</span>
                                                         <div className='flex justify-end font-medium text-sm'>
-                                                            {bilan.qcm && !bilan.qcm.completed && <span className={cn('px-2 h-5 leading-1 rounded-full border flex items-center gap-2', cardStyle.borderColor, cardStyle.iconBgColor)}><AlertTriangleIcon className='w-4'/> Qcm à faire</span>}
+                                                            {bilan.qcm && !bilan.qcm.completed && <span className={cn('px-2 h-5 leading-1 tracking-tight rounded-full border flex items-center gap-2', cardStyle.borderColor, cardStyle.iconBgColor)}><AlertTriangleIcon className='w-4'/> Qcm à faire</span>}
                                                             {bilan.qcm && bilan.qcm.completed && <span className={cn('px-2 h-5 leading-1 rounded-full border flex items-center gap-2', cardStyle.borderColor, cardStyle.iconBgColor)}>Qcm : <TrophyIcon className='w-4'/> {bilan.qcm.score!}/{bilan.qcm.qcmQuestions.length}</span>}
                                                             {!bilan.qcm && <span className='px-2 h-5 leading-1 rounded-full border'>Pas de QCM</span>}
                                                         </div>
@@ -80,9 +80,6 @@ const SeancesListDrawer = ({bilans, onQcmSubmit, children} : {bilans : BilanEntr
                                                 <p className='text-sm opacity-75 flex items-center gap-2 tracking-tight'><UserIcon className='size-4'/><span><span className='capitalize'>{bilan.submittedBy.firstName}</span> <span className='uppercase'>{bilan.submittedBy.lastName}</span></span></p>
                                                 <p className='text-sm opacity-75 leading-4 tracking-tight flex flex-col items-start'><span className='flex items-center justify-center gap-1'><CalendarIcon className='size-4'/> {format(bilan.date, 'd/MM/y', {locale : fr})}</span></p>
                                             </div>
-                                        </div>
-                                        <div>
-                                            <ChevronRightIcon/>
                                         </div>
                                     </div>
                                 </SeanceDetailsDrawer>

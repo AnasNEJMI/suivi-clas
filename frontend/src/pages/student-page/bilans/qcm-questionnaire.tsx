@@ -28,7 +28,7 @@ import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
 
-const QcmQuestionnaire = ({qcm, onQcmSubmit} : {qcm : QcmEntry, onQcmSubmit : (qcm: QcmEntry) => void}) => {
+const QcmQuestionnaire = ({qcm, onQcmSubmit, children} : {qcm : QcmEntry, onQcmSubmit : (qcm: QcmEntry) => void, children : React.ReactNode}) => {
     const [open, setOpen] = useState(false);
     const [savedAnswers, setSavedAnswers] = useState<Record<string, string>>({})
     const [initialItem, setInitialItem] = useState<string>("");
@@ -112,9 +112,6 @@ const QcmQuestionnaire = ({qcm, onQcmSubmit} : {qcm : QcmEntry, onQcmSubmit : (q
         })
 
         const score = questionsWithAnswers.filter(q => q.correct).length;
-
-        // console.log('questions with answers', questionsWithAnswers)
-        // console.log('score ', score, ' / ', questionsWithAnswers.length)
         
         const newQcm : QcmEntry = {
             ...qcm,
@@ -122,8 +119,6 @@ const QcmQuestionnaire = ({qcm, onQcmSubmit} : {qcm : QcmEntry, onQcmSubmit : (q
             completed : true,
             qcmQuestions : questionsWithAnswers
         }
-        
-        // console.log('qcm answered ', newQcm);
 
         submitMutation.mutate(newQcm);
     }
@@ -131,7 +126,7 @@ const QcmQuestionnaire = ({qcm, onQcmSubmit} : {qcm : QcmEntry, onQcmSubmit : (q
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <BrandButton className='w-full mt-4 text-base h-12'>Compléter le QCM</BrandButton>
+        {children}
       </DialogTrigger>
       <DialogContent className='w-full h-dvh md:max-w-4xl md:h-fit'>
         {open &&
@@ -160,12 +155,12 @@ const QcmQuestionnaire = ({qcm, onQcmSubmit} : {qcm : QcmEntry, onQcmSubmit : (q
                                 <div className="mb-2 flex gap-1.5" aria-hidden="true">
                                 {Array.from({ length: state.total }, (_, index) => (
                                     <span
-                                    key={index}
-                                    className={
-                                        index < state.current
-                                        ? "h-1.5 flex-1 rounded-full bg-lime-600"
-                                        : "h-1.5 flex-1 rounded-full bg-muted"
-                                    }
+                                        key={index}
+                                        className={
+                                            index < state.current
+                                            ? "h-1.5 flex-1 rounded-full bg-lime-600"
+                                            : "h-1.5 flex-1 rounded-full bg-muted"
+                                        }
                                     />
                                 ))}
                                 </div>

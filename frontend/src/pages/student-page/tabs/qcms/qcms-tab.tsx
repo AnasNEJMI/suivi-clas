@@ -4,22 +4,21 @@ import SectionError from '../../section-error'
 import Skeleton from '../../bilans/bilans-skeleton'
 import { useRouteLoaderData } from 'react-router'
 import type { User } from '@/api/auth'
-import SeancesTabHeader from './header'
-import SeancesTabDataWrapper from './seances-data-wrapper'
+import QcmsTabDataWrapper from './qcms-data-wrapper'
+import TabHeader from '../tab-header'
 
-const StudentSeancesTab = () => {
+const QcmsTab = () => {
     const {user : student} = useRouteLoaderData('student') as {user: User};
   return (
     <>
-        <SeancesTabHeader student={student} className=''/>
+        <TabHeader student={student} tabLabel='QCMs' description = 'Complète les QCMs soumis par tes animateurs, et consulte tes résultats'/>
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
             <Suspense fallback = {<Skeleton/>}>
-                <SeancesTabDataWrapper student = {student}/>
-                {/* <BilansSection student = {student}/> */}
+                <QcmsTabDataWrapper student = {student}/>
             </Suspense>
         </ErrorBoundary>
     </>
   )
 }
 
-export default StudentSeancesTab
+export default QcmsTab

@@ -9,8 +9,15 @@ type QcmEntry = {
     id : number,
     completed : boolean,
     score : number | null,
-    lesson : {id : number, label : string} | null,
+    lesson : {id : number, label : string, subject : {id : number, label : string}} | null,
+    submittedBy : {
+        id : number,
+        firstName : string,
+        lastName : string,
+        gender : Gender
+    },
     qcmQuestions : QcmQuestionsEntry[],
+    date : Date,
     createdAt : Date,
     updatedAt : Date,
 }
@@ -110,7 +117,7 @@ export async function studentBilansHandler(
                         studentId : true,
                         createdAt : true,
                         updatedAt : true,
-                        lesson : {select : {id : true, label : true}},
+                        lesson : {select : {id : true, label : true, subject : {select : {id : true, label : true}}}},
                         qcmQuestions : {
                             select : {
                                 id : true,
@@ -136,7 +143,11 @@ export async function studentBilansHandler(
             }
         })
         
-        return sendSuccess<BilansResponse>(res, {bilans})
+        return sendSuccess<BilansResponse>(res, {
+            bilans : bilans.map(b => (
+                {...b, qcm : b.qcm? {...b.qcm, submittedBy : b.submittedBy, date : b.date} : null}
+            ))
+        })
 
     }catch(error){
         if (error instanceof PrismaClientKnownRequestError) {
