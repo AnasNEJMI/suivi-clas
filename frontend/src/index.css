@@ -186,7 +186,7 @@
   .brand-h-scrollbar{
     @apply [&::-webkit-scrollbar]:w-24 [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-lime-500/25 [&::-webkit-scrollbar-track]:px-6 [&::-webkit-scrollbar-thumb]:bg-lime-500;
   }
-  .brand-h-scrollbar{
+  .brand-v-scrollbar{
     @apply [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-lime-500/25 [&::-webkit-scrollbar-track]:px-6 [&::-webkit-scrollbar-thumb]:bg-lime-500;
   }
 

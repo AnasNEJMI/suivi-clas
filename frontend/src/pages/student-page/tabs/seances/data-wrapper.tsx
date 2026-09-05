@@ -36,7 +36,8 @@ const SeancesTabDataWrapper = ({student} : {student : User}) => {
     }
   return (
     <>
-        <LastSeanceCard bilans = {bilans}/>
+        {/* <div className='absolute top-0 left-0 w-full h-[calc(100dvh-5rem)] md:h-[calc(100dvh-1rem)] bg-green-300 z-50'></div> */}
+        <LastSeanceCard onQcmSubmit={onQcmSubmit} bilans = {bilans}/>
     </>
   )
 }

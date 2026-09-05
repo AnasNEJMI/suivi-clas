@@ -19,7 +19,6 @@ export function NavMain({
   items: UserLayoutTab[]
 }) {
   const location = useLocation();
-  console.log('pathname ',location.pathname);
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">

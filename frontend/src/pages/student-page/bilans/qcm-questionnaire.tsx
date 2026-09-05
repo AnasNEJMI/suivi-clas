@@ -113,8 +113,8 @@ const QcmQuestionnaire = ({qcm, onQcmSubmit} : {qcm : QcmEntry, onQcmSubmit : (q
 
         const score = questionsWithAnswers.filter(q => q.correct).length;
 
-        console.log('questions with answers', questionsWithAnswers)
-        console.log('score ', score, ' / ', questionsWithAnswers.length)
+        // console.log('questions with answers', questionsWithAnswers)
+        // console.log('score ', score, ' / ', questionsWithAnswers.length)
         
         const newQcm : QcmEntry = {
             ...qcm,
@@ -123,7 +123,7 @@ const QcmQuestionnaire = ({qcm, onQcmSubmit} : {qcm : QcmEntry, onQcmSubmit : (q
             qcmQuestions : questionsWithAnswers
         }
         
-        console.log('qcm answered ', newQcm);
+        // console.log('qcm answered ', newQcm);
 
         submitMutation.mutate(newQcm);
     }

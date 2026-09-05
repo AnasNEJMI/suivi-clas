@@ -74,7 +74,7 @@ export type BilanEntry  = {
     } | null;
     id: number;
     studentId: number;
-    seanceId: number;
+    seance : {id : number, seanceDuration: {id: number;label: string; durationMin: number}};
     submittedBy : {
         id : number,
         firstName : string,

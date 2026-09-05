@@ -12,7 +12,7 @@ const SeancesTabHeader = ({student, ...props} : SeancesTabHeader) => {
         <div className={cn('flex flex-col', !isMobile && 'pt-8')}>
             {isMobile && <span className='text-xs font-light opacity-50'>Éspace Étudiant</span>}
             <span className='font-bold md:text-3xl'>Bonjour <span>{student.firstName}</span> 👋 !</span>
-            {!isMobile && <p className='opacity-50 max-w-xl text-balance leading-5'>Retrouve tes dernières séances et poursuit ton apprentissage.</p>}
+            {!isMobile && <p className='opacity-50 max-w-xl text-balance leading-5'>Retrouve tes dernières séances et poursuis ton apprentissage.</p>}
         </div>
     </section>
   )

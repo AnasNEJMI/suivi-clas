@@ -14,7 +14,7 @@ const UserMobileLayout = ({children, tabs, theme} : UserMobileLayoutProps) => {
     const location = useLocation();
   return (
     <main className='relative pb-22 font-outfit p-2 bg-white'>
-        <div className='rounded-lg bg-zinc-100 min-h-dvh w-full p-4'>
+        <div className='rounded-lg bg-zinc-100 min-h-[calc(100dvh-6rem)] w-full p-4'>
             {children}
         </div>
         <nav className='fixed w-full bottom-0 left-0 bg-white z-10'>
