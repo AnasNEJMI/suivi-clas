@@ -4,6 +4,7 @@ import { studentKeys } from '@/api/student/query-keys';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import LastSeanceCard from './last-seance-card';
 import SeanceHistoryCarousel from './seance-history-carousel';
+import SeanceStats from './seance-stats';
 
 const SeancesTabDataWrapper = ({student} : {student : User}) => {
     const queryKey = studentKeys.bilans({studentId : student.id});
@@ -39,6 +40,7 @@ const SeancesTabDataWrapper = ({student} : {student : User}) => {
     <>
         <LastSeanceCard onQcmSubmit={onQcmSubmit} bilans = {bilans}/>
         <SeanceHistoryCarousel onQcmSubmit={onQcmSubmit} bilans = {bilans}/>
+        <SeanceStats bilans = {bilans}/>
     </>
   )
 }

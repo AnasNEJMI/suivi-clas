@@ -5,7 +5,7 @@ import Skeleton from '../../bilans/bilans-skeleton'
 import { useRouteLoaderData } from 'react-router'
 import type { User } from '@/api/auth'
 import SeancesTabHeader from './header'
-import SeancesTabDataWrapper from './data-wrapper'
+import SeancesTabDataWrapper from './seances-data-wrapper'
 
 const StudentSeancesTab = () => {
     const {user : student} = useRouteLoaderData('student') as {user: User};
