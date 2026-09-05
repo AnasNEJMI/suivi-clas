@@ -3,6 +3,7 @@ import { studentApiCalls, type BilanEntry, type QcmEntry } from '@/api/student/a
 import { studentKeys } from '@/api/student/query-keys';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import LastSeanceCard from './last-seance-card';
+import SeanceHistoryCarousel from './seance-history-carousel';
 
 const SeancesTabDataWrapper = ({student} : {student : User}) => {
     const queryKey = studentKeys.bilans({studentId : student.id});
@@ -36,8 +37,8 @@ const SeancesTabDataWrapper = ({student} : {student : User}) => {
     }
   return (
     <>
-        {/* <div className='absolute top-0 left-0 w-full h-[calc(100dvh-5rem)] md:h-[calc(100dvh-1rem)] bg-green-300 z-50'></div> */}
         <LastSeanceCard onQcmSubmit={onQcmSubmit} bilans = {bilans}/>
+        <SeanceHistoryCarousel onQcmSubmit={onQcmSubmit} bilans = {bilans}/>
     </>
   )
 }

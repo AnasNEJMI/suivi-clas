@@ -5,21 +5,21 @@ import { Drawer, DrawerClose, DrawerContent,DrawerDescription,DrawerHeader,Drawe
 import { useIsMobile } from '@/hooks/use-mobile'
 import { cn, getCongralutoryMessage } from '@/lib/utils'
 import { ArrowLeftIcon, BookOpenIcon, CalendarIcon, ClockIcon, LibraryBigIcon, MessageCircleQuestionIcon, NotebookPenIcon, TrophyIcon, UserIcon} from 'lucide-react'
-import type { CardStyle } from './last-seance-card'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { Separator } from '@/components/ui/separator'
 import QcmResultsQuestionnaire from '../../bilans/qcm-results-questionnaire'
 import QcmQuestionnaire from '../../bilans/qcm-questionnaire'
+import type { CardStyle } from '@/lib/types/data.types'
 
-const LastSeanceDetailsDrawer = ({bilan, cardStyle, onQcmSubmit} : {bilan : BilanEntry, cardStyle : CardStyle, onQcmSubmit : (qcm: QcmEntry) => void}) => {
+const SeanceDetailsDrawer = ({bilan, cardStyle, onQcmSubmit, children} : {bilan : BilanEntry, cardStyle : CardStyle, onQcmSubmit : (qcm: QcmEntry) => void, children : React.ReactNode}) => {
     const isMobile = useIsMobile();
 
     
   return (
     <Drawer direction={isMobile? 'left' : 'right'}>
         <DrawerTrigger asChild>
-            <Button className='h-10 font-outfit text-base'>Details</Button>
+            {children}
         </DrawerTrigger>
         <DrawerContent className='h-dvh pl-4 pr-2 pb-2 font-outfit shadow-none border-none bg-zinc-100 md:rounded-t-xl'>
             <DrawerHeader className='flex'>
@@ -105,9 +105,9 @@ const LastSeanceDetailsDrawer = ({bilan, cardStyle, onQcmSubmit} : {bilan : Bila
                         <div className='flex flex-col bg-white rounded-2xl p-4'>
                             <div className='flex w-full gap-2'><NotebookPenIcon/><span className='tracking-tight text-lg font-semibold'>Détails de la séance</span></div>
                             <div className='flex items-center justify-between w-full mt-4'><span className='text-sm flex items-center gap-2 opacity-75'><CalendarIcon className='size-4'/> Date</span><span className='font-medium capitalize'>{format(bilan.date, 'PPP', {locale : fr})}</span></div>
-                            <div className='flex items-center justify-between w-full mt-2'><span className='text-sm flex items-center gap-2 opacity-75'><ClockIcon className='size-4'/> Durée</span><span className='font-medium capitalize'>{bilan.seance.seanceDuration.label}</span></div>
-                            <div className='flex items-center justify-between w-full mt-2'><span className='text-sm flex items-center gap-2 opacity-75'><LibraryBigIcon className='size-4'/> Matière</span><span className='font-medium capitalize'>{cardStyle.label}</span></div>
-                            <div className='flex items-center justify-between w-full mt-2'><span className='text-sm flex items-center gap-2 opacity-75'><BookOpenIcon className='size-4'/> Leçon</span><span className='font-medium capitalize'>{bilan.lesson!.label}</span></div>
+                            <div className='flex items-center justify-between w-full mt-2'><span className='text-sm flex items-center gap-2 opacity-75'><ClockIcon className='size-4'/> Durée</span><span className='font-medium'>{bilan.seance.seanceDuration.label}</span></div>
+                            <div className='flex items-center justify-between w-full mt-2'><span className='text-sm flex items-center gap-2 opacity-75'><LibraryBigIcon className='size-4'/> Matière</span><span className='font-medium'>{cardStyle.label}</span></div>
+                            <div className='flex items-center justify-between w-full mt-2'><span className='text-sm flex items-center gap-2 opacity-75'><BookOpenIcon className='size-4'/> Leçon</span><span className='font-medium'>{bilan.lesson!.label}</span></div>
                             <Separator className='my-4'/>
                             <div className='flex items-center justify-between w-full'><span className='text-sm flex items-center gap-2 opacity-75'><UserIcon className='size-4'/> Animateur(trice)</span><span className='font-medium capitalize'>{bilan.submittedBy.firstName} {bilan.submittedBy.lastName}</span></div>
                         </div>
@@ -119,4 +119,4 @@ const LastSeanceDetailsDrawer = ({bilan, cardStyle, onQcmSubmit} : {bilan : Bila
   )
 }
 
-export default LastSeanceDetailsDrawer
+export default SeanceDetailsDrawer
