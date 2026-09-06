@@ -14,16 +14,6 @@ const QcmList = ({qcms }: {qcms : QcmEntry[]}) => {
                 return <QcmNotCompletedRow key = {qcm.id} qcm = {qcm}/>
             })}
         </div>
-        {/* <div className='flex flex-col gap-2 mt-4'>
-            {
-                qcms.map((qcm) => {
-                    if(qcm.completed){
-                        return <QcmCompletedRow key = {qcm.id} qcm = {qcm}/>
-                    }
-                    return <QcmNotCompletedRow key = {qcm.id} qcm = {qcm}/>
-                })
-            }
-        </div> */}
     </div>
   )
 }

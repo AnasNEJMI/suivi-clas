@@ -1,4 +1,4 @@
-import { AtomIcon, LandmarkIcon, LanguagesIcon, LeafIcon, PiIcon, type LucideProps } from 'lucide-react'
+import { AtomIcon, BookOpenCheckIcon, CalendarClockIcon, LandmarkIcon, LanguagesIcon, LeafIcon, LightbulbIcon, NotebookPenIcon, PiIcon, RepeatIcon, ShieldCheckIcon, type LucideProps } from 'lucide-react'
 import { type ForwardRefExoticComponent, type RefAttributes } from 'react'
 
 export type bilanDataPresent = {
@@ -116,4 +116,67 @@ export const CARD_STYLES : Record<Subject, CardStyle> = {
         iconBgColor : 'bg-emerald-200',
         icon : LeafIcon
     }
+}
+
+
+export type SkillCarouselCardStyle = {
+    label : string,
+    bgColor : string,
+    borderColor : string,
+    highlightTextColor : string,
+    highlightTextColorBg : string,
+    icon : ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>,
+}
+
+
+export const SKILL_CAROUSEL_CARD_STYLES : Record<string, SkillCarouselCardStyle> = {
+    autonomy : {
+        label : 'Autonomie',
+        bgColor : 'bg-emerald-100',
+        borderColor : 'border-emerald-400',
+        highlightTextColor : 'text-emerald-700',
+        highlightTextColorBg : 'bg-emerald-700',
+        icon : LightbulbIcon
+    },
+    discipline : {
+        label : 'Discipline',
+        bgColor : 'bg-sky-100',
+        borderColor : 'border-sky-400',
+        highlightTextColor : 'text-sky-700',
+        highlightTextColorBg : 'bg-sky-700',
+        icon : ShieldCheckIcon
+    },
+    organisation : {
+        label : 'Organisation',
+        bgColor : 'bg-indigo-100',
+        borderColor : 'border-indigo-400',
+        highlightTextColor : 'text-indigo-700',
+        highlightTextColorBg : 'bg-indigo-700',
+        icon : NotebookPenIcon
+    },
+    ponctuality : {
+        label : 'Ponctualité',
+        bgColor : 'bg-rose-100',
+        borderColor : 'border-rose-400',
+        highlightTextColor : 'text-rose-700',
+        highlightTextColorBg : 'bg-rose-700',
+        icon : CalendarClockIcon
+    },
+    preparation : {
+        label : 'Préparation',
+        bgColor : 'bg-amber-100',
+        borderColor : 'border-amber-400',
+        highlightTextColor : 'text-amber-700',
+        highlightTextColorBg : 'bg-amber-700',
+        icon : BookOpenCheckIcon
+    },
+    regularity : {
+        label : 'Autonomie',
+        bgColor : 'bg-cyan-100',
+        borderColor : 'border-cyan-400',
+        highlightTextColor : 'text-cyan-700',
+        highlightTextColorBg : 'bg-cyan-700',
+        icon : RepeatIcon
+    },
+
 }
