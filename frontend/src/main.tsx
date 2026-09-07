@@ -21,6 +21,7 @@ import MethodPage from './pages/method-page.tsx'
 import SeancesTab from './pages/student-page/tabs/seances/seances-tab.tsx'
 import QcmsTab from './pages/student-page/tabs/qcms/qcms-tab.tsx'
 import SkillEvalsTab from './pages/student-page/tabs/skill-evals/skill-evals-tab.tsx'
+import LessonEvalsTab from './pages/student-page/tabs/lesson-evals/lesson-evals-tab.tsx'
 
 
 function lazify<T extends FunctionComponent<any>>(
@@ -60,7 +61,8 @@ const router = createBrowserRouter([
         children : [
           {index : true, Component : SeancesTab},
           {path : 'qcms', Component : QcmsTab},
-          {path : 'methodologie', Component : SkillEvalsTab}
+          {path : 'methodologie', Component : SkillEvalsTab},
+          {path : 'Programme', Component : LessonEvalsTab}
         ]
       },
       {

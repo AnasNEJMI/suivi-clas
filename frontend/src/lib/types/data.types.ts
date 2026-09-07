@@ -66,7 +66,15 @@ export const SUBJECTS = [
 export type Subject = (typeof SUBJECTS)[number];
 
 
-export type CardStyle = {label : string, bgColor : string, highlightTextColor : string, borderColor : string, iconBgColor : string, icon : ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>};
+export type CardStyle = {
+    label : string,
+    bgColor : string,
+    highlightTextColor : string,
+    borderColor : string,
+    iconBgColor : string,
+    progressBgColor : string,
+    progressIndicatorColor : string,
+    icon : ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>};
 export const CARD_STYLES : Record<Subject, CardStyle> = {
     'Anglais' : {
         label : 'Anglais',
@@ -74,6 +82,8 @@ export const CARD_STYLES : Record<Subject, CardStyle> = {
         highlightTextColor : 'text-orange-600',
         borderColor : 'border-orange-600',
         iconBgColor : 'bg-orange-200',
+        progressBgColor : 'bg-orange-200',
+        progressIndicatorColor : 'bg-orange-600',
         icon : LanguagesIcon
     },
     'Français' : {
@@ -82,6 +92,8 @@ export const CARD_STYLES : Record<Subject, CardStyle> = {
         highlightTextColor : 'text-violet-600',
         borderColor : 'border-violet-600',
         iconBgColor : 'bg-violet-200',
+        progressBgColor : 'bg-violet-200',
+        progressIndicatorColor : 'bg-violet-600',
         icon : LanguagesIcon
     },
     'Histoire-Géographie' : {
@@ -90,6 +102,8 @@ export const CARD_STYLES : Record<Subject, CardStyle> = {
         highlightTextColor : 'text-cyan-600',
         borderColor : 'border-cyan-600',
         iconBgColor : 'bg-cyan-200',
+        progressBgColor : 'bg-cyan-200',
+        progressIndicatorColor : 'bg-cyan-600',
         icon : LandmarkIcon
     },
     'Mathématiques' : {
@@ -98,6 +112,8 @@ export const CARD_STYLES : Record<Subject, CardStyle> = {
         highlightTextColor : 'text-blue-500',
         borderColor : 'border-blue-600',
         iconBgColor : 'bg-blue-200',
+        progressBgColor : 'bg-blue-200',
+        progressIndicatorColor : 'bg-blue-600',
         icon : PiIcon
     },
     'Physique-Chimie' : {
@@ -106,6 +122,8 @@ export const CARD_STYLES : Record<Subject, CardStyle> = {
         highlightTextColor : 'text-amber-600',
         borderColor : 'border-amber-600',
         iconBgColor : 'bg-orange-200',
+        progressBgColor : 'bg-amber-200',
+        progressIndicatorColor : 'bg-amber-600',
         icon : AtomIcon
     },
     'Sciences de la Vie et de la Terre' : {
@@ -114,6 +132,8 @@ export const CARD_STYLES : Record<Subject, CardStyle> = {
         highlightTextColor : 'text-emerald-600',
         borderColor : 'border-emerald-600',
         iconBgColor : 'bg-emerald-200',
+        progressBgColor : 'bg-emerald-200',
+        progressIndicatorColor : 'bg-emerald-600',
         icon : LeafIcon
     }
 }
