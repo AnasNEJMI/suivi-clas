@@ -19,21 +19,21 @@ const UserMobileLayout = ({children, tabs, theme} : UserMobileLayoutProps) => {
         </div>
         <nav className='fixed w-full bottom-0 left-0 bg-white z-10'>
             <Separator/>
-            <ul className='flex items-stretch h-full'>
+            <ul className='flex items-center justify-evenly h-full'>
                 {
                     tabs.map((tab, index)=>(
-                        <li key={index} className='p-2 rounded-md flex-1'>
+                        <li key={index} className='py-2 h-20 max-w-18 rounded-md flex-1'>
                             <Link
                             
                             to={tab.url}
-                            className={cn('group flex flex-col items-center justify-center gap-1 h-16 border-2 p-2 rounded-md',
+                            className={cn('group flex flex-col items-center justify-center gap-1 border-2 p-2 rounded-md',
                                 location.pathname === tab.url
                                 ?`${theme.tabBgSelected} ${theme.tabBorderSelected} ${theme.tabTextSelected} hover:${theme.tabBgSelected} hover:${theme.tabBorderSelected} hover:${theme.tabTextSelected}`
                                 :`border-transparent bg-transparent hover:bg-zinc-100`
                             )}
                             >  
                                 <tab.icon  className='size-6'/>
-                                <span className='text-xs font-medium tracking-tight'>{tab.title}</span>
+                                <span className='text-xs tracking-tighter'>{tab.title}</span>
                             </Link>
                         </li>
                     ))

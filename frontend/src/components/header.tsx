@@ -9,14 +9,9 @@ const Header = () => {
 
   return (
     <header className='fixed z-50 w-full md:left-1/2 md:-translate-x-1/2 rounded-xl flex items-center justify-between gap-4 pt-6 px-6'>
-        <Link to='/' className='px-4 py-2 text-lg bg-lime-400 text-black  h-12 rounded-md flex items-center justify-center font-outfit font-medium'>
-          CourParcours
+        <Link to='/' className='px-4 py-2 text-lg bg-lime-400 text-black  h-12 rounded-md flex items-center justify-center font-outfit font-bold'>
+          CoursParcours
         </Link>
-        {/* <div className='hidden lg:flex lg:items-center lg:justify-center lg:gap-2'>
-          <BrandLink to='/a-propos' label='A Propos'/>
-          <BrandLink to='/methode' label='Notre méthode'/>
-          <BrandLink to='/contact' label='Contact'/>
-        </div> */}
         <div className='flex gap-2 items-center'>
           <div className='flex items-center justify-center gap-4 '>
             {

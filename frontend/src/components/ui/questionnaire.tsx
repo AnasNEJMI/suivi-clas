@@ -189,7 +189,7 @@ function QuestionnaireError({
       data-slot="questionnaire-error"
       className={cn("mt-2 text-sm text-destructive", className)}
       {...props}
-    />
+    >Veuillez sélectionner une réponse avant de confirmer.</QuestionnairePrimitive.Error>
   )
 }
 

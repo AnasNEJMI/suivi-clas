@@ -191,7 +191,7 @@ export const SKILL_CAROUSEL_CARD_STYLES : Record<string, SkillCarouselCardStyle>
         icon : BookOpenCheckIcon
     },
     regularity : {
-        label : 'Autonomie',
+        label : 'Régularité',
         bgColor : 'bg-cyan-100',
         borderColor : 'border-cyan-400',
         highlightTextColor : 'text-cyan-700',

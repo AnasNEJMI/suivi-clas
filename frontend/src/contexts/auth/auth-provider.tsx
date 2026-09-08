@@ -3,12 +3,11 @@ import React from 'react'
 import AuthContext from './auth-context';
 import {useQuery, useQueryClient } from '@tanstack/react-query';
 import { useApiMutation } from '@/hooks/useApiMutation';
-import SuccessToast from '@/components/toasts/success-toast';
-import ErrorToast from '@/components/toasts/error-toast';
 import { ApiError } from '@/lib/errors/apiError.class';
 import { queryKeys } from '@/lib/query/keys';
 import { useNavigate } from 'react-router';
 import type { UserType } from '@/api/api.types';
+import { toast } from 'sonner';
 
 
 const AuthProvider = ({children} : {children : React.ReactNode}) => {
@@ -30,10 +29,10 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
       onSuccess : (data) => {
         console.log('login success : ', data);
         queryClient.setQueryData(queryKeys.auth.user, data.user);
-        SuccessToast({
-          message : `Bienvenue ${data.user.firstName}`,
+        toast.success(`Bienvenue ${data.user.firstName}`,{
+          description : 'Contents de vous revoir.'
         });
-
+        
         if(data.user.userType === 'student'){
           navigate('/etudiant', {replace : true});
         }else if(data.user.userType === 'animator'){
@@ -44,18 +43,20 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
       },
       onError : (error) => {
         if (error instanceof ApiError) {
-          ErrorToast({error});
+          toast.error(`Erreur survenue`,{
+            description : 'Une erreur a survenu lors de la connexion.'
+          });
         } else {
           console.log('unknown error : ', error);
-          ErrorToast({
-            error: new ApiError('UNKNOWN_ERROR', 'Erreur de connexion', 0),
+          toast.error(`Erreur survenue`,{
+            description : 'Une erreur a survenu lors de la connexion.'
           });
         }
       },
-
+      
     }
   )
-
+  
   const logoutMutation = useApiMutation(
     logout,
     {
@@ -63,8 +64,8 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
         queryClient.setQueryData(queryKeys.auth.user, null);
         queryClient.invalidateQueries({queryKey : queryKeys.auth.user});
         queryClient.clear();
-        SuccessToast({
-          message : `Déconnecté avec succès.`
+        toast.success(`Déconnecté avec succès`,{
+          description : `À très bientôt !`
         })
         navigate('/', {replace : true});
       },
@@ -73,10 +74,12 @@ const AuthProvider = ({children} : {children : React.ReactNode}) => {
         queryClient.invalidateQueries({queryKey : queryKeys.auth.user});
         queryClient.clear();
         if (error instanceof ApiError) {
-          ErrorToast({error});
+          toast.error(`Erreur survenue`,{
+            description : 'Une erreur a survenu lors de la déconnexion.'
+          });
         } else {
-          ErrorToast({
-            error: new ApiError('UNKNOWN_ERROR', 'Erreur de connexion', 0),
+          toast.error(`Erreur survenue`,{
+            description : 'Une erreur a survenu lors de la déconnexion.'
           });
         }
       },

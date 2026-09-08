@@ -16,7 +16,7 @@ function FooterSection() {
                         <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white'>
                         <School className='h-4 w-4 text-white' aria-hidden />
                         </div>
-                        <span className='text-xl font-medium text-zinc-200'>Suivi CLAS</span>
+                        <span className='text-xl font-medium text-zinc-200'>CoursParcours</span>
                     </div>
                     <p className=' md:max-w-72 text-sm md:text-base leading-[1.55] text-white/65'>
                         La plateforme qui réunit animateurs, élèves et associations autour d'un accompagnement scolaire de qualité.

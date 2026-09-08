@@ -52,19 +52,20 @@ const QcmResultsQuestionnaire = ({qcm, children} : {qcm : QcmEntry, children : R
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className='w-full h-dvh md:max-w-4xl md:h-fit'>
+      <DialogContent className='w-full max-h-dvh p-0'>
         {open &&
         <Questionnaire
           defaultItem={items[0].name}
           items={items}
           onItemChange={setCurrentItemName}
+          className='h-dvh pt-6 pb-4'
         >
             {
                 qcm.qcmQuestions.map((q) => {
                     const itemName = `${q.id}-${q.bankQuestion.id}`;
                     return (
-                    <QuestionnaireItem name={itemName} key={itemName} className='pb-18'>
-                        <DialogHeader>
+                    <QuestionnaireItem name={itemName} key={itemName}  className='h-[calc(100%-4rem)] px-2'>
+                        <DialogHeader className='px-4'>
                             <DialogTitle className='text-start flex flex-col gap-2'>
                                 <div className='flex items-center gap-4'>
                                     <span className='text-sm font-bold opacity-75'>QCM</span>
@@ -75,7 +76,7 @@ const QcmResultsQuestionnaire = ({qcm, children} : {qcm : QcmEntry, children : R
                             <DialogDescription/>
                         </DialogHeader>
                         <QuestionnaireProgress
-                            className="w-full"
+                            className="w-full px-4"
                             render={(props, state) => (
                             <div {...props}>
                                 <div className="mb-2 flex gap-1.5" aria-hidden="true">
@@ -96,42 +97,44 @@ const QcmResultsQuestionnaire = ({qcm, children} : {qcm : QcmEntry, children : R
                             </div>
                             )}
                         />
-                        <p className='text-lg font-semibold my-6'>{q.bankQuestion.question}</p>
-                        <QuestionnaireChoices>
-                            <QuestionnaireChoice value={AnswerChoice.a} defaultChecked = {answers[itemName] === AnswerChoice.a} disabled className={`${q.correct?'data-checked:bg-lime-600 data-checked:text-white' : 'data-checked:bg-red-500 data-checked:text-white'} ${q.bankQuestion.correctAnswer === AnswerChoice.a?'bg-lime-600 text-white' : ''}`}>
-                                {q.bankQuestion.answerA}
-                            </QuestionnaireChoice>
-                            <QuestionnaireChoice value={AnswerChoice.b} defaultChecked = {answers[itemName] === AnswerChoice.b} disabled className={`${q.correct?'data-checked:bg-lime-600 data-checked:text-white' : 'data-checked:bg-red-500 data-checked:text-white'} ${q.bankQuestion.correctAnswer === AnswerChoice.b?'bg-lime-600 text-white' : ''}`}>
-                                {q.bankQuestion.answerB}
-                            </QuestionnaireChoice>
-                            <QuestionnaireChoice value={AnswerChoice.c} defaultChecked = {answers[itemName] === AnswerChoice.c} disabled className={`${q.correct?'data-checked:bg-lime-600 data-checked:text-white' : 'data-checked:bg-red-500 data-checked:text-white'} ${q.bankQuestion.correctAnswer === AnswerChoice.c?'bg-lime-600 text-white' : ''}`}>
-                                {q.bankQuestion.answerC}
-                            </QuestionnaireChoice>
-                            <QuestionnaireChoice value={AnswerChoice.d} defaultChecked = {answers[itemName] === AnswerChoice.d} disabled className={`${q.correct?'data-checked:bg-lime-600 data-checked:text-white' : 'data-checked:bg-red-500 data-checked:text-white'} ${q.bankQuestion.correctAnswer === AnswerChoice.d?'bg-lime-600 text-white' : ''}`}>
-                                {q.bankQuestion.answerD}
-                            </QuestionnaireChoice>
-                        </QuestionnaireChoices>
-                        <div className='mt-6'>
-                            <span className='font-bold'>Explication</span>
-                            <p className=' font-medium'>{q.bankQuestion.explanation}</p>
+                        <p className='text-lg font-semibold my-6 px-4 '>{q.bankQuestion.question}</p>
+                        <div className="brand-v-scrollbar overflow-x-hidden overflow-y-auto px-4 ">
+                            <QuestionnaireChoices>
+                                <QuestionnaireChoice value={AnswerChoice.a} defaultChecked = {answers[itemName] === AnswerChoice.a} disabled className={`${q.correct?'data-checked:bg-lime-600 data-checked:text-white' : 'data-checked:bg-red-500 data-checked:text-white'} ${q.bankQuestion.correctAnswer === AnswerChoice.a?'bg-lime-600 text-white' : ''}`}>
+                                    {q.bankQuestion.answerA}
+                                </QuestionnaireChoice>
+                                <QuestionnaireChoice value={AnswerChoice.b} defaultChecked = {answers[itemName] === AnswerChoice.b} disabled className={`${q.correct?'data-checked:bg-lime-600 data-checked:text-white' : 'data-checked:bg-red-500 data-checked:text-white'} ${q.bankQuestion.correctAnswer === AnswerChoice.b?'bg-lime-600 text-white' : ''}`}>
+                                    {q.bankQuestion.answerB}
+                                </QuestionnaireChoice>
+                                <QuestionnaireChoice value={AnswerChoice.c} defaultChecked = {answers[itemName] === AnswerChoice.c} disabled className={`${q.correct?'data-checked:bg-lime-600 data-checked:text-white' : 'data-checked:bg-red-500 data-checked:text-white'} ${q.bankQuestion.correctAnswer === AnswerChoice.c?'bg-lime-600 text-white' : ''}`}>
+                                    {q.bankQuestion.answerC}
+                                </QuestionnaireChoice>
+                                <QuestionnaireChoice value={AnswerChoice.d} defaultChecked = {answers[itemName] === AnswerChoice.d} disabled className={`${q.correct?'data-checked:bg-lime-600 data-checked:text-white' : 'data-checked:bg-red-500 data-checked:text-white'} ${q.bankQuestion.correctAnswer === AnswerChoice.d?'bg-lime-600 text-white' : ''}`}>
+                                    {q.bankQuestion.answerD}
+                                </QuestionnaireChoice>
+                            </QuestionnaireChoices>
+                            <div className='mt-6'>
+                                <span className='font-bold'>Explication</span>
+                                <p className=' font-medium'>{q.bankQuestion.explanation}</p>
+                            </div>
+                            <QuestionnaireError/>
                         </div>
-                        <QuestionnaireError/>
                     </QuestionnaireItem>
                     )})
             }
-          <DialogFooter className=' absolute bottom-6 left-0 px-6 w-full'>
+          <DialogFooter className='flex flex-row px-4 justify-end w-full'>
             {
                 currentItemName === items[items.length - 1].name &&
                 <DialogClose asChild className=''>
-                    <BrandButton type="button" variant="default" className='h-12 w-full'>
+                    <BrandButton type="button" variant="default" className='h-12 w-full lg:max-w-60'>
                         Fermer
                     </BrandButton>
                 </DialogClose>
             }
-            <QuestionnaireActions className='flex-1 flex'>
+            <QuestionnaireActions className='flex-1 flex justify-end'>
                 {
                     currentItemName !== items[items.length - 1].name &&
-                    <QuestionnaireSkip variant={'default'} className='w-full h-12'>Question suivante</QuestionnaireSkip>
+                    <QuestionnaireSkip variant={'default'} className='w-full h-12 lg:max-w-60'>Question suivante</QuestionnaireSkip>
                 }
             </QuestionnaireActions>
           </DialogFooter>

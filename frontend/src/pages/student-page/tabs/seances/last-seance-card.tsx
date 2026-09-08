@@ -117,8 +117,8 @@ const LastSeanceCard = ({bilans, onQcmSubmit} : {bilans : BilanEntry[], onQcmSub
                         <p className='mt-2 opacity-75 text-start w-full'>Tu peux consulter les réponses aux questions.</p>
                         <div className='p-4 mt-4 rounded-lg bg-emerald-200 mb-auto'>
                             <div className='flex items-center justify-center gap-2'>
-                                <TrophyIcon className='size-10'/>
-                                <div className='text-3xl tracking-tight font-bold'>
+                                <TrophyIcon className='size-8'/>
+                                <div className='text-2xl tracking-tight font-bold'>
                                     <span>{recentBilan.qcm.score}/{recentBilan.qcm.qcmQuestions.length}</span>
                                 </div>
                             </div>

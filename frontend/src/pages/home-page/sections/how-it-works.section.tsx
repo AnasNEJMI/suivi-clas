@@ -35,8 +35,8 @@ function HowItWorksSection() {
       </p>
       <div className='flex flex-col md:flex-row items-stretch justify-center gap-4 max-w-7xl mt-6'>
         {steps.map((step, i) => (
-          <>
-            <div key={step.n} className='max-w-md flex-1 grow flex flex-col items-center justify-center rounded-xl border-2 border-lime-500 outline-lime-800 bg-white p-4 text-center dark:border-zinc-700 dark:bg-zinc-800'>
+          <div key={step.n}>
+            <div className='max-w-md flex-1 grow flex flex-col items-center justify-center rounded-xl border-2 border-lime-500 outline-lime-800 bg-white p-4 text-center dark:border-zinc-700 dark:bg-zinc-800'>
               <div className='mx-auto mb-2 flex h-6 w-6 items-center justify-center rounded-full bg-lime-600 text-[12px] font-medium text-white'>
                 {step.n}
               </div>
@@ -57,7 +57,7 @@ function HowItWorksSection() {
                 <ChevronDown className='h-4 w-4' aria-hidden />
               </div>
             )}
-          </>
+          </div>
         ))}
       </div>
     </section>

@@ -1,18 +1,7 @@
-import type { User } from '@/api/auth';
-import BaseLayout from '@/layouts/base-layout';
-import { Outlet, useRouteLoaderData } from 'react-router';
-import { ErrorBoundary }     from 'react-error-boundary'
-import { Suspense, useEffect } from 'react';
-import Skeleton from './bilans/bilans-skeleton';
-import BilansSection from './bilans/bilans-section';
-import SectionError from './section-error';
-import SkillsEvalSection from './skills-eval/Skills-eval-section';
-import LessonEvalSection from './lesson-eval/lesson-eval-section';
-import StudentPageHeroSection from './hero-section';
+import { Outlet} from 'react-router';
+import {useEffect } from 'react';
 import { studentApiCalls } from '@/api/student/apiCalls';
-import FooterSection from '../footer-section';
-import { SEOHead } from '@/components/seo-head';
-import { BicepsFlexedIcon, BookOpenTextIcon, FilePenLineIcon, GraduationCapIcon } from 'lucide-react';
+import { BicepsFlexedIcon, BookOpenTextIcon, FilePenLineIcon, GraduationCapIcon, User2Icon } from 'lucide-react';
 import UserPageWrapper from './page-wrapper';
 import type { UserPageTheme } from '@/lib/types/data.types';
 
@@ -30,7 +19,7 @@ const PAGE_TABS = [
       icon: FilePenLineIcon,
     },
     {
-      title: "Methodologie",
+      title: "Méthode",
       url: `${ROOT_PATH}/methodologie`,
       icon: BicepsFlexedIcon,
     },
@@ -38,6 +27,11 @@ const PAGE_TABS = [
       title: "Programme",
       url: `${ROOT_PATH}/programme`,
       icon: GraduationCapIcon,
+    },
+    {
+      title: "Profile",
+      url: `${ROOT_PATH}/profile`,
+      icon: User2Icon,
     }
 ]
 
@@ -65,27 +59,6 @@ const StudentPageLayout = () => {
             theme  = {PAGE_THEME}
         >
             <Outlet/>
-            {/* <BaseLayout>
-                <StudentPageHeroSection student={user}/>
-                <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
-                    <Suspense fallback = {<Skeleton/>}>
-                        <BilansSection student = {user}/>
-                    </Suspense>
-                </ErrorBoundary>
-                <ErrorBoundary fallback = {<SectionError desc = 'des évaluations de la méthodologie'/>}>
-                    <Suspense fallback = {<Skeleton/>}>
-                        <SkillsEvalSection student = {user}/>
-                    </Suspense>
-                </ErrorBoundary>
-    
-                <ErrorBoundary fallback = {<SectionError desc = 'des évaluations des leçons'/>}>
-                    <Suspense fallback = {<Skeleton/>}>
-                        <LessonEvalSection student = {user}/>
-                    </Suspense>
-                </ErrorBoundary>
-                <LogoutSection/>
-                <FooterSection/>
-            </BaseLayout> */}
         </UserPageWrapper>
   )
 }

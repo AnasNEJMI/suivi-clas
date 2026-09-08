@@ -52,7 +52,10 @@ const QcmQuestionnaire = ({qcm, onQcmSubmit, children} : {qcm : QcmEntry, onQcmS
                 return;
             }
             
-            toast(`QCM Complété ! Vous avez obtenu un résulat de : ${qcm.score}`);
+            // toast(`QCM Complété ! Vous avez obtenu un résulat de : ${qcm.score}`);
+            toast.success("QCM complété", {
+                description: `Vous avez obtenu une note de ${qcm.score}/10`,
+            })
             console.log('qcm returned : ', qcm);
 
             onQcmSubmit(qcm);
@@ -128,20 +131,21 @@ const QcmQuestionnaire = ({qcm, onQcmSubmit, children} : {qcm : QcmEntry, onQcmS
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className='w-full h-dvh md:max-w-4xl md:h-fit'>
+      <DialogContent className='w-full h-dvh p-0'>
         {open &&
         <Questionnaire
           defaultItem={initialItem}
           items={items}
           onSubmit={handleQcmSubmit}
           onChange={handleFormChange}
+          className='h-dvh pt-6 pb-4'
         >
             {
                 qcm.qcmQuestions.map((q) => {
                     const itemName = `${q.id}-${q.bankQuestion.id}`;
                     return (
-                    <QuestionnaireItem name={itemName} key={itemName} required>
-                        <DialogHeader>
+                    <QuestionnaireItem name={itemName} key={itemName} className='h-[calc(100%-4rem)] px-2' required>
+                        <DialogHeader className='px-4'>
                             <DialogTitle className='text-start flex flex-col gap-2'>
                                 <span className='text-sm font-bold opacity-75'>QCM</span>
                                 <span className='text-base'>{qcm.lesson!.label}</span>
@@ -149,7 +153,7 @@ const QcmQuestionnaire = ({qcm, onQcmSubmit, children} : {qcm : QcmEntry, onQcmS
                             <DialogDescription/>
                         </DialogHeader>
                         <QuestionnaireProgress
-                            className="w-full"
+                            className="w-full px-4"
                             render={(props, state) => (
                             <div {...props}>
                                 <div className="mb-2 flex gap-1.5" aria-hidden="true">
@@ -170,26 +174,28 @@ const QcmQuestionnaire = ({qcm, onQcmSubmit, children} : {qcm : QcmEntry, onQcmS
                             </div>
                             )}
                         />
-                        <p className='text-lg font-semibold my-6'>{q.bankQuestion.question}</p>
-                        <QuestionnaireChoices>
-                            <QuestionnaireChoice value={AnswerChoice.a} defaultChecked = {savedAnswers[itemName] === AnswerChoice.a}>
-                                {q.bankQuestion.answerA}
-                            </QuestionnaireChoice>
-                            <QuestionnaireChoice value={AnswerChoice.b} defaultChecked = {savedAnswers[itemName] === AnswerChoice.b}>
-                                {q.bankQuestion.answerB}
-                            </QuestionnaireChoice>
-                            <QuestionnaireChoice value={AnswerChoice.c} defaultChecked = {savedAnswers[itemName] === AnswerChoice.c}>
-                                {q.bankQuestion.answerC}
-                            </QuestionnaireChoice>
-                            <QuestionnaireChoice value={AnswerChoice.d} defaultChecked = {savedAnswers[itemName] === AnswerChoice.d}>
-                                {q.bankQuestion.answerD}
-                            </QuestionnaireChoice>
-                        </QuestionnaireChoices>
-                        <QuestionnaireError/>
+                        <p className='text-lg font-semibold my-6 px-4'>{q.bankQuestion.question}</p>
+                        <div className="brand-v-scrollbar overflow-x-hidden overflow-y-auto px-4">
+                            <QuestionnaireChoices>
+                                <QuestionnaireChoice value={AnswerChoice.a} defaultChecked = {savedAnswers[itemName] === AnswerChoice.a}>
+                                    {q.bankQuestion.answerA}
+                                </QuestionnaireChoice>
+                                <QuestionnaireChoice value={AnswerChoice.b} defaultChecked = {savedAnswers[itemName] === AnswerChoice.b}>
+                                    {q.bankQuestion.answerB}
+                                </QuestionnaireChoice>
+                                <QuestionnaireChoice value={AnswerChoice.c} defaultChecked = {savedAnswers[itemName] === AnswerChoice.c}>
+                                    {q.bankQuestion.answerC}
+                                </QuestionnaireChoice>
+                                <QuestionnaireChoice value={AnswerChoice.d} defaultChecked = {savedAnswers[itemName] === AnswerChoice.d}>
+                                    {q.bankQuestion.answerD}
+                                </QuestionnaireChoice>
+                            </QuestionnaireChoices>
+                            <QuestionnaireError/>
+                        </div>
                     </QuestionnaireItem>
                     )})
             }
-          <DialogFooter className='flex flex-row'>
+          <DialogFooter className='flex flex-row px-4'>
             <DialogClose asChild className='flex-1 p-0'>
               <BrandButton type="button" variant="outline" className='h-12'>
                 Annuler
