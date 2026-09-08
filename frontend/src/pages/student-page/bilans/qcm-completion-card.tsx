@@ -3,6 +3,7 @@ import { TriangleAlertIcon } from 'lucide-react'
 import QcmQuestionnaire from './qcm-questionnaire'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { BrandButton } from '@/components/brand-button'
 
 const QcmCompletionCard = ({qcm, onQcmSubmit} : {qcm : QcmEntry, onQcmSubmit : (qcm: QcmEntry) => void}) => {
   return (
@@ -11,7 +12,9 @@ const QcmCompletionCard = ({qcm, onQcmSubmit} : {qcm : QcmEntry, onQcmSubmit : (
             <TriangleAlertIcon/>
             <p className='font-medium'>Vous avez un QCM à compléter pour cette semaine</p>
         </div>
-        <QcmQuestionnaire qcm = {qcm} onQcmSubmit = {onQcmSubmit}/>
+        <QcmQuestionnaire qcm = {qcm} onQcmSubmit = {onQcmSubmit}>
+          <BrandButton>Compléter le QCM</BrandButton>
+        </QcmQuestionnaire>
         <div className='flex justify-end mt-2'>
             <span className='text-sm font-light text-end opacity-75'>Créé le <span className='capitalize underline underline-offset-1 font-medium'>{format(qcm.createdAt, 'PPP', {locale : fr})}</span></span>
         </div>

@@ -6,7 +6,7 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar"
 import {useNavigate } from "react-router"
-import { BicepsFlexedIcon, BookOpenIcon, ChartNoAxesCombinedIcon, CircleQuestionMarkIcon, DownloadIcon, LogOutIcon, NotebookTextIcon, UserIcon,} from "lucide-react"
+import {LogOutIcon} from "lucide-react"
 import { Separator } from "./ui/separator"
 import { useAuth } from "@/contexts/auth/use-auth"
 import { ApiError } from "@/lib/errors/apiError.class"
@@ -14,49 +14,54 @@ import { BrandButton } from "./brand-button"
 import { useState } from "react"
 import type { UserLayoutTab, UserPageTheme } from "@/lib/types/data.types"
 
-const data = {
-  welcome : [
-    {
-      title: "Acceuil",
-      url: "/animateur",
-      icon: UserIcon,
-    } 
-  ],
-  navMain: [
-    {
-      title: "Bilans",
-      url: "/animateur/bilans",
-      icon: NotebookTextIcon,
-    },
-    {
-      title: "Compétences",
-      url: "/animateur/evaluation-competences",
-      icon: BicepsFlexedIcon,
-    },
-    {
-      title: "Évaluation de leçons",
-      url: "/animateur/evaluation-lecons",
-      icon: BookOpenIcon,
-    },
-    {
-      title: "Qcms",
-      url: "/animateur/qcms",
-      icon: CircleQuestionMarkIcon,
-    },
-  ],
-  usefulLinks: [
-    {
-      title: "Liens utiles",
-      url: "/animateur/liens-utiles",
-      icon: ChartNoAxesCombinedIcon,
-    },
-    {
-      title: "Téléchargements",
-      url: "/animateur/liens-telechargements",
-      icon: DownloadIcon,
-    },
-  ],
-}
+// const data = {
+//   welcome : [
+//     {
+//       title: "Acceuil",
+//       url: "/animateur",
+//       icon: UserIcon,
+//     } 
+//   ],
+//   navMain: [
+//     {
+//       title: "Bilans",
+//       url: "/animateur/bilans",
+//       icon: NotebookTextIcon,
+//     },
+//     {
+//       title: "Compétences",
+//       url: "/animateur/evaluation-competences",
+//       icon: BicepsFlexedIcon,
+//     },
+//     {
+//       title: "Évaluation de leçons",
+//       url: "/animateur/evaluation-lecons",
+//       icon: BookOpenIcon,
+//     },
+//     {
+//       title: "Qcms",
+//       url: "/animateur/qcms",
+//       icon: CircleQuestionMarkIcon,
+//     },
+//     {
+//       title: "Profile",
+//       url: `${ROOT_PATH}/profile`,
+//       icon: User2Icon,
+//     }
+//   ],
+//   usefulLinks: [
+//     {
+//       title: "Liens utiles",
+//       url: "/animateur/liens-utiles",
+//       icon: ChartNoAxesCombinedIcon,
+//     },
+//     {
+//       title: "Téléchargements",
+//       url: "/animateur/liens-telechargements",
+//       icon: DownloadIcon,
+//     },
+//   ],
+// }
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar>{
   tabs : UserLayoutTab[],
