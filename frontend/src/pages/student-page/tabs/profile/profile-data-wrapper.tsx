@@ -5,7 +5,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import ProfileCard from './profile-card';
 import AssociationCard from './association-card';
 import StatsCard from './stats-card';
-import LogoutCard from './logout-card';
+import LogoutCard from '../../../logout-card';
 
 const ProfileTabDataWrapper = ({student} : {student : User}) => {
     const {data : {bilans}} = useSuspenseQuery({

@@ -7,9 +7,9 @@ import { sendSuccess } from '../../utils/response.utils.js';
 
 export type AnimatorStatsResponse = { animatorStatsPerScolarYear: AnimatorStatsPerScolarYear[] }
 export type AnimatorStatsPerScolarYear = { scolarYear: { id: number; label: string }; animators: AnimatorStats[]}
-export type AnimatorStats = { animator : {id: number; firstName: string;  lastName: string; gender : Gender},classes: AnimatorClassStats[], totalSeances : number, totalBilans : number};
-export type AnimatorClassStats = { class : {id : number, label : string}, seances : SeanceStats[], seancesCount : number; bilansSubmitted : number}
-export type SeanceStats = {id : number, duration : string, date : Date}
+export type AnimatorStats = { animator : {id: number; firstName: string;  lastName: string; gender : Gender},classes: AnimatorClassStats[], totalSeances : number, totalBilans : number, totalQcms : number};
+export type AnimatorClassStats = { class : {id : number, label : string}, seances : SeanceStats[], seancesCount : number; bilansSubmitted : number, qcmsSubmitted : number}
+export type SeanceStats = {id : number, duration : string, date : Date, students : {firstName : string, lastName : string,gender : Gender, presence : boolean}[]}
 
 
 export async function associationAnimatorStatsHandler(req: Request, res: Response, next: NextFunction) {
@@ -44,6 +44,19 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
         animator : {select : {id : true, firstName : true, lastName : true, gender : true}},
         class : {select : {id : true, label : true}},
         date : true,
+        bilans : {
+          select : {
+            qcm : true,
+            presence : true,
+            student : {
+              select : {
+                firstName : true,
+                lastName : true,
+                gender : true,
+              }
+            }
+          },
+        },
         _count : {select : {bilans : true}},
         seanceDuration : {select : {id : true, label : true}}
       },
@@ -58,9 +71,9 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
     type ScolarYearBucket = {
       scolarYear: { id: number; label: string }
       animators: Map<number, {
-        totalSeances : number, totalBilans : number,
+        totalSeances : number, totalBilans : number, totalQcms : number,
         animator:    { id: number; firstName: string, lastName : string, gender : Gender}
-        classes: Map<number, {class : {id : number, label : string}, seances : {id: number, duration : string, date : Date}[], seancesCount: number; bilansSubmitted: number }>
+        classes: Map<number, {class : {id : number, label : string}, seances : {id: number, duration : string, date : Date, students : {firstName : string, lastName : string,gender : Gender, presence : boolean}[]}[], seancesCount: number; bilansSubmitted: number, qcmsSubmitted : number}>
       }>
     }
     
@@ -83,6 +96,7 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
           {
             totalBilans : 0,
             totalSeances : 0,
+            totalQcms : 0,
             animator : {id: animator.id, firstName: animator.firstName, lastName : animator.lastName, gender : animator.gender}, 
             classes : new Map()
           }
@@ -97,16 +111,24 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
           class : {id : clas.id, label : clas.label},
           seances : [],
           seancesCount : 0,
-          bilansSubmitted : 0
+          bilansSubmitted : 0,
+          qcmsSubmitted : 0,
         })
       }
 
       const classBucket = animatorBucket.classes.get(clas.id)!;
-      classBucket.seances.push({id : seance.id, date : seance.date, duration : seance.seanceDuration.label});
+      classBucket.seances.push({
+        id : seance.id,
+        date : seance.date,
+        duration : seance.seanceDuration.label,
+        students : seance.bilans.map(b => {return {presence : b.presence, ...b.student}})
+      });
       classBucket.bilansSubmitted+= seance._count.bilans;
       classBucket.seancesCount++;
+      classBucket.qcmsSubmitted += seance.bilans.map(b => b.qcm !== null).length;
       animatorBucket.totalBilans+= seance._count.bilans;
       animatorBucket.totalSeances++;
+      animatorBucket.totalQcms += seance.bilans.map(b => b.qcm !== null).length;
     }
 
     //2- we need to run through the contracts next and add entries for contracts for which no seances are registered
@@ -125,6 +147,7 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
         yearBucket.animators.set(animator.id, {
           totalBilans : 0,
           totalSeances : 0,
+          totalQcms : 0,
           animator,
           classes : new Map()
         });
@@ -139,7 +162,8 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
           class : clas,
           seances : [],
           seancesCount : 0,
-          bilansSubmitted : 0
+          bilansSubmitted : 0,
+          qcmsSubmitted : 0,
         });
       }
     }
@@ -152,6 +176,7 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
         animators.push({
           totalBilans : animatorBucket.totalBilans,
           totalSeances : animatorBucket.totalSeances,
+          totalQcms : animatorBucket.totalQcms,
           animator : animatorBucket.animator,
           classes
         })

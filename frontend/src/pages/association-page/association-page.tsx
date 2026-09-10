@@ -3,7 +3,7 @@ import BaseLayout from '@/layouts/base-layout';
 import {useRouteLoaderData } from 'react-router'
 import AssociationMemberHeroSection from './hero-section';
 import { ErrorBoundary } from 'react-error-boundary';
-import SectionError from '../student-page/section-error';
+import SectionError from '../section-error';
 import Skeleton from '../student-page/bilans/bilans-skeleton';
 import { Suspense } from 'react';
 import PresenceStatsSection from './presence-stats/presence-section';

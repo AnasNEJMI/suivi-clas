@@ -31,6 +31,18 @@ export async function associationPageLoader(){
             staleTime : 2 * 60 * 1000,
         })
 
+        void queryClient.prefetchQuery({
+            queryKey : associationMemberQueryKeys.qcmStats,
+            queryFn : associationMemberApiCalls.fetchQcmStats,
+            staleTime : 2 * 60 * 1000
+        })
+
+        void queryClient.prefetchQuery({
+            queryKey : associationMemberQueryKeys.animatorStats,
+            queryFn : associationMemberApiCalls.fetchAnimatorStats,
+            staleTime : 2 * 60 * 1000
+        })
+
         return {user : user};
     }catch(error){
         if(error instanceof Response && error.status === 302){

@@ -22,7 +22,9 @@ import SeancesTab from './pages/student-page/tabs/seances/seances-tab.tsx'
 import QcmsTab from './pages/student-page/tabs/qcms/qcms-tab.tsx'
 import SkillEvalsTab from './pages/student-page/tabs/skill-evals/skill-evals-tab.tsx'
 import LessonEvalsTab from './pages/student-page/tabs/lesson-evals/lesson-evals-tab.tsx'
-import ProfileTab from './pages/student-page/tabs/profile/profile-tab.tsx'
+import StudentProfileTab from './pages/student-page/tabs/profile/profile-tab.tsx'
+import AssocProfileTab from './pages/association-page/tabs/profile-tab/profile-tab.tsx'
+import AssocAnimatorsTab from './pages/association-page/tabs/animators-tab/animators-tab.tsx'
 
 
 function lazify<T extends FunctionComponent<any>>(
@@ -39,7 +41,7 @@ function lazify<T extends FunctionComponent<any>>(
 const HomePage = lazify(() => import('./pages/home-page/page.tsx'))
 const StudentPageLayout = lazify(() => import('./pages/student-page/layout.tsx'))
 const AnimatorPage = lazify(() => import('./pages/animator-page/animator-page.tsx'))
-const AssociationPage = lazify(() => import('./pages/association-page/association-page.tsx'))
+const AssociationPageLayout = lazify(() => import('./pages/association-page/layout.tsx'))
 const LoginPage = lazify(() => import('./pages/login-page/page.tsx'))
 
 const router = createBrowserRouter([
@@ -64,15 +66,19 @@ const router = createBrowserRouter([
           {path : 'qcms', Component : QcmsTab},
           {path : 'methodologie', Component : SkillEvalsTab},
           {path : 'programme', Component : LessonEvalsTab},
-          {path : 'profile', Component : ProfileTab},
+          {path : 'profile', Component : StudentProfileTab},
         ]
       },
       {
         id : 'association',
         path : 'association',
-        Component : AssociationPage,
+        Component : AssociationPageLayout,
         loader : associationPageLoader,
         shouldRevalidate: () => true,
+        children :[
+          {index : true, Component : AssocProfileTab},
+          {path : 'seances', Component : AssocAnimatorsTab},
+        ]
       },
       {
         id: "animator",

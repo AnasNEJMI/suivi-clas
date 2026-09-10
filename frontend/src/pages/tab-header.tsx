@@ -4,15 +4,16 @@ import { cn } from '@/lib/utils';
 
 interface TabHeader extends React.ComponentProps<"section"> {
     student : User,
-    description : string
-    tabLabel : string,
+    title : string,
+    subTitle : string,
+    description : string,
 }
-const TabHeader = ({student,description,tabLabel, ...props} : TabHeader) => {
+const TabHeader = ({student,description,subTitle,title, ...props} : TabHeader) => {
     const isMobile = useIsMobile();
   return (
     <section {...props}>
         <div className={cn('flex flex-col', !isMobile && 'pt-8')}>
-            {isMobile && <span className='text-xs font-light opacity-50'>Éspace Étudiant - {tabLabel}</span>}
+            {isMobile && <span className='text-xs font-light opacity-50'>{title} - {subTitle}</span>}
             <span className='font-bold md:text-3xl'>Bonjour <span>{student.firstName}</span> 👋 !</span>
             {!isMobile && <p className='opacity-50 max-w-xl text-balance leading-5'>{description}</p>}
         </div>
