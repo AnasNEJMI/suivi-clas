@@ -10,7 +10,7 @@ const AssocClassesCard = ({classes}:{classes : ClassVisitStats[]}) => {
   return (
     <Card className='mt-4 font-outfit gap-0 flex-1'>
       <CardHeader>
-        <CardTitle className='flex items-center gap-2 text-lg'><GraduationCapIcon className='text-emerald-400 size-6'/> Mes Groupes</CardTitle>
+        <CardTitle className='flex items-center gap-2 text-lg'><GraduationCapIcon className='text-amber-600 size-6'/> Mes Groupes</CardTitle>
       </CardHeader>
         <CardContent className='mt-0'>
             <div className='flex flex-col gap-1 text-base w-full'>

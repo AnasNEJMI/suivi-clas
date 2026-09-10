@@ -5,20 +5,20 @@ import type { User } from '@/api/auth'
 import TabHeader from '@/pages/tab-header'
 import SectionError from '@/pages/section-error'
 import { Skeleton } from '@/components/ui/skeleton'
-import PresenceTabDataWrapper from './animators-data-wrapper'
+import AssocPresenceTabDataWrapper from './presence-data-wrapper'
 
-const AssocAnimatorsTab = () => {
+const AssocPresenceTab = () => {
     const {user : association} = useRouteLoaderData('association') as {user: User};
   return (
     <>
         <TabHeader student={association} title = 'Éspace association' subTitle='Séances' description="Récapitulatif des séances réalisées par chacun des animateurs participants"/>
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
             <Suspense fallback = {<Skeleton/>}>
-                <PresenceTabDataWrapper/>
+                <AssocPresenceTabDataWrapper/>
             </Suspense>
         </ErrorBoundary>
     </>
   )
 }
 
-export default AssocAnimatorsTab
+export default AssocPresenceTab

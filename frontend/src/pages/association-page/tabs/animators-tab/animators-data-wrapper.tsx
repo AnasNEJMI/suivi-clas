@@ -4,7 +4,7 @@ import {useSuspenseQuery } from '@tanstack/react-query';
 import AssocAnimatorStatsRecap from './animator-stats-recap';
 import AssocSeanceHistoryCarousel from './seance-history-carousel';
 
-const AnimatorsTabDataWrapper = () => {
+const PresenceTabDataWrapper = () => {
     const {data : {animatorStatsPerScolarYear}} = useSuspenseQuery({
         queryKey : associationMemberQueryKeys.animatorStats,
         queryFn : associationMemberApiCalls.fetchAnimatorStats,
@@ -19,4 +19,4 @@ const AnimatorsTabDataWrapper = () => {
   )
 }
 
-export default AnimatorsTabDataWrapper
+export default PresenceTabDataWrapper

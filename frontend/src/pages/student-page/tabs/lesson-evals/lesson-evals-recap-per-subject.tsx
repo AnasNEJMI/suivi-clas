@@ -8,7 +8,7 @@ import { ChevronRightIcon, RotateCwFadingClockIcon } from 'lucide-react'
 import SubjectEvalListDrawer from './subject-eval-list-drawer'
 
 const LessonEvalsRecapPerSubject = ({lessonsBySubject} : {lessonsBySubject : LessonsBySubject[]}) => {
-    if(!lessonsBySubject){
+    if(!lessonsBySubject || lessonsBySubject.length === 0){
         return(
             <>
                 <h3 className='mt-6 font-semibold text-lg lg:text-xl text-zinc-900 tracking-tight'>Par matière</h3>

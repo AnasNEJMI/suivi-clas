@@ -25,6 +25,7 @@ import LessonEvalsTab from './pages/student-page/tabs/lesson-evals/lesson-evals-
 import StudentProfileTab from './pages/student-page/tabs/profile/profile-tab.tsx'
 import AssocProfileTab from './pages/association-page/tabs/profile-tab/profile-tab.tsx'
 import AssocAnimatorsTab from './pages/association-page/tabs/animators-tab/animators-tab.tsx'
+import AssocPresenceTab from './pages/association-page/tabs/presence-tab/presence-tab.tsx'
 
 
 function lazify<T extends FunctionComponent<any>>(
@@ -78,6 +79,7 @@ const router = createBrowserRouter([
         children :[
           {index : true, Component : AssocProfileTab},
           {path : 'seances', Component : AssocAnimatorsTab},
+          {path : 'presence', Component : AssocPresenceTab},
         ]
       },
       {

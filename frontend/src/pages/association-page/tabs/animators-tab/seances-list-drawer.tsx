@@ -4,17 +4,19 @@ import { Drawer, DrawerClose, DrawerContent,DrawerDescription,DrawerHeader,Drawe
 import { useIsMobile } from '@/hooks/use-mobile'
 import AssocSeanceDetailsDrawer from './seance-details-drawer'
 import { Button } from '@/components/ui/button'
-import { ArrowLeftIcon, CalendarIcon, ClockIcon, GraduationCapIcon, UserIcon } from 'lucide-react'
+import { ArrowLeftIcon, CalendarIcon, ClockIcon, GraduationCapIcon, RotateCwFadingClockIcon, UserIcon } from 'lucide-react'
 import { cn, getElapsedDays } from '@/lib/utils'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { Separator } from '@/components/ui/separator'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 const AssocSeancesListDrawer = ({seances, filters, children} : {seances : CarouselSeance[], filters : string[], children : ReactNode}) => {
     const isMobile = useIsMobile();
+    console.log('seances ', seances)
 
-    const [filter, setFilter] = useState<string>('all')
     
+    const [filter, setFilter] = useState<string>('all')
     const getFilteredSeances = useCallback((filter : string) => {
         let newSeances : CarouselSeance[] = [];
         for(const f of filters){
@@ -45,6 +47,34 @@ const AssocSeancesListDrawer = ({seances, filters, children} : {seances : Carous
     const selectedSeanceBuckets = useMemo(()=>{
         return getFilteredSeances(filter);
     }, [filter,getFilteredSeances])
+    
+    if(seances.length === 0){
+        return (
+            <Drawer direction={isMobile? 'left' : 'right'}>
+                <DrawerTrigger asChild>
+                    {children}
+                </DrawerTrigger>
+                <DrawerContent className='h-dvh pl-4 pr-2 pb-2 font-outfit shadow-none border-none bg-zinc-100 md:rounded-t-xl'>
+                    <DrawerHeader className='flex'>
+                        <DrawerClose asChild>
+                            <Button variant={'ghost'} className='w-fit h-12 opacity-75'><ArrowLeftIcon className='size-6'/> <span>Retour</span></Button>
+                        </DrawerClose>
+                        <DrawerTitle className='text-lg'>Séances</DrawerTitle>
+                        <DrawerDescription>0 Séances réalisées</DrawerDescription>
+                    </DrawerHeader>
+                    <div className=''>
+                        <Card className='border-2 border-dashed border-zinc-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-xl bg-transparent mt-4 p-4'>
+                            <CardHeader className='flex flex-col items-center justify-center w-full'>
+                                <RotateCwFadingClockIcon className='size-10 opacity-70'/>
+                                <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>Aucune séance enregistrée pour le moment.</CardTitle>
+                                <CardDescription className='text-pretty text-sm max-w-xl text-center'>Toutes les séance enregistrées seront affichées ici dès leur réalisation.</CardDescription>
+                            </CardHeader>   
+                        </Card>
+                    </div>
+                </DrawerContent>
+            </Drawer>
+        )
+    }
 
     const animatorName = `${seances[0].animator.firstName} ${seances[0].animator.lastName}`
 
