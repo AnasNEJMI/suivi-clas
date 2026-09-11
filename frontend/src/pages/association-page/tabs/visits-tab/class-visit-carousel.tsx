@@ -46,7 +46,7 @@ const AssocClassVisitCarousel = ({classVisits} : {classVisits: ClassVisitStats})
                             const daysSinceLastVisit = student.lastVisit? getDaysSinceLastVisit(student.lastVisit!) : null;
                             return (
                                 <CarouselItem key={student.id} className="group pl-2 max-w-60 pb-4">
-                                    <div className={cn(`rounded-xl w-full h-full p-4 font-outfit flex flex-col justify-between shadow-sm bg-white border`, daysSinceLastVisit && (daysSinceLastVisit > 7 || daysSinceLastVisit < 0) ? 'border-emerald-300' : 'border-red-300')}>
+                                    <div className={cn(`rounded-xl w-full h-full p-4 font-outfit flex flex-col justify-between shadow-sm bg-white border-2`, daysSinceLastVisit && (daysSinceLastVisit > 7 || daysSinceLastVisit < 0) ? 'border-emerald-300' : 'border-red-300')}>
                                         <div className=''>
                                             <div className='text-base flex items-center gap-2 tracking-tight font-semibold'><div className='capitalize h-8 w-8 rounded-full bg-amber-200 flex items-center justify-center'>{student.firstName.slice(0,1)}</div><span><span className='capitalize'>{student.firstName}</span> <span className='uppercase'>{student.lastName}</span></span></div>
                                             <div className='text-sm leading-4 tracking-tight flex flex-col items-start font-semibold opacity-75'><span className='flex items-center justify-center gap-1'><div className='h-8 w-8 flex items-center justify-center'><GraduationCapIcon className='size-4'/></div>{classVisits.class.label}</span></div>
