@@ -31,17 +31,17 @@ const AssocPresenceStatsRecap = ({presenceStatsPerScolarYear} : {presenceStatsPe
         <>
             <h3 className='mt-6 font-semibold text-lg lg:text-xl text-zinc-900'>Bilan de présence</h3>
             <div className='mt-2 flex gap-2 lg:gap-4'>
-                <div className='rounded-xl p-4 flex items-center justify-between bg-emerald-100 shadow-sm flex-1'>
+                <div className='rounded-xl p-4 flex items-start justify-between bg-emerald-100 shadow-sm flex-1'>
                     <div className='flex flex-col'>
                         <span className='font-bold text-2xl'>{presenceRate}%</span>
-                        <span className='opacity-75 text-sm font-medium'>Présence</span>
+                        <span className='opacity-75 text-sm font-medium'>Élèves présents</span>
                     </div>
                     <CalendarCheck2Icon className='size-8 text-emerald-600'/>
                 </div>
-                <div className='rounded-xl p-4 flex items-center justify-between bg-red-100 shadow-sm flex-1'>
+                <div className='rounded-xl p-4 flex items-start justify-between bg-red-100 shadow-sm flex-1'>
                     <div className='flex flex-col'>
                         <span className='font-bold text-2xl'>{absenceRate}%</span>
-                        <span className='opacity-75 text-sm font-medium'>Absence</span>
+                        <span className='opacity-75 text-sm font-medium'>Élèves absents</span>
                     </div>
                     <CalendarX2Icon className='size-8 text-red-600'/>
                 </div>

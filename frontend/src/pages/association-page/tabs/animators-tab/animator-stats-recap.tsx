@@ -29,7 +29,7 @@ const AssocAnimatorStatsRecap = ({animatorStatsPerScolarYear} : {animatorStatsPe
         <>
             <h3 className='mt-6 font-semibold text-lg lg:text-xl text-zinc-900'>Bilan de l'année</h3>
             <div className='mt-2 flex flex-col lg:flex-row gap-2 lg:gap-4'>
-                <div className='rounded-xl p-4 flex items-center justify-between bg-white shadow-sm lg:flex-1/3'>
+                <div className='rounded-xl p-4 flex items-start justify-between bg-white shadow-sm lg:flex-1/3'>
                     <div className='flex flex-col'>
                         <span className='font-bold text-2xl'>{totalSeances}</span>
                         <span className='opacity-75 text-sm font-medium'>séances réalisées</span>
@@ -37,14 +37,14 @@ const AssocAnimatorStatsRecap = ({animatorStatsPerScolarYear} : {animatorStatsPe
                     <LibraryBigIcon className='size-8'/>
                 </div>
                 <div className='flex  lg:flex-2/3 gap-2 lg:gap-4'>
-                    <div className='rounded-xl p-4 flex items-center justify-between bg-emerald-100 shadow-sm flex-1'>
+                    <div className='rounded-xl p-4 flex items-start justify-between bg-emerald-100 shadow-sm flex-1'>
                         <div className='flex flex-col'>
                             <span className='font-bold text-2xl'>{totalBilans}</span>
                             <span className='opacity-75 text-sm font-medium'>bilans soumis</span>
                         </div>
                         <NotebookTextIcon className='size-8 text-emerald-600'/>
                     </div>
-                    <div className='rounded-xl p-4 flex items-center justify-between bg-indigo-100 shadow-sm flex-1'>
+                    <div className='rounded-xl p-4 flex items-start justify-between bg-indigo-100 shadow-sm flex-1'>
                         <div className='flex flex-col'>
                             <span className='font-bold text-2xl'>{totalQcms}</span>
                             <span className='opacity-75 text-sm font-medium'>qcms envoyés</span>

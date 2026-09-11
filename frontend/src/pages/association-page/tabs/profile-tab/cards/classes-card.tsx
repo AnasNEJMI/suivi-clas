@@ -28,7 +28,7 @@ const AssocClassesCard = ({classes}:{classes : ClassVisitStats[]}) => {
                                     <AccordionContent className='flex flex-wrap gap-1 font-semibold text-sm'>
                                         {
                                             clas.students.map((student) => (
-                                                <div className='px-2 py-1 rounded-md bg-zinc-100 border border-zinc-200'>
+                                                <div key={student.id} className='px-2 py-1 rounded-md bg-zinc-100 border border-zinc-200'>
                                                     <span>{student.firstName}</span> <span>{student.lastName}</span>
                                                 </div>
                                             ))

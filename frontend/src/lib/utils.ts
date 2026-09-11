@@ -41,3 +41,9 @@ export const getCongralutoryMessage = (score : number | null) => {
   if(score > 6 && score <= 9) return 'Très bon résultat, visons la note complète !';
   if(score == 10) return 'Résultat magnifique, chapeau !';
 }
+
+export const getDaysSinceLastVisit = (lastVisit : Date) => {
+  const now = new Date();
+  const timeSinceLastVisit = now.getTime() - new Date(lastVisit).getTime();
+  return Math.round(timeSinceLastVisit/(1000*60*60*24))
+}

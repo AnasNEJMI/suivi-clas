@@ -33,7 +33,7 @@ const LogoutCard = () => {
                 </div>
                 <div className='flex flex-col justify-evenly'>
                     <span className='font-semibold text-lg'>Se déconnecter</span>
-                    <p className='leading-4 tracking-tight flex items-center justify-start gap-2 text-red-500'>Tu seras redirigé vers la page d'acceuil.</p>
+                    <p className='leading-4 tracking-tight flex items-center justify-start gap-2 text-red-500'>Vous serez redirigés vers la page d'acceuil.</p>
                 </div>
             </div>
             <BrandButton variant='destructive' className='px-6' disabled = {isRequestingLoggingOut} onClick={onLogout}>Déconnexion</BrandButton>

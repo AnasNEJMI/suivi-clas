@@ -15,7 +15,6 @@ const AssocPresenceTabDataWrapper = () => {
     <>
         <AssocPresenceStatsRecap presenceStatsPerScolarYear = {presenceStatsPerScolarYear}/>
         <AssocPresenceStatsPerClass presenceStatsPerScolarYear = {presenceStatsPerScolarYear}/>
-        {/* <AssocSeanceHistoryCarousel animatorStatsPerScolarYear = {animatorStatsPerScolarYear}/> */}
     </>
   )
 }

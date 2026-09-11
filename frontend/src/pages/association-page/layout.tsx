@@ -22,8 +22,8 @@ const PAGE_TABS = [
       icon: CalendarCheck2Icon,
     },
     {
-      title: "Consultation",
-      url: `${ROOT_PATH}/consultation`,
+      title: "Visites",
+      url: `${ROOT_PATH}/visites`,
       icon: EyeIcon,
     },
     {

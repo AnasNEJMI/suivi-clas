@@ -13,8 +13,6 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 
 const AssocSeancesListDrawer = ({seances, filters, children} : {seances : CarouselSeance[], filters : string[], children : ReactNode}) => {
     const isMobile = useIsMobile();
-    console.log('seances ', seances)
-
     
     const [filter, setFilter] = useState<string>('all')
     const getFilteredSeances = useCallback((filter : string) => {
@@ -29,7 +27,6 @@ const AssocSeancesListDrawer = ({seances, filters, children} : {seances : Carous
         for(const s of newSeances){
             const month = format(s.seance.date, 'MMMM y', {locale : fr});
             if(!seancesMap.has(month)){
-                console.log(month);
                 seancesMap.set(month, []);
             }
             const seancesBucket = seancesMap.get(month)!;
@@ -115,20 +112,29 @@ const AssocSeancesListDrawer = ({seances, filters, children} : {seances : Carous
                                         </div>
                                         <div className='mt-4 flex flex-col gap-2'>
                                             {
-                                                seanceBucket.seances.map((seance) => (
-                                                    <AssocSeanceDetailsDrawer key={seance.seance.id} seance={seance}>
-                                                        <div className={cn(`rounded-xl w-full h-full p-4 font-outfit flex flex-col justify-between group-hover:border shadow-sm bg-white`)}>
-                                                            <div className='flex justify-end font-medium text-sm'>
-                                                            <span className={cn('px-2 rounded-full flex items-center gap-2 text-sm tracking-tight bg-amber-200 border border-amber-500')}><CalendarIcon className='size-4 text-amber-700'/>{getElapsedDays(seance.seance.date)}</span>
+                                                seanceBucket.seances.map((seance) => {
+                                                    const studentsPresent = seance.seance.students.filter(s => s.presence).length;
+                                                    const studentsAbsent = seance.seance.students.filter(s => !s.presence).length;
+                                                    const presenceRate = Math.round(100 * studentsPresent/(studentsPresent+studentsAbsent))
+                                                    return (
+                                                        <AssocSeanceDetailsDrawer key={seance.seance.id} seance={seance}>
+                                                            <div className={cn(`rounded-xl w-full h-full p-4 font-outfit flex flex-col justify-between group-hover:border shadow-sm bg-white`)}>
+                                                                <div className='flex justify-end font-medium text-sm'>
+                                                                <span className={cn('px-2 rounded-full flex items-center gap-2 text-sm tracking-tight bg-amber-200 border border-amber-500')}><CalendarIcon className='size-4 text-amber-700'/>{getElapsedDays(seance.seance.date)}</span>
+                                                                </div>
+                                                                <div className='mt-2'>
+                                                                <p className='text-sm flex items-center gap-2 tracking-tight'><UserIcon className='size-4'/><span><span className='capitalize'>{seance.animator.firstName}</span> <span className='uppercase'>{seance.animator.lastName}</span></span></p>
+                                                                <p className='text-sm leading-4 tracking-tight flex flex-col items-start'><span className='flex items-center justify-center gap-1'><GraduationCapIcon className='size-4'/> {seance.class.label}</span></p>
+                                                                <p className='text-sm leading-4 tracking-tight flex flex-col items-start'><span className='flex items-center justify-center gap-1'><ClockIcon className='size-4'/> {seance.seance.duration}</span></p>
+                                                                </div>
+                                                                <div className='flex justify-start mt-4'>
+                                                                    <span className={cn('border px-2 text-sm',presenceRate >= 50 ? 'bg-emerald-200 text-emerald-700 border-emerald-400 rounded-full' : 'bg-red-200 text-red-700 border-red-400')}>{studentsPresent}/{studentsPresent+studentsAbsent} élèves présents</span>
+                                                                </div>
                                                             </div>
-                                                            <div className='mt-2'>
-                                                            <p className='text-sm flex items-center gap-2 tracking-tight'><UserIcon className='size-4'/><span><span className='capitalize'>{seance.animator.firstName}</span> <span className='uppercase'>{seance.animator.lastName}</span></span></p>
-                                                            <p className='text-sm leading-4 tracking-tight flex flex-col items-start'><span className='flex items-center justify-center gap-1'><GraduationCapIcon className='size-4'/> {seance.class.label}</span></p>
-                                                            <p className='text-sm leading-4 tracking-tight flex flex-col items-start'><span className='flex items-center justify-center gap-1'><ClockIcon className='size-4'/> {seance.seance.duration}</span></p>
-                                                            </div>
-                                                        </div>
-                                                    </AssocSeanceDetailsDrawer>
-                                                ))
+                                                        </AssocSeanceDetailsDrawer>
+                                                    )
+                                                }
+                                            )
                                             }
                                         </div>
                                     </div>

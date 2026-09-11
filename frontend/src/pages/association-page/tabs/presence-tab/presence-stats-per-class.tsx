@@ -19,7 +19,7 @@ const AssocPresenceStatsPerClass = ({presenceStatsPerScolarYear} : {presenceStat
 
   return (
     <>
-      <h3 className='mt-6 font-semibold text-lg lg:text-xl text-zinc-900'>Par Groupe</h3>
+      <h3 className='mt-6 font-semibold text-lg lg:text-xl text-zinc-900'>Présence par groupe</h3>
       <div className='mt-2'>
         {
           presenceStats.classes.map((classPresence, index) => (
