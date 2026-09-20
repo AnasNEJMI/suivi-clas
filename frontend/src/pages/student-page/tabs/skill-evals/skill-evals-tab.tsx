@@ -11,7 +11,7 @@ const SkillEvalsTab = () => {
     const {user : student} = useRouteLoaderData('student') as {user: User};
   return (
     <>
-        <TabHeader student={student} title = 'Éspace élève' subTitle='Méthodologie' description = "Consulte l'évolution de compétences méthodologique"/>
+        <TabHeader user={student} title = 'Éspace élève' subTitle='Méthodologie' description = "Consulte l'évolution de compétences méthodologique"/>
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
             <Suspense fallback = {<Skeleton/>}>
                 <SkillEvalsTabDataWrapper student = {student}/>

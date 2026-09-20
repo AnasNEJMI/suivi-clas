@@ -1,8 +1,27 @@
 import { prisma } from '../../../db/prisma.js';
+import { QcmEntry } from '../../animator/seances/utils.js';
 import { shuffle } from './helper-functions.js';
 
-export async function generateQcmForBilan(bilanId : number, studentId: number, lessonId:number){
-    const existing = await prisma.qcm.findUnique({ where: { bilanId }, select: { id: true } })
+export async function generateQcmForBilan(bilanId : number, studentId: number, lessonId:number) : Promise<QcmEntry | null>{
+    const existing = await prisma.qcm.findUnique({ 
+        where: { bilanId },
+        select : {
+            id : true, completed : true, score : true, studentId : true, createdAt : true, updatedAt : true,
+            lesson : {select : {id : true, label : true, subject : {select : {id : true, label :true}}}},
+            qcmQuestions : {
+                select : {
+                    id : true,
+                    correct : true,
+                    selectedChoice : true,
+                    bankQuestion : {
+                        select : {
+                            id : true, question : true, difficulty : true, answerA : true, answerB : true, answerC : true, answerD : true, correctAnswer : true, explanation : true,
+                        }
+                    }
+                }
+            }
+        },
+    })
     if (existing) return existing;
     
     const bankQuestions = await prisma.qcmBankQuestion.findMany({
@@ -23,6 +42,21 @@ export async function generateQcmForBilan(bilanId : number, studentId: number, l
 
     return prisma.qcm.create({
         data : {studentId, bilanId, lessonId, qcmQuestions : {create : selected.map(q => ({bankQuestionId : q.id}))}},
-        select : {id : true},
-    })
+        select : {
+            id : true, completed : true, score : true, studentId : true, createdAt : true, updatedAt : true,
+            lesson : {select : {id : true, label : true, subject : {select : {id : true, label :true}}}},
+            qcmQuestions : {
+                select : {
+                    id : true,
+                    correct : true,
+                    selectedChoice : true,
+                    bankQuestion : {
+                        select : {
+                            id : true, question : true, difficulty : true, answerA : true, answerB : true, answerC : true, answerD : true, correctAnswer : true, explanation : true,
+                        }
+                    }
+                }
+            }
+        },
+    })  
 }

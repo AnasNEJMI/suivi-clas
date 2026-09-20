@@ -5,16 +5,16 @@ import Skeleton from '../../bilans/bilans-skeleton'
 import { useRouteLoaderData } from 'react-router'
 import type { User } from '@/api/auth'
 import TabHeader from '../../../tab-header'
-import SeancesTabDataWrapper from './seances-data-wrapper'
+import StudentSeancesTabDataWrapper from './seances-data-wrapper'
 
-const SeancesTab = () => {
+const StudentSeancesTab = () => {
     const {user : student} = useRouteLoaderData('student') as {user: User};
   return (
     <>
-        <TabHeader student={student} title = 'Éspace élève' subTitle='Séances' description='Retrouve tes dernières séances et poursuis ton apprentissage.'/>
+        <TabHeader user={student} title = 'Éspace élève' subTitle='Séances' description='Retrouve tes dernières séances et poursuis ton apprentissage.'/>
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
             <Suspense fallback = {<Skeleton/>}>
-                <SeancesTabDataWrapper student = {student}/>
+                <StudentSeancesTabDataWrapper student = {student}/>
                 {/* <BilansSection student = {student}/> */}
             </Suspense>
         </ErrorBoundary>
@@ -22,4 +22,4 @@ const SeancesTab = () => {
   )
 }
 
-export default SeancesTab
+export default StudentSeancesTab

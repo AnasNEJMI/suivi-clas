@@ -9,7 +9,7 @@ export type AnimatorStatsResponse = { animatorStatsPerScolarYear: AnimatorStatsP
 export type AnimatorStatsPerScolarYear = { scolarYear: { id: number; label: string }; animators: AnimatorStats[]}
 export type AnimatorStats = { animator : {id: number; firstName: string;  lastName: string; gender : Gender},classes: AnimatorClassStats[], totalSeances : number, totalBilans : number, totalQcms : number};
 export type AnimatorClassStats = { class : {id : number, label : string}, seances : SeanceStats[], seancesCount : number; bilansSubmitted : number, qcmsSubmitted : number}
-export type SeanceStats = {id : number, duration : string, date : Date, students : {firstName : string, lastName : string,gender : Gender, presence : boolean}[]}
+export type SeanceStats = {id : number, duration : string, date : Date, students : {firstName : string, lastName : string, gender : Gender, presence : boolean}[]}
 
 
 export async function associationAnimatorStatsHandler(req: Request, res: Response, next: NextFunction) {

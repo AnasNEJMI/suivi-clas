@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const bilanFormSchema = z.object({
+export const createBilanFormSchema = z.object({
     subjectId : z.number().int(),
     lessonId : z.number().int(),
     presence : z.boolean(),
@@ -13,4 +13,4 @@ export const bilanFormSchema = z.object({
     if (!data.summary.trim()) ctx.addIssue({ code: 'custom', path: ['summary'],    message: 'Bilan requis.'});
 })
 
-export type BilanFormValues = z.infer<typeof bilanFormSchema>
+export type CreateBilanFormValues = z.infer<typeof createBilanFormSchema>

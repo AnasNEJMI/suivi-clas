@@ -1,7 +1,7 @@
 import { animatorApiCalls } from '@/api/animator/apiCalls'
 import type { LessonsByLevelEntry, SeanceBilanEntry, SeanceStudentEntry } from '@/api/animator/types'
 import { Field } from '@/components/ui/field'
-import { bilanFormSchema, type BilanFormValues } from '@/lib/schemas/bilans-bilan.schema'
+import { createBilanFormSchema, type CreateBilanFormValues } from '@/lib/schemas/create-bilan.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { useMemo } from 'react'
@@ -37,8 +37,8 @@ const StudentBilanForm = ({
         [lessonsByLevel, student.level.id]
     )
 
-    const methods = useForm<BilanFormValues>({
-        resolver : zodResolver(bilanFormSchema),
+    const methods = useForm<CreateBilanFormValues>({
+        resolver : zodResolver(createBilanFormSchema),
         defaultValues : {
             presence : student.bilan?.presence ?? true,
             subjectId : student.bilan?.lesson?.subject.id ?? -1,
@@ -49,7 +49,7 @@ const StudentBilanForm = ({
     })
 
     const submitMutation = useMutation({
-        mutationFn: (data: BilanFormValues) =>
+        mutationFn: (data: CreateBilanFormValues) =>
             animatorApiCalls.submitBilan({
                 animatorId,
                 seanceId,

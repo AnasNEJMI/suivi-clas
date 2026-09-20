@@ -42,7 +42,7 @@ const BilansGeneralInfoCard = ({
   
   const initialScolarYearId = Number(searchParams.get('scolarYearId')) || scolarYears[0]?.id;
   const initialClassId = Number(searchParams.get('classId')) || -1;
-  const initialDateStr = searchParams.get('scolarYearId');
+  const initialDateStr = searchParams.get('date');
 
 
   const form = useForm<z.infer<typeof bilansGeneralInfoCard>>({

@@ -1,16 +1,18 @@
 import { ApiError } from "@/lib/errors/apiError.class";
 import { apiRequest } from "../client";
 import { ErrorCodes, ErrorStatusMap } from "@/lib/errors/errors.constants";
-import { type LessonEvalsEntry, type AnimatorBaseDataResponse, type Animator as AnimatorProfile, type SeanceBilanEntry, type SeanceEntry, type LessonEvalEntry, type SkillEvalEntry } from "./types";
+import { type LessonEvalsEntry, type AnimatorBaseDataResponse, type Animator as AnimatorProfile, type LessonEvalEntry, type SkillEvalEntry } from "./types";
 import {type LessonEval } from "../api.types";
 import { fetchPayloadlessData } from "../helper-functions";
 import type { QcmEntry } from "../student/apiCalls";
+import type { BilanEntry, DeleteBilanEntry, SeanceEntry, SeancesDataResponse } from "./seances.types";
 
 const ANIMATOR_API_ENDPOINT = '/api/animator/';
 
 const animatorEndpoints = {
     me : 'me',
-    baseData : 'base-data',
+    baseData : 'base',
+    seances : 'seances',
     skills : 'skills',
     qcmsWithQuestions : 'qcmWithQuestions',
     seance : 'seance',
@@ -32,11 +34,14 @@ type SeancePayload = {
     scolarYearId : number,
 }
 
+type DeleteBilanPayload = {
+    bilanId : number
+}
+
 type SeanceSubmitPayload = {
     date : Date,
     animatorId : number,
     classId : number,
-    scolarYearId : number,
     seanceDurationId : number,
 }
 
@@ -145,6 +150,14 @@ export async function deleteData<T extends Record<string, unknown>, K>(payload :
     }
 }
 
+const deleteBilan = async (deleteBilanPayload : DeleteBilanPayload) : Promise<DeleteBilanEntry | null> => {
+    const res = await apiRequest<{ data: DeleteBilanEntry | null; }>(
+        `${ANIMATOR_API_ENDPOINT}bilan/${deleteBilanPayload.bilanId}`,
+        { method: 'DELETE' }
+    );
+    return res.data;
+}
+
 export async function submitData<T, K>(payload : T, endpoint : string) : Promise<K | null>{
     try{
         const response =  await apiRequest<{data : K}>(`/api/animator/${endpoint}`,{
@@ -167,10 +180,12 @@ export async function submitData<T, K>(payload : T, endpoint : string) : Promise
 export const animatorApiCalls = {
     fetchProfile : fetchAnimatorProfile,
     fetchBaseData : fetchPayloadlessData<AnimatorBaseDataResponse>(animatorEndpoints.baseData, ANIMATOR_API_ENDPOINT),
+    fetchSeancesData : fetchPayloadlessData<SeancesDataResponse>(animatorEndpoints.seances, ANIMATOR_API_ENDPOINT),
     submitSeance : (payload : SeanceSubmitPayload) =>  submitData<SeanceSubmitPayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
+    submitBilan : (payload : BilanPayload) => submitData<BilanPayload, BilanEntry | null>(payload, animatorEndpoints.bilan),
     deleteSeance : (payload : SeancePayload) =>  deleteData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
+    deleteBilan,
     fetchSeance : (payload : SeancePayload) => fetchData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
-    submitBilan : (payload : BilanPayload) => submitData<BilanPayload, SeanceBilanEntry | null>(payload, animatorEndpoints.bilan),
 
     fetchLessonEvals : (payload : StudentAnimatorPayload) => fetchData<StudentAnimatorPayload, LessonEvalsEntry>(payload, animatorEndpoints.lessonEvals),
     submitLessonEval : (payload : LessonEvalPayload) => submitData<LessonEvalPayload, LessonEvalEntry | null>(payload, animatorEndpoints.lessonEval),

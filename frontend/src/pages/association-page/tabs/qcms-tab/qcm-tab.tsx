@@ -11,7 +11,7 @@ const AssocQcmTab = () => {
     const {user : association} = useRouteLoaderData('association') as {user: User};
   return (
     <>
-        <TabHeader student={association} title = 'Éspace association' subTitle='QCMs' description="Récapitulatif de la complétion des QCMs par les élèves"/>
+        <TabHeader user={association} title = 'Éspace association' subTitle='QCMs' description="Récapitulatif de la complétion des QCMs par les élèves"/>
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
             <Suspense fallback = {<Skeleton/>}>
                 <AssocQCMTabDataWrapper/>

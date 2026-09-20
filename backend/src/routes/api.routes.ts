@@ -33,6 +33,7 @@ import { qcmSchema } from '../schemas/qcm.schema.js';
 import { submitStudentQcmHandler } from '../controllers/student/submitQcm.controller.js';
 import { associationQcmStatsHandler } from '../controllers/association-member/fetchQcmStats.controller.js';
 import { animatorFetchQcmsHandler } from '../controllers/animator/fetchQcms.controller.js';
+import animatorRouter from './animator.routes.js';
 
 const router = Router();
 
@@ -48,6 +49,8 @@ router.get('/student/lesson-evals', requireAuthHandler, asyncHandler(studentLess
 router.get('/student/visit',requireAuthHandler,asyncHandler(studentVisitHandler))
 router.post('/student/qcm', validateBody(qcmSchema),requireAuthHandler, asyncHandler(submitStudentQcmHandler));
 
+router.use('/animator', animatorRouter)
+
 router.get('/animator/me', requireAuthHandler, asyncHandler(animatorProfileHandler));
 router.get('/animator/base-data', requireAuthHandler, asyncHandler(animatorBaseDataHandler));
 router.get('/animator/seance', requireAuthHandler, asyncHandler(animatorFetchSeanceHandler));
@@ -57,8 +60,6 @@ router.get('/animator/qcms', requireAuthHandler, asyncHandler(animatorFetchQcmsH
 
 router.post('/animator/lesson-eval', validateBody(lessonEvalSchema), requireAuthHandler, asyncHandler(animatorSubmitLessonEvalHandler));
 router.post('/animator/skill-eval', validateBody(skillEvalSchema), requireAuthHandler, asyncHandler(animatorSubmitSkillEvalHandler));
-router.post('/animator/bilan',validateBody(bilanSchema), requireAuthHandler, asyncHandler(animatorSubmitBilanHandler));
-router.post('/animator/seance',validateBody(seanceSchema), requireAuthHandler, asyncHandler(animatorSubmitSeanceHandler));
 
 router.delete('/animator/seance', requireAuthHandler, asyncHandler(animatorDeleteSeanceHandler));
 

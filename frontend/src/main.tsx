@@ -10,7 +10,6 @@ import { RootErrorBoundary } from './pages/root-error-boundry.tsx'
 import { studentPageLoader } from './router/loaders/student-page-loader.tsx'
 import AnimatorWelcome from './pages/animator-page/animator-welcome.tsx'
 import { AnimatorPageLoader } from './router/loaders/animator.loader.ts'
-import AnimatorBilansPage from './pages/animator-page/animator-bilans/page.tsx'
 import AnimatorSkillEvaluationPage from './pages/animator-page/animator-skill-evaluation/page.tsx'
 import { associationPageLoader } from './router/loaders/association-page-loader.ts'
 import AnimatorLessonEvaluationsPage from './pages/animator-page/animator-lesson-evaluations/page.tsx'
@@ -18,7 +17,7 @@ import AnimatorQcmPage from './pages/animator-page/animator-qcm-page/page.tsx'
 import { lazy, Suspense, type FunctionComponent } from 'react'
 import PageSkeleton from './pages/page-skeleton.tsx'
 import MethodPage from './pages/method-page.tsx'
-import SeancesTab from './pages/student-page/tabs/seances/seances-tab.tsx'
+import StudentSeancesTab from './pages/student-page/tabs/seances/seances-tab.tsx'
 import QcmsTab from './pages/student-page/tabs/qcms/qcms-tab.tsx'
 import SkillEvalsTab from './pages/student-page/tabs/skill-evals/skill-evals-tab.tsx'
 import LessonEvalsTab from './pages/student-page/tabs/lesson-evals/lesson-evals-tab.tsx'
@@ -28,6 +27,7 @@ import AssocAnimatorsTab from './pages/association-page/tabs/animators-tab/anima
 import AssocPresenceTab from './pages/association-page/tabs/presence-tab/presence-tab.tsx'
 import AssocVisitsTab from './pages/association-page/tabs/visits-tab/visits-tab.tsx'
 import AssocQcmTab from './pages/association-page/tabs/qcms-tab/qcm-tab.tsx'
+import AnimSeancesTab from './pages/animator-page/tabs/seances/seances-tab.tsx'
 
 
 function lazify<T extends FunctionComponent<any>>(
@@ -43,8 +43,8 @@ function lazify<T extends FunctionComponent<any>>(
 
 const HomePage = lazify(() => import('./pages/home-page/page.tsx'))
 const StudentPageLayout = lazify(() => import('./pages/student-page/layout.tsx'))
-const AnimatorPage = lazify(() => import('./pages/animator-page/animator-page.tsx'))
 const AssociationPageLayout = lazify(() => import('./pages/association-page/layout.tsx'))
+const AnimatorPageLayout = lazify(() => import('./pages/animator-page/layout.tsx'))
 const LoginPage = lazify(() => import('./pages/login-page/page.tsx'))
 
 const router = createBrowserRouter([
@@ -65,7 +65,7 @@ const router = createBrowserRouter([
         loader : studentPageLoader,
         shouldRevalidate: () => true,
         children : [
-          {index : true, Component : SeancesTab},
+          {index : true, Component : StudentSeancesTab},
           {path : 'qcms', Component : QcmsTab},
           {path : 'methodologie', Component : SkillEvalsTab},
           {path : 'programme', Component : LessonEvalsTab},
@@ -89,12 +89,12 @@ const router = createBrowserRouter([
       {
         id: "animator",
         path : 'animateur',
-        Component : AnimatorPage,
+        Component : AnimatorPageLayout,
         loader : AnimatorPageLoader,
         shouldRevalidate: () => true,
         children : [
           {index : true, Component : AnimatorWelcome},
-          {path : 'bilans', Component : AnimatorBilansPage},
+          {path : 'seances', Component : AnimSeancesTab},
           {path : 'evaluation-lecons', Component : AnimatorLessonEvaluationsPage},
           {path : 'evaluation-competences', Component : AnimatorSkillEvaluationPage},
           {path : 'qcms', Component : AnimatorQcmPage},

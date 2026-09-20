@@ -7,10 +7,10 @@ import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { AlertTriangleIcon, ArrowLeftIcon, CalendarIcon, CalendarX,TrophyIcon, UserIcon} from 'lucide-react'
-import SeanceDetailsDrawer from './seance-details-drawer'
+import StudentSeanceDetailsDrawer from './seance-details-drawer'
 import { useMemo, useState } from 'react'
 
-const SeancesListDrawer = ({bilans, onQcmSubmit, children} : {bilans : BilanEntry[], onQcmSubmit : (qcm: QcmEntry) => void, children : React.ReactNode}) => {
+const StudentSeancesListDrawer = ({bilans, onQcmSubmit, children} : {bilans : BilanEntry[], onQcmSubmit : (qcm: QcmEntry) => void, children : React.ReactNode}) => {
     const isMobile = useIsMobile();
     const [filter, setFilter] = useState<'all' | 'present' | 'absent'>('all')
 
@@ -59,7 +59,7 @@ const SeancesListDrawer = ({bilans, onQcmSubmit, children} : {bilans : BilanEntr
                             const cardStyle = CARD_STYLES[bilan.lesson!.subject.label as Subject];
                             
                             return (
-                                <SeanceDetailsDrawer key={bilan.id} onQcmSubmit={onQcmSubmit} bilan={bilan} cardStyle={cardStyle}>
+                                <StudentSeanceDetailsDrawer key={bilan.id} onQcmSubmit={onQcmSubmit} bilan={bilan} cardStyle={cardStyle}>
                                     <div className={cn('flex items-center gap-4 w-full p-4 rounded-lg bg-white shadow-sm hover:shadow-md hover:-translate-y-1 transition-all ease-out duration-100 cursor-pointer')}>
                                         <div key={bilan.id} className={cn(' flex-1')}>
                                             <div className='flex gap-2 w-full'>
@@ -82,7 +82,7 @@ const SeancesListDrawer = ({bilans, onQcmSubmit, children} : {bilans : BilanEntr
                                             </div>
                                         </div>
                                     </div>
-                                </SeanceDetailsDrawer>
+                                </StudentSeanceDetailsDrawer>
                             )
                         }
                         
@@ -94,4 +94,4 @@ const SeancesListDrawer = ({bilans, onQcmSubmit, children} : {bilans : BilanEntr
   )
 }
 
-export default SeancesListDrawer
+export default StudentSeancesListDrawer

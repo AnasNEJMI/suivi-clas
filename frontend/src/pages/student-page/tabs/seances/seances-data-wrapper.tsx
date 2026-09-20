@@ -2,11 +2,11 @@ import type { User } from '@/api/auth'
 import { studentApiCalls, type BilanEntry, type QcmEntry } from '@/api/student/apiCalls';
 import { studentKeys } from '@/api/student/query-keys';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import LastSeanceCard from './last-seance-card';
-import SeanceHistoryCarousel from './seance-history-carousel';
-import SeanceStats from './seance-stats';
+import StudentLastSeanceCard from './last-seance-card';
+import StudentSeanceHistoryCarousel from './seance-history-carousel';
+import StudentSeanceStats from './seance-stats';
 
-const SeancesTabDataWrapper = ({student} : {student : User}) => {
+const StudentSeancesTabDataWrapper = ({student} : {student : User}) => {
     const queryKey = studentKeys.bilans({studentId : student.id});
 
     const {data : {bilans}} = useSuspenseQuery({
@@ -38,11 +38,11 @@ const SeancesTabDataWrapper = ({student} : {student : User}) => {
     }
   return (
     <>
-        <LastSeanceCard onQcmSubmit={onQcmSubmit} bilans = {bilans}/>
-        <SeanceHistoryCarousel onQcmSubmit={onQcmSubmit} bilans = {bilans}/>
-        <SeanceStats bilans = {bilans}/>
+        <StudentLastSeanceCard onQcmSubmit={onQcmSubmit} bilans = {bilans}/>
+        <StudentSeanceHistoryCarousel onQcmSubmit={onQcmSubmit} bilans = {bilans}/>
+        <StudentSeanceStats bilans = {bilans}/>
     </>
   )
 }
 
-export default SeancesTabDataWrapper
+export default StudentSeancesTabDataWrapper

@@ -4,6 +4,7 @@ import AuthProvider from '@/contexts/auth/auth-provider';
 import { queryClient } from '@/lib/query/client';
 import AuthLayout from './auth-layout';
 import { HelmetProvider } from 'react-helmet-async';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const RootLayout = () => {
 
@@ -13,6 +14,7 @@ const RootLayout = () => {
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
             <AuthLayout/>
+            <ReactQueryDevtools initialIsOpen={false} />
           </AuthProvider>
         </QueryClientProvider>
       </HelmetProvider>

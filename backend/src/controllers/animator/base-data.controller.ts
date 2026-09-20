@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { sendSuccess } from "../../utils/response.utils.js";
 import { prisma } from "../../db/prisma.js";
 import { ApiError } from "../../classes/ApiError.class.js";
-import { ScolarYear } from "../../db/seed.users.data.js";
-import { number } from "zod";
 import { PrismaClientKnownRequestError } from "../../generated/prisma/internal/prismaNamespace.js";
 
 export type SeanceDurationEntry = {
@@ -57,12 +55,11 @@ export type StudentEntry = {
     firstName: string;
     lastName:  string;
     gender:    'f' | 'm';
-    // level est null si l'élève n'a pas encore de niveau assigné
     level: {
         id:      number;
         label:   string;
         order:   number;
-    } | null;
+    };
     bilans: BilanEntry[];
     skills:  SkillEntry[];
 };
@@ -70,7 +67,7 @@ export type StudentEntry = {
 export type ClassEntry = {
     id:       number;
     label:    string;
-    contractId : number,
+    contractId  : number,
     association : {id : number, label : string},
     students: StudentEntry[];
 };
@@ -103,6 +100,11 @@ export async function animatorBaseDataHandler(
                 orderBy : { scolarYear : {label : 'desc'}},
                 select : {
                     id : true,
+                    contractSpecializations : {
+                        select : {
+                            subjectId : true,
+                        }
+                    },
                     scolarYear : {select : {id : true, label : true}},
                     class : {
                         select : {

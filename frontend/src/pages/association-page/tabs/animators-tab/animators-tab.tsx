@@ -11,7 +11,7 @@ const AssocAnimatorsTab = () => {
     const {user : association} = useRouteLoaderData('association') as {user: User};
   return (
     <>
-        <TabHeader student={association} title = 'Éspace association' subTitle='Séances' description="Récapitulatif des séances réalisées par chacun des animateurs participants"/>
+        <TabHeader user={association} title = 'Éspace association' subTitle='Séances' description="Récapitulatif des séances réalisées par chacun des animateurs participants"/>
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
             <Suspense fallback = {<Skeleton/>}>
                 <PresenceTabDataWrapper/>

@@ -83,8 +83,10 @@ model AssociationMember {
 }
 
 model Association {
-  id      Int    @id @default(autoincrement())
-  label    String @unique
+  id         Int    @id @default(autoincrement())
+  label      String @unique
+  address    String
+  postalCode Int
 
   members AssociationMember[]
   classes Class[]
@@ -132,9 +134,26 @@ model AnimatorContract{
 
   createdAt    DateTime @default(now())
 
+  contractSpecializations AnimatorContractSpecialization[]
+
   @@index([classId])
   @@index([animatorId])
   @@index([scolarYearId])
+}
+
+model AnimatorContractSpecialization{
+  id            Int      @id @default(autoincrement())
+  
+  animatorContractId     Int
+  animatorContract   AnimatorContract @relation(fields: [animatorContractId], references: [id], onDelete: Cascade)
+  
+  subjectId     Int
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+
+  updatedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  @@index([animatorContractId])
+  @@index([subjectId])
 }
 
 //////////////////// ACADEMIC STRUCTURE ////////////////////
@@ -292,6 +311,7 @@ model Subject {
   id      Int    @id @default(autoincrement())
   label   String @unique
 
+  animatorContractSpecializations AnimatorContractSpecialization[]
   lessons Lesson[]
 }
 

@@ -75,7 +75,7 @@ export type CardStyle = {
     progressBgColor : string,
     progressIndicatorColor : string,
     icon : ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>};
-export const CARD_STYLES : Record<Subject, CardStyle> = {
+export const CARD_STYLES : Record<Subject | 'none', CardStyle> = {
     'Anglais' : {
         label : 'Anglais',
         bgColor : 'bg-orange-100/75',
@@ -134,6 +134,16 @@ export const CARD_STYLES : Record<Subject, CardStyle> = {
         iconBgColor : 'bg-emerald-200',
         progressBgColor : 'bg-emerald-200',
         progressIndicatorColor : 'bg-emerald-600',
+        icon : LeafIcon
+    },
+    'none' : {
+        label : '',
+        bgColor : 'bg-red-100/75',
+        highlightTextColor : 'text-red-600',
+        borderColor : 'border-red-600',
+        iconBgColor : 'bg-red-200',
+        progressBgColor : 'bg-red-200',
+        progressIndicatorColor : 'bg-red-600',
         icon : LeafIcon
     }
 }

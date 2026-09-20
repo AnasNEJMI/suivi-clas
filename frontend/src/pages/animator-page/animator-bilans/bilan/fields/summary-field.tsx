@@ -1,5 +1,5 @@
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
-import type { BilanFormValues }                 from '@/lib/schemas/bilans-bilan.schema'
+import type { CreateBilanFormValues }                 from '@/lib/schemas/create-bilan.schema'
 import { Field, FieldError, FieldLabel }        from '@/components/ui/field'
 import { Textarea }                             from '@/components/ui/textarea'
 
@@ -9,7 +9,7 @@ import { Textarea }                             from '@/components/ui/textarea'
 // When subject changes, LessonField resets lessonId → this unmounts.
 // The cascade is entirely implicit — no prop drilling of disabled/visible state needed.
 export default function SummaryField() {
-    const { control } = useFormContext<BilanFormValues>()
+    const { control } = useFormContext<CreateBilanFormValues>()
     const lessonId    = useWatch({ control, name: 'lessonId' })
 
     if (lessonId < 1) return null

@@ -1,7 +1,7 @@
 import type { BilanEntry } from '@/api/student/apiCalls'
 import { CalendarCheck2Icon, CalendarIcon, CalendarX2Icon, PieChartIcon } from 'lucide-react'
 
-const SeanceStats = ({bilans} : {bilans : BilanEntry[]}) => {
+const StudentSeanceStats = ({bilans} : {bilans : BilanEntry[]}) => {
     let presentBilansCount : string | number = '', absentBilansCount : string | number = '', presenceRate : string | number = '';
     if(bilans.length === 0){
         presentBilansCount = '-';
@@ -46,4 +46,4 @@ const SeanceStats = ({bilans} : {bilans : BilanEntry[]}) => {
   )
 }
 
-export default SeanceStats
+export default StudentSeanceStats

@@ -11,7 +11,7 @@ const StudentProfileTab = () => {
     const {user : student} = useRouteLoaderData('student') as {user: User};
   return (
     <>
-        <TabHeader student={student} title = 'Éspace élève' subTitle='Profile' description = "Les informations générales concernant ton profile."/>
+        <TabHeader user={student} title = 'Éspace élève' subTitle='Profile' description = "Les informations générales concernant ton profile."/>
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
             <Suspense fallback = {<Skeleton/>}>
                 <ProfileTabDataWrapper student = {student}/>

@@ -1,12 +1,12 @@
 import { Controller, useFormContext} from 'react-hook-form'
-import type { BilanFormValues }                 from '@/lib/schemas/bilans-bilan.schema'
+import type { CreateBilanFormValues }                 from '@/lib/schemas/create-bilan.schema'
 import type { SubjectEntry }                    from '@/api/animator/types'
 import { Field, FieldError, FieldLabel }        from '@/components/ui/field'
 import { ToggleGroup, ToggleGroupItem }         from '@/components/ui/toggle-group'
 
 
 export default function SubjectField({ availableSubjects }: { availableSubjects: SubjectEntry[] }) {
-    const { control, setValue } = useFormContext<BilanFormValues>()
+    const { control, setValue } = useFormContext<CreateBilanFormValues>()
 
     return (
         <Controller

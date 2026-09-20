@@ -49,37 +49,37 @@ export type Subject = (typeof SUBJECTS)[number];
 // ─────────────────────────────────────────────
 
 export const SEANCE_DURATION_LABELS = [
-  "1 heure",
-  "1 heure et 15 min",
-  "1 heure et 30 min",
-  "1 heure et 45 min",
-  "2 heures",
-  "2 heures et 15 min",
-  "2 heures et 30 min",
-  "2 heures et 45 min",
-  "3 heures",
-  "3 heures et 15 min",
-  "3 heures et 30 min",
-  "3 heures et 45 min",
-  "4 heures",
+  "1h",
+  "1h et 15min",
+  "1h et 30min",
+  "1h et 45min",
+  "2h",
+  "2h et 15min",
+  "2h et 30min",
+  "2h et 45min",
+  "3h",
+  "3h et 15min",
+  "3h et 30min",
+  "3h et 45min",
+  "4h",
 ] as const;
 
 export type SeanceDurationLabel = typeof SEANCE_DURATION_LABELS[number];
 
 export const SEANCE_DURATIONS : Record <SeanceDurationLabel, number> = {
-  '1 heure' : 60,
-  '1 heure et 15 min' : 75,
-  '1 heure et 30 min' : 90,
-  '1 heure et 45 min' : 105,
-  '2 heures' : 120,
-  '2 heures et 15 min' : 135,
-  '2 heures et 30 min' : 150,
-  '2 heures et 45 min' : 165,
-  '3 heures' : 180,
-  '3 heures et 15 min' : 195,
-  '3 heures et 30 min' : 210,
-  '3 heures et 45 min' : 225,
-  '4 heures' : 240,
+  '1h' : 60,
+  '1h et 15min' : 75,
+  '1h et 30min' : 90,
+  '1h et 45min' : 105,
+  '2h' : 120,
+  '2h et 15min' : 135,
+  '2h et 30min' : 150,
+  '2h et 45min' : 165,
+  '3h' : 180,
+  '3h et 15min' : 195,
+  '3h et 30min' : 210,
+  '3h et 45min' : 225,
+  '4h' : 240,
 }
 
 // ─────────────────────────────────────────────
@@ -109,6 +109,8 @@ export interface AssocMemberSeed {
 
 export interface AssociationSeed {
   name:    string;
+  address : string,
+  postalCode : number,
   classes: ClassSeed[];
   members: AssocMemberSeed[];
 }
@@ -119,7 +121,7 @@ export interface AnimatorSeed {
   lastName:         string;
   password:         string;
   gender:           "m" | "f";
-  contracts : {associationLabel : string, classLabel : string, scolarYearLabel : ScolarYear}[],
+  contracts : {associationLabel : string, classLabel : string, scolarYearLabel : ScolarYear, specializations : Subject[]}[],
 }
 
 export interface LessonSeed {
@@ -136,6 +138,8 @@ export interface LessonSeed {
 export const ASSOCIATIONS_SEED : AssociationSeed[] = [
     {
         name : "Fleurs Du Lys",
+        address : "Dammarie-Les-Lys",
+        postalCode : 77190,
         members : [
             {username : "Sanae-FdL", firstName : "Sanae", lastName : "", password : "Sanae-Suivi-FdL-CLAS-77", gender : "f"},
             {username : "Sabrina-FdL", firstName : "Sabrina", lastName : "", password : "Sabrina-Suivi-FdL-CLAS-77", gender : "f"}
@@ -195,9 +199,19 @@ export const ANIMATORS_SEED: AnimatorSeed[] = [
     password: "Anas-NEJ-CLAS-FdL-77",
     gender: "m",
     contracts: [
-      {associationLabel : "Fleurs Du Lys", classLabel : "Groupe 3ème", scolarYearLabel : '2026-2027'},
-      {associationLabel : "Fleurs Du Lys", classLabel : "Groupe Lycée", scolarYearLabel : '2026-2027'}],
-  }
+      {associationLabel : "Fleurs Du Lys", classLabel : "Groupe 3ème", scolarYearLabel : '2026-2027', specializations  : ['Mathématiques', 'Physique-Chimie', 'Sciences de la Vie et de la Terre']},
+      {associationLabel : "Fleurs Du Lys", classLabel : "Groupe Lycée", scolarYearLabel : '2026-2027', specializations  : ['Mathématiques', 'Physique-Chimie', 'Sciences de la Vie et de la Terre']}],
+  },
+  {
+    username: "Selmah-FdL",
+    firstName: "Selmah",
+    lastName: "",
+    password: "Selmah-CLAS-FdL-77",
+    gender: "f",
+    contracts: [
+      {associationLabel : "Fleurs Du Lys", classLabel : "Groupe 3ème", scolarYearLabel : '2026-2027', specializations  : ['Français', 'Histoire-Géographie', 'Anglais']},
+    ],
+  },
 ];
 
 // ─────────────────────────────────────────────

@@ -1,10 +1,10 @@
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import type { BilanFormValues } from '@/lib/schemas/bilans-bilan.schema'
+import type { CreateBilanFormValues } from '@/lib/schemas/create-bilan.schema'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 
 const IncludeQcmField = () => {
-    const { control } = useFormContext<BilanFormValues>()
+    const { control } = useFormContext<CreateBilanFormValues>()
     const summary    = useWatch({ control, name: 'summary' })
     
     if (summary.length === 0) return null

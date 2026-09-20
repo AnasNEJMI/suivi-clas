@@ -125,7 +125,7 @@ export type SeanceStudentEntry = {
     lastName : string,
     gender : 'm' | 'f',
     level : {id : number, label : string},
-    bilan : SeanceBilanEntry | null,
+    bilan : BilanEntry | null,
 }
 
 export type SeanceBilanEntry = {
@@ -234,3 +234,4 @@ export const SkillFieldLabels : Record <SkillFieldType, string> = {
 }
 
 export type SkillFieldType = typeof SKILL_FIELDS[number];
+

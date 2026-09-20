@@ -13,10 +13,9 @@ import QcmQuestionnaire from '../../bilans/qcm-questionnaire'
 import type { CardStyle } from '@/lib/types/data.types'
 import { BrandButton } from '@/components/brand-button'
 
-const SeanceDetailsDrawer = ({bilan, cardStyle, onQcmSubmit, children} : {bilan : BilanEntry, cardStyle : CardStyle, onQcmSubmit : (qcm: QcmEntry) => void, children : React.ReactNode}) => {
+const StudentSeanceDetailsDrawer = ({bilan, cardStyle, onQcmSubmit, children} : {bilan : BilanEntry, cardStyle : CardStyle, onQcmSubmit : (qcm: QcmEntry) => void, children : React.ReactNode}) => {
     const isMobile = useIsMobile();
 
-    
   return (
     <Drawer direction={isMobile? 'left' : 'right'}>
         <DrawerTrigger asChild>
@@ -125,4 +124,4 @@ const SeanceDetailsDrawer = ({bilan, cardStyle, onQcmSubmit, children} : {bilan 
   )
 }
 
-export default SeanceDetailsDrawer
+export default StudentSeanceDetailsDrawer

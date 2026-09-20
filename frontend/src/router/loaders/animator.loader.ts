@@ -6,27 +6,34 @@ import {replace} from "react-router";
 
 export async function AnimatorPageLoader(){
     try{
-        const animator = await queryClient.ensureQueryData({
+        const user = await queryClient.ensureQueryData({
             queryKey : animatorKeys.me,
             queryFn : animatorApiCalls.fetchProfile,
             staleTime : 10 * 60 * 1000,
         })
         
-        console.log('animator profile response : ',JSON.stringify(animator, null, 2))
+        console.log('animator profile response : ',JSON.stringify(user, null, 2))
         
-        if(!animator){
+        if(!user){
             throw replace(`/`);
         }
-
-        const baseData = await queryClient.ensureQueryData({
+        
+        //base data (shared between tabs)
+        void queryClient.prefetchQuery({
             queryKey : animatorKeys.baseData,
             queryFn : animatorApiCalls.fetchBaseData,
-            staleTime : 10 * 60 * 1000,
-        }) 
+            staleTime : 365* 24 *60 * 60 * 1000
+        })
         
-        console.log('animator base data response : ',JSON.stringify(baseData, null, 2))
-
-        return {animator, baseData};
+        
+        //seance tab data
+        void queryClient.prefetchQuery({
+            queryKey : animatorKeys.seances,
+            queryFn : animatorApiCalls.fetchSeancesData,
+            staleTime : 2 * 60 * 1000
+        })
+        
+        return {user};
     }catch(error){
         if(error instanceof Response && error.status === 302){
             throw error;

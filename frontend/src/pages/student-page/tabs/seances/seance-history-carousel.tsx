@@ -3,10 +3,10 @@ import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import { ArrowRightIcon, RotateCwFadingClockIcon } from 'lucide-react'
-import CarouselSeanceCard from './carousel-seance-card'
-import SeancesListDrawer from './seances-list-drawer'
+import StudentCarouselSeanceCard from './carousel-seance-card'
+import StudentSeancesListDrawer from './seances-list-drawer'
 
-const SeanceHistoryCarousel = ({bilans, onQcmSubmit} : {bilans : BilanEntry[], onQcmSubmit : (qcm: QcmEntry) => void}) => {
+const StudentSeanceHistoryCarousel = ({bilans, onQcmSubmit} : {bilans : BilanEntry[], onQcmSubmit : (qcm: QcmEntry) => void}) => {
     if(bilans.length === 0){
         return (
             <div className='mt-12'>
@@ -41,7 +41,7 @@ const SeanceHistoryCarousel = ({bilans, onQcmSubmit} : {bilans : BilanEntry[], o
                     {
                         bilans.slice(0, Math.min(bilans.length, 5)).map((bilan) => (
                             <CarouselItem key={bilan.id} className="group pl-4 max-w-60 h-48 hover:-translate-y-2 transition-transform duration-100 ease-out">
-                                <CarouselSeanceCard onQcmSubmit = {onQcmSubmit} bilan = {bilan}/>
+                                <StudentCarouselSeanceCard onQcmSubmit = {onQcmSubmit} bilan = {bilan}/>
                             </CarouselItem>
                         ))
                     }
@@ -51,13 +51,13 @@ const SeanceHistoryCarousel = ({bilans, onQcmSubmit} : {bilans : BilanEntry[], o
                         <CarouselPrevious variant={'outline'}/>
                         <CarouselNext variant={'outline'}/>
                     </div>
-                    <SeancesListDrawer   bilans = {bilans} onQcmSubmit={onQcmSubmit}>
+                    <StudentSeancesListDrawer   bilans = {bilans} onQcmSubmit={onQcmSubmit}>
                         <Button variant={'outline'} className='tracking-tight'>Voir toutes les séances <ArrowRightIcon/></Button>
-                    </SeancesListDrawer>
+                    </StudentSeancesListDrawer>
                 </div>
             </Carousel>
         </div>
   )
 }
 
-export default SeanceHistoryCarousel
+export default StudentSeanceHistoryCarousel

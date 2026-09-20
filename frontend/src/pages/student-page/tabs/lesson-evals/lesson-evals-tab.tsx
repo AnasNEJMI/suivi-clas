@@ -11,7 +11,7 @@ const LessonEvalsTab = () => {
     const {user : student} = useRouteLoaderData('student') as {user: User};
   return (
     <>
-        <TabHeader student={student} title = 'Éspace élève' subTitle='Évalution des leçons' description = "Retrouve ton niveau d'acquisition des leçons abordées lors des séances."/>
+        <TabHeader user={student} title = 'Éspace élève' subTitle='Évalution des leçons' description = "Retrouve ton niveau d'acquisition des leçons abordées lors des séances."/>
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
             <Suspense fallback = {<Skeleton/>}>
                 <LessonEvalsTabDataWrapper student = {student}/>

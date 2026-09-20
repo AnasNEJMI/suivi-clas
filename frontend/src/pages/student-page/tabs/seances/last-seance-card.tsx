@@ -6,14 +6,14 @@ import { cn, getCongralutoryMessage, getElapsedDays } from '@/lib/utils';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import {CalendarIcon, CalendarX2Icon, ClockIcon, MessageCircleQuestionIcon,TrophyIcon,} from 'lucide-react';
-import SeanceDetailsDrawer from './seance-details-drawer';
+import StudentSeanceDetailsDrawer from './seance-details-drawer';
 import QcmResultsQuestionnaire from '../../bilans/qcm-results-questionnaire';
 import QcmQuestionnaire from '../../bilans/qcm-questionnaire';
 import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/brand-button';
 
 
-const LastSeanceCard = ({bilans, onQcmSubmit} : {bilans : BilanEntry[], onQcmSubmit : (qcm: QcmEntry) => void}) => {    
+const StudentLastSeanceCard = ({bilans, onQcmSubmit} : {bilans : BilanEntry[], onQcmSubmit : (qcm: QcmEntry) => void}) => {    
     if(bilans.length === 0){
         return (
             <div className='mt-6'>
@@ -98,9 +98,9 @@ const LastSeanceCard = ({bilans, onQcmSubmit} : {bilans : BilanEntry[], onQcmSub
                             <p className='text-sm opacity-75 leading-4 tracking-tight flex items-center justify-start gap-2'><span className='flex items-center justify-center gap-1'><CalendarIcon className='size-4'/> {format(recentBilan.date, 'd/MM/y', {locale : fr})}</span> <span className='flex items-center justify-center gap-1'><ClockIcon className='size-4'/> {recentBilan.seance.seanceDuration.label}</span></p>
                         </div>
                     </div>
-                    <SeanceDetailsDrawer onQcmSubmit={onQcmSubmit} bilan={recentBilan} cardStyle={cardStyle}>     
+                    <StudentSeanceDetailsDrawer onQcmSubmit={onQcmSubmit} bilan={recentBilan} cardStyle={cardStyle}>     
                         <Button className='h-10 font-outfit text-base'>Details</Button>
-                    </SeanceDetailsDrawer>
+                    </StudentSeanceDetailsDrawer>
                 </CardFooter>
             </Card>
             <div className='py-0 lg:py-4'>
@@ -150,4 +150,4 @@ const LastSeanceCard = ({bilans, onQcmSubmit} : {bilans : BilanEntry[], onQcmSub
   )
 }
 
-export default LastSeanceCard
+export default StudentLastSeanceCard

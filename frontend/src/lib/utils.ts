@@ -47,3 +47,14 @@ export const getDaysSinceLastVisit = (lastVisit : Date) => {
   const timeSinceLastVisit = now.getTime() - new Date(lastVisit).getTime();
   return Math.round(timeSinceLastVisit/(1000*60*60*24))
 }
+
+export function isSameDay(date1: string | Date, date2: string | Date): boolean {
+  const d1 = new Date(date1);
+  const d2 = new Date(date2);
+
+  return (
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate()
+  );
+}

@@ -11,7 +11,7 @@ const QcmsTab = () => {
     const {user : student} = useRouteLoaderData('student') as {user: User};
   return (
     <>
-        <TabHeader student={student} title = 'Éspace élève' subTitle='QCMs' description = 'Complète les QCMs soumis par tes animateurs, et consulte tes résultats'/>
+        <TabHeader user={student} title = 'Éspace élève' subTitle='QCMs' description = 'Complète les QCMs soumis par tes animateurs, et consulte tes résultats'/>
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
             <Suspense fallback = {<Skeleton/>}>
                 <QcmsTabDataWrapper student = {student}/>
