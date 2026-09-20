@@ -1,7 +1,7 @@
 import type {DeleteBilanEntry, SeanceDurationEntry, StudentEntry } from '@/api/animator/seances.types'
 import AnimBilanCompletedDrawer from './bilan-completed-drawer'
 import { cn, getElapsedDays } from '@/lib/utils'
-import { AlertTriangleIcon, BookOpenText, CalendarIcon, CalendarXIcon, ClockIcon, SchoolIcon, TrophyIcon, UserIcon } from 'lucide-react';
+import { AlertTriangleIcon, BookOpenText, CalendarIcon, CalendarXIcon, ClockFadingIcon, SchoolIcon, TrophyIcon, UserIcon } from 'lucide-react';
 import { CARD_STYLES, type Subject } from '@/lib/types/data.types';
 
 interface AnimBilanCompletedCardProps{
@@ -41,7 +41,7 @@ const AnimBilanCompletedCard = ({
               <p className='text-sm opacity-75 leading-4 tracking-tight flex flex-col items-start mt-auto'>
                 <span className='flex items-center justify-center gap-1'><SchoolIcon className='size-4'/> {level}</span>
                 <span className='flex items-center justify-center gap-1'><CalendarIcon className='size-4'/> {getElapsedDays(date)}</span>
-                <span className='flex items-center justify-center gap-1'><ClockIcon className='size-4'/> {seanceDuration.label}</span>
+                <span className='flex items-center justify-center gap-1'><ClockFadingIcon className='size-4'/> {seanceDuration.label}</span>
               </p>
               <div className='flex justify-end mt-4 text-xs'>
                   <span className={cn('px-2 rounded-full border', cardStyle.borderColor, cardStyle.highlightTextColor)}>Pas de QCM</span>
@@ -63,7 +63,7 @@ const AnimBilanCompletedCard = ({
             <p className='text-base font-semibold flex items-center gap-2 tracking-tight mt-4'><UserIcon className='size-4'/>{name}</p>
             <h3 className='text-sm opacity-75 font-medium tracking-tight max-w-full truncate mt-auto flex items-center gap-2'><BookOpenText className='size-4'/>{lesson.label}</h3>
             <p className='text-sm opacity-75 leading-4 tracking-tight flex flex-col items-start'><span className='flex items-center justify-center gap-1'><SchoolIcon className='size-4'/> {level}</span></p>
-            <p className='text-sm opacity-75 leading-4 tracking-tight flex flex-col items-start'><span className='flex items-center justify-center gap-1'><CalendarIcon className='size-4'/> {getElapsedDays(date)}</span> <span className='flex items-center justify-center gap-1'><ClockIcon className='size-4'/> {seanceDuration.label}</span></p>
+            <p className='text-sm opacity-75 leading-4 tracking-tight flex flex-col items-start'><span className='flex items-center justify-center gap-1'><CalendarIcon className='size-4'/> {getElapsedDays(date)}</span> <span className='flex items-center justify-center gap-1'><ClockFadingIcon className='size-4'/> {seanceDuration.label}</span></p>
             <div className='flex justify-end mt-4 text-xs'>
                 {bilan.qcm && !bilan.qcm.completed && <span className={cn('px-2 rounded-full border flex items-center gap-2', cardStyle.borderColor, cardStyle.iconBgColor)}><AlertTriangleIcon className='w-4'/> Qcm à faire</span>}
                 {bilan.qcm && bilan.qcm.completed && <span className={cn('px-2 rounded-full border flex items-center gap-2', cardStyle.borderColor, cardStyle.iconBgColor)}>Qcm : <TrophyIcon className='w-4'/> {bilan.qcm.score!}/{bilan.qcm.qcmQuestions.length}</span>}

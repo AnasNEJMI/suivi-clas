@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Drawer, DrawerClose, DrawerContent,DrawerDescription,DrawerHeader,DrawerTitle,DrawerTrigger } from '@/components/ui/drawer'
 import { useIsMobile } from '@/hooks/use-mobile';
 import { getElapsedDays } from '@/lib/utils';
-import { ArrowLeftIcon, CalendarIcon, Clock8Icon, UserIcon } from 'lucide-react';
+import { ArrowLeftIcon, CalendarIcon, ClockFadingIcon, UserIcon } from 'lucide-react';
 import {type ReactNode } from 'react'
 import AnimCompletedBilanDetails from './completed-bilan-details';
 import DeleteBilanDialog from './delete-bilan-dialog';
@@ -26,13 +26,13 @@ const AnimBilanCompletedDrawer = ({
         <DrawerTrigger asChild>
             {children}
         </DrawerTrigger>
-        <DrawerContent className='h-dvh flex flex-col font-outfit shadow-none border-none bg-zinc-100 md:rounded-t-xl pb-6'>
+        <DrawerContent className='h-dvh flex flex-col font-outfit shadow-none border-none bg-zinc-100 md:rounded-t-xl pb-6 px-2'>
             <DrawerHeader className='flex'>
                 <DrawerClose asChild>
                     <Button variant={'ghost'} className='w-fit h-12'><ArrowLeftIcon className='size-6'/></Button>
                 </DrawerClose>
                 <div className='flex items-start justify-between'>
-                    <div className='pl-2'>
+                    <div className=''>
                         <DrawerTitle className='font-bold text-xl tracking-tight'>Bilan de séance</DrawerTitle>
                         <DrawerDescription className='text-sm text-pretty leading-4 flex flex-col gap-1'>
                             <span className='flex items-center gap-1'>
@@ -44,7 +44,7 @@ const AnimBilanCompletedDrawer = ({
                                 {getElapsedDays(seanceDate)}
                             </span>
                             <span className='flex items-center gap-1'>
-                                <Clock8Icon className='size-4'/>
+                                <ClockFadingIcon className='size-4'/>
                                 {seanceDuration.label}
                             </span>
                         </DrawerDescription>

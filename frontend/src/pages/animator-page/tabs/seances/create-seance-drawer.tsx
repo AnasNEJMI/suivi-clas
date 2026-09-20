@@ -42,7 +42,7 @@ const CreateSeanceDrawer = ({
                     <Button variant={'ghost'} className='w-fit h-12 opacity-75 px-0'><ArrowLeftIcon className='size-6'/> <span>Retour</span></Button>
                 </DrawerClose>
                 <DrawerTitle className='font-bold text-xl  md:text-3xl tracking-tight'>Créer une séance</DrawerTitle>
-                <DrawerDescription className='text-base'>Choisir les paramètres de votre séance, puis appuyer sur 'Créer' pour finaliser la création.</DrawerDescription>
+                <DrawerDescription className='text-sm'>Choisir les paramètres de votre séance, puis appuyer sur 'Créer' pour finaliser la création.</DrawerDescription>
             </DrawerHeader>
             <CreateSeanceForm animator={animator} classes={classes} seanceDurations={seanceDurations} seanceExists={seanceExists} onSeanceCreated = {handleSeanceCreated}/>
 

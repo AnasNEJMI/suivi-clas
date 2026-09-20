@@ -83,7 +83,13 @@ const SeancesHistoryByGroup = ({
                                         <CarouselPrevious variant={'outline'}/>
                                         <CarouselNext variant={'outline'}/>
                                     </div>
-                                    <GroupSeancesListDrawer seances = {group.seances}>
+                                    <GroupSeancesListDrawer
+                                        group = {group.label}
+                                        seances = {group.seances}
+                                        lessonsByLevel={lessonsByLevel}
+                                        onBilanDeleted={onBilanDeleted}
+                                        onBilanSubmitted={onBilanSubmitted}
+                                    >
                                         <Button variant={'outline'} className='tracking-tight'>Voir toutes les séances <ArrowRightIcon/></Button>
                                     </GroupSeancesListDrawer>
                                 </div>

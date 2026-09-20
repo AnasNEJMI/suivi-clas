@@ -21,13 +21,15 @@ const SeancesStats = ({seancesByScolarYear} : {seancesByScolarYear : SeancesBySc
     
     let seancesTotal = 0;
     let bilansTotal = 0;
+    let bilansCompletedTotal = 0;
     let qcmsTotal = 0;
     for (let i = 0; i < seancesData.classes.length; i++) {
         const clas = seancesData.classes[i]!;
         seancesTotal += clas.seances.length;
         for (let j = 0; j < clas.seances.length; j++) {
             const seance = clas.seances[j];
-            bilansTotal += seance.studentBilans.filter(s => s.bilan !== null).length;
+            bilansTotal+= seance.studentBilans.length;
+            bilansCompletedTotal += seance.studentBilans.filter(s => s.bilan !== null).length;
             qcmsTotal += seance.studentBilans.filter(s => s.bilan !== null && s.bilan.qcm !== null).length;
         }
     }
@@ -47,7 +49,7 @@ const SeancesStats = ({seancesByScolarYear} : {seancesByScolarYear : SeancesBySc
                 <div className='flex flex-col items-center p-4 rounded-md shadow-md bg-white gap-2 flex-1'>
                     <div className='flex items-center gap-2'>
                         <NotebookTextIcon className='text-emerald-700 size-8'/>
-                        <span className='font-bold text-3xl'>{bilansTotal}</span>
+                        <span className='font-bold text-3xl'>{bilansCompletedTotal}/{bilansTotal}</span>
                     </div>
                     <span className='text-sm opacity-75'>Bilans soumis</span>
                 </div>

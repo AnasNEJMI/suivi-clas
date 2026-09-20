@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn, getElapsedDays } from '@/lib/utils'
-import {BookCheckIcon, BookXIcon, CalendarIcon, ClockIcon,GraduationCapIcon,NotebookPenIcon, PackageCheckIcon, PackageXIcon} from 'lucide-react'
+import {BookCheckIcon, BookXIcon, CalendarIcon, ClockFadingIcon,GraduationCapIcon,NotebookPenIcon, PackageCheckIcon, PackageXIcon} from 'lucide-react'
 import type { BilanEntry, DeleteBilanEntry, SeanceEntry } from '@/api/animator/seances.types'
 import { Progress } from '@/components/ui/progress'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
@@ -54,7 +54,7 @@ const AnimSeanceDetailsDialog = ({
                         </CardHeader>
                         <div className='flex items-center justify-between w-full mt-4'><span className='text-sm flex items-center gap-2 opacity-75'><GraduationCapIcon className='size-4'/> Groupe</span><span className='font-medium capitalize'>{group}</span></div>
                         <div className='flex items-center justify-between w-full mt-1'><span className='text-sm flex items-center gap-2 opacity-75'><CalendarIcon className='size-4'/> Date</span><span className='font-medium capitalize'>{getElapsedDays(seance.date)}</span></div>
-                        <div className='flex items-center justify-between w-full mt-1'><span className='text-sm flex items-center gap-2 opacity-75'><ClockIcon className='size-4'/> Durée</span><span className='font-medium'>{seance.seanceDuration.label}</span></div>
+                        <div className='flex items-center justify-between w-full mt-1'><span className='text-sm flex items-center gap-2 opacity-75'><ClockFadingIcon className='size-4'/> Durée</span><span className='font-medium'>{seance.seanceDuration.label}</span></div>
                         <div className={cn('flex items-center justify-between w-full mt-1', bilansCompletedCount === studentsCount && 'text-lime-600 opacity-100')}><span className={cn('text-sm flex items-center gap-2 opacity-75',  bilansCompletedCount === studentsCount && 'text-lime-600 opacity-100')}><BookCheckIcon className='size-4'/> Bilans soumis</span><span className={cn('font-medium', bilansCompletedCount === studentsCount && 'text-lime-600')}>{bilansCompletedCount}/{studentsCount} bilans</span></div>
                         <Progress
                             className='mt-2'

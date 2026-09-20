@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { CARD_STYLES, type Subject } from "@/lib/types/data.types"
 import { cn, getElapsedDays } from "@/lib/utils"
 import QcmResultsQuestionnaire from "@/pages/student-page/bilans/qcm-results-questionnaire"
-import { BookCheckIcon, CalendarIcon, CalendarX2Icon, Clock8Icon, InfoIcon, MessageCircleQuestionIcon, NotebookPenIcon, NotebookTextIcon, RotateCwFadingClockIcon } from "lucide-react"
+import { BookCheckIcon, CalendarIcon, CalendarX2Icon, ClockFadingIcon, InfoIcon, MessageCircleQuestionIcon, NotebookPenIcon, NotebookTextIcon, RotateCwFadingClockIcon } from "lucide-react"
 
 interface AnimCompletedBilanDetailsProps{
     studentBilan : StudentEntry,
@@ -114,7 +114,7 @@ const AnimCompletedBilanDetails = ({studentBilan, seanceDuration} : AnimComplete
             </Card>
         }
 
-        <Card className={cn("border-none shadow-card gap-0 mt-4")}>
+        <Card className={cn("border-none shadow-card gap-0 mt-4 mb-4")}>
             <CardHeader>
                 <CardTitle className="text-base flex items-center gap-1">
                     <InfoIcon/> Informations générales
@@ -122,7 +122,7 @@ const AnimCompletedBilanDetails = ({studentBilan, seanceDuration} : AnimComplete
             </CardHeader>
             <CardContent className="flex flex-col gap-2 mt-2">
                 <div className="flex items-center gap-4 justify-between"><span className="flex items-center gap-1 opacity-75"><CalendarIcon className="size-4"/> Date de la séance</span> <span>{getElapsedDays(studentBilan.bilan.date)}</span></div>
-                <div className="flex items-center gap-4 justify-between"><span className="flex items-center gap-1 opacity-75"><Clock8Icon className="size-4"/> Durée de la séance</span> <span>{seanceDuration.label}</span></div>
+                <div className="flex items-center gap-4 justify-between"><span className="flex items-center gap-1 opacity-75"><ClockFadingIcon className="size-4"/> Durée de la séance</span> <span>{seanceDuration.label}</span></div>
             </CardContent>
         </Card>
 
