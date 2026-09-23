@@ -9,10 +9,12 @@ import { animatorSubmitSeanceHandler } from "../controllers/animator/seances/sub
 import { bilanSchema } from "../schemas/bilan.schema.js";
 import { animatorSubmitBilanHandler } from "../controllers/animator/submitBilan.controller.js";
 import { animatorDeleteBilanHandler } from "../controllers/animator/seances/delete-bilan.controller.js";
+import { animatorFetchProfileDataHandler } from "../controllers/animator/profile/fetch-profile.controller.js";
 
 const router = Router();
 router.get('/base', requireAuthHandler, asyncHandler(animatorFetchBaseDataHandler));
 router.get('/seances', requireAuthHandler, asyncHandler(animatorFetchSeancesDataHandler));
+router.get('/profile', requireAuthHandler, asyncHandler(animatorFetchProfileDataHandler));
 router.post('/seance',validateBody(seanceSchema), requireAuthHandler, asyncHandler(animatorSubmitSeanceHandler));
 
 router.post('/bilan',validateBody(bilanSchema), requireAuthHandler, asyncHandler(animatorSubmitBilanHandler));

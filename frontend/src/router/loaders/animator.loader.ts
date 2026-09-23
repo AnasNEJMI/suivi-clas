@@ -33,6 +33,13 @@ export async function AnimatorPageLoader(){
             staleTime : 2 * 60 * 1000
         })
         
+        //profile data
+        void queryClient.prefetchQuery({
+            queryKey : animatorKeys.profile,
+            queryFn : animatorApiCalls.fetchProfileData,
+            staleTime : 2 * 60 * 1000
+        })
+        
         return {user};
     }catch(error){
         if(error instanceof Response && error.status === 302){

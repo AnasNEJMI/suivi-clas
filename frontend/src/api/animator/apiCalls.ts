@@ -6,6 +6,7 @@ import {type LessonEval } from "../api.types";
 import { fetchPayloadlessData } from "../helper-functions";
 import type { QcmEntry } from "../student/apiCalls";
 import type { BilanEntry, DeleteBilanEntry, SeanceEntry, SeancesDataResponse } from "./seances.types";
+import type { ProfileDataResponse } from "./profile.types";
 
 const ANIMATOR_API_ENDPOINT = '/api/animator/';
 
@@ -13,6 +14,7 @@ const animatorEndpoints = {
     me : 'me',
     baseData : 'base',
     seances : 'seances',
+    profile : 'profile',
     skills : 'skills',
     qcmsWithQuestions : 'qcmWithQuestions',
     seance : 'seance',
@@ -181,6 +183,7 @@ export const animatorApiCalls = {
     fetchProfile : fetchAnimatorProfile,
     fetchBaseData : fetchPayloadlessData<AnimatorBaseDataResponse>(animatorEndpoints.baseData, ANIMATOR_API_ENDPOINT),
     fetchSeancesData : fetchPayloadlessData<SeancesDataResponse>(animatorEndpoints.seances, ANIMATOR_API_ENDPOINT),
+    fetchProfileData : fetchPayloadlessData<ProfileDataResponse>(animatorEndpoints.profile, ANIMATOR_API_ENDPOINT),
     submitSeance : (payload : SeanceSubmitPayload) =>  submitData<SeanceSubmitPayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
     submitBilan : (payload : BilanPayload) => submitData<BilanPayload, BilanEntry | null>(payload, animatorEndpoints.bilan),
     deleteSeance : (payload : SeancePayload) =>  deleteData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),

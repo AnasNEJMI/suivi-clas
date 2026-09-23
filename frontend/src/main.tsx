@@ -8,7 +8,6 @@ import AboutPage from './pages/about-page.tsx'
 import ContactPage from './pages/contact-page.tsx'
 import { RootErrorBoundary } from './pages/root-error-boundry.tsx'
 import { studentPageLoader } from './router/loaders/student-page-loader.tsx'
-import AnimatorWelcome from './pages/animator-page/animator-welcome.tsx'
 import { AnimatorPageLoader } from './router/loaders/animator.loader.ts'
 import AnimatorSkillEvaluationPage from './pages/animator-page/animator-skill-evaluation/page.tsx'
 import { associationPageLoader } from './router/loaders/association-page-loader.ts'
@@ -28,6 +27,7 @@ import AssocPresenceTab from './pages/association-page/tabs/presence-tab/presenc
 import AssocVisitsTab from './pages/association-page/tabs/visits-tab/visits-tab.tsx'
 import AssocQcmTab from './pages/association-page/tabs/qcms-tab/qcm-tab.tsx'
 import AnimSeancesTab from './pages/animator-page/tabs/seances/seances-tab.tsx'
+import AnimProfileTab from './pages/animator-page/tabs/profile/profile-tab.tsx'
 
 
 function lazify<T extends FunctionComponent<any>>(
@@ -93,7 +93,7 @@ const router = createBrowserRouter([
         loader : AnimatorPageLoader,
         shouldRevalidate: () => true,
         children : [
-          {index : true, Component : AnimatorWelcome},
+          {index : true, Component : AnimProfileTab},
           {path : 'seances', Component : AnimSeancesTab},
           {path : 'evaluation-lecons', Component : AnimatorLessonEvaluationsPage},
           {path : 'evaluation-competences', Component : AnimatorSkillEvaluationPage},
