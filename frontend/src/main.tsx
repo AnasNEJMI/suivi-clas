@@ -12,7 +12,6 @@ import { AnimatorPageLoader } from './router/loaders/animator.loader.ts'
 import AnimatorSkillEvaluationPage from './pages/animator-page/animator-skill-evaluation/page.tsx'
 import { associationPageLoader } from './router/loaders/association-page-loader.ts'
 import AnimatorLessonEvaluationsPage from './pages/animator-page/animator-lesson-evaluations/page.tsx'
-import AnimatorQcmPage from './pages/animator-page/animator-qcm-page/page.tsx'
 import { lazy, Suspense, type FunctionComponent } from 'react'
 import PageSkeleton from './pages/page-skeleton.tsx'
 import MethodPage from './pages/method-page.tsx'
@@ -28,6 +27,7 @@ import AssocVisitsTab from './pages/association-page/tabs/visits-tab/visits-tab.
 import AssocQcmTab from './pages/association-page/tabs/qcms-tab/qcm-tab.tsx'
 import AnimSeancesTab from './pages/animator-page/tabs/seances/seances-tab.tsx'
 import AnimProfileTab from './pages/animator-page/tabs/profile/profile-tab.tsx'
+import AnimQcmsTab from './pages/animator-page/tabs/qcms/qcms-tab.tsx'
 
 
 function lazify<T extends FunctionComponent<any>>(
@@ -95,9 +95,9 @@ const router = createBrowserRouter([
         children : [
           {index : true, Component : AnimProfileTab},
           {path : 'seances', Component : AnimSeancesTab},
+          {path : 'qcms', Component : AnimQcmsTab},
           {path : 'evaluation-lecons', Component : AnimatorLessonEvaluationsPage},
           {path : 'evaluation-competences', Component : AnimatorSkillEvaluationPage},
-          {path : 'qcms', Component : AnimatorQcmPage},
         ]
       },
       // {

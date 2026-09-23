@@ -3,7 +3,7 @@ import AssocClassQCMsCarousel from './class-qcm-carousel';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { RotateCwFadingClockIcon } from 'lucide-react';
 
-const AssocVisitStatsPerClass = ({qcmStatsPerScolarYear} : {qcmStatsPerScolarYear : QcmStatsPerScolarYear[]}) => {
+const AssocQcmsStatsPerClass = ({qcmStatsPerScolarYear} : {qcmStatsPerScolarYear : QcmStatsPerScolarYear[]}) => {
   const qcmStats = qcmStatsPerScolarYear[0];
   if(!qcmStats || qcmStats.classes.length === 0){
     return (
@@ -31,4 +31,4 @@ const AssocVisitStatsPerClass = ({qcmStatsPerScolarYear} : {qcmStatsPerScolarYea
   )
 }
 
-export default AssocVisitStatsPerClass
+export default AssocQcmsStatsPerClass

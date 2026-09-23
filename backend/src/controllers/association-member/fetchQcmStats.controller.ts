@@ -2,7 +2,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { prisma }                          from '../../db/prisma.js'
 import { ApiError } from '../../classes/ApiError.class.js';
-import { Gender } from '../../generated/prisma/enums.js';
 import { sendSuccess } from '../../utils/response.utils.js';
 
 export type QcmStatsResponse = { qcmStatsPerScolarYear: QcmStatsPerScolarYear[] }
