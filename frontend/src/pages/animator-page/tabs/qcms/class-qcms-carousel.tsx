@@ -23,6 +23,7 @@ const AnimClassQCMsCarousel = ({classStats, baseData} : {classStats: SeancesByCl
             </div>
         )
     }
+
     type QCMBucket  = {
         id : number
         firstName : string,
@@ -32,7 +33,6 @@ const AnimClassQCMsCarousel = ({classStats, baseData} : {classStats: SeancesByCl
     }
 
     const studentsMap = new Map<number, QCMBucket>();
-
     const classData = baseData.classes.find(c => c.id === classStats.id)!;
 
     for (let i = 0; i < qcms.length; i++) {
@@ -49,7 +49,6 @@ const AnimClassQCMsCarousel = ({classStats, baseData} : {classStats: SeancesByCl
                 qcms : []
             })
         }
-
         studentsMap.get(qcm.studentId)!.qcms.push(qcm);
     }
 
@@ -78,90 +77,90 @@ const AnimClassQCMsCarousel = ({classStats, baseData} : {classStats: SeancesByCl
 
         return bQcmCompletionRate - aQcmCompletionRate;
     });
-    
 
     return (
-    <>
-        <div className="flex items-center justify-between mt-4">
-            <div className="flex items-center gap-2">
-                <GraduationCapIcon className='text-sky-600 size-6'/>
-                <span className="font-medium">{classStats.label}</span>
+        <>
+            <div className="flex items-center justify-between mt-4">
+                <div className="flex items-center gap-2">
+                    <GraduationCapIcon className='text-sky-600 size-6'/>
+                    <span className="font-medium">{classStats.label}</span>
+                </div>
+                <span className="px-2 rounded-full bg-white border border-zinc-200 text-sm opacity-75">{students.length} élèves</span>
             </div>
-            <span className="px-2 rounded-full bg-white border border-zinc-200 text-sm opacity-75">{students.length} élèves</span>
-        </div>
-        {
-            students.length === 0 &&
-            <Card className='border-2 border-dashed border-zinc-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-xl bg-transparent mt-4 p-4'>
-                <CardHeader className='flex flex-col items-center justify-center w-full'>
-                    <RotateCwFadingClockIcon className='size-10 opacity-70'/>
-                    <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>Les données de présence n'ont pas été enregistrées pour le moment.</CardTitle>
-                    <CardDescription className='text-pretty text-sm max-w-xl text-center'>Toutes les données de présence enregistrées seront affichées ici dès leur réalisation.</CardDescription>
-                </CardHeader>   
-            </Card>
-        }
-        {
-            students.length > 0 &&
-            <Carousel
-                opts={{align :'start'}}
-                className='mt-2'
-            >
-                <CarouselContent className='-ml-2 pt-2'>
-                    {
-                        students.map((student) => {
-                            const qcmsCompleted = student.qcms.filter(q => q.completed).length;
-                            const totalQcms = student.qcms.length;
-                            const qcmCompletionRate = totalQcms > 0 ? Math.round(100 * qcmsCompleted / totalQcms) : -1;
-                            const qcmTotalPoints = student.qcms.reduce((accumulator, currentValue) => accumulator + (currentValue?.score?? 0), 0)
-                            const averageQCMScore = totalQcms > 0 ? qcmTotalPoints/totalQcms : '-';
-                            return (
-                                <CarouselItem key={student.id} className="group pl-2 max-w-60 pb-4">
-                                    <div className={cn(`rounded-xl w-full h-full p-4 font-outfit flex flex-col justify-between shadow-sm bg-white`, qcmCompletionRate > 75 ? 'border-emerald-300 border-2' : qcmCompletionRate >= 0 ? 'border-red-300 border-2' : 'border-zinc-100 border')}>
-                                        <div className=''>
-                                            <div className='text-base flex items-center gap-2 tracking-tight font-semibold'><div className='capitalize h-8 w-8 rounded-full bg-amber-200 flex items-center justify-center'>{student.firstName.slice(0,1)}</div><span><span className='capitalize'>{student.firstName}</span> <span className='uppercase'>{student.lastName}</span></span></div>
-                                            <div className='text-sm leading-4 tracking-tight flex flex-col items-start font-semibold opacity-75'><span className='flex items-center justify-center gap-1'><div className='h-8 w-8 flex items-center justify-center'><GraduationCapIcon className='size-4'/></div>{classStats.label}</span></div>
-                                            <div className='mt-4 py-2 text-sm leading-4 tracking-tight flex items-center justify-between w-full'>
-                                                <span className='flex items-center gap-1'>
-                                                    <CalendarCheck2Icon className='size-4'/>
-                                                    QCMs envoyés
-                                                </span>
-                                                <span className='font-bold'>
-                                                    {totalQcms} QCMs
-                                                </span>
-                                            </div>
-                                            <div className='py-2 text-sm leading-4 tracking-tight flex items-center justify-between w-full'>
-                                                <span className='flex items-center gap-1'>
-                                                    <CalendarCheck2Icon className='size-4'/>
-                                                    QCMs complétés
-                                                </span>
-                                                <span className={cn('font-bold', qcmCompletionRate >= 75 ? 'text-emerald-700' : 'text-red-700')}>
-                                                    {qcmsCompleted}/{totalQcms} QCMs
-                                                </span>
-                                            </div>
-                                            <div className='py-2 text-sm leading-4 tracking-tight flex items-center justify-between w-full'>
-                                                <span className='flex items-center gap-1'>
-                                                    <CalendarX2Icon className='size-4 '/>
-                                                    Note moyenne
-                                                </span>
-                                                <span className='font-bold'>
-                                                    {averageQCMScore}/10
-                                                </span>
+            {
+                students.length === 0 &&
+                <Card className='border-2 border-dashed border-zinc-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-xl bg-transparent mt-4 p-4'>
+                    <CardHeader className='flex flex-col items-center justify-center w-full'>
+                        <RotateCwFadingClockIcon className='size-10 opacity-70'/>
+                        <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>Les données de présence n'ont pas été enregistrées pour le moment.</CardTitle>
+                        <CardDescription className='text-pretty text-sm max-w-xl text-center'>Toutes les données de présence enregistrées seront affichées ici dès leur réalisation.</CardDescription>
+                    </CardHeader>   
+                </Card>
+            }
+            {
+                students.length > 0 &&
+                <Carousel
+                    opts={{align :'start'}}
+                    className='mt-2'
+                >
+                    <CarouselContent className='-ml-2 pt-2'>
+                        {
+                            students.map((student) => {
+                                const qcmsCompleted = student.qcms.filter(q => q.completed).length;
+                                const totalQcms = student.qcms.length;
+                                const qcmCompletionRate = totalQcms > 0 ? Math.round(100 * qcmsCompleted / totalQcms) : -1;
+                                const qcmTotalPoints = student.qcms.reduce((accumulator, currentValue) => accumulator + (currentValue?.score?? 0), 0)
+                                const averageQCMScore = totalQcms > 0 ? qcmTotalPoints/totalQcms : '-';
+                                return (
+                                    <CarouselItem key={student.id} className="group pl-2 max-w-60 pb-4">
+                                        {/* todo : make student qcms visitable and consultable */}
+                                        <div className={cn(`rounded-xl w-full h-full p-4 font-outfit flex flex-col justify-between shadow-sm bg-white`, qcmCompletionRate > 75 ? 'border-emerald-300 border-2' : qcmCompletionRate >= 0 ? 'border-red-300 border-2' : 'border-zinc-100 border')}>
+                                            <div className=''>
+                                                <div className='text-sm flex items-center gap-2 tracking-tight font-semibold'><div className='capitalize h-6 w-6 rounded-full bg-amber-200 flex items-center justify-center'>{student.firstName.slice(0,1)}</div><span><span className='capitalize'>{student.firstName}</span> <span className='uppercase'>{student.lastName}</span></span></div>
+                                                <div className='text-sm tracking-tight flex flex-col items-start font-semibold opacity-75'><span className='flex items-center justify-center gap-1'><div className='h-6 w-6 flex items-center justify-center'><GraduationCapIcon className='size-4'/></div>{classStats.label}</span></div>
+                                                <div className='mt-4 text-sm tracking-tight flex items-center justify-between w-full'>
+                                                    <span className='flex items-center gap-1 opacity-75'>
+                                                        <CalendarCheck2Icon className='size-4'/>
+                                                        QCMs envoyés
+                                                    </span>
+                                                    <span className='font-bold'>
+                                                        {totalQcms}
+                                                    </span>
+                                                </div>
+                                                <div className='text-sm tracking-tight flex items-center justify-between w-full'>
+                                                    <span className='flex items-center gap-1 opacity-75'>
+                                                        <CalendarCheck2Icon className='size-4'/>
+                                                        QCMs complétés
+                                                    </span>
+                                                    <span className={cn('font-bold', qcmCompletionRate >= 75 ? 'text-emerald-700' : 'text-red-700')}>
+                                                        {qcmsCompleted}/{totalQcms}
+                                                    </span>
+                                                </div>
+                                                <div className='text-sm tracking-tight flex items-center justify-between w-full'>
+                                                    <span className='flex items-center gap-1 opacity-75'>
+                                                        <CalendarX2Icon className='size-4 '/>
+                                                        Note moyenne
+                                                    </span>
+                                                    <span className='font-bold'>
+                                                        {averageQCMScore}/10
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </CarouselItem>
-                            )
-                        })
-                    }
-                </CarouselContent>
-                <div className=' flex justify-between items-center mb-6'>
-                    <div>
-                        <CarouselPrevious variant={'outline'}/>
-                        <CarouselNext variant={'outline'}/>
+                                    </CarouselItem>
+                                )
+                            })
+                        }
+                    </CarouselContent>
+                    <div className=' flex justify-between items-center mb-6'>
+                        <div>
+                            <CarouselPrevious variant={'outline'}/>
+                            <CarouselNext variant={'outline'}/>
+                        </div>
                     </div>
-                </div>
-            </Carousel>
-        }
-    </>
+                </Carousel>
+            }
+        </>
   )
 }
 

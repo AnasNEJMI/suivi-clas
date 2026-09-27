@@ -20,7 +20,7 @@ const AnimQcmsStatsPerClass = ({seancesByScolarYear, baseData} : {seancesByScola
 
   return (
     <>
-      <h3 className='mt-6 font-semibold text-lg lg:text-xl text-zinc-900'>Visites cette année</h3>
+      <h3 className='mt-6 font-semibold text-lg lg:text-xl text-zinc-900'>Qcms cette année</h3>
       <div className='mt-2'>
         {
           seancesStatsPerClass.map((clasSStats, index) => (

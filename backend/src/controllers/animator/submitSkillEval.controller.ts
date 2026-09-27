@@ -3,6 +3,7 @@ import { PrismaClientKnownRequestError } from "../../generated/prisma/internal/p
 import { ApiError } from "../../classes/ApiError.class.js";
 import { prisma } from '../../db/prisma.js';
 import { sendSuccess } from '../../utils/response.utils.js';
+import { SkillEvalData } from './skill-evals/fetch-skill-evals.controller.js';
 
 type SkillEvalInput = {
     studentId : number,
@@ -19,25 +20,8 @@ type SkillEvalInput = {
     improvements : string,
 }
 
-export type SkillEvalEntry = {
-    id : number,
-    studentId : number,
-    animatorId : number,
-    autonomy : number,
-    discipline : number,
-    organisation : number,
-    ponctuality : number,
-    regularity : number,
-    respect : number,
-    preparation : number,
-    positive : string,
-    negative : string,
-    improvements : string,
-    updatedAt : Date,
-}
-
 type SkillEvalResponse = {
-    data : SkillEvalEntry | null
+    data : SkillEvalData | null
 }
 
 
@@ -95,7 +79,7 @@ export async function animatorSubmitSkillEvalHandler(
         return sendSuccess<SkillEvalResponse>(
             res,
             {
-                data : skillEval
+                data : {...skillEval}
             }
         )
     }catch(error){

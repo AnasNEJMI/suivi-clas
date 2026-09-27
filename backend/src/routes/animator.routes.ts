@@ -10,6 +10,7 @@ import { bilanSchema } from "../schemas/bilan.schema.js";
 import { animatorSubmitBilanHandler } from "../controllers/animator/submitBilan.controller.js";
 import { animatorDeleteBilanHandler } from "../controllers/animator/seances/delete-bilan.controller.js";
 import { animatorFetchProfileDataHandler } from "../controllers/animator/profile/fetch-profile.controller.js";
+import { animatorFetchSkillEvalsHandler } from "../controllers/animator/skill-evals/fetch-skill-evals.controller.js";
 
 const router = Router();
 router.get('/base', requireAuthHandler, asyncHandler(animatorFetchBaseDataHandler));
@@ -20,5 +21,6 @@ router.post('/seance',validateBody(seanceSchema), requireAuthHandler, asyncHandl
 router.post('/bilan',validateBody(bilanSchema), requireAuthHandler, asyncHandler(animatorSubmitBilanHandler));
 router.delete('/bilan/:bilanId', requireAuthHandler, asyncHandler(animatorDeleteBilanHandler));
 
+router.get('/skill-evals', requireAuthHandler, asyncHandler(animatorFetchSkillEvalsHandler));
 
 export default router;

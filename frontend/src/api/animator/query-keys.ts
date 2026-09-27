@@ -6,6 +6,7 @@ export const animatorKeys = {
     baseData : ['animator', 'base-data'] as const,
     seances : ['animator', 'seances'] as const,
     profile : ['animator', 'profile', 'data'] as const,
+    skillEvals : ['animator', 'skill-evals', 'data'] as const,
     seance : ({animatorId, scolarYearId, classId, date} : SeanceQueryParams) =>
     ['animator', 'seance', animatorId, scolarYearId, classId, format(date, 'yyyy-MM-dd')] as const,
     lessonEval : ({animatorId, scolarYearId, classId, studentId} : LessonEvalQueryParams) =>

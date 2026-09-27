@@ -7,6 +7,7 @@ import { fetchPayloadlessData } from "../helper-functions";
 import type { QcmEntry } from "../student/apiCalls";
 import type { BilanEntry, DeleteBilanEntry, SeanceEntry, SeancesDataResponse } from "./seances.types";
 import type { ProfileDataResponse } from "./profile.types";
+import type { SkillEvalData, SkillEvalsResponse } from "./skill-evals.types";
 
 const ANIMATOR_API_ENDPOINT = '/api/animator/';
 
@@ -22,6 +23,7 @@ const animatorEndpoints = {
     lessonEvals : 'lesson-evals',
     lessonEval : 'lesson-eval',
     skillEval : 'skill-eval',
+    skillEvals : 'skill-evals',
     qcms : 'qcms',
 }
 
@@ -184,6 +186,7 @@ export const animatorApiCalls = {
     fetchBaseData : fetchPayloadlessData<AnimatorBaseDataResponse>(animatorEndpoints.baseData, ANIMATOR_API_ENDPOINT),
     fetchSeancesData : fetchPayloadlessData<SeancesDataResponse>(animatorEndpoints.seances, ANIMATOR_API_ENDPOINT),
     fetchProfileData : fetchPayloadlessData<ProfileDataResponse>(animatorEndpoints.profile, ANIMATOR_API_ENDPOINT),
+    fetchSkillEvalsData : fetchPayloadlessData<SkillEvalsResponse>(animatorEndpoints.skillEvals, ANIMATOR_API_ENDPOINT),
     submitSeance : (payload : SeanceSubmitPayload) =>  submitData<SeanceSubmitPayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
     submitBilan : (payload : BilanPayload) => submitData<BilanPayload, BilanEntry | null>(payload, animatorEndpoints.bilan),
     deleteSeance : (payload : SeancePayload) =>  deleteData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
@@ -194,7 +197,7 @@ export const animatorApiCalls = {
     submitLessonEval : (payload : LessonEvalPayload) => submitData<LessonEvalPayload, LessonEvalEntry | null>(payload, animatorEndpoints.lessonEval),
 
     fetchSkillEval : (payload : StudentAnimatorPayload) => fetchData<StudentAnimatorPayload, SkillEvalEntry | null>(payload, animatorEndpoints.skillEval),
-    submitSkillEval : (payload : SkillEvalPayload) => submitData<SkillEvalPayload, SkillEvalEntry | null>(payload, animatorEndpoints.skillEval),
+    submitSkillEval : (payload : SkillEvalPayload) => submitData<SkillEvalPayload, SkillEvalData | null>(payload, animatorEndpoints.skillEval),
     
     fetchQcms : (payload : StudentAnimatorPayload) => fetchData<StudentAnimatorPayload, QcmEntry[]>(payload, animatorEndpoints.qcms),
     

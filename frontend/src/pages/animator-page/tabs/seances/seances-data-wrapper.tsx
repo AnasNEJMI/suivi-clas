@@ -87,7 +87,6 @@ const AnimSeancesTabDataWrapper = ({animator} : {animator : User}) => {
             }),
             };
         });
-        console.log('bilan submitted : ', bilan)
     }
 
     const onBilanDeleted = (bilan: DeleteBilanEntry) => {
@@ -122,36 +121,28 @@ const AnimSeancesTabDataWrapper = ({animator} : {animator : User}) => {
             }),
             };
         });
-        console.log('bilan submitted : ', bilan)
     }
 
-    
-    
-    console.log('animator :', animator)
-    console.log('scolarYears :', scolarYears)
-    console.log('lessonsByLevel :', lessonsByLevel)
-    console.log('seancesByScolarYear :', seancesByScolarYear)
-    console.log('seanceDurations :', seanceDurations)
-  return (
-    <>
-        <CreateSeanceDrawer
-            animator={animator} 
-            classes = {scolarYears[0].classes}
-            seanceDurations = {seanceDurations}
-            existingSeancesByClass = {seancesByScolarYear[0]?.classes?? []}
-            onSeanceCreated = {onSeanceCreated}
-        >
-            <Button className={cn('fixed right-4 w-14 h-14 z-20 rounded-md cursor-pointer', isMobile && 'bottom-24', !isMobile && 'bottom-4')}><PlusIcon className='size-6'/></Button>
-        </CreateSeanceDrawer>
-        <SeancesStats seancesByScolarYear = {seancesByScolarYear}/>
-        <SeancesHistoryByGroup
-            seancesByScolarYear = {seancesByScolarYear}
-            lessonsByLevel={lessonsByLevel}
-            onBilanSubmitted={onBilanSubmitted}
-            onBilanDeleted={onBilanDeleted}
-        />
-    </>
-  )
+    return (
+        <>
+            <CreateSeanceDrawer
+                animator={animator} 
+                classes = {scolarYears[0].classes}
+                seanceDurations = {seanceDurations}
+                existingSeancesByClass = {seancesByScolarYear[0]?.classes?? []}
+                onSeanceCreated = {onSeanceCreated}
+            >
+                <Button className={cn('fixed right-4 w-14 h-14 z-20 rounded-md cursor-pointer', isMobile && 'bottom-24', !isMobile && 'bottom-4')}><PlusIcon className='size-6'/></Button>
+            </CreateSeanceDrawer>
+            <SeancesStats seancesByScolarYear = {seancesByScolarYear}/>
+            <SeancesHistoryByGroup
+                seancesByScolarYear = {seancesByScolarYear}
+                lessonsByLevel={lessonsByLevel}
+                onBilanSubmitted={onBilanSubmitted}
+                onBilanDeleted={onBilanDeleted}
+            />
+        </>
+    )
 }
 
 export default AnimSeancesTabDataWrapper
