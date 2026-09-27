@@ -5,7 +5,7 @@ import { useIsBigScreen } from '@/hooks/use-bigScreen';
 import type { SkillEvalFormValues } from '@/lib/schemas/skill-eval.schema';
 import { Controller, useFormContext } from 'react-hook-form';
 
-const SkillSliderField = ({name} : {name : SkillFieldType}) => {
+const AnimSkillSliderField = ({name} : {name : SkillFieldType}) => {
     const { control} = useFormContext<SkillEvalFormValues>()
     const isBigScreen = useIsBigScreen();
   return (
@@ -35,4 +35,4 @@ const SkillSliderField = ({name} : {name : SkillFieldType}) => {
   )
 }
 
-export default SkillSliderField
+export default AnimSkillSliderField

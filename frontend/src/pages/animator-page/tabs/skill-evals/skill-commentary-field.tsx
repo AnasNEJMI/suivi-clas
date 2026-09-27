@@ -5,7 +5,7 @@ import type { SkillEvalFormValues } from '@/lib/schemas/skill-eval.schema'
 import { CheckIcon, RocketIcon, XIcon } from 'lucide-react'
 import { Controller, useFormContext } from 'react-hook-form'
 
-const SkillCommentaryField = ({name} : {name : SkillFieldType}) => {
+const AnimSkillCommentaryField = ({name} : {name : SkillFieldType}) => {
     const { control} = useFormContext<SkillEvalFormValues>()
 
   return (
@@ -34,4 +34,4 @@ const SkillCommentaryField = ({name} : {name : SkillFieldType}) => {
   )
 }
 
-export default SkillCommentaryField
+export default AnimSkillCommentaryField

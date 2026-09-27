@@ -16,7 +16,7 @@ import type { LessonEntry } from '@/api/animator/types'
 import { cn, getElapsedDays } from '@/lib/utils'
 import { type CardStyle } from '@/lib/types/data.types'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
-import EvaluationField from '../../animator-lesson-evaluations/fields/evaluation-field'
+import EvaluationField from './evaluation-field'
 
 const AnimLessonEvalFormDrawer = ({
     student, animatorId, onLessonEvalUpserted, lesson, lessonEval, cardStyle, children

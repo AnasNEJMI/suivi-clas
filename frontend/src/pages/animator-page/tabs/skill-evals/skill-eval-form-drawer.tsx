@@ -10,10 +10,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { animatorApiCalls } from '@/api/animator/apiCalls'
 import { toast } from 'sonner'
-import SkillSliderField from '../../animator-skill-evaluation/fields/skill-silder-field'
-import SkillCommentaryField from '../../animator-skill-evaluation/fields/skill-commentary-field'
 import { Field } from '@/components/ui/field'
 import { BrandButton } from '@/components/brand-button'
+import AnimSkillSliderField from './skill-slider-field'
+import AnimSkillCommentaryField from './skill-commentary-field'
 
 const AnimSkillEvalDrawer = ({student, animatorId, onSkillEvalUpserted, children} : {student : SkillEvalStudentEntry, animatorId : number, onSkillEvalUpserted : (skillEval : SkillEvalData)  => void, children : ReactNode}) => {
     const isMobile = useIsMobile();
@@ -90,18 +90,18 @@ const AnimSkillEvalDrawer = ({student, animatorId, onSkillEvalUpserted, children
                             <form onSubmit={form.handleSubmit((data) => submitMutation.mutate(data))}>
                                 <span className='flex items-center gap-2 font-medium text-lg mt-4'><NotebookPenIcon/> Notes</span>
                                 <div className='flex flex-col lg:flex-row justify-evenly gap-4 bg-white border border-zinc-100 shadow-sm p-4 rounded-md mt-2'>
-                                    <SkillSliderField name='autonomy' />
-                                    <SkillSliderField name='discipline' />
-                                    <SkillSliderField name='organisation' />
-                                    <SkillSliderField name='ponctuality' />
-                                    <SkillSliderField name='regularity' />
-                                    <SkillSliderField name='respect' />
-                                    <SkillSliderField name='preparation' />
+                                    <AnimSkillSliderField name='autonomy' />
+                                    <AnimSkillSliderField name='discipline' />
+                                    <AnimSkillSliderField name='organisation' />
+                                    <AnimSkillSliderField name='ponctuality' />
+                                    <AnimSkillSliderField name='regularity' />
+                                    <AnimSkillSliderField name='respect' />
+                                    <AnimSkillSliderField name='preparation' />
                                 </div>
                                 <div className='mt-6 flex flex-col gap-6'>
-                                    <SkillCommentaryField name='positive' />
-                                    <SkillCommentaryField name='negative' />
-                                    <SkillCommentaryField name='improvements' />
+                                    <AnimSkillCommentaryField name='positive' />
+                                    <AnimSkillCommentaryField name='negative' />
+                                    <AnimSkillCommentaryField name='improvements' />
                                 </div>
                                 <Field className='flex flex-row gap-2 mt-12'>
                                     <BrandButton
