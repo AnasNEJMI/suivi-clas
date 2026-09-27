@@ -12,21 +12,18 @@ type LessonEvalInput = {
     evaluation : LessonEval
 }
 
-export type LessonEvalEntry = {
-    id : number,
-    lesson : {
-        id : number,
-        label : string,
-        subject : {
-            id : number, 
-            label : string
-        },
-    },
-    evaluation : LessonEval
+export type LessonEvalData = {
+  id:         number,
+  studentId : number,
+  lesson:     { id: number; label: string }
+  subject:    { id: number; label: string }
+  level:      { id: number; label: string }
+  evaluation: LessonEval
+  updatedAt : Date
 }
 
 type LessonEvalResponse = {
-    data : LessonEvalEntry
+    data : LessonEvalData
 }
 
 
@@ -72,19 +69,40 @@ export async function animatorSubmitLessonEvalHandler(
                         } 
                     }
                 },
-                evaluation : true
+                student : {
+                    select : {
+                        id : true,
+                        level : {select : {id : true, label : true}}
+                    }
+                },
+                evaluation : true,
+                updatedAt : true,
             }
         })
 
         if(!lessonEval){
             throw ApiError.internalError('Erreur lors de la soumission de l\'évalation.')
         }
-
+        
+        const level = lessonEval.student.level;
+        const subject = lessonEval.lesson.subject;
+        const lesson = {id : lessonEval.lesson.id, label : lessonEval.lesson.label};
+        if(!level || !subject || !lesson){
+            throw ApiError.internalError('Erreur lors de la soumission de l\'évalation.')
+        }
 
         return sendSuccess<LessonEvalResponse>(
             res,
             {
-                data : lessonEval
+                data : {
+                    id : lessonEval.id,
+                    studentId : lessonEval.student.id,
+                    lesson,
+                    subject,
+                    level,
+                    evaluation : lessonEval.evaluation,
+                    updatedAt : lessonEval.updatedAt
+                }
             }
         )
     }catch(error){

@@ -1,4 +1,4 @@
-import { Controller, useFormContext, useWatch } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import { Field, FieldError, FieldLabel }        from '@/components/ui/field'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import type { LessonEvalFormValues } from '@/lib/schemas/lesson-eval.schema'
@@ -7,8 +7,6 @@ import { LESSON_EVALS, LessonEvalLabels } from '@/api/api.types'
 
 export default function EvaluationField() {
     const { control } = useFormContext<LessonEvalFormValues>()
-    const lessonId = useWatch({ control, name: 'lessonId' })
-    if(lessonId < 1) return null;
     return (
         <Controller
             name='evaluation'

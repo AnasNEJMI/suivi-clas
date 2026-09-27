@@ -1,13 +1,14 @@
 import { ApiError } from "@/lib/errors/apiError.class";
 import { apiRequest } from "../client";
 import { ErrorCodes, ErrorStatusMap } from "@/lib/errors/errors.constants";
-import { type LessonEvalsEntry, type AnimatorBaseDataResponse, type Animator as AnimatorProfile, type LessonEvalEntry, type SkillEvalEntry } from "./types";
+import { type LessonEvalsEntry, type AnimatorBaseDataResponse, type Animator as AnimatorProfile, type SkillEvalEntry } from "./types";
 import {type LessonEval } from "../api.types";
 import { fetchPayloadlessData } from "../helper-functions";
 import type { QcmEntry } from "../student/apiCalls";
 import type { BilanEntry, DeleteBilanEntry, SeanceEntry, SeancesDataResponse } from "./seances.types";
 import type { ProfileDataResponse } from "./profile.types";
 import type { SkillEvalData, SkillEvalsResponse } from "./skill-evals.types";
+import type { LessonEvalData, LessonEvalsResponse } from "./lesson-evals.types";
 
 const ANIMATOR_API_ENDPOINT = '/api/animator/';
 
@@ -187,6 +188,7 @@ export const animatorApiCalls = {
     fetchSeancesData : fetchPayloadlessData<SeancesDataResponse>(animatorEndpoints.seances, ANIMATOR_API_ENDPOINT),
     fetchProfileData : fetchPayloadlessData<ProfileDataResponse>(animatorEndpoints.profile, ANIMATOR_API_ENDPOINT),
     fetchSkillEvalsData : fetchPayloadlessData<SkillEvalsResponse>(animatorEndpoints.skillEvals, ANIMATOR_API_ENDPOINT),
+    fetchLessonEvalsData : fetchPayloadlessData<LessonEvalsResponse>(animatorEndpoints.lessonEvals, ANIMATOR_API_ENDPOINT),
     submitSeance : (payload : SeanceSubmitPayload) =>  submitData<SeanceSubmitPayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
     submitBilan : (payload : BilanPayload) => submitData<BilanPayload, BilanEntry | null>(payload, animatorEndpoints.bilan),
     deleteSeance : (payload : SeancePayload) =>  deleteData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
@@ -194,7 +196,7 @@ export const animatorApiCalls = {
     fetchSeance : (payload : SeancePayload) => fetchData<SeancePayload, SeanceEntry | null>(payload, animatorEndpoints.seance),
 
     fetchLessonEvals : (payload : StudentAnimatorPayload) => fetchData<StudentAnimatorPayload, LessonEvalsEntry>(payload, animatorEndpoints.lessonEvals),
-    submitLessonEval : (payload : LessonEvalPayload) => submitData<LessonEvalPayload, LessonEvalEntry | null>(payload, animatorEndpoints.lessonEval),
+    submitLessonEval : (payload : LessonEvalPayload) => submitData<LessonEvalPayload, LessonEvalData | null>(payload, animatorEndpoints.lessonEval),
 
     fetchSkillEval : (payload : StudentAnimatorPayload) => fetchData<StudentAnimatorPayload, SkillEvalEntry | null>(payload, animatorEndpoints.skillEval),
     submitSkillEval : (payload : SkillEvalPayload) => submitData<SkillEvalPayload, SkillEvalData | null>(payload, animatorEndpoints.skillEval),

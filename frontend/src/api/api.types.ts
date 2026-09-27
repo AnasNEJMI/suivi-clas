@@ -109,7 +109,7 @@ export const USER_TYPE_LABELS : Record<UserType, string> = {
 }
 
 export const LessonEvalLabels : Record <LessonEval, string> = {
-    'notAcquired' : 'Non Acquis',
+    'notAcquired' : 'Non abordé',
     'acquiring' : 'En cours d\'acquisition',
     'acquired' : 'Acquis',
     'expert' : 'Expertise',
