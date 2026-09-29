@@ -11,6 +11,8 @@ backend/.env.development
 
 backend/prisma/qcm-backup.json
 backend/prisma/qcm-invalid-output.json
+backend/prisma/dirty-questions-cleaned-up.json
+backend/prisma/dirty-qcm-questions.json
 
 todo.md
 lesson-summary-todo.md

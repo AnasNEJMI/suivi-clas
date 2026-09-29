@@ -11,16 +11,22 @@ const AnimClassQCMsCarousel = ({classStats, baseData} : {classStats: SeancesByCl
     
     if(!qcms || qcms.length === 0){
         return (
-            <div className='mt-6'>
-                <h3 className='font-semibold text-lg lg:text-xl text-zinc-900'>Bilan des QCMs</h3>
-                <Card className='border-2 border-dashed border-zinc-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-xl bg-transparent mt-4 p-4'>
-                    <CardHeader className='flex flex-col items-center justify-center w-full'>
-                        <RotateCwFadingClockIcon className='size-10 opacity-70'/>
-                        <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>Aucun QCM enregistré pour le moment.</CardTitle>
-                        <CardDescription className='text-pretty text-sm max-w-xl text-center'>Les statistiques des QCMS générés seront affichées ici dès leur enregistrement.</CardDescription>
-                    </CardHeader>   
-                </Card>
+            <>
+            <div className="flex items-center justify-between mt-4">
+                <div className="flex items-center gap-2">
+                    <GraduationCapIcon className='text-sky-600 size-6'/>
+                    <span className="font-medium">{classStats.label}</span>
+                </div>
             </div>
+            <Card className='border-2 border-dashed border-zinc-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-xl bg-transparent mt-4 p-4'>
+                <CardHeader className='flex flex-col items-center justify-center w-full'>
+                    <RotateCwFadingClockIcon className='size-10 opacity-70'/>
+                    <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>Les données de présence n'ont pas été enregistrées pour le moment.</CardTitle>
+                    <CardDescription className='text-pretty text-sm max-w-xl text-center'>Toutes les données de présence enregistrées seront affichées ici dès leur réalisation.</CardDescription>
+                </CardHeader>   
+            </Card>
+            
+        </>
         )
     }
 
