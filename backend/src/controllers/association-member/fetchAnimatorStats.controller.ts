@@ -1,13 +1,12 @@
-// src/controllers/association/visitStats.controller.ts
 import { Request, Response, NextFunction } from 'express'
-import { prisma }                          from '../../db/prisma.js'
+import { prisma } from '../../db/prisma.js'
 import { ApiError } from '../../classes/ApiError.class.js';
 import { Gender } from '../../generated/prisma/enums.js';
 import { sendSuccess } from '../../utils/response.utils.js';
 
 export type AnimatorStatsResponse = { animatorStatsPerScolarYear: AnimatorStatsPerScolarYear[] }
 export type AnimatorStatsPerScolarYear = { scolarYear: { id: number; label: string }; animators: AnimatorStats[]}
-export type AnimatorStats = { animator : {id: number; firstName: string;  lastName: string; gender : Gender},classes: AnimatorClassStats[], totalSeances : number, totalBilans : number, totalQcms : number};
+export type AnimatorStats = { animator : {id: number; firstName: string;  lastName: string; gender : Gender, specializations : {id : number, label : string}[]},classes: AnimatorClassStats[], totalSeances : number, totalBilans : number, totalQcms : number};
 export type AnimatorClassStats = { class : {id : number, label : string}, seances : SeanceStats[], seancesCount : number; bilansSubmitted : number, qcmsSubmitted : number}
 export type SeanceStats = {id : number, duration : string, date : Date, students : {firstName : string, lastName : string, gender : Gender, presence : boolean}[]}
 
@@ -20,6 +19,7 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
     const contracts = await prisma.animatorContract.findMany({
       where : {class : {associationId}},
       select : {
+        contractSpecializations : {select : {id : true, subject : {select : {id : true, label : true}}}},
         scolarYear : {select : {id : true, label : true}},
         animator : {select : {id : true, firstName : true, lastName : true, gender : true}},
         class : {select : {id : true, label : true}},
@@ -31,7 +31,15 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
     }
     const yearIds = new Set(contracts.map(c => c.scolarYear?.id).filter(id => id !== null && id !== undefined));
     const animatorIds = new Set(contracts.map(c => c.animator?.id).filter(id => id !== null && id !== undefined));
-
+    const animatorSpecializationsMap = new Map<number, {specializations : {id : number, label : string}[]}>();
+    for (let i = 0; i < contracts.length; i++) {
+      const contract = contracts[i];
+      
+      if(!contract?.animator || !contract.contractSpecializations) continue;
+      if(!animatorSpecializationsMap.has(contract.animator.id)){
+        animatorSpecializationsMap.set(contract.animator.id, {specializations : contract.contractSpecializations.map(s => s.subject)})
+      }
+    }
     //1-
     const seances = await prisma.seance.findMany({
       where : {
@@ -72,7 +80,7 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
       scolarYear: { id: number; label: string }
       animators: Map<number, {
         totalSeances : number, totalBilans : number, totalQcms : number,
-        animator:    { id: number; firstName: string, lastName : string, gender : Gender}
+        animator:    { id: number; firstName: string, lastName : string, gender : Gender, specializations : {id : number, label : string}[]}
         classes: Map<number, {class : {id : number, label : string}, seances : {id: number, duration : string, date : Date, students : {firstName : string, lastName : string,gender : Gender, presence : boolean}[]}[], seancesCount: number; bilansSubmitted: number, qcmsSubmitted : number}>
       }>
     }
@@ -97,7 +105,7 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
             totalBilans : 0,
             totalSeances : 0,
             totalQcms : 0,
-            animator : {id: animator.id, firstName: animator.firstName, lastName : animator.lastName, gender : animator.gender}, 
+            animator : {id: animator.id, firstName: animator.firstName, lastName : animator.lastName, gender : animator.gender, specializations : animatorSpecializationsMap.get(animator.id)?.specializations?? []}, 
             classes : new Map()
           }
         )
@@ -125,16 +133,17 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
       });
       classBucket.bilansSubmitted+= seance._count.bilans;
       classBucket.seancesCount++;
-      classBucket.qcmsSubmitted += seance.bilans.map(b => b.qcm !== null).length;
+      classBucket.qcmsSubmitted += seance.bilans.filter(b => b.qcm !== null).length;
       animatorBucket.totalBilans+= seance._count.bilans;
       animatorBucket.totalSeances++;
-      animatorBucket.totalQcms += seance.bilans.map(b => b.qcm !== null).length;
+      animatorBucket.totalQcms += seance.bilans.filter(b => b.qcm !== null).length;
     }
 
     //2- we need to run through the contracts next and add entries for contracts for which no seances are registered
     for(const contract of contracts){
       const scolarYear = contract.scolarYear;
-      if(!scolarYear) continue;
+      const specializations = contract.contractSpecializations;
+      if(!scolarYear || !specializations) continue;
       if(!scolarYearMap.get(scolarYear.id)){
          scolarYearMap.set(scolarYear.id, {scolarYear, animators : new Map()})
       }
@@ -143,12 +152,14 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
       const animator = contract.animator;
       if(!animator) continue;
 
+
+
       if(!yearBucket.animators.get(animator.id)){
         yearBucket.animators.set(animator.id, {
           totalBilans : 0,
           totalSeances : 0,
           totalQcms : 0,
-          animator,
+          animator : {...animator, specializations : specializations.map(s => s.subject)},
           classes : new Map()
         });
       }

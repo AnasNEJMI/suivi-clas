@@ -1,90 +1,263 @@
-import type { ClassPresenceStats } from '@/api/association-member/apiCalls'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
-import { cn } from '@/lib/utils'
-import { CalendarCheck2Icon, CalendarX2Icon, GraduationCapIcon, PieChartIcon, RotateCwFadingClockIcon} from 'lucide-react'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import type { ClassPresenceStats } from "@/api/association-member/apiCalls";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { cn } from "@/lib/utils";
+import {
+  AlertCircleIcon,
+  AlertTriangleIcon,
+  CalendarCheck2Icon,
+  CalendarX2Icon,
+  ClockIcon,
+  GraduationCapIcon,
+  RotateCwFadingClockIcon,
+  SparklesIcon,
+} from "lucide-react";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-const AssocClassPresenceCarousel = ({classPresence} : {classPresence : ClassPresenceStats}) => {
-    classPresence.students.sort((a, b) => b.presence - a.presence); 
-    return (
-    <>
-        <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-                <div className='w-8 h-8 rounded-full  flex items-center justify-center font-bold text-base'>
-                <GraduationCapIcon className='text-sky-600'/>
-            </div>
-            <span className="font-semibold">{classPresence.class.label}</span>
-            </div>
-            <span className="px-2 rounded-full bg-white border border-zinc-200 text-sm opacity-75">{classPresence.students.length} élèves</span>
+type StudentPresence = ClassPresenceStats["students"][number];
+
+const StudentPresenceCard = ({
+  student,
+  classLabel,
+}: {
+  student: StudentPresence;
+  classLabel: string;
+}) => {
+  const totalSeances = student.presence + student.absence;
+  const presenceRate =
+    totalSeances === 0 ? 0 : Math.round((student.presence / totalSeances) * 100);
+
+  // Définition des seuils d'assiduité
+  const isGood = totalSeances > 0 && presenceRate >= 80;
+  const isWarning = totalSeances > 0 && presenceRate >= 50 && presenceRate < 80;
+  const isBad = totalSeances > 0 && presenceRate < 50;
+  const isNoData = totalSeances === 0;
+
+  return (
+    <div
+      className={cn(
+        "bg-white border rounded-2xl p-4 lg:p-5 flex flex-col justify-between h-full shadow-xs transition-all duration-200 font-outfit",
+        isGood && "border-slate-200 hover:border-emerald-300",
+        isWarning && "border-slate-200 hover:border-amber-300",
+        isBad && "border-rose-200 bg-rose-50/20",
+        isNoData && "border-slate-200"
+      )}
+    >
+      <div>
+        {/* 1. Pourcentage Seul en Haut à Droite */}
+        <div className="flex justify-end">
+          <span
+            className={cn(
+              "inline-flex items-center px-3 py-1 rounded-full text-xs lg:text-sm font-extrabold border shadow-2xs",
+              isGood && "bg-emerald-50 text-emerald-700 border-emerald-200",
+              isWarning && "bg-amber-50 text-amber-700 border-amber-200",
+              isBad && "bg-rose-50 text-rose-700 border-rose-200",
+              isNoData && "bg-slate-100 text-slate-600 border-slate-200"
+            )}
+          >
+            {isNoData ? "N/A" : `${presenceRate}%`}
+          </span>
         </div>
-        {
-            classPresence.students.length === 0 &&
-            <Card className='border-2 border-dashed border-zinc-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-xl bg-transparent mt-4 p-4'>
-                <CardHeader className='flex flex-col items-center justify-center w-full'>
-                    <RotateCwFadingClockIcon className='size-10 opacity-70'/>
-                    <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>Les données de présence n'ont pas été enregistrées pour le moment.</CardTitle>
-                    <CardDescription className='text-pretty text-sm max-w-xl text-center'>Toutes les données de présence enregistrées seront affichées ici dès leur réalisation.</CardDescription>
-                </CardHeader>   
-            </Card>
-        }
-        {
-            classPresence.students.length > 0 &&
-            <Carousel
-                opts={{align :'start'}}
-                className='mt-2'
-            >
-                <CarouselContent className='-ml-2 pt-2'>
-                    {
-                        classPresence.students.map((student) => {
-                            const totalSeances = student.presence + student.absence;
-                            const present = totalSeances === 0? 0 : student.presence;
-                            const absent = totalSeances === 0? 0 : student.absence;
 
-                            const presenceRate = totalSeances === 0? 0 : Math.round(100 * present / totalSeances);
-                            return (
-                                <CarouselItem key={student.id} className="group pl-2 max-w-60 pb-4">
-                                    <div className={cn(`rounded-xl w-full h-full p-4 font-outfit flex flex-col justify-between shadow-sm bg-white border-2`, presenceRate > 75 ? 'border-emerald-300' : presenceRate === 0 && totalSeances === 0 ? '' : 'border-red-300')}>
-                                        <div className=''>
-                                            <div className='text-base flex items-center gap-2 tracking-tight font-semibold'><div className='capitalize h-8 w-8 rounded-full bg-amber-200 flex items-center justify-center'>{student.firstName.slice(0,1)}</div><span><span className='capitalize'>{student.firstName}</span> <span className='uppercase'>{student.lastName}</span></span></div>
-                                            <div className='text-sm leading-4 tracking-tight flex flex-col items-start font-semibold opacity-75'><span className='flex items-center justify-center gap-1'><div className='h-8 w-8 flex items-center justify-center'><GraduationCapIcon className='size-4'/></div>{classPresence.class.label}</span></div>
-                                            <div className='mt-4 py-2 text-sm leading-4 tracking-tight flex items-center justify-between w-full'>
-                                                <span className='flex items-center gap-1'>
-                                                    <CalendarCheck2Icon className='size-4'/>
-                                                    {student.gender === 'm' ? 'Présent' : 'Présente'}
-                                                </span>
-                                                <span className='font-bold'>
-                                                    {present}/{present+absent} séances
-                                                </span>
-                                            </div>
-                                            <div className='text-sm leading-4 tracking-tight flex items-center justify-between w-full'>
-                                                <span className='flex items-center gap-1'>
-                                                    <CalendarX2Icon className='size-4'/>
-                                                    {student.gender === 'm' ? 'Absent' : 'Absente'}
-                                                </span>
-                                                <span className='font-bold'>
-                                                    {absent}/{present+absent} séances
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className='flex justify-end font-medium text-sm mt-4'>
-                                            <span className={cn('px-2 rounded-full flex items-center gap-2 text-sm tracking-tight', presenceRate > 75 ? 'bg-emerald-200 border border-emerald-500' : presenceRate === 0 && totalSeances === 0 ? 'border-zinc-200 bg-zinc-100' : 'bg-red-200 border border-red-500')}><PieChartIcon className={cn('size-4', presenceRate > 75 ? 'text-emerald-700' : 'text-red-700')}/>{presenceRate}%</span>
-                                        </div>
-                                    </div>
-                                </CarouselItem>
-                            )
-                        })
-                    }
-                </CarouselContent>
-                <div className=' flex justify-between items-center mb-6'>
-                    <div>
-                        <CarouselPrevious variant={'outline'}/>
-                        <CarouselNext variant={'outline'}/>
-                    </div>
-                </div>
-            </Carousel>
-        }
-    </>
-  )
-}
+        {/* 2. Infos Élève en-dessous (Avatar, Nom & Classe) */}
+        <div className="flex items-center gap-3 mt-4">
+          <div
+            className={cn(
+              "w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shadow-2xs shrink-0 text-white",
+              isGood && "bg-emerald-600",
+              isWarning && "bg-amber-500",
+              isBad && "bg-rose-600",
+              isNoData && "bg-slate-400"
+            )}
+          >
+            {student.firstName.charAt(0).toUpperCase()}
+            {student.lastName.charAt(0).toUpperCase()}
+          </div>
+          <div className="min-w-0">
+            <h5 className="font-bold text-slate-900 text-sm lg:text-base leading-snug truncate">
+              <span className="capitalize">{student.firstName}</span>{" "}
+              <span className="uppercase">{student.lastName}</span>
+            </h5>
+            <p className="text-xs text-slate-600 font-medium truncate flex items-center gap-1 mt-0.5">
+              <GraduationCapIcon className="size-3.5 text-slate-400 shrink-0" />
+              {classLabel}
+            </p>
+          </div>
+        </div>
 
-export default AssocClassPresenceCarousel
+        {/* 3. Barre de Progression Visuelle */}
+        <div className="mt-4">
+          <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+            <div
+              className={cn(
+                "h-full transition-all duration-500 rounded-full",
+                isGood && "bg-emerald-500",
+                isWarning && "bg-amber-500",
+                isBad && "bg-rose-500",
+                isNoData && "bg-slate-200"
+              )}
+              style={{ width: `${isNoData ? 0 : presenceRate}%` }}
+            />
+          </div>
+        </div>
+
+        {/* 4. Statistiques Détaillées Présent / Absent (Lisibilité et taille renforcées) */}
+        <div className="grid grid-cols-2 gap-2.5 mt-4">
+          {/* Présent */}
+          <div className="flex items-center gap-2 bg-slate-50/80 border border-slate-200 p-2.5 rounded-xl">
+            <CalendarCheck2Icon className="size-4.5 text-emerald-600 shrink-0" />
+            <div className="truncate">
+              <span className="text-xs font-bold text-emerald-950 block">
+                {student.gender === "m" ? "Présent" : "Présente"}
+              </span>
+              <div className="text-xs lg:text-sm font-extrabold text-slate-900 mt-0.5">
+                {student.presence}{" "}
+                <span className="text-slate-500 font-medium text-xs">/ {totalSeances}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Absent */}
+          <div className="flex items-center gap-2 bg-slate-50/80 border border-slate-200 p-2.5 rounded-xl">
+            <CalendarX2Icon className="size-4.5 text-rose-600 shrink-0" />
+            <div className="truncate">
+              <span className="text-xs font-bold text-rose-950 block">
+                {student.gender === "m" ? "Absent" : "Absente"}
+              </span>
+              <div className="text-xs lg:text-sm font-extrabold text-slate-900 mt-0.5">
+                {student.absence}{" "}
+                <span className="text-slate-500 font-medium text-xs">/ {totalSeances}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 5. Badge d'Encouragement / Action */}
+      <div className="mt-4 pt-3 border-t border-slate-100">
+        {isGood && (
+          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800 bg-emerald-50/80 border border-emerald-100/80 px-2.5 py-1.5 rounded-xl">
+            <SparklesIcon className="size-3.5 text-emerald-600 shrink-0" />
+            <span className="truncate">Excellente assiduité !</span>
+          </div>
+        )}
+
+        {isWarning && (
+          <div className="flex items-center gap-2 text-xs font-semibold text-amber-800 bg-amber-50/80 border border-amber-100/80 px-2.5 py-1.5 rounded-xl">
+            <AlertCircleIcon className="size-3.5 text-amber-600 shrink-0" />
+            <span className="truncate">Quelques absences à surveiller</span>
+          </div>
+        )}
+
+        {isBad && (
+          <div className="flex items-center gap-2 text-xs font-semibold text-rose-800 bg-rose-50/80 border border-rose-100/80 px-2.5 py-1.5 rounded-xl">
+            <AlertTriangleIcon className="size-3.5 text-rose-600 shrink-0" />
+            <span className="truncate">Suivi d'assiduité nécessaire</span>
+          </div>
+        )}
+
+        {isNoData && (
+          <div className="flex items-center gap-2 text-xs font-medium text-slate-600 bg-slate-100/80 border border-slate-200/60 px-2.5 py-1.5 rounded-xl">
+            <ClockIcon className="size-3.5 text-slate-400 shrink-0" />
+            <span className="truncate">En attente de séances</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const AssocClassPresenceCarousel = ({
+  classPresence,
+}: {
+  classPresence: ClassPresenceStats;
+}) => {
+  // Tri par assiduité décroissante
+  const sortedStudents = [...classPresence.students].sort((a, b) => {
+    const totalA = a.presence + a.absence;
+    const totalB = b.presence + b.absence;
+    const rateA = totalA === 0 ? 0 : a.presence / totalA;
+    const rateB = totalB === 0 ? 0 : b.presence / totalB;
+    return rateB - rateA;
+  });
+
+  return (
+    <div className="bg-slate-50/60 border border-slate-200/60 rounded-3xl p-5 lg:p-6 font-outfit">
+      {/* Header Classe */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-linear-to-tr from-sky-600 to-indigo-600 text-white flex items-center justify-center font-bold text-base shadow-xs">
+            <GraduationCapIcon className="size-5 text-white" />
+          </div>
+          <div>
+            <h4 className="font-bold text-slate-900 text-base leading-snug">
+              {classPresence.class.label}
+            </h4>
+            <p className="text-xs text-slate-500 font-medium">
+              Suivi d'assiduité des élèves
+            </p>
+          </div>
+        </div>
+
+        <span className="inline-flex items-center px-3 py-1 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-2xs">
+          {sortedStudents.length} élève{sortedStudents.length > 1 ? "s" : ""}
+        </span>
+      </div>
+
+      {/* État Vide */}
+      {sortedStudents.length === 0 ? (
+        <Card className="border-2 border-dashed border-slate-200 shadow-none h-48 flex flex-col items-center justify-center w-full rounded-2xl bg-white/50 p-6 text-center">
+          <CardHeader className="p-0 flex flex-col items-center w-full">
+            <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-2">
+              <RotateCwFadingClockIcon className="size-6 text-slate-400" />
+            </div>
+            <CardTitle className="text-base font-bold text-slate-800">
+              Aucun élève inscrit
+            </CardTitle>
+            <CardDescription className="text-xs text-slate-500 max-w-sm mt-1">
+              Les données d'assiduité apparaîtront ici dès que des élèves seront ajoutés à cette classe.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      ) : (
+        /* Carrousel */
+        <Carousel opts={{ align: "start" }} className="w-full">
+          <CarouselContent className="-ml-3 py-3 px-1">
+            {sortedStudents.map((student) => (
+              <CarouselItem
+                key={student.id}
+                className="pl-3 basis-65 sm:basis-72 shrink-0"
+              >
+                <StudentPresenceCard
+                  student={student}
+                  classLabel={classPresence.class.label}
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+
+          {/* Navigation du Carrousel */}
+          <div className="flex items-center justify-between pt-3 border-t border-slate-200/80 mt-2">
+            <div className="flex items-center gap-2">
+              <CarouselPrevious
+                variant="outline"
+                className="static translate-y-0 h-9 w-9 border-slate-200 hover:bg-white"
+              />
+              <CarouselNext
+                variant="outline"
+                className="static translate-y-0 h-9 w-9 border-slate-200 hover:bg-white"
+              />
+            </div>
+          </div>
+        </Carousel>
+      )}
+    </div>
+  );
+};
+
+export default AssocClassPresenceCarousel;

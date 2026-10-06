@@ -11,7 +11,7 @@ const AssocProfileTab = () => {
     const {user : association} = useRouteLoaderData('association') as {user: User};
   return (
     <>
-        <TabHeader user={association} title = 'Éspace association' subTitle='Profile' description="Récapitulatif de l'année scolaire."/>
+        <TabHeader user={association} title = 'Éspace association' subTitle='Profile' description="Retrouvez le récapitulatif des animateurs et des élèves participants cette année"/>
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
             <Suspense fallback = {<Skeleton/>}>
                 <ProfileTabDataWrapper association = {association}/>

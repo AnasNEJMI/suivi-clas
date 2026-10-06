@@ -1,88 +1,188 @@
-import { Fragment, type ReactNode } from 'react'
-import type { CarouselSeance } from './seance-history-carousel'
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Drawer, DrawerClose, DrawerContent,DrawerDescription,DrawerHeader,DrawerTitle,DrawerTrigger } from '@/components/ui/drawer'
-import { Button } from '@/components/ui/button'
-import { ArrowLeftIcon, CalendarIcon, ClockIcon, NotebookPenIcon } from 'lucide-react';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { cn, getElapsedDays } from '@/lib/utils';
-import { Separator } from '@/components/ui/separator';
+import { type ReactNode } from "react";
+import type { CarouselSeance } from "./seance-history-carousel";
+import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
+import {
+  ArrowLeftIcon,
+  ClockIcon,
+  GraduationCapIcon,
+  CheckCircle2Icon,
+  XCircleIcon,
+  BookOpenIcon,
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn, getElapsedDays } from "@/lib/utils";
 
-const AssocSeanceDetailsDrawer = ({seance, children} : {seance : CarouselSeance, children : ReactNode}) => {
-    const isMobile = useIsMobile();
-    return (
-      <Drawer direction={isMobile? 'left' : 'right'}>
-        <DrawerTrigger asChild>
-            {children}
-        </DrawerTrigger>
-        <DrawerContent className='h-dvh pl-4 pr-2 pb-2 font-outfit shadow-none border-none bg-zinc-100 md:rounded-t-xl'>
-            <DrawerHeader className='flex'>
-                <DrawerClose asChild>
-                    <Button variant={'ghost'} className='w-fit h-12 opacity-75'><ArrowLeftIcon className='size-6'/> <span>Retour</span></Button>
-                </DrawerClose>
-                <DrawerDescription>Séance du <span>{(new Date(seance.seance.date)).toLocaleDateString('fr-FR', {day: '2-digit',month: '2-digit',year: 'numeric',})}</span></DrawerDescription>
-                <DrawerTitle className='font-bold text-xl  md:text-3xl tracking-tight'>Résumé de la séance</DrawerTitle>
-            </DrawerHeader>
-            <div className="brand-v-scrollbar overflow-x-hidden overflow-y-auto px-4">
-                <Card 
-                    className={cn(
-                        'border-none shadow-none  rounded-2xl flex flex-col lg:flex-row items-start justify-start lg:justify-between',
-                    )}
-                >
-                    <CardHeader className='flex flex-col items-center justify-start w-full'>
-                        <div className='flex gap-2 w-full'>
-                            <NotebookPenIcon className={cn('size-10 p-2 rounded-xl bg-amber-300')}/>
-                            <div className='flex flex-col w-full'>
-                                <div className='flex items-start justify-between w-full'>
-                                    <span className={cn('font-bold tracking-tight uppercase text-xs')}>{seance.class.label}</span>
-                                </div>
-                                <CardTitle className='text-xl lg:text-2xl font-semibold'>Pôle scientifique</CardTitle>
-                            </div>
-                        </div>
-                    </CardHeader>
-                    <CardFooter className='flex items-start justify-between w-full'>
-                        <div className='flex gap-2'>
-                            <div className={cn('w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold text-xl bg-sky-300')}>
-                                {seance.animator.firstName.slice(0,1)}
-                            </div>
-                            <div className='flex flex-col justify-between'>
-                                <p className='tracking-tight text-base lg:text-lg'><span className='font-bold'>{seance.animator.firstName} {seance.animator.lastName}</span></p>
-                                <p className='text-sm opacity-75 leading-4 tracking-tight flex items-center justify-start gap-2'><span className='flex items-center justify-center gap-1'><CalendarIcon className='size-4'/> {getElapsedDays(seance.seance.date)}</span> · <span className='flex items-center justify-center gap-1'><ClockIcon className='size-4'/> {seance.seance.duration}</span></p>
-                            </div>
-                        </div>
-                    </CardFooter>
-                </Card>
-                <Card 
-                    className={cn(
-                        'border-none shadow-none  rounded-2xl flex flex-col items-start justify-start lg:justify-between mt-6',
-                    )}
-                >
-                    <CardHeader className='flex flex-col items-center justify-start w-full'>
-                        <div className='flex gap-2 w-full'>
-                            <NotebookPenIcon className={cn('size-6 rounded-xl text-violet-600')}/>
-                            <div className='flex flex-col w-full'>
-                                <CardTitle className='text-xl lg:text-2xl font-semibold'>Participation</CardTitle>
-                            </div>
-                        </div>
-                    </CardHeader>
-                    <CardContent className='flex flex-col w-full'>
-                        {
-                          seance.seance.students.map((student, index) => (
-                            <Fragment key={index}>
-                              <div className={cn('flex items-center justify-between p-2', index%2 === 0 && 'bg-zinc-100/75', index === 0 && 'rounded-t-md', index === seance.seance.students.length - 1 && 'rounded-b-md')}>
-                                <span className={cn('font-medium tracking-tighter', !student.presence && 'opacity-75')}>{student.firstName} {student.lastName}</span>
-                                <span className={cn('border px-2 rounded-full', student.presence ? 'border-emerald-400 bg-emerald-100 text-emerald-600' : 'border-red-400 bg-red-100 text-red-600')}>{student.presence? student.gender === 'm'? 'présent' : 'présente' : student.gender === 'm' ? 'absent' : 'absente'}</span>
-                              </div>
-                              {index < seance.seance.students.length - 1 && <Separator/>}
-                            </Fragment>
-                          ))
-                        }
-                    </CardContent>
-                </Card>
+const AssocSeanceDetailsDrawer = ({
+  seance,
+  children,
+}: {
+  seance: CarouselSeance;
+  children: ReactNode;
+}) => {
+  const isMobile = useIsMobile();
+  const formattedDate = new Date(seance.seance.date).toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  const studentsPresent = seance.seance.students.filter((s) => s.presence).length;
+  const totalStudents = seance.seance.students.length;
+
+  return (
+    <Drawer direction={isMobile ? "left" : "right"}>
+      <DrawerTrigger asChild>{children}</DrawerTrigger>
+
+      <DrawerContent className="max-w-xl ml-auto font-outfit bg-slate-50 border-l border-slate-200">
+        {/* En-tête du tiroir */}
+        <DrawerHeader className="border-b border-slate-200 bg-white px-6 py-4 flex flex-col gap-1">
+          <div className="flex items-center justify-between">
+            <DrawerClose asChild>
+              <Button variant="ghost" size="sm" className="-ml-2 text-slate-500 hover:text-slate-900 gap-1.5">
+                <ArrowLeftIcon className="size-4" />
+                <span>Fermer</span>
+              </Button>
+            </DrawerClose>
+            <span className="text-xs font-semibold px-2.5 py-1 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-full">
+              {getElapsedDays(seance.seance.date)}
+            </span>
+          </div>
+
+          <DrawerTitle className="text-xl font-bold text-slate-900 mt-2">
+            Fiche de Séance
+          </DrawerTitle>
+          <DrawerDescription className="text-xs text-slate-500">
+            Séance effectuée le {formattedDate}
+          </DrawerDescription>
+        </DrawerHeader>
+
+        {/* Contenu Déroulant */}
+        <div className="overflow-y-auto p-6 space-y-6 brand-v-scrollbar">
+          {/* Hero Card : Synthèse */}
+          <Card className="border-slate-200/80 shadow-xs bg-white rounded-2xl overflow-hidden py-0 gap-0">
+            <div className="bg-indigo-600 p-5 text-white">
+              <div className="flex items-center justify-between mb-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-bold bg-white/20 backdrop-blur-xs text-white uppercase tracking-wider">
+                  <GraduationCapIcon className="size-3.5" />
+                  {seance.class.label}
+                </span>
+                <span className="text-xs font-medium text-indigo-100 flex items-center gap-1">
+                  <ClockIcon className="size-3.5" />
+                  {seance.seance.duration}
+                </span>
+              </div>
+              <h3 className="text-xl font-bold tracking-tight">Séance d'accompagnement</h3>
             </div>
-        </DrawerContent>
-    </Drawer>
-    )
-}
 
-export default AssocSeanceDetailsDrawer
+            {/* Animateur Info */}
+            <div className="p-4 bg-slate-50/80 flex items-center justify-between border-t border-slate-100 text-sm">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-linear-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center font-bold text-base shadow-xs">
+                  {seance.animator.firstName.charAt(0)}
+                  {seance.animator.lastName.charAt(0)}
+                </div>
+                <div>
+                  <p className="font-bold text-slate-900 leading-tight">
+                    {seance.animator.firstName} {seance.animator.lastName}
+                  </p>
+                  <p className="text-xs text-slate-500">{seance.animator.gender === 'f' ? 'Animatrice' : 'Animateur'}</p>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <span className="text-xs text-slate-400 block font-medium">Présence</span>
+                <span className="text-sm font-bold text-slate-800">
+                  {studentsPresent} / {totalStudents} élèves
+                </span>
+              </div>
+            </div>
+          </Card>
+
+          {/* Liste des Élèves & Appel */}
+          <Card className="border-slate-200/80 shadow-xs bg-white rounded-2xl gap-2">
+            <CardHeader className="pb-3 border-b border-slate-100">
+              <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <BookOpenIcon className="size-4 text-indigo-600" />
+                Appel & Participation
+              </CardTitle>
+            </CardHeader>
+
+            <CardContent className="pt-4 space-y-2">
+              {seance.seance.students.map((student, index) => {
+                const isPresent = student.presence;
+                const genderSuffix = student.gender === "f" ? "e" : "";
+
+                return (
+                  <div
+                    key={index}
+                    className={cn(
+                      "flex items-center justify-between p-3 rounded-xl border transition-colors",
+                      isPresent
+                        ? "bg-emerald-50/40 border-emerald-100/80"
+                        : "bg-rose-50/40 border-rose-100/80"
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={cn(
+                          "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold",
+                          isPresent
+                            ? "bg-emerald-100 text-emerald-700 border border-emerald-200/60"
+                            : "bg-rose-100 text-rose-700 border border-rose-200/60"
+                        )}
+                      >
+                        {student.firstName.charAt(0)}
+                        {student.lastName.charAt(0)}
+                      </div>
+                      <span
+                        className={cn(
+                          "text-sm font-medium",
+                          isPresent ? "text-slate-800" : "text-slate-400 line-through"
+                        )}
+                      >
+                        {student.firstName} {student.lastName}
+                      </span>
+                    </div>
+
+                    <span
+                      className={cn(
+                        "inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold border",
+                        isPresent
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                          : "bg-rose-50 text-rose-700 border-rose-200"
+                      )}
+                    >
+                      {isPresent ? (
+                        <>
+                          <CheckCircle2Icon className="size-3 text-emerald-600" />
+                          Présent{genderSuffix}
+                        </>
+                      ) : (
+                        <>
+                          <XCircleIcon className="size-3 text-rose-600" />
+                          Absent{genderSuffix}
+                        </>
+                      )}
+                    </span>
+                  </div>
+                );
+              })}
+            </CardContent>
+          </Card>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  );
+};
+
+export default AssocSeanceDetailsDrawer;

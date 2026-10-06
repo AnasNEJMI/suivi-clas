@@ -48,7 +48,7 @@ export async function requireAuthHandler(
                 gender:      student.gender === Gender.f ? 'f' : 'm',
                 class:       { id: student.class.id,                  label: student.class.label },
                 level:       { id: student.level.id,                  label: student.level.label },
-                association: { id: student.class.association.id,      label: student.class.association.label },
+                association: student.class.association,
                 createdAt:   student.createdAt,
             };
         }else if(session.animator){
@@ -82,7 +82,7 @@ export async function requireAuthHandler(
                 gender:      associationMember.gender === Gender.f ? 'f' : 'm',
                 class:       null,
                 level:       null,
-                association: { id: associationMember.association.id, label: associationMember.association.label },
+                association: associationMember.association,
                 createdAt:   associationMember.createdAt,
             };
         }else {

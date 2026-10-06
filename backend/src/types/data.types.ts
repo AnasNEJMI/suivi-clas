@@ -9,7 +9,7 @@ export type User = {
     gender : Gender,
     class : {id : number, label : string} | null,
     level : {id : number, label : string} | null,
-    association : {id : number, label : string} | null,
+    association : {id : number, label : string, address : string, postalCode : number} | null,
     createdAt : Date,
 }
 

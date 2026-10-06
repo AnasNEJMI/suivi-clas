@@ -101,6 +101,8 @@ export async function loginHandler(
                                 select : {
                                     id : true,
                                     label : true,
+                                    postalCode : true,
+                                    address : true,
                                 }
                             }
                         }
@@ -166,7 +168,7 @@ export async function loginHandler(
                         gender : student.gender === Gender.f? 'f' : 'm',
                         class : {id : student.class.id, label : student.class.label}, //todo
                         level : {id : student.level.id, label : student.level.label},
-                        association : {id : student.class.association.id, label : student.class.association.label},
+                        association : student.class.association,
                         createdAt : student.createdAt,
                     }
                 }
@@ -184,6 +186,8 @@ export async function loginHandler(
                         select : {
                             id : true,
                             label : true,
+                            postalCode : true,
+                            address : true,
                         }
                     }
                 }
@@ -231,9 +235,9 @@ export async function loginHandler(
                         lastName : associationMember.lastName,
                         userType : 'associationMember',
                         gender : associationMember.gender === Gender.f? 'f' : 'm',
-                        class : null, //todo
+                        class : null,
                         level : null,
-                        association : {id : associationMember.association.id, label : associationMember.association.label},
+                        association : associationMember.association,
                         createdAt : associationMember.createdAt,
                     }
                 }

@@ -193,7 +193,6 @@ export async function animatorFetchProfileDataHandler(
       })
     )
     
-    console.log('proifle data ',scolarYears)
     return sendSuccess<ProfileDataResponse>(res, { scolarYears })
 
   } catch (error) {

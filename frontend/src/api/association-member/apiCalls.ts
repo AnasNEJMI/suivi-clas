@@ -40,7 +40,7 @@ export type StudentVisitStats = { id: number; firstName: string; lastName: strin
 
 export type AnimatorStatsResponse = { animatorStatsPerScolarYear: AnimatorStatsPerScolarYear[] }
 export type AnimatorStatsPerScolarYear = { scolarYear: { id: number; label: string }; animators: AnimatorStats[]}
-export type AnimatorStats = { animator : {id: number; firstName: string;  lastName: string; gender : 'm' | 'f'},classes: AnimatorClassStats[], totalSeances : number, totalBilans : number, totalQcms : number};
+export type AnimatorStats = { animator : {id: number; firstName: string;  lastName: string; gender : 'm' | 'f', specializations : {id : number, label : string}[]},classes: AnimatorClassStats[], totalSeances : number, totalBilans : number, totalQcms : number};
 export type AnimatorClassStats = { class : {id : number, label : string}, seances : SeanceStats[], seancesCount : number; bilansSubmitted : number}
 export type SeanceStats = {id : number, duration : string, date : Date, students : {firstName : string, lastName : string, gender : 'm' | 'f', presence : boolean}[]}
 

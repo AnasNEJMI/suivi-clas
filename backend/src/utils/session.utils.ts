@@ -89,7 +89,7 @@ export async function getSession(sessionId : string){
                             id:    true,
                             label: true,
                             association: {
-                                select: { id: true, label: true },
+                                select: { id: true, label: true , postalCode : true, address : true},
                             },
                         },
                     },
@@ -117,7 +117,7 @@ export async function getSession(sessionId : string){
                     gender:    true,
                     createdAt: true,
                     association: {
-                        select: { id: true, label: true },
+                        select: { id: true, label: true ,postalCode : true, address : true},
                     },
                 },
             },

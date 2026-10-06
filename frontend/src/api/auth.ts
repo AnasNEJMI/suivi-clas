@@ -15,13 +15,14 @@ export type User = {
     gender : 'f' | 'm',
     class : {id : number, label : string} | null,
     level : {id : number, label : string} | null,
-    association : {id : number, label : string} | null,
+    association : {id : number, label : string, address : string, postalCode : number} | null,
     createdAt : Date,
 }
 
 export async function fetchUser():Promise<User | null>{
     try{
         const response =  await apiRequest<{user : User}>('/api/auth/profile')
+        console.log('user', response.user)
         return response.user;
     }catch(error){
         if(error instanceof ApiError

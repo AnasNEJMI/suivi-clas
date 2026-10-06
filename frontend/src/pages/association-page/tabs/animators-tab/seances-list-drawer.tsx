@@ -1,152 +1,268 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react'
-import type { CarouselSeance } from './seance-history-carousel'
-import { Drawer, DrawerClose, DrawerContent,DrawerDescription,DrawerHeader,DrawerTitle,DrawerTrigger } from '@/components/ui/drawer'
-import { useIsMobile } from '@/hooks/use-mobile'
-import AssocSeanceDetailsDrawer from './seance-details-drawer'
-import { Button } from '@/components/ui/button'
-import { ArrowLeftIcon, CalendarIcon, ClockIcon, GraduationCapIcon, RotateCwFadingClockIcon, UserIcon } from 'lucide-react'
-import { cn, getElapsedDays } from '@/lib/utils'
-import { format } from 'date-fns'
-import { fr } from 'date-fns/locale'
-import { Separator } from '@/components/ui/separator'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useMemo, useState, type ReactNode } from "react";
+import type { CarouselSeance } from "./seance-history-carousel";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { useIsMobile } from "@/hooks/use-mobile";
+import AssocSeanceDetailsDrawer from "./seance-details-drawer";
+import { Button } from "@/components/ui/button";
+import {
+  ArrowLeftIcon,
+  CalendarIcon,
+  ClockIcon,
+  GraduationCapIcon,
+  RotateCwFadingClockIcon,
+} from "lucide-react";
+import { cn, getElapsedDays } from "@/lib/utils";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import { Separator } from "@/components/ui/separator";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-const AssocSeancesListDrawer = ({seances, filters, children} : {seances : CarouselSeance[], filters : string[], children : ReactNode}) => {
-    const isMobile = useIsMobile();
-    
-    const [filter, setFilter] = useState<string>('all')
-    const getFilteredSeances = useCallback((filter : string) => {
-        let newSeances : CarouselSeance[] = [];
-        for(const f of filters){
-            if(filter === f){
-                if(f === 'all') newSeances = seances;
-                else newSeances = seances.filter(s => s.class.label === f);
-            } 
-        }
-        const seancesMap = new Map<string, CarouselSeance[]>();
-        for(const s of newSeances){
-            const month = format(s.seance.date, 'MMMM y', {locale : fr});
-            if(!seancesMap.has(month)){
-                seancesMap.set(month, []);
-            }
-            const seancesBucket = seancesMap.get(month)!;
-            seancesBucket.push(s);
-        }
-
-        const seanceBuckets : {month : string, seances : CarouselSeance[]}[] = []
-        for(const [month, seances] of seancesMap.entries()){
-            seanceBuckets.push({month, seances})
-        }
-        return seanceBuckets;
-    }, [seances, filters])
-
-
-    const selectedSeanceBuckets = useMemo(()=>{
-        return getFilteredSeances(filter);
-    }, [filter,getFilteredSeances])
-    
-    if(seances.length === 0){
-        return (
-            <Drawer direction={isMobile? 'left' : 'right'}>
-                <DrawerTrigger asChild>
-                    {children}
-                </DrawerTrigger>
-                <DrawerContent className='h-dvh pl-4 pr-2 pb-2 font-outfit shadow-none border-none bg-zinc-100 md:rounded-t-xl'>
-                    <DrawerHeader className='flex'>
-                        <DrawerClose asChild>
-                            <Button variant={'ghost'} className='w-fit h-12 opacity-75'><ArrowLeftIcon className='size-6'/> <span>Retour</span></Button>
-                        </DrawerClose>
-                        <DrawerTitle className='text-lg'>Séances</DrawerTitle>
-                        <DrawerDescription>0 Séances réalisées</DrawerDescription>
-                    </DrawerHeader>
-                    <div className=''>
-                        <Card className='border-2 border-dashed border-zinc-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-xl bg-transparent mt-4 p-4'>
-                            <CardHeader className='flex flex-col items-center justify-center w-full'>
-                                <RotateCwFadingClockIcon className='size-10 opacity-70'/>
-                                <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>Aucune séance enregistrée pour le moment.</CardTitle>
-                                <CardDescription className='text-pretty text-sm max-w-xl text-center'>Toutes les séance enregistrées seront affichées ici dès leur réalisation.</CardDescription>
-                            </CardHeader>   
-                        </Card>
-                    </div>
-                </DrawerContent>
-            </Drawer>
-        )
-    }
-
-    const animatorName = `${seances[0].animator.firstName} ${seances[0].animator.lastName}`
-
-    return (
-        <Drawer direction={isMobile? 'left' : 'right'}>
-            <DrawerTrigger asChild>
-                {children}
-            </DrawerTrigger>
-            <DrawerContent className='h-dvh pl-4 pr-2 pb-2 font-outfit shadow-none border-none bg-zinc-100 md:rounded-t-xl'>
-                <DrawerHeader className='flex'>
-                    <DrawerClose asChild>
-                        <Button variant={'ghost'} className='w-fit h-12 opacity-75'><ArrowLeftIcon className='size-6'/> <span>Retour</span></Button>
-                    </DrawerClose>
-                    <DrawerTitle className='font-bold text-xl  md:text-3xl tracking-tight flex items-center gap-2'>
-                        <div className='w-10 h-10 rounded-full bg-sky-300 flex items-center justify-center font-bold text-xl'>
-                            {animatorName.slice(0,1)}
-                        </div>
-                        <span>{animatorName}</span>
-                    </DrawerTitle>
-                    <DrawerDescription className='text-base'>{seances.length} séances réalisées</DrawerDescription>
-                    <div className='mt-2 flex gap-2 flex-wrap'>
-                        {
-                            filters.map((f, index) => (
-                                <span key={index} onClick={() => setFilter(f)} className={cn('px-4 py-2 text-sm tracking-tight text-nowrap border border-zinc-200 rounded-full', filter === f? 'bg-zinc-900 text-white hover:bg-zinc-900' : 'bg-transparent text-zinc-900 hover:bg-zinc-200')}>{f === 'all'?'Tout' : f}</span>
-                            ))
-                        }
-                    </div>
-                </DrawerHeader>
-                <div className="brand-v-scrollbar overflow-x-hidden overflow-y-auto px-2 flex flex-col gap-2 pb-4">
-                    {
-                        selectedSeanceBuckets && selectedSeanceBuckets.map((seanceBucket, index) => {
-                                return (
-                                    <div key = {index} className='mt-4'>
-                                        <div className='w-full flex gap-6 items-center capitalize opacity-75 text-sm tracking-tight'>
-                                            <Separator className='flex-1'/>
-                                            <span className='text-center font-bold '>{seanceBucket.month}</span>
-                                            <Separator className='flex-1'/>
-                                        </div>
-                                        <div className='mt-4 flex flex-col gap-2'>
-                                            {
-                                                seanceBucket.seances.map((seance) => {
-                                                    const studentsPresent = seance.seance.students.filter(s => s.presence).length;
-                                                    const studentsAbsent = seance.seance.students.filter(s => !s.presence).length;
-                                                    const presenceRate = Math.round(100 * studentsPresent/(studentsPresent+studentsAbsent))
-                                                    return (
-                                                        <AssocSeanceDetailsDrawer key={seance.seance.id} seance={seance}>
-                                                            <div className={cn(`rounded-xl w-full h-full p-4 font-outfit flex flex-col justify-between group-hover:border shadow-sm bg-white`)}>
-                                                                <div className='flex justify-end font-medium text-sm'>
-                                                                <span className={cn('px-2 rounded-full flex items-center gap-2 text-sm tracking-tight bg-amber-200 border border-amber-500')}><CalendarIcon className='size-4 text-amber-700'/>{getElapsedDays(seance.seance.date)}</span>
-                                                                </div>
-                                                                <div className='mt-2'>
-                                                                <p className='text-sm flex items-center gap-2 tracking-tight'><UserIcon className='size-4'/><span><span className='capitalize'>{seance.animator.firstName}</span> <span className='uppercase'>{seance.animator.lastName}</span></span></p>
-                                                                <p className='text-sm leading-4 tracking-tight flex flex-col items-start'><span className='flex items-center justify-center gap-1'><GraduationCapIcon className='size-4'/> {seance.class.label}</span></p>
-                                                                <p className='text-sm leading-4 tracking-tight flex flex-col items-start'><span className='flex items-center justify-center gap-1'><ClockIcon className='size-4'/> {seance.seance.duration}</span></p>
-                                                                </div>
-                                                                <div className='flex justify-start mt-4'>
-                                                                    <span className={cn('border px-2 text-sm',presenceRate >= 50 ? 'bg-emerald-200 text-emerald-700 border-emerald-400 rounded-full' : 'bg-red-200 text-red-700 border-red-400')}>{studentsPresent}/{studentsPresent+studentsAbsent} élèves présents</span>
-                                                                </div>
-                                                            </div>
-                                                        </AssocSeanceDetailsDrawer>
-                                                    )
-                                                }
-                                            )
-                                            }
-                                        </div>
-                                    </div>
-                                )
-                            }
-                            
-                        )
-                    }
-                </div>
-            </DrawerContent>
-        </Drawer>
-  )
+interface AssocSeancesListDrawerProps {
+  seances: CarouselSeance[];
+  filters: string[];
+  children: ReactNode;
 }
 
-export default AssocSeancesListDrawer
+// Extracted Séance Card Item styled matching AssocCarouselSeanceCard
+const SeanceCardItem = ({ seance }: { seance: CarouselSeance }) => {
+  const studentsPresent = seance.seance.students.filter((s) => s.presence).length;
+  const totalStudents = seance.seance.students.length;
+  const presenceRate =
+    totalStudents > 0 ? Math.round((studentsPresent / totalStudents) * 100) : 0;
+  
+  const isHighAttendance = presenceRate >= 60;
+
+  // Lively status colors for presence performance
+  const status = isHighAttendance 
+    ? { text: "text-emerald-700", bar: "bg-emerald-500", track: "bg-emerald-100/70" }
+    : { text: "text-pink-700", bar: "bg-pink-500", track: "bg-pink-100/70" };
+
+  return (
+    <AssocSeanceDetailsDrawer seance={seance}>
+      <div
+        className={cn(
+          "w-full p-4 rounded-2xl bg-white border border-slate-200/80 shadow-2xs",
+          "hover:border-amber-300 hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer",
+          "flex flex-col font-outfit group select-none relative overflow-hidden"
+        )}
+      >
+        {/* Top Row: Icon Accent & Date at Top Right */}
+        <div>
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <div className="flex items-center justify-center size-8 rounded-xl bg-amber-50 text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-colors duration-200 shrink-0">
+              <GraduationCapIcon className="size-4" />
+            </div>
+
+            {/* Date at Top Right */}
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 bg-slate-100/80 px-2.5 py-1 rounded-full border border-slate-200/60 shrink-0">
+              <CalendarIcon className="size-3 text-slate-400" />
+              {getElapsedDays(seance.seance.date)}
+            </span>
+          </div>
+
+          {/* Class Title (Beneath Top Row) */}
+          <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-indigo-950 transition-colors truncate tracking-tight">
+            {seance.class.label}
+          </h3>
+
+          {/* Duration (Beneath Class Title) */}
+          <div className="flex items-center gap-1.5 mt-1.5 text-xs text-slate-500 font-medium">
+            <ClockIcon className="size-3.5 text-slate-400 shrink-0" />
+            <span>Durée : <strong className="text-slate-700 font-semibold">{seance.seance.duration}</strong></span>
+          </div>
+        </div>
+
+        {/* Bottom Section: Compact Presence & Progress Bar */}
+        <div className="mt-4 pt-3 border-t border-slate-100">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+              Présence
+            </span>
+            <div className="flex items-baseline gap-1">
+              <span className={cn("text-xs font-extrabold", status.text)}>
+                {presenceRate}%
+              </span>
+              <span className="text-[10px] font-semibold text-slate-400">
+                ({studentsPresent}/{totalStudents})
+              </span>
+            </div>
+          </div>
+
+          {/* Progress Indicator */}
+          <div className={cn("w-full h-1.5 rounded-full overflow-hidden", status.track)}>
+            <div
+              className={cn("h-full rounded-full transition-all duration-500 ease-out", status.bar)}
+              style={{ width: `${presenceRate}%` }}
+            />
+          </div>
+        </div>
+      </div>
+    </AssocSeanceDetailsDrawer>
+  );
+};
+
+const AssocSeancesListDrawer = ({
+  seances,
+  filters,
+  children,
+}: AssocSeancesListDrawerProps) => {
+  const isMobile = useIsMobile();
+  const [filter, setFilter] = useState<string>("all");
+
+  const animator = seances[0]?.animator;
+  const animatorName = animator ? `${animator.firstName} ${animator.lastName}` : "";
+
+  const selectedSeanceBuckets = useMemo(() => {
+    const filtered =
+      filter === "all"
+        ? seances
+        : seances.filter((s) => s.class.label === filter);
+
+    const seancesMap = new Map<string, CarouselSeance[]>();
+    for (const s of filtered) {
+      const monthStr = format(new Date(s.seance.date), "MMMM yyyy", { locale: fr });
+      if (!seancesMap.has(monthStr)) {
+        seancesMap.set(monthStr, []);
+      }
+      seancesMap.get(monthStr)!.push(s);
+    }
+
+    return Array.from(seancesMap.entries()).map(([month, bucketSeances]) => ({
+      month,
+      seances: bucketSeances,
+    }));
+  }, [seances, filter]);
+
+  return (
+    <Drawer direction={isMobile ? "left" : "right"}>
+      <DrawerTrigger asChild>{children}</DrawerTrigger>
+
+      <DrawerContent className="max-w-xl ml-auto font-outfit bg-slate-50 border-l border-slate-200">
+        {/* Drawer Header */}
+        <DrawerHeader className="border-b border-slate-200 bg-white px-6 py-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <DrawerClose asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="-ml-2 text-slate-500 hover:text-slate-900 gap-1.5"
+              >
+                <ArrowLeftIcon className="size-4" />
+                <span>Fermer</span>
+              </Button>
+            </DrawerClose>
+
+            <span className="inline-flex items-center px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700">
+              {seances.length} séance{seances.length > 1 ? "s" : ""}
+            </span>
+          </div>
+
+          {seances.length > 0 && animator ? (
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-linear-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center font-bold text-lg shadow-xs shrink-0">
+                {animator.firstName.charAt(0)}
+                {animator.lastName.charAt(0)}
+              </div>
+              <div>
+                <DrawerTitle className="text-xl font-bold text-slate-900 leading-tight">
+                  {animatorName}
+                </DrawerTitle>
+                <DrawerDescription className="text-xs text-slate-500 font-medium">
+                  Historique des séances réalisées
+                </DrawerDescription>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <DrawerTitle className="text-xl font-bold text-slate-900">
+                Toutes les séances
+              </DrawerTitle>
+              <DrawerDescription className="text-xs text-slate-500">
+                0 séance enregistrée
+              </DrawerDescription>
+            </div>
+          )}
+
+          {/* Class Filters */}
+          {seances.length > 0 && (
+            <div className="pt-2 flex items-center gap-1.5 overflow-x-auto brand-h-scrollbar pb-1">
+              {filters.map((f) => {
+                const isActive = filter === f;
+                const label = f === "all" ? "Toutes les classes" : f;
+
+                return (
+                  <button
+                    key={f}
+                    type="button"
+                    onClick={() => setFilter(f)}
+                    className={cn(
+                      "px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-all duration-150 cursor-pointer border",
+                      isActive
+                        ? "bg-indigo-600 text-white border-indigo-600 shadow-2xs"
+                        : "bg-white text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-900"
+                    )}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </DrawerHeader>
+
+        {/* Drawer Body */}
+        <div className="brand-v-scrollbar overflow-y-auto p-6 space-y-6">
+          {seances.length === 0 ? (
+            <Card className="border-2 border-dashed border-slate-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-2xl bg-white/50 p-6 text-center">
+              <CardHeader className="p-0 flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-3">
+                  <RotateCwFadingClockIcon className="size-6 text-slate-400" />
+                </div>
+                <CardTitle className="text-base font-bold text-slate-800">
+                  Aucune séance enregistrée
+                </CardTitle>
+                <CardDescription className="text-xs text-slate-500 max-w-sm mt-1">
+                  Toutes les séances enregistrées pour cet animateur apparaîtront ici.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          ) : selectedSeanceBuckets.length === 0 ? (
+            <div className="text-center py-12 text-slate-400 text-sm">
+              Aucune séance ne correspond au filtre sélectionné.
+            </div>
+          ) : (
+            selectedSeanceBuckets.map((bucket) => (
+              <div key={bucket.month} className="space-y-3">
+                {/* Month Separator */}
+                <div className="flex items-center gap-4">
+                  <Separator className="flex-1 bg-slate-200" />
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-100 px-3 py-1 rounded-md border border-slate-200/60">
+                    {bucket.month}
+                  </span>
+                  <Separator className="flex-1 bg-slate-200" />
+                </div>
+
+                {/* Séance List */}
+                <div className="space-y-2.5">
+                  {bucket.seances.map((seance) => (
+                    <SeanceCardItem key={seance.seance.id} seance={seance} />
+                  ))}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </DrawerContent>
+    </Drawer>
+  );
+};
+
+export default AssocSeancesListDrawer;
