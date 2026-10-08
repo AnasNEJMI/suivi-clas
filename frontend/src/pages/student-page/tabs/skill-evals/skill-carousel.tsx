@@ -7,8 +7,9 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { SKILL_CAROUSEL_CARD_STYLES } from '@/lib/types/data.types';
-import { SparklesIcon } from 'lucide-react';
+import { RotateCwFadingClockIcon } from 'lucide-react';
 import SkillCarouselCard from './skill-carousel-card';
+import { EmptyStateCard } from '@/components/ui/empty-state-card';
 
 const SKILL_KEYS = [
   'autonomy',
@@ -23,21 +24,15 @@ const SkillCarousel = ({ skillsEvals }: { skillsEvals: SkillsEvalEntry[] }) => {
   // État vide
   if (!skillsEvals || skillsEvals.length === 0) {
     return (
-      <div className="font-outfit mt-6 space-y-3">
+      <div className="font-outfit space-y-4">
         <h3 className="text-lg lg:text-xl font-bold text-slate-900 tracking-tight">
           Compétences Méthodologiques
         </h3>
-        <div className="flex flex-col items-center justify-center p-8 bg-white border border-dashed border-slate-200/80 rounded-2xl text-center">
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-3">
-            <SparklesIcon className="size-5 text-slate-400" />
-          </div>
-          <p className="text-sm font-semibold text-slate-700">
-            Aucune évaluation de méthodologie enregistrée
-          </p>
-          <p className="text-xs text-slate-400 mt-1 max-w-md">
-            Une fois vos évaluations soumises par vos enseignants, vous découvrirez ici votre moyenne pour chaque compétence.
-          </p>
-        </div>
+        <EmptyStateCard
+          icon={RotateCwFadingClockIcon}
+          title='Aucune évaluation de méthodologie enregistrée'
+          description='Une fois vos évaluations soumises par vos animateurs, vous découvrirez ici votre moyenne pour chaque compétence.'
+        />
       </div>
     );
   }

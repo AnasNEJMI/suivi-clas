@@ -44,63 +44,62 @@ const QcmQuestionnaire = ({
   const storageKey = `qcm-progress-${qcm.id}`;
 
   const items = useMemo(() => {
-    return qcm.qcmQuestions.map((q) => ({
+      return qcm.qcmQuestions.map((q) => ({
       name: `${q.id}-${q.bankQuestion.id}`,
-      required: true,
-    }));
+      required: true
+      }));
   }, [qcm]);
 
   const submitMutation = useMutation({
-    mutationFn: (qcm: QcmEntry) => studentApiCalls.submitQcm(qcm),
-    onSuccess: (qcm) => {
-      if (!qcm) {
-        toast.error('Erreur lors de la soumission du Qcm.');
-        return;
+      mutationFn : (qcm : QcmEntry) => 
+          studentApiCalls.submitQcm(qcm),
+      onSuccess :(qcm) => {
+          if(!qcm){
+              toast.error('Erreur lors de la soumission du Qcm.');
+              return;
+          }
+          
+          // toast(`QCM Complété ! Vous avez obtenu un résulat de : ${qcm.score}`);
+          toast.success("QCM complété", {
+              description: `Vous avez obtenu une note de ${qcm.score}/10`,
+          })
+          console.log('qcm returned : ', qcm);
+
+          onQcmSubmit(qcm);
+          setOpen(false);
+          return;
+      },
+      onError : (err) => {
+          toast.error('Erreur lors de la soumission du Qcm.')
+          console.log('submit error : ',err) 
       }
-
-      // Clear progress on successful submission
-      localStorage.removeItem(storageKey);
-
-      toast.success('QCM complété', {
-        description: `Vous avez obtenu une note de ${qcm.score}/10`,
-      });
-      console.log('qcm returned : ', qcm);
-
-      onQcmSubmit(qcm);
-      setOpen(false);
-      return;
-    },
-    onError: (err) => {
-      toast.error('Erreur lors de la soumission du Qcm.');
-      console.log('submit error : ', err);
-    },
-  });
+  })
 
   const onOpenChange = (newOpen: boolean) => {
-    if (newOpen) {
-      // Restore progress from localStorage if present
-      const savedProgress = localStorage.getItem(storageKey);
-      if (savedProgress) {
-        try {
-          const parsed = JSON.parse(savedProgress);
-          if (parsed.answers) setSavedAnswers(parsed.answers);
-          if (parsed.lastItem) {
-            setInitialItem(parsed.lastItem);
-            setOpen(newOpen);
-            return;
+      if (newOpen) {
+          const saved = localStorage.getItem(storageKey);
+          
+          if (saved) {
+              try {
+                  const parsed = JSON.parse(saved);
+                  setSavedAnswers(parsed);
+                  console.log('parsed : ', parsed)
+                  const firstUnanswered = items.find((item) => !parsed[item.name]);
+                  setInitialItem(firstUnanswered ? firstUnanswered.name : items[items.length - 1].name);
+              } catch (error) {
+                  console.error("Failed to parse saved QCM progress", error);
+                  setSavedAnswers({});
+                  setInitialItem(items[0]?.name || "");
+              }
+          } else {
+              setSavedAnswers({});
+              setInitialItem(items[0]?.name || "");
           }
-        } catch (e) {
-          console.error('Failed to parse saved QCM progress:', e);
-        }
       }
-
-      if (qcm.qcmQuestions.length > 0) {
-        const firstItem = `${qcm.qcmQuestions[0].id}-${qcm.qcmQuestions[0].bankQuestion.id}`;
-        setInitialItem(firstItem);
-      }
-    }
-    setOpen(newOpen);
+      
+      setOpen(newOpen);
   };
+
 
   const handleSelectChoice = (itemName: string, choice: string) => {
     const updatedAnswers = {
@@ -125,29 +124,29 @@ const QcmQuestionnaire = ({
     localStorage.setItem(storageKey, JSON.stringify(currentAnswers));
   };
 
-  function handleQcmSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    
-    const questionsWithAnswers = qcm.qcmQuestions.map(q => {
-        const itemName = `${q.id}-${q.bankQuestion.id}`;
-        return {
-            ...q,
-            correct : formData.get(itemName) === q.bankQuestion.correctAnswer,
-            selectedChoice : formData.get(itemName) as AnswerChoice,
-        }
-    })
+   function handleQcmSubmit(event: React.FormEvent<HTMLFormElement>) {
+      event.preventDefault()
+      const formData = new FormData(event.currentTarget)
+      
+      const questionsWithAnswers = qcm.qcmQuestions.map(q => {
+          const itemName = `${q.id}-${q.bankQuestion.id}`;
+          return {
+              ...q,
+              correct : formData.get(itemName) === q.bankQuestion.correctAnswer,
+              selectedChoice : formData.get(itemName) as AnswerChoice,
+          }
+      })
 
-    const score = questionsWithAnswers.filter(q => q.correct).length;
-    
-    const newQcm : QcmEntry = {
-        ...qcm,
-        score,
-        completed : true,
-        qcmQuestions : questionsWithAnswers
-    }
+      const score = questionsWithAnswers.filter(q => q.correct).length;
+      
+      const newQcm : QcmEntry = {
+          ...qcm,
+          score,
+          completed : true,
+          qcmQuestions : questionsWithAnswers
+      }
 
-    submitMutation.mutate(newQcm);
+      submitMutation.mutate(newQcm);
   }
 
   const totalAnswered = Object.keys(savedAnswers).length;
@@ -155,7 +154,7 @@ const QcmQuestionnaire = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="w-full h-dvh p-0 rounded-none overflow-hidden border-none bg-slate-50/95 dark:bg-slate-950 font-outfit shadow-2xl backdrop-blur-md">
+      <DialogContent className="w-full h-dvh p-2 rounded-none overflow-hidden border-none bg-slate-50/95 dark:bg-slate-950 font-outfit shadow-2xl backdrop-blur-md">
         {open && (
           <Questionnaire
             defaultItem={initialItem || items[0]?.name}
@@ -171,6 +170,7 @@ const QcmQuestionnaire = ({
 
               return (
                 <QuestionnaireItem
+                  
                   name={itemName}
                   key={itemName}
                   className="h-[calc(100%-5rem)] px-4 md:px-8 overflow-y-auto brand-v-scrollbar"
@@ -262,9 +262,9 @@ const QcmQuestionnaire = ({
                           value={key}
                           defaultChecked={isSelected}
                           onClick={() => handleSelectChoice(itemName, key)}
-                          className={`p-3 rounded-2xl text-sm md:text-base transition-all duration-200 flex items-center justify-between cursor-pointer ${choiceStyle}`}
+                          className={`p-3 rounded-2xl text-sm md:text-base transition-all duration-200 flex flex-row items-center gap-4 cursor-pointer ${choiceStyle}`}
                         >
-                          <span className="pr-3 leading-relaxed">{text}</span>
+                          <span className="pr-3 leading-relaxed flex-1">{text}</span>
                           <div
                             className={`size-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
                               isSelected

@@ -7,13 +7,14 @@ import {
   CalendarIcon,
   CheckCircle2Icon,
   Clock8Icon,
-  SparklesIcon,
+  RotateCwFadingClockIcon,
   TrophyIcon,
   UserIcon,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import QcmQuestionnaire from '../../bilans/qcm-questionnaire';
 import QcmResultsQuestionnaire from '../../bilans/qcm-results-questionnaire';
+import { EmptyStateCard } from '@/components/ui/empty-state-card';
 
 interface QcmsListProps {
   qcms: QcmEntry[];
@@ -42,6 +43,9 @@ const QcmsList = ({ qcms, onQcmSubmit }: QcmsListProps) => {
   return (
     <div className="font-outfit space-y-4 mt-6">
       {/* Barre de Filtres par Statut */}
+        <h3 className="font-bold text-lg lg:text-xl text-slate-900 tracking-tight">
+        Bilan des QCMs
+      </h3>
       <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-2xl border border-slate-200/60 w-fit">
         <button
           type="button"
@@ -85,19 +89,13 @@ const QcmsList = ({ qcms, onQcmSubmit }: QcmsListProps) => {
 
       {/* État Vide (Empty State) */}
       {(!selectedQcms || selectedQcms.length === 0) && (
-        <div className="flex flex-col items-center justify-center p-8 bg-white border border-dashed border-slate-200/80 rounded-2xl text-center">
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-3">
-            <SparklesIcon className="size-5 text-slate-400" />
-          </div>
-          <p className="text-sm font-semibold text-slate-700">
-            Aucun QCM à afficher
-          </p>
-          <p className="text-xs text-slate-400 mt-1 max-w-sm">
-            {filter === 'all'
+        <EmptyStateCard
+          icon={RotateCwFadingClockIcon}
+          title='Aucun QCM à afficher'
+          description={filter === 'all'
               ? 'Tous les questionnaires attribués à vos cours s’afficheront ici.'
               : 'Aucun questionnaire ne correspond au filtre sélectionné.'}
-          </p>
-        </div>
+        />
       )}
 
       {/* Liste des Cartes QCM */}

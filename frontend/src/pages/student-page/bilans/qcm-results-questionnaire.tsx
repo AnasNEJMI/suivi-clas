@@ -59,7 +59,7 @@ const QcmResultsQuestionnaire = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="w-full h-dvh p-0 rounded-none overflow-hidden border-none bg-slate-50 dark:bg-slate-950 font-outfit shadow-2xl">
+      <DialogContent className="w-full h-dvh p-2 rounded-none overflow-hidden border-none bg-slate-50 dark:bg-slate-950 font-outfit shadow-2xl">
         {open && (
           <Questionnaire
             defaultItem={items[0].name}
@@ -135,7 +135,7 @@ const QcmResultsQuestionnaire = ({
 
                   {/* Question Stem Box */}
                   <div className="p-4 rounded-2xl bg-white border border-slate-200/80 my-4">
-                    <p className="text-lg font-bold text-slate-900 leading-snug">
+                    <p className="text-base font-bold text-slate-900 leading-snug">
                       {q.bankQuestion.question}
                     </p>
                   </div>
@@ -170,7 +170,7 @@ const QcmResultsQuestionnaire = ({
                           disabled
                           className={`p-3 rounded-2xl text-sm transition-all flex items-center justify-between ${choiceStyle}`}
                         >
-                          <span className="pr-2">{text}</span>
+                          <span className="pr-2 flex-1">{text}</span>
                           {isCorrectAnswer && (
                             <CheckCircle2Icon className="size-5 text-emerald-600 shrink-0" />
                           )}
@@ -186,7 +186,7 @@ const QcmResultsQuestionnaire = ({
                   <div className="mt-5 p-4 rounded-2xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 text-slate-800 dark:text-slate-200">
                     <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-extrabold text-xs uppercase tracking-wider mb-1.5">
                       <LightbulbIcon className="size-4 fill-amber-400 text-amber-600" />
-                      Explication pédagogique
+                      Explication
                     </div>
                     <p className="text-xs md:text-sm font-medium leading-relaxed">
                       {q.bankQuestion.explanation}

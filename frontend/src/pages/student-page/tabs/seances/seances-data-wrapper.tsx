@@ -34,7 +34,7 @@ const StudentSeancesTabDataWrapper = ({ student }: { student: User }) => {
   };
 
   return (
-    <div className="space-y-8 pb-12 transition-all">
+    <div className="transition-all">
       {/* Hero / Recent Session Section */}
       <section className="relative">
         <StudentLastSeanceCard onQcmSubmit={onQcmSubmit} bilans={bilans} />

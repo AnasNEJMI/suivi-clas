@@ -1,6 +1,7 @@
 import type { SkillsEvalEntry } from '@/api/student/apiCalls';
 import { RotateCwFadingClockIcon } from 'lucide-react';
 import SkillsEvalCard from './skills-eval-card';
+import { EmptyStateCard } from '@/components/ui/empty-state-card';
 
 interface SkillsEvalsCardListProps {
   skillsEvals: SkillsEvalEntry[];
@@ -10,21 +11,15 @@ const SkillsEvalsCardList = ({ skillsEvals }: SkillsEvalsCardListProps) => {
   // État vide
   if (!skillsEvals || skillsEvals.length === 0) {
     return (
-      <div className="font-outfit mt-8 space-y-3">
+      <div className="font-outfit mt-6 space-y-3">
         <h3 className="text-lg lg:text-xl font-bold text-slate-900 tracking-tight">
           Évaluations des animateurs
         </h3>
-        <div className="flex flex-col items-center justify-center p-8 bg-white border border-dashed border-slate-200/80 rounded-2xl text-center">
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-3">
-            <RotateCwFadingClockIcon className="size-5 text-slate-400" />
-          </div>
-          <p className="text-sm font-semibold text-slate-700">
-            Aucune évaluation de méthodologie enregistrée
-          </p>
-          <p className="text-xs text-slate-400 mt-1 max-w-md">
-            Une fois les évaluations soumises, vous découvrirez ici les commentaires de chacun des animateurs qui vous accompagnent.
-          </p>
-        </div>
+        <EmptyStateCard
+          icon={RotateCwFadingClockIcon}
+          title='Aucune évaluation de méthodologie enregistrée'
+          description='Une fois les évaluations soumises, vous découvrirez ici les commentaires de chacun des animateurs qui vous accompagnent.'
+        />
       </div>
     );
   }

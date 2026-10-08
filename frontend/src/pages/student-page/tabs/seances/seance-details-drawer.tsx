@@ -48,7 +48,7 @@ const StudentSeanceDetailsDrawer = ({
   return (
     <Drawer direction={isMobile ? 'left' : 'right'}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
-      <DrawerContent className="font-outfit border-none bg-slate-50 dark:bg-slate-950 rounded-t-3xl md:rounded-l-3xl md:rounded-r-none shadow-2xl flex flex-col">
+      <DrawerContent className="font-outfit border-none bg-slate-50 rounded-t-3xl md:rounded-l-3xl md:rounded-r-none shadow-2xl flex flex-col">
         {/* Drawer Top Navigation Header */}
         <DrawerHeader className="px-6 pt-6 pb-4 border-b border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900">
           <div className="flex items-center justify-between w-full mb-2">
@@ -80,11 +80,11 @@ const StudentSeanceDetailsDrawer = ({
           {/* Header Card with Subject Styling */}
           <Card
             className={cn(
-              'rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden shadow-none gap-0',
+              'rounded-2xl font-outfit p-4 flex flex-col lg:flex-row items-center justify-evenly relative overflow-hidden shadow-none gap-0',
               cardStyle.bgColor
             )}
           >
-            <CardHeader className="p-0">
+            <CardHeader className="p-0 w-full">
               <div className="flex items-center gap-3">
                 <div
                   className={cn(
@@ -104,14 +104,15 @@ const StudentSeanceDetailsDrawer = ({
                   >
                     {cardStyle.label}
                   </span>
-                  <CardTitle className="text-xl font-extrabold text-slate-900 dark:text-white mt-1">
+                  <CardTitle className="text-xl font-bold  text-slate-900 w-full mt-1">
                     {bilan.lesson?.label}
                   </CardTitle>
                 </div>
               </div>
             </CardHeader>
-
-            <CardFooter className="p-0 pt-0 border-t mt-4 border-slate-900/5 flex items-center gap-3">
+            
+            <Separator className='lg:hidden my-4 lg:my-0'/>
+            <CardFooter className="p-0 border-slate-900/5 flex items-center gap-3 w-full">
               <div
                 className={cn(
                   'size-10 rounded-lg flex items-center justify-center font-black text-base',

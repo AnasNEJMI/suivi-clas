@@ -1,4 +1,5 @@
 import type { LessonsBySubject } from '@/api/student/apiCalls';
+import { EmptyStateCard } from '@/components/ui/empty-state-card';
 import { cn } from '@/lib/utils';
 import {
   AwardIcon,
@@ -25,21 +26,15 @@ const LessonEvalsRecap = ({ lessonsBySubject }: LessonEvalsRecapProps) => {
   // État vide
   if (!lessonsBySubject || lessonsEvaluated.length === 0) {
     return (
-      <div className="font-outfit mt-6 space-y-3">
+      <div className="font-outfit space-y-4">
         <h3 className="text-lg lg:text-xl font-bold text-slate-900 tracking-tight">
           Bilan global de maîtrise
         </h3>
-        <div className="flex flex-col items-center justify-center p-8 bg-white border border-dashed border-slate-200/80 rounded-2xl text-center">
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-3">
-            <RotateCwFadingClockIcon className="size-5 text-slate-400" />
-          </div>
-          <p className="text-sm font-semibold text-slate-700">
-            Aucune leçon évaluée pour le moment
-          </p>
-          <p className="text-xs text-slate-400 mt-1 max-w-md">
-            Dès que vos professeurs ou animateurs valideront vos leçons, votre bilan de maîtrise global s'affichera ici.
-          </p>
-        </div>
+        <EmptyStateCard
+          icon={RotateCwFadingClockIcon}
+          title='Aucune leçon évaluée pour le moment'
+          description="Dès que vos animateurs valideront vos leçons, votre bilan de maîtrise global s'affichera ici."
+        />
       </div>
     );
   }
@@ -95,7 +90,7 @@ const LessonEvalsRecap = ({ lessonsBySubject }: LessonEvalsRecapProps) => {
   ];
 
   return (
-    <div className="font-outfit">
+    <div className="font-outfit space-y-4">
       <h3 className="text-lg lg:text-xl font-bold text-slate-900 tracking-tight">
         Bilan global de maîtrise
       </h3>

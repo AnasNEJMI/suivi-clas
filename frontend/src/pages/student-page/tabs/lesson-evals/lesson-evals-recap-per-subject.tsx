@@ -12,6 +12,7 @@ import { CARD_STYLES, type Subject } from '@/lib/types/data.types';
 import { cn } from '@/lib/utils';
 import { ChevronRightIcon, RotateCwFadingClockIcon } from 'lucide-react';
 import SubjectEvalListDrawer from './subject-eval-list-drawer';
+import { EmptyStateCard } from '@/components/ui/empty-state-card';
 
 interface LessonEvalsRecapPerSubjectProps {
   lessonsBySubject: LessonsBySubject[];
@@ -22,29 +23,21 @@ const LessonEvalsRecapPerSubject = ({
 }: LessonEvalsRecapPerSubjectProps) => {
   if (!lessonsBySubject || lessonsBySubject.length === 0) {
     return (
-      <div className="font-outfit mt-6 space-y-3">
+      <div className="font-outfit mt-6 space-y-4">
         <h3 className="text-lg lg:text-xl font-bold text-slate-900 tracking-tight">
           Par matière
         </h3>
-        <Card className="border-2 border-dashed border-slate-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-2xl bg-transparent p-4">
-          <CardHeader className="flex flex-col items-center justify-center w-full p-0 text-center">
-            <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-3">
-              <RotateCwFadingClockIcon className="size-5 text-slate-400" />
-            </div>
-            <CardTitle className="text-base font-semibold text-slate-700">
-              Aucune leçon n'a encore été évaluée pour le moment.
-            </CardTitle>
-            <p className="text-xs text-slate-400 mt-1 max-w-md">
-              Une fois des évaluations de leçons soumises, vous découvrirez ici le bilan de maîtrise par matière.
-            </p>
-          </CardHeader>
-        </Card>
+        <EmptyStateCard
+          icon={RotateCwFadingClockIcon}
+          title="Aucune leçon n'a encore été évaluée pour le moment."
+          description='Une fois des évaluations de leçons soumises, vous découvrirez ici le bilan de maîtrise par matière.'
+        />
       </div>
     );
   }
 
   return (
-    <div className="font-outfit mt-6 space-y-3">
+    <div className="font-outfit mt-6 space-y-4">
       <h3 className="text-lg lg:text-xl font-bold text-slate-900 tracking-tight">
         Par matière
       </h3>

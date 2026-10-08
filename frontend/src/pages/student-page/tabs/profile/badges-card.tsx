@@ -199,14 +199,14 @@ export const BadgesCard = ({ bilans, lessonsBySubject }: BadgesCardProps) => {
 
   return (
     <Card className="bg-slate-50/60 border-slate-200/60 rounded-3xl p-5 lg:p-6 shadow-none">
-      <CardHeader className="p-0 mb-4 flex flex-row items-center justify-between">
+      <CardHeader className="p-0 mb-4 flex flex-col items-center justify-between">
         <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-2">
           <div className="w-9 h-9 rounded-xl bg-amber-400 text-amber-950 flex items-center justify-center shadow-2xs">
             <TrophyIcon className="size-5 fill-amber-950" />
           </div>
           Objectifs & Trophées
         </CardTitle>
-        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-2xs">
+        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-nowrap bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-2xs">
           <SparklesIcon className="size-3.5 text-amber-500" />
           {totalUnlocked} / {badges.length} débloqués
         </span>

@@ -21,6 +21,7 @@ import {
 import QcmQuestionnaire from '../../bilans/qcm-questionnaire';
 import QcmResultsQuestionnaire from '../../bilans/qcm-results-questionnaire';
 import StudentSeanceDetailsDrawer from './seance-details-drawer';
+import { EmptyStateCard } from '@/components/ui/empty-state-card';
 
 const StudentLastSeanceCard = ({
   bilans,
@@ -32,23 +33,17 @@ const StudentLastSeanceCard = ({
   // --- STATE 1: NO SESSIONS YET ---
   if (bilans.length === 0) {
     return (
-      <div>
-        <div className="flex items-center gap-2 mb-3">
+      <div className='space-y-4 font-outfit'>
+        <div className="flex items-center gap-2">
           <h3 className="font-bold text-lg tracking-tight text-slate-900 dark:text-white">
             Dernière séance
           </h3>
         </div>
-        <Card className="border-2 border-dashed border-indigo-200 dark:border-indigo-900/50 h-72 flex flex-col items-center justify-center w-full rounded-3xl bg-linear-to-b from-indigo-50/50 via-white to-slate-50 dark:from-indigo-950/20 dark:to-slate-900 shadow-sm p-6 text-center">
-          <div className="size-12 rounded-2xl bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-4 shadow-inner">
-            <CalendarX2Icon className="size-8" />
-          </div>
-          <CardTitle className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
-            Aucune séance récente
-          </CardTitle>
-          <CardDescription className="text-balance max-w-md text-slate-600 dark:text-slate-400 mt-1 text-sm font-medium">
-            Les retours de séances et tes devoirs QCM apparaîtront ici dès ta première classe.
-          </CardDescription>
-        </Card>
+        <EmptyStateCard
+          icon={CalendarX2Icon}
+          title='Aucune séance récente'
+          description='Les retours de séances et tes devoirs QCM apparaîtront ici dès ta première classe.'
+        />
       </div>
     );
   }
@@ -58,8 +53,8 @@ const StudentLastSeanceCard = ({
   // --- STATE 2: ABSENCE STATE ---
   if (!recentBilan.presence || !recentBilan.lesson) {
     return (
-      <div>
-        <div className="flex items-center gap-2 mb-3">
+      <div className='space-y-4 font-outfit'>
+        <div className="flex items-center gap-2">
           <h3 className="font-bold text-lg tracking-tight text-slate-900 dark:text-white">
             Dernière séance
           </h3>
@@ -148,7 +143,7 @@ const StudentLastSeanceCard = ({
         {/* Left 2/3 Section: Session Summary */}
         <Card
           className={cn(
-            'border-none shadow-none flex flex-col justify-between flex-2 rounded-none p-6 lg:p-7 relative overflow-hidden',
+            'border-none font-outfit shadow-none flex flex-col justify-between flex-2 rounded-none p-6 lg:p-7 relative overflow-hidden',
             cardStyle.bgColor
           )}
         >
@@ -183,7 +178,7 @@ const StudentLastSeanceCard = ({
                     {getElapsedDays(recentBilan.date)}
                   </span>
                 </div>
-                <CardTitle className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white mt-1.5">
+                <CardTitle className="text-xl font-bold tracking-tight text-slate-900 dark:text-white mt-1.5">
                   {recentBilan.lesson.label}
                 </CardTitle>
               </div>

@@ -1,6 +1,5 @@
 import type { BilanEntry, QcmEntry } from '@/api/student/apiCalls';
 import { Button } from '@/components/ui/button';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
@@ -11,6 +10,7 @@ import {
 import { ArrowRightIcon, HistoryIcon, RotateCwFadingClockIcon } from 'lucide-react';
 import StudentCarouselSeanceCard from './carousel-seance-card';
 import StudentSeancesListDrawer from './seances-list-drawer';
+import { EmptyStateCard } from '@/components/ui/empty-state-card';
 
 const CAROUSEL_MAX_LENGTH = 6;
 
@@ -22,7 +22,7 @@ const StudentSeanceHistoryCarousel = ({
   onQcmSubmit: (qcm: QcmEntry) => void;
 }) => {
   return (
-    <div className="space-y-6 font-outfit mt-10">
+    <div className="space-y-4 font-outfit mt-6">
       {/* En-tête de section */}
       <div>
         <div className="flex items-center gap-2">
@@ -56,19 +56,11 @@ const StudentSeanceHistoryCarousel = ({
 
         {/* État Vide */}
         {bilans.length === 0 ? (
-          <Card className="border-2 border-dashed border-slate-200 shadow-none h-48 flex flex-col items-center justify-center w-full rounded-2xl bg-white/50 p-6 text-center">
-            <CardHeader className="p-0 flex flex-col items-center w-full">
-              <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-2">
-                <RotateCwFadingClockIcon className="size-6 text-slate-400" />
-              </div>
-              <CardTitle className="text-base font-bold text-slate-800">
-                Aucune séance enregistrée
-              </CardTitle>
-              <CardDescription className="text-xs text-slate-500 max-w-sm mt-1">
-                Toutes les séances réalisées avec vos animateurs apparaîtront ici automatiquement.
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          <EmptyStateCard
+            icon={RotateCwFadingClockIcon}
+            title='Aucune séance enregistrée'
+            description='Toutes les séances réalisées avec vos animateurs apparaîtront ici automatiquement.'
+          />
         ) : (
           /* Carrousel */
           <Carousel opts={{ align: 'start' }} className="w-full">
