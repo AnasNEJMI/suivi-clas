@@ -1,40 +1,54 @@
-import type { SkillsEvalEntry } from '@/api/student/apiCalls'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { RotateCwFadingClockIcon } from 'lucide-react'
-import SkillsEvalCard from './skills-eval-card'
+import type { SkillsEvalEntry } from '@/api/student/apiCalls';
+import { RotateCwFadingClockIcon } from 'lucide-react';
+import SkillsEvalCard from './skills-eval-card';
 
-const SkillsEvalsCardList = ({skillsEvals} : {skillsEvals : SkillsEvalEntry[]}) => {
-  
-    if(skillsEvals.length === 0) {
-        return (
-            <>
-                <h3 className='mt-6 font-semibold text-lg lg:text-xl text-zinc-900 tracking-tight'>Évaluations des animateurs</h3>
-                <Card className='border-2 mt-4 border-dashed border-zinc-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-xl bg-transparent p-4'>
-                    <CardHeader className='flex flex-col items-center justify-center w-full'>
-                        <RotateCwFadingClockIcon className='size-10 opacity-70'/>
-                        <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>Aucune évaluation de méthodologie n'est enregistrée pour le moment.</CardTitle>
-                        <CardDescription className='text-pretty text-sm max-w-xl text-center'>Une fois les évaluations soumises, vous découvrirez les commentaires de chacun des animateurs qui vous accompagnent.</CardDescription>
-                    </CardHeader>
-                </Card>
-            </>
-        )
-    }
-    
-    return (
-        <>
-            <div className='mt-6 flex items-center justify-between'>
-                <h3 className='font-semibold text-lg lg:text-xl text-zinc-900 tracking-tight'>Évaluations des animateurs</h3>
-                <span className='bg-white border border-zinc-200 px-4 py-1 text-sm tracking-tight rounded-full text-zinc-800'>{skillsEvals.length} évaluations</span>
-            </div>
-            <div className='w-full flex flex-col gap-4 mt-4'>
-                {
-                    skillsEvals.map((skillsEval) => (
-                        <SkillsEvalCard key = {skillsEval.id} skillsEval = {skillsEval}/>
-                    ))
-                }
-            </div>
-        </>
-    )
+interface SkillsEvalsCardListProps {
+  skillsEvals: SkillsEvalEntry[];
 }
 
-export default SkillsEvalsCardList
+const SkillsEvalsCardList = ({ skillsEvals }: SkillsEvalsCardListProps) => {
+  // État vide
+  if (!skillsEvals || skillsEvals.length === 0) {
+    return (
+      <div className="font-outfit mt-8 space-y-3">
+        <h3 className="text-lg lg:text-xl font-bold text-slate-900 tracking-tight">
+          Évaluations des animateurs
+        </h3>
+        <div className="flex flex-col items-center justify-center p-8 bg-white border border-dashed border-slate-200/80 rounded-2xl text-center">
+          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-3">
+            <RotateCwFadingClockIcon className="size-5 text-slate-400" />
+          </div>
+          <p className="text-sm font-semibold text-slate-700">
+            Aucune évaluation de méthodologie enregistrée
+          </p>
+          <p className="text-xs text-slate-400 mt-1 max-w-md">
+            Une fois les évaluations soumises, vous découvrirez ici les commentaires de chacun des animateurs qui vous accompagnent.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="font-outfit mt-8 space-y-4">
+      {/* En-tête de section avec compteur */}
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg lg:text-xl font-bold text-slate-900 tracking-tight">
+          Évaluations des animateurs
+        </h3>
+        <span className="bg-slate-100/80 border border-slate-200/80 px-3.5 py-1 text-xs font-bold text-slate-700 rounded-full">
+          {skillsEvals.length} {skillsEvals.length > 1 ? 'évaluations' : 'évaluation'}
+        </span>
+      </div>
+
+      {/* Liste des cartes d'évaluations */}
+      <div className="w-full space-y-4">
+        {skillsEvals.map((skillsEval) => (
+          <SkillsEvalCard key={skillsEval.id} skillsEval={skillsEval} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default SkillsEvalsCardList;

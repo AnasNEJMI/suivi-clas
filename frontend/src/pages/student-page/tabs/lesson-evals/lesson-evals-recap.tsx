@@ -1,82 +1,199 @@
-import type { LessonsBySubject } from '@/api/student/apiCalls'
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { BookOpenIcon, RotateCwFadingClockIcon } from 'lucide-react'
+import type { LessonsBySubject } from '@/api/student/apiCalls';
+import { cn } from '@/lib/utils';
+import {
+  AwardIcon,
+  BookOpenIcon,
+  CheckCircle2Icon,
+  ClockIcon,
+  RotateCwFadingClockIcon,
+} from 'lucide-react';
 
-const LessonEvalsRecap = ({lessonsBySubject} : {lessonsBySubject : LessonsBySubject[]}) => {
-    if(!lessonsBySubject){
-        return(
-            <>
-                <h3 className='mt-6 font-semibold text-lg lg:text-xl text-zinc-900 tracking-tight'>Bilan global</h3>
-                <Card className='border-2 mt-4 border-dashed border-zinc-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-xl bg-transparent p-4'>
-                    <CardHeader className='flex flex-col items-center justify-center w-full'>
-                        <RotateCwFadingClockIcon className='size-10 opacity-70'/>
-                        <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>Aucune leçon n'a encore été évaluée pour le moment.</CardTitle>
-                        <CardDescription className='text-pretty text-sm max-w-xl text-center'>Une fois des évaluations de leçons soumises, vous découvrirez ici le bilan global de maîtrise.</CardDescription>
-                    </CardHeader>
-                </Card>
-            </>
-        )
-    }
-    
-    const lessonsEvaluatedMap = [];
-    for(const subject of lessonsBySubject){
-        lessonsEvaluatedMap.push([...subject.lessons.filter(l => l.eval !== null)]);
-    }
-    
-    const lessonsEvaluated = lessonsEvaluatedMap.flat();
-
-    if(lessonsEvaluated.length === 0){
-        return(
-            <>
-                <h3 className='mt-6 font-semibold text-lg lg:text-xl text-zinc-900 tracking-tight'>Bilan global</h3>
-                <Card className='border-2 mt-4 border-dashed border-zinc-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-xl bg-transparent p-4'>
-                    <CardHeader className='flex flex-col items-center justify-center w-full'>
-                        <RotateCwFadingClockIcon className='size-10 opacity-70'/>
-                        <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>Aucune leçon n'a encore été évaluée pour le moment.</CardTitle>
-                        <CardDescription className='text-pretty text-sm max-w-xl text-center'>Une fois des évaluations de leçons soumises, vous découvrirez ici le bilan global de maîtrise.</CardDescription>
-                    </CardHeader>
-                </Card>
-            </>
-        )
-    }
-
-    const lessonsNotAcquiredCount = lessonsEvaluated.flat().filter(l => l.eval!.evaluation === 'notAcquired').length;
-    const lessonsAquiringCount = lessonsEvaluated.flat().filter(l => l.eval!.evaluation === 'acquiring').length;
-    const lessonsAcquiredCount = lessonsEvaluated.flat().filter(l => l.eval!.evaluation === 'acquired').length;
-    const lessonsExpertCount = lessonsEvaluated.flat().filter(l => l.eval!.evaluation === 'expert').length;
-    return (
-    <>
-        <h3 className='mt-6 font-semibold text-lg lg:text-xl text-zinc-900 tracking-tight'>Bilan global</h3>
-        <Card className='mt-4 shadow-card flex flex-col items-start justify-start w-full rounded-xl bg-white'>
-            <CardHeader className='w-full flex justify-between'>
-                <BookOpenIcon className='size-12 p-2 bg-indigo-100 rounded-md text-indigo-800'/>
-                <div className='flex flex-col items-end'>
-                    <CardTitle className='text-3xl font-bold'>{lessonsEvaluated.flat().length}</CardTitle>
-                    <CardDescription className='text-sm text-center'>Leçons abordées</CardDescription>
-                </div>
-            </CardHeader>
-
-            <CardFooter className='grid grid-cols-2 lg:grid-cols-4 w-full gap-2'>
-                <div className='bg-red-100 p-4 rounded-md flex flex-col items-center'>
-                    <span className='font-bold text-xl'>{lessonsNotAcquiredCount}</span>
-                    <span className='text-sm opacity-75 tracking-tight'>Pas Acquis</span>
-                </div>
-                <div className='bg-orange-100 p-4 rounded-md flex flex-col items-center'>
-                    <span className='font-bold text-xl'>{lessonsAquiringCount}</span>
-                    <span className='text-sm opacity-75 tracking-tight'>En cours</span>
-                </div>
-                <div className='bg-lime-100 p-4 rounded-md flex flex-col items-center'>
-                    <span className='font-bold text-xl'>{lessonsAcquiredCount}</span>
-                    <span className='text-sm opacity-75 tracking-tight'>Acquis</span>
-                </div>
-                <div className='bg-emerald-100 p-4 rounded-md flex flex-col items-center'>
-                    <span className='font-bold text-xl'>{lessonsExpertCount}</span>
-                    <span className='text-sm opacity-75 tracking-tight'>Maîtrise</span>
-                </div>
-            </CardFooter>
-        </Card>
-    </>
-  )
+interface LessonEvalsRecapProps {
+  lessonsBySubject: LessonsBySubject[];
 }
 
-export default LessonEvalsRecap
+const LessonEvalsRecap = ({ lessonsBySubject }: LessonEvalsRecapProps) => {
+  // Une leçon est considérée comme évaluée si eval !== null et evaluation est 'acquiring', 'acquired' ou 'expert'
+  const lessonsEvaluated =
+    lessonsBySubject?.flatMap((subject) =>
+      subject.lessons.filter(
+        (lesson) =>
+          lesson.eval !== null && lesson.eval.evaluation !== 'notAcquired'
+      )
+    ) ?? [];
+
+  // État vide
+  if (!lessonsBySubject || lessonsEvaluated.length === 0) {
+    return (
+      <div className="font-outfit mt-6 space-y-3">
+        <h3 className="text-lg lg:text-xl font-bold text-slate-900 tracking-tight">
+          Bilan global de maîtrise
+        </h3>
+        <div className="flex flex-col items-center justify-center p-8 bg-white border border-dashed border-slate-200/80 rounded-2xl text-center">
+          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-3">
+            <RotateCwFadingClockIcon className="size-5 text-slate-400" />
+          </div>
+          <p className="text-sm font-semibold text-slate-700">
+            Aucune leçon évaluée pour le moment
+          </p>
+          <p className="text-xs text-slate-400 mt-1 max-w-md">
+            Dès que vos professeurs ou animateurs valideront vos leçons, votre bilan de maîtrise global s'affichera ici.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Calcul des effectifs par niveau de maîtrise
+  const totalCount = lessonsEvaluated.length;
+  const acquiringCount = lessonsEvaluated.filter(
+    (l) => l.eval?.evaluation === 'acquiring'
+  ).length;
+  const acquiredCount = lessonsEvaluated.filter(
+    (l) => l.eval?.evaluation === 'acquired'
+  ).length;
+  const expertCount = lessonsEvaluated.filter(
+    (l) => l.eval?.evaluation === 'expert'
+  ).length;
+
+  // Calcul des pourcentages pour la barre de répartition
+  const pctAcquiring = totalCount ? (acquiringCount / totalCount) * 100 : 0;
+  const pctAcquired = totalCount ? (acquiredCount / totalCount) * 100 : 0;
+  const pctExpert = totalCount ? (expertCount / totalCount) * 100 : 0;
+
+  const levels = [
+    {
+      key: 'acquiring',
+      label: 'En cours',
+      count: acquiringCount,
+      bgColor: 'bg-amber-50/70',
+      borderColor: 'border-amber-200/70',
+      textColor: 'text-amber-700',
+      barColor: 'bg-amber-500',
+      icon: ClockIcon,
+    },
+    {
+      key: 'acquired',
+      label: 'Acquis',
+      count: acquiredCount,
+      bgColor: 'bg-emerald-50/70',
+      borderColor: 'border-emerald-200/70',
+      textColor: 'text-emerald-700',
+      barColor: 'bg-emerald-500',
+      icon: CheckCircle2Icon,
+    },
+    {
+      key: 'expert',
+      label: 'Maîtrise',
+      count: expertCount,
+      bgColor: 'bg-indigo-50/70',
+      borderColor: 'border-indigo-200/70',
+      textColor: 'text-indigo-700',
+      barColor: 'bg-indigo-500',
+      icon: AwardIcon,
+    },
+  ];
+
+  return (
+    <div className="font-outfit">
+      <h3 className="text-lg lg:text-xl font-bold text-slate-900 tracking-tight">
+        Bilan global de maîtrise
+      </h3>
+
+      <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-2xs space-y-5">
+        {/* En-tête : Icône + Compteur de leçons évaluées */}
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-xl bg-indigo-50 border border-indigo-100/80 flex items-center justify-center shrink-0 shadow-2xs">
+              <BookOpenIcon className="size-5 text-indigo-600" />
+            </div>
+            <div>
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-tight">
+                Suivi de progression
+              </p>
+              <h4 className="text-base font-bold text-slate-800">
+                Niveau d'assimilation des cours
+              </h4>
+            </div>
+          </div>
+
+          <div className="text-right">
+            <span className="text-2xl font-extrabold text-slate-900 tracking-tight">
+              {totalCount}
+            </span>
+            <p className="text-xs font-medium text-slate-400">
+              {totalCount > 1 ? 'Leçons évaluées' : 'Leçon évaluée'}
+            </p>
+          </div>
+        </div>
+
+        {/* Barre de répartition segmentée */}
+        <div className="space-y-1.5">
+          <div className="flex justify-between items-center text-xs font-medium text-slate-500">
+            <span>Répartition par niveau</span>
+            <span>
+              {Math.round(pctAcquired + pctExpert)}% d'acquisition confirmée
+            </span>
+          </div>
+          <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden flex gap-0.5">
+            {pctAcquiring > 0 && (
+              <div
+                className="h-full bg-amber-500 transition-all duration-500"
+                style={{ width: `${pctAcquiring}%` }}
+                title={`En cours : ${acquiringCount}`}
+              />
+            )}
+            {pctAcquired > 0 && (
+              <div
+                className="h-full bg-emerald-500 transition-all duration-500"
+                style={{ width: `${pctAcquired}%` }}
+                title={`Acquis : ${acquiredCount}`}
+              />
+            )}
+            {pctExpert > 0 && (
+              <div
+                className="h-full bg-indigo-500 transition-all duration-500"
+                style={{ width: `${pctExpert}%` }}
+                title={`Maîtrise : ${expertCount}`}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Cartes métriques par niveau (3 colonnes) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {levels.map((lvl) => {
+            const Icon = lvl.icon;
+            return (
+              <div
+                key={lvl.key}
+                className={cn(
+                  'p-3.5 rounded-xl border flex flex-col justify-between transition-all duration-200',
+                  lvl.bgColor,
+                  lvl.borderColor
+                )}
+              >
+                <div className="flex items-center justify-between">
+                  <span className={cn('text-xs font-bold', lvl.textColor)}>
+                    {lvl.label}
+                  </span>
+                  <Icon className={cn('size-4 opacity-75', lvl.textColor)} />
+                </div>
+                <div className="mt-3 flex items-baseline gap-1">
+                  <span className={cn('text-2xl font-black tracking-tight', lvl.textColor)}>
+                    {lvl.count}
+                  </span>
+                  <span className={cn('text-[11px] font-semibold opacity-60', lvl.textColor)}>
+                    {lvl.count > 1 ? 'leçons' : 'leçon'}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LessonEvalsRecap;

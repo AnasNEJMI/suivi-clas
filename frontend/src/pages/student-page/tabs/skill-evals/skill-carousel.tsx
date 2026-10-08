@@ -1,76 +1,110 @@
 import type { SkillsEvalEntry } from '@/api/student/apiCalls';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import SkillCarouselCard from './skill-carousel-card';
-import {RotateCwFadingClockIcon} from 'lucide-react';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 import { SKILL_CAROUSEL_CARD_STYLES } from '@/lib/types/data.types';
+import { SparklesIcon } from 'lucide-react';
+import SkillCarouselCard from './skill-carousel-card';
 
-const SkillCarousel = ({skillsEvals} : {skillsEvals : SkillsEvalEntry[]}) => {
-    
-    if(skillsEvals.length === 0) {
-        return (
-            <>
-                <h3 className='mt-6 font-semibold text-lg lg:text-xl text-zinc-900'>Compétences Méthodologiques</h3>
-                <Card className='border-2 mt-4 border-dashed border-zinc-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-xl bg-transparent p-4'>
-                    <CardHeader className='flex flex-col items-center justify-center w-full'>
-                        <RotateCwFadingClockIcon className='size-10 opacity-70'/>
-                        <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>Aucune évaluation de méthodologie n'est enregistrée pour le moment.</CardTitle>
-                        <CardDescription className='text-pretty text-sm max-w-xl text-center'>Une fois les évaluations soumises, vous découvrirez votre moyenne sur chacunes des compétences évaluées.</CardDescription>
-                    </CardHeader>
-                </Card>
-            </>
-        )
+const SKILL_KEYS = [
+  'autonomy',
+  'discipline',
+  'organisation',
+  'ponctuality',
+  'preparation',
+  'regularity',
+] as const;
+
+const SkillCarousel = ({ skillsEvals }: { skillsEvals: SkillsEvalEntry[] }) => {
+  // État vide
+  if (!skillsEvals || skillsEvals.length === 0) {
+    return (
+      <div className="font-outfit mt-6 space-y-3">
+        <h3 className="text-lg lg:text-xl font-bold text-slate-900 tracking-tight">
+          Compétences Méthodologiques
+        </h3>
+        <div className="flex flex-col items-center justify-center p-8 bg-white border border-dashed border-slate-200/80 rounded-2xl text-center">
+          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-3">
+            <SparklesIcon className="size-5 text-slate-400" />
+          </div>
+          <p className="text-sm font-semibold text-slate-700">
+            Aucune évaluation de méthodologie enregistrée
+          </p>
+          <p className="text-xs text-slate-400 mt-1 max-w-md">
+            Une fois vos évaluations soumises par vos enseignants, vous découvrirez ici votre moyenne pour chaque compétence.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Cumul des scores et calcul des moyennes
+  const totalScores = skillsEvals.reduce(
+    (acc, curr) => ({
+      autonomy: acc.autonomy + curr.autonomy,
+      discipline: acc.discipline + curr.discipline,
+      organisation: acc.organisation + curr.organisation,
+      ponctuality: acc.ponctuality + curr.ponctuality,
+      preparation: acc.preparation + curr.preparation,
+      regularity: acc.regularity + curr.regularity,
+    }),
+    {
+      autonomy: 0,
+      discipline: 0,
+      organisation: 0,
+      ponctuality: 0,
+      preparation: 0,
+      regularity: 0,
     }
+  );
 
-
-    const skillEvalTotal : SkillsEvalEntry = {...skillsEvals[0]};
-
-    for (let i = 1; i < skillsEvals.length; i++) {
-        const skillsEval = skillsEvals[i];
-        skillEvalTotal.autonomy += skillsEval.autonomy;
-        skillEvalTotal.discipline += skillsEval.discipline;
-        skillEvalTotal.organisation += skillsEval.organisation;
-        skillEvalTotal.ponctuality += skillsEval.ponctuality;
-        skillEvalTotal.preparation += skillsEval.preparation;
-        skillEvalTotal.regularity += skillsEval.regularity;
-    }
+  const count = skillsEvals.length;
 
   return (
-    <>
-        <h3 className='mt-6 font-semibold text-lg lg:text-xl text-zinc-900'>Compétences Méthodologiques</h3>
-        <Carousel
-            opts={{align :'start'}}
-            className='mt-2'
-        >
-            <CarouselContent className='-ml-4 pt-4'>
-                <CarouselItem className="group pl-4 max-w-48 h-40 hover:-translate-y-1 transition-transform duration-100 ease-out">
-                    <SkillCarouselCard cardStyle = {SKILL_CAROUSEL_CARD_STYLES['autonomy']}  score = {Math.round(skillEvalTotal.autonomy/skillsEvals.length)}/>
-                </CarouselItem>
-                <CarouselItem className="group pl-4 max-w-48 h-40 hover:-translate-y-1 transition-transform duration-100 ease-out">
-                    <SkillCarouselCard cardStyle = {SKILL_CAROUSEL_CARD_STYLES['discipline']}  score = {Math.round(skillEvalTotal.discipline/skillsEvals.length)}/>
-                </CarouselItem>
-                <CarouselItem className="group pl-4 max-w-48 h-40 hover:-translate-y-1 transition-transform duration-100 ease-out">
-                    <SkillCarouselCard cardStyle = {SKILL_CAROUSEL_CARD_STYLES['organisation']}  score = {Math.round(skillEvalTotal.organisation/skillsEvals.length)}/>
-                </CarouselItem>
-                <CarouselItem className="group pl-4 max-w-48 h-40 hover:-translate-y-1 transition-transform duration-100 ease-out">
-                    <SkillCarouselCard cardStyle = {SKILL_CAROUSEL_CARD_STYLES['ponctuality']}  score = {Math.round(skillEvalTotal.ponctuality/skillsEvals.length)}/>
-                </CarouselItem>
-                <CarouselItem className="group pl-4 max-w-48 h-40 hover:-translate-y-1 transition-transform duration-100 ease-out">
-                    <SkillCarouselCard cardStyle = {SKILL_CAROUSEL_CARD_STYLES['preparation']}  score = {Math.round(skillEvalTotal.preparation/skillsEvals.length)}/>
-                </CarouselItem>
-                <CarouselItem className="group pl-4 max-w-48 h-40 hover:-translate-y-1 transition-transform duration-100 ease-out">
-                    <SkillCarouselCard cardStyle = {SKILL_CAROUSEL_CARD_STYLES['regularity']}  score = {Math.round(skillEvalTotal.regularity/skillsEvals.length)}/>
-                </CarouselItem>
-            </CarouselContent>
-            <div className='mt-4 flex justify-between items-center'>
-                <div>
-                    <CarouselPrevious variant={'outline'}/>
-                    <CarouselNext variant={'outline'}/>
-                </div>
-            </div>
-        </Carousel>
-    </>
-  )
-}
+    <div className="font-outfit">
+      <Carousel opts={{ align: 'start' }} className="w-full">
+        {/* En-tête : Titre & Navigation du carrousel */}
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-bold text-slate-900 tracking-tight">
+            Compétences Méthodologiques
+          </h3>
+        </div>
 
-export default SkillCarousel
+        {/* Contenu du Carrousel */}
+        <CarouselContent className="-ml-3 py-1">
+          {SKILL_KEYS.map((key) => {
+            const style = SKILL_CAROUSEL_CARD_STYLES[key];
+            const avgScore = Math.round(totalScores[key] / count);
+
+            if (!style) return null;
+
+            return (
+              <CarouselItem
+                key={key}
+                className="pl-3 max-w-48 h-40 shrink-0"
+              >
+                <SkillCarouselCard cardStyle={style} score={avgScore} />
+              </CarouselItem>
+            );
+          })}
+        </CarouselContent>
+        <div className="flex items-center gap-1.5 relative mt-4">
+        <CarouselPrevious
+                variant="outline"
+                className="static translate-y-0 h-9 w-9 border-slate-200 hover:bg-white"
+            />
+            <CarouselNext
+                variant="outline"
+                className="static translate-y-0 h-9 w-9 border-slate-200 hover:bg-white"
+            />
+        </div>
+      </Carousel>
+    </div>
+  );
+};
+
+export default SkillCarousel;

@@ -1,46 +1,152 @@
-import type { BilanEntry, QcmEntry } from '@/api/student/apiCalls'
+import type { BilanEntry, QcmEntry } from '@/api/student/apiCalls';
 import { CARD_STYLES, type Subject } from '@/lib/types/data.types';
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { AlertTriangleIcon, CalendarIcon, CalendarXIcon, ClockIcon, TrophyIcon, UserIcon } from 'lucide-react';
+import {
+  CalendarIcon,
+  CalendarXIcon,
+  ClockIcon,
+  TrophyIcon,
+  UserIcon,
+  CheckCircle2Icon,
+} from 'lucide-react';
 import StudentSeanceDetailsDrawer from './seance-details-drawer';
 
-const StudentCarouselSeanceCard = ({bilan, onQcmSubmit} : {bilan : BilanEntry, onQcmSubmit : (qcm: QcmEntry) => void}) => {
-  if(!bilan.presence || !bilan.lesson){
+const StudentCarouselSeanceCard = ({
+  bilan,
+  onQcmSubmit,
+}: {
+  bilan: BilanEntry;
+  onQcmSubmit: (qcm: QcmEntry) => void;
+}) => {
+  // --- CAS D'ABSENCE ---
+  if (!bilan.presence || !bilan.lesson) {
     return (
-      <div className={cn(`rounded-xl w-full h-full p-4 font-outfit flex flex-col justify-between group-hover:border border-red-500 bg-red-100 opacity-50 shadow-sm`)}>
-        <div className='flex justify-end font-medium text-sm'>
-          <CalendarXIcon className='text-red-500 size-8'/>
+      <div className="w-full h-full rounded-2xl border border-rose-200/80 bg-rose-50/80 p-4 font-outfit flex flex-col justify-between shadow-2xs hover:shadow-md transition-all duration-200 group text-left">
+        {/* Header Badge */}
+        <div className="flex items-center justify-between">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100/80 text-rose-700 border border-rose-200">
+            <CalendarXIcon className="size-3.5" />
+            Absence
+          </span>
         </div>
-        <h3 className='text-lg font-semibold tracking-tight text-red-600'>Absence</h3>
+
+        {/* Info Principale */}
         <div>
-          <p className='text-sm opacity-75 flex items-center gap-2 tracking-tight'><UserIcon className='size-4'/><span><span className='capitalize'>{bilan.submittedBy.firstName}</span> <span className='uppercase'>{bilan.submittedBy.lastName}</span></span></p>
-          <p className='text-sm opacity-75 leading-4 tracking-tight flex flex-col items-start'><span className='flex items-center justify-center gap-1'><CalendarIcon className='size-4'/> {format(bilan.date, 'd/MM/y', {locale : fr})}</span> <span className='flex items-center justify-center gap-1'><ClockIcon className='size-4'/> {bilan.seance.seanceDuration.label}</span></p>
+          <h3 className="text-base font-bold text-rose-950 tracking-tight line-clamp-1">
+            Séance non effectuée
+          </h3>
+          <p className="text-xs text-rose-600/80 font-medium mt-0.5">
+            Élève absent(e)
+          </p>
+        </div>
+
+        {/* Footer Métadonnées */}
+        <div className="pt-2.5 border-t border-rose-200/60 space-y-1 text-xs text-rose-800/80">
+          <p className="flex items-center gap-1.5 font-medium truncate">
+            <UserIcon className="size-3.5 shrink-0 opacity-70" />
+            <span className="capitalize">{bilan.submittedBy.firstName}</span>{' '}
+            <span className="uppercase">{bilan.submittedBy.lastName}</span>
+          </p>
+          <div className="flex items-center justify-between text-[11px] font-semibold text-rose-700/80">
+            <span className="flex items-center gap-1">
+              <CalendarIcon className="size-3 shrink-0 opacity-75" />
+              {format(new Date(bilan.date), 'dd/MM/yyyy', { locale: fr })}
+            </span>
+            <span className="flex items-center gap-1">
+              <ClockIcon className="size-3 shrink-0 opacity-75" />
+              {bilan.seance.seanceDuration.label}
+            </span>
+          </div>
         </div>
       </div>
-    )
+    );
   }
-  const cardStyle = CARD_STYLES[bilan.lesson!.subject.label as Subject];
+
+  // --- CAS DE PRÉSENCE ---
+  const cardStyle = CARD_STYLES[bilan.lesson.subject.label as Subject];
+  const IconComponent = cardStyle.icon;
+
   return (
-    <StudentSeanceDetailsDrawer onQcmSubmit={onQcmSubmit} bilan={bilan} cardStyle={cardStyle}>
-      <div className={cn(`rounded-xl w-full h-full p-4 font-outfit flex flex-col justify-between group-hover:border shadow-sm`, cardStyle.borderColor, cardStyle.bgColor)}>
-        <div className='flex justify-end font-medium text-sm'>
-          {bilan.qcm && !bilan.qcm.completed && <span className={cn('px-4 rounded-full border flex items-center gap-2', cardStyle.borderColor, cardStyle.iconBgColor)}><AlertTriangleIcon className='w-4'/> Qcm à faire</span>}
-          {bilan.qcm && bilan.qcm.completed && <span className={cn('px-4 rounded-full border flex items-center gap-2', cardStyle.borderColor, cardStyle.iconBgColor)}>Qcm : <TrophyIcon className='w-4'/> {bilan.qcm.score!}/{bilan.qcm.qcmQuestions.length}</span>}
-          {!bilan.qcm && <span className='px-4 rounded-full border'>Pas de QCM</span>}
+    <StudentSeanceDetailsDrawer
+      onQcmSubmit={onQcmSubmit}
+      bilan={bilan}
+      cardStyle={cardStyle}
+    >
+      <div
+        className={cn(
+          'w-full h-full rounded-2xl p-4 font-outfit flex flex-col justify-between border shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group text-left cursor-pointer relative overflow-hidden backdrop-blur-xs',
+          cardStyle.bgColor,
+          cardStyle.borderColor
+        )}
+      >
+        {/* Subtle top-right accent glow */}
+        <div className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-white/20 blur-xl pointer-events-none" />
+
+        {/* Header : Badge Discipline + Status QCM */}
+        <div className="flex items-center justify-between gap-1.5 z-10">
+          {/* Badge Matière */}
+          <span
+            className={cn(
+              'inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-[11px] font-extrabold uppercase bg-white tracking-tight border',
+              cardStyle.highlightTextColor,
+              cardStyle.borderColor,
+            )}
+          >
+            <IconComponent className="size-3.5 shrink-0" />
+            {cardStyle.label}
+          </span>
+
+          {/* Badge Statut QCM */}
+          {bilan.qcm && !bilan.qcm.completed && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 shrink-0 animate-bounce">
+              ⚡QCM à faire
+            </span>
+          )}
+          {bilan.qcm && bilan.qcm.completed && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-600 text-white shadow-2xs shrink-0">
+              <TrophyIcon className="size-3" />
+              {bilan.qcm.score}/{bilan.qcm.qcmQuestions.length}
+            </span>
+          )}
+          {!bilan.qcm && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold text-slate-600 bg-white/60 border border-slate-200/50 shrink-0">
+              <CheckCircle2Icon className="size-3 text-slate-400" />
+              Sans QCM
+            </span>
+          )}
         </div>
-        <div>
-          <p className={cn('text-xs font-bold flex flex-col items-start uppercase leading-3', cardStyle.highlightTextColor)}><cardStyle.icon/><span>{cardStyle.label}</span></p>
-          <h3 className='text-base font-semibold tracking-tight max-w-48 truncate mt-1'>{bilan.lesson.label}</h3>
+
+        {/* Titre du cours */}
+        <div className="my-1.5 z-10">
+          <h3 className="text-base font-bold text-slate-900 tracking-tight line-clamp-2 leading-snug group-hover:text-indigo-600 transition-colors">
+            {bilan.lesson.label}
+          </h3>
         </div>
-        <div>
-          <p className='text-sm opacity-75 flex items-center gap-2 tracking-tight'><UserIcon className='size-4'/><span><span className='capitalize'>{bilan.submittedBy.firstName}</span> <span className='uppercase'>{bilan.submittedBy.lastName}</span></span></p>
-          <p className='text-sm opacity-75 leading-4 tracking-tight flex flex-col items-start'><span className='flex items-center justify-center gap-1'><CalendarIcon className='size-4'/> {format(bilan.date, 'd/MM/y', {locale : fr})}</span> <span className='flex items-center justify-center gap-1'><ClockIcon className='size-4'/> {bilan.seance.seanceDuration.label}</span></p>
+
+        {/* Footer : Animateur & Date / Durée */}
+        <div className="pt-2.5 border-t border-slate-900/10 dark:border-white/10 space-y-1 z-10">
+          <p className="flex items-center gap-1.5 text-xs text-slate-900 font-semibold truncate">
+            <UserIcon className="size-3.5 shrink-0" />
+            <span className="capitalize">{bilan.submittedBy.firstName}</span>{' '}
+            <span className="uppercase">{bilan.submittedBy.lastName}</span>
+          </p>
+
+          <div className="flex items-center justify-between text-[11px] text-slate-600 font-medium">
+            <span className="flex items-center gap-1">
+              <CalendarIcon className={cn("size-3.5 text-indigo-500", cardStyle.highlightTextColor)}/>
+              {format(new Date(bilan.date), 'dd/MM/yyyy', { locale: fr })}
+            </span>
+            <span className="flex items-center gap-1">
+              <ClockIcon className={cn("size-3.5 text-indigo-500", cardStyle.highlightTextColor)}/>
+              {bilan.seance.seanceDuration.label}
+            </span>
+          </div>
         </div>
       </div>
     </StudentSeanceDetailsDrawer>
-  )
-}
+  );
+};
 
-export default StudentCarouselSeanceCard
+export default StudentCarouselSeanceCard;
