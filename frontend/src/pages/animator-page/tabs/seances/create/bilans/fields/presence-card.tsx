@@ -10,14 +10,15 @@ import { Controller, useFormContext } from 'react-hook-form'
 const PresenceCard = ({student} : {    student : StudentEntry}) => {
     const { control, setValue } = useFormContext<CreateBilanFormValues>();
   return (
-    <Card className={cn("border-none shadow-card gap-0")}>
-        <CardHeader className='gap-0'>
-            <CardTitle className="text-base flex items-center gap-1">
-                <BookCheckIcon/> Présence
+    <Card className={cn("border-none shadow-card gap-0 font-outfit relative rounded-2xl rounded-tr-none")}>
+        <div className='absolute -top-6 right-0 h-6 px-3 text-xs font-bold rounded-t-md bg-indigo-600 text-white flex items-center justify-center uppercase'>ÉTAPE 1</div>
+        <CardHeader className='gap-0 space-y-0.5'>
+            <CardTitle className="text-base font-bold flex items-center gap-1 text-indigo-600">
+                <BookCheckIcon/>Présence
             </CardTitle>
-            <CardDescription className='text-sm'>Choisir si l'élève était présent ou pas lors de cette séance.</CardDescription>
+            <CardDescription className='text-xs mt-1'>Choisir si l'élève était présent ou pas lors de cette séance.</CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-2 mt-2">
+        <CardContent className="flex flex-col gap-2 mt-4">
             <Controller
                 name='presence'
                 control={control}
@@ -45,7 +46,7 @@ const PresenceCard = ({student} : {    student : StudentEntry}) => {
                                         <ToggleGroupItem
                                             key={p}
                                             value={p}
-                                            className='flex-1 h-10 rounded-md capitalize'
+                                            className='flex-1 h-10 rounded-md capitalize text-sm font-semibold'
                                         >
                                             {p}
                                         </ToggleGroupItem>
@@ -72,7 +73,7 @@ const PresenceCard = ({student} : {    student : StudentEntry}) => {
                                         <ToggleGroupItem
                                             key={p}
                                             value={p}
-                                            className='flex-1 h-10 rounded-md capitalize'
+                                            className='flex-1 h-10 rounded-md capitalize text-sm font-semibold'
                                         >
                                             {p}
                                         </ToggleGroupItem>

@@ -1,133 +1,188 @@
-import { useState, type ReactNode } from 'react'
-import { Drawer, DrawerClose, DrawerContent,DrawerDescription,DrawerHeader,DrawerTitle,DrawerTrigger } from '@/components/ui/drawer'
-import { Button } from '@/components/ui/button'
-import { ArrowLeftIcon, NotebookPenIcon, UserIcon } from 'lucide-react'
-import { useIsMobile } from '@/hooks/use-mobile'
-import { FormProvider, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { animatorApiCalls } from '@/api/animator/apiCalls'
-import { toast } from 'sonner'
-import { Field } from '@/components/ui/field'
-import { BrandButton } from '@/components/brand-button'
-import type { LessonEvalData, StudentLessonEvalsEntry } from '@/api/animator/lesson-evals.types'
-import { lessonEvalFormSchema, type LessonEvalFormValues } from '@/lib/schemas/lesson-eval.schema'
-import type { LessonEntry } from '@/api/animator/types'
-import { cn, getElapsedDays } from '@/lib/utils'
-import { type CardStyle } from '@/lib/types/data.types'
-import { Card, CardHeader, CardTitle } from '@/components/ui/card'
-import EvaluationField from './evaluation-field'
+import { useState, type ReactNode } from 'react';
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
+import { Button } from '@/components/ui/button';
+import { ArrowLeftIcon, CalendarIcon } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { FormProvider, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { animatorApiCalls } from '@/api/animator/apiCalls';
+import { toast } from 'sonner';
+import { Field } from '@/components/ui/field';
+import { BrandButton } from '@/components/brand-button';
+import type { LessonEvalData, StudentLessonEvalsEntry } from '@/api/animator/lesson-evals.types';
+import { lessonEvalFormSchema, type LessonEvalFormValues } from '@/lib/schemas/lesson-eval.schema';
+import type { LessonEntry } from '@/api/animator/types';
+import { cn, getElapsedDays } from '@/lib/utils';
+import { type CardStyle } from '@/lib/types/data.types';
+import EvaluationField from './evaluation-field';
+
+interface AnimLessonEvalFormDrawerProps {
+    student: StudentLessonEvalsEntry;
+    animatorId: number;
+    lesson: LessonEntry;
+    cardStyle: CardStyle;
+    lessonEval: LessonEvalData | undefined;
+    onLessonEvalUpserted: (lessonEval: LessonEvalData) => void;
+    children: ReactNode;
+}
 
 const AnimLessonEvalFormDrawer = ({
-    student, animatorId, onLessonEvalUpserted, lesson, lessonEval, cardStyle, children
-} : {student : StudentLessonEvalsEntry, animatorId : number, lesson : LessonEntry, cardStyle : CardStyle, lessonEval : LessonEvalData | undefined, onLessonEvalUpserted : (lessonEval : LessonEvalData)  => void, children : ReactNode}) => {
+    student,
+    animatorId,
+    onLessonEvalUpserted,
+    lesson,
+    lessonEval,
+    cardStyle,
+    children,
+}: AnimLessonEvalFormDrawerProps) => {
     const isMobile = useIsMobile();
     const [open, setOpen] = useState(false);
+    const initials = `${student.firstName?.[0] ?? ''}${student.lastName?.[0] ?? ''}`.toUpperCase();
 
     const form = useForm<LessonEvalFormValues>({
         resolver: zodResolver(lessonEvalFormSchema),
         defaultValues: {
-            evaluation : lessonEval?.evaluation?? 'notAcquired',
+            evaluation: lessonEval?.evaluation ?? 'notAcquired',
         },
-    })
+    });
 
     const submitMutation = useMutation({
-        mutationFn : (data : LessonEvalFormValues) => {
-            console.log('data ', data);
-
+        mutationFn: (data: LessonEvalFormValues) => {
             return animatorApiCalls.submitLessonEval({
                 animatorId,
-                studentId : student.id,
-                lessonId : lesson.id,
-                evaluation : data.evaluation
-            })
+                studentId: student.id,
+                lessonId: lesson.id,
+                evaluation: data.evaluation,
+            });
         },
-        onSuccess : (lessonEval) => {
-            console.log('lessonEval : ',lessonEval)
-            if(!lessonEval){
-                toast.error('Erreur lors de l\'enregistrement de l\'évaluation de la leçon.');
-            }else{
-                toast.success('Évalution de la leçon soumise avec succès.');
-                onLessonEvalUpserted(lessonEval);
+        onSuccess: (resLessonEval) => {
+            if (!resLessonEval) {
+                toast.error("Erreur lors de l'enregistrement de l'évaluation de la leçon.");
+            } else {
+                toast.success('Évaluation de la leçon soumise avec succès.');
+                onLessonEvalUpserted(resLessonEval);
                 setOpen(false);
             }
         },
-        onError : (err) => {
-            console.error(err)
-            toast.error('Erreur lors de l\'enregistrement de l\'évaluation de la leçon.');
+        onError: (err) => {
+            console.error(err);
+            toast.error("Erreur lors de l'enregistrement de l'évaluation de la leçon.");
         },
-    })
-
-    
+    });
 
     return (
-        <Drawer direction={isMobile? 'left' : 'right'} open = {open} onOpenChange={setOpen}>
-            <DrawerTrigger asChild>
-                {children}
-            </DrawerTrigger>
-            <DrawerContent className='h-dvh px-4 pb-2 font-outfit shadow-none border-none bg-zinc-100 md:rounded-t-xl'>
-                <DrawerHeader className='flex'>
-                    <DrawerClose asChild>
-                        <Button variant={'ghost'} className='w-fit h-12 opacity-75'><ArrowLeftIcon className='size-6'/></Button>
-                    </DrawerClose>
-                    <DrawerTitle className='font-bold text-xl  md:text-3xl tracking-tight'>Créer/Modifier l'évaluation d'une leçon</DrawerTitle>
-                    <DrawerDescription className='text-base'>
-                        <span className="flex items-center gap-1 text-sm"><UserIcon className="size-4"/> <span>{student.firstName} {student.lastName}</span></span>
-                    </DrawerDescription>
+        <Drawer direction={isMobile ? 'left' : 'right'} open={open} onOpenChange={setOpen}>
+            <DrawerTrigger asChild>{children}</DrawerTrigger>
+            
+            <DrawerContent className="h-dvh flex flex-col font-outfit shadow-2xl border-l border-slate-200/80 bg-slate-50/95 backdrop-blur-md p-0 md:rounded-l-2xl overflow-hidden focus:outline-none gap-0">
+                {/* --- EN-TÊTE DU DRAWER --- */}
+                <DrawerHeader className="p-4 sm:p-5 border-b border-slate-200/80 bg-white/90 shrink-0 space-y-3 text-left">
+                    <div className="flex items-center justify-between">
+                        <DrawerClose asChild>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 px-2.5 -ml-2 gap-1.5 font-bold text-slate-900 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+                            >
+                                <ArrowLeftIcon className="size-4" />
+                                <span>Retour</span>
+                            </Button>
+                        </DrawerClose>
+
+                        <span className="inline-flex items-center px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-200/80">
+                            Évaluation de leçon
+                        </span>
+                    </div>
+
+                    <div className="flex items-center gap-3 pt-1">
+                        <div className="size-11 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100/80 flex items-center justify-center font-extrabold text-sm shadow-2xs shrink-0">
+                            {initials}
+                        </div>
+                        <div className="space-y-0.5 min-w-0 flex-1">
+                            <DrawerTitle className="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 truncate">
+                                {student.firstName} {student.lastName}
+                            </DrawerTitle>
+                            <DrawerDescription className="text-xs font-medium text-slate-500">
+                                Attribuez un niveau de maîtrise pour cette leçon
+                            </DrawerDescription>
+                        </div>
+                    </div>
                 </DrawerHeader>
-                <Card 
-                    className={cn(
-                        'border-none shadow-none rounded-2xl flex flex-col lg:flex-row items-start justify-start lg:justify-between mt-6',
-                        cardStyle.bgColor
-                    )}
-                >
-                    <CardHeader className='flex flex-col items-center justify-start w-full'>
-                        <div className='flex gap-2 w-full'>
-                            <cardStyle.icon className={cn('size-12 p-3 rounded-xl', cardStyle.iconBgColor, cardStyle.highlightTextColor)}/>
-                            <div className='flex flex-col w-full'>
-                                <div className='flex items-start justify-between w-full'>
-                                    <span className={cn('font-bold tracking-tight uppercase text-sm',cardStyle.highlightTextColor)}>{cardStyle.label}</span>
-                                </div>
-                                <CardTitle className='text-xl lg:text-2xl font-semibold'>{lesson.label}</CardTitle>
-                            </div>
-                        </div>
-                    </CardHeader>
-                </Card>
+
+                {/* --- FORMULAIRE DÉFILANT --- */}
                 <FormProvider {...form}>
-                    <form onSubmit={form.handleSubmit((data) => submitMutation.mutate(data))} className='flex flex-col h-full'>
-                        <div className='h-full'>
-                            <span className='flex items-center gap-2 font-medium text-lg mt-6'><NotebookPenIcon/> Votre évaluation</span>
-                            {lessonEval && <span className='text-sm text-lime-700 bg-lime-100 px-4 border border-lime-300 rounded-full mt-4'>Dernière évaluation : {getElapsedDays(lessonEval.updatedAt)}</span>}
-                            {!lessonEval && <span className='text-sm text-zinc-700 bg-white px-4 border border-zinc-300 rounded-full mt-4'>Première évaluation</span>}
-                            <div className='gap-4 bg-white border border-zinc-100 shadow-sm p-4 rounded-md mt-2'>
-                                <EvaluationField/>
+                    <form
+                        onSubmit={form.handleSubmit((data) => submitMutation.mutate(data))}
+                        className="brand-v-scrollbar overflow-x-hidden overflow-y-auto p-4 sm:p-5 flex-1 space-y-6 flex flex-col justify-between"
+                    >
+                        <div className="space-y-5">
+                            {/* Carte rappel de la leçon */}
+                            <div className={cn('p-5 rounded-3xl border shadow-2xs relative overflow-hidden', cardStyle.bgColor, cardStyle.borderColor)}>
+                                <div className="flex items-start gap-3.5">
+                                    <div className={cn('size-11 rounded-2xl flex items-center justify-center shrink-0 shadow-2xs', cardStyle.iconBgColor, cardStyle.highlightTextColor)}>
+                                        <cardStyle.icon className="size-6" />
+                                    </div>
+                                    <div className="space-y-1 min-w-0">
+                                        <span className={cn('font-extrabold tracking-wider uppercase text-xs block', cardStyle.highlightTextColor)}>
+                                            {cardStyle.label}
+                                        </span>
+                                        <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                                            {lesson.label}
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Section Choix de l'évaluation */}
+                            <div className="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-2xs space-y-4">
+                                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                                    <h4 className="font-bold text-sm text-slate-900">Niveau d'acquisition</h4>
+                                    {lessonEval ? (
+                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold">
+                                            <CalendarIcon className="size-3.5 text-emerald-500" />
+                                            <span>Mise à jour {getElapsedDays(lessonEval.updatedAt)}</span>
+                                        </span>
+                                    ) : (
+                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200 text-xs font-semibold">
+                                            <span>Première évaluation</span>
+                                        </span>
+                                    )}
+                                </div>
+
+                                <div className="pt-2">
+                                    <EvaluationField />
+                                </div>
                             </div>
                         </div>
-                        <Field className='flex flex-row gap-2 mt-12'>
+
+                        {/* Boutons d'action */}
+                        <Field className="pt-4 flex flex-row items-center gap-3 mt-auto">
                             <BrandButton
-                                type='button'
-                                variant='outline'
-                                size='lg'
+                                type="button"
+                                variant="outline"
+                                size="lg"
                                 onClick={() => form.reset()}
                                 disabled={submitMutation.isPending}
-                                className='flex-1 py-6 text-base font-medium'
+                                className="flex-1 h-11 text-sm font-bold"
                             >
-                                Annuler
+                                Réinitialiser
                             </BrandButton>
+
                             <BrandButton
-                                type='submit'
-                                size='lg'
+                                type="submit"
+                                size="lg"
                                 disabled={submitMutation.isPending}
-                                className='flex-1 py-6 text-base font-medium'
+                                className="flex-1 h-11 text-sm font-bold"
                             >
-                                {submitMutation.isPending ? 'Chargement...' : 'Soumettre'}
+                                {submitMutation.isPending ? 'Enregistrement...' : "Enregistrer l'évaluation"}
                             </BrandButton>
                         </Field>
                     </form>
                 </FormProvider>
             </DrawerContent>
         </Drawer>
-  )
-}
+    );
+};
 
-export default AnimLessonEvalFormDrawer
+export default AnimLessonEvalFormDrawer;

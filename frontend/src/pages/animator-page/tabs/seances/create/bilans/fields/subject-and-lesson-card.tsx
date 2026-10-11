@@ -6,7 +6,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useMemo } from 'react'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { BookCheckIcon } from 'lucide-react'
+import { BookCheckIcon, CheckIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { CARD_STYLES, type Subject } from '@/lib/types/data.types'
 
@@ -16,6 +16,7 @@ export default function SubjectAndLessonCard({ availableSubjects }: { availableS
     const presence = useWatch({ control, name: 'presence' })
     
     const subjectId = useWatch({ control, name: 'subjectId' })
+    const lessonId = useWatch({ control, name: 'lessonId' })
     
     const availableLessons = useMemo(
         () => availableSubjects.find(s => s.id === subjectId)?.lessons ?? [],
@@ -26,20 +27,21 @@ export default function SubjectAndLessonCard({ availableSubjects }: { availableS
     
 
     return (
-        <Card className={cn("border-none shadow-card gap-0")}>
-            <CardHeader>
-                <CardTitle className="text-base flex items-center gap-1">
+        <Card className={cn("border-none shadow-card gap-0 rounded-2xl rounded-tr-none relative mt-8")}>
+            <div className='absolute -top-6 right-0 h-6 px-3 text-xs font-bold rounded-t-md bg-indigo-600 text-white flex items-center justify-center uppercase'>ÉTAPE 2</div>
+            <CardHeader className='space-y-0.5'>
+                <CardTitle className="text-base flex items-center gap-1 font-bold text-indigo-600">
                     <BookCheckIcon/> Leçon abordée
                 </CardTitle>
-                <CardDescription>Choisir la matière et la leçon étudiées en priorité.</CardDescription>
+                <CardDescription className='text-xs'>Choisir la matière et la leçon étudiées en priorité.</CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-col gap-2 mt-2">
+            <CardContent className="flex flex-col gap-2 mt-6">
                 <Controller
                     name='subjectId'
                     control={control}
                     render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid} className='gap-2'>
-                            <FieldLabel className='text-base'>Matière</FieldLabel>
+                            <FieldLabel className='text-base font-medium'>Matière {subjectId >= 1 && <CheckIcon className='text-lime-500 size-4'/>}</FieldLabel>
                             <ToggleGroup
                                 type='single'
                                 value={field.value > 0 ? field.value.toString() : ''}
@@ -72,8 +74,8 @@ export default function SubjectAndLessonCard({ availableSubjects }: { availableS
                         control={control}
                         render={({ field, fieldState }) => (
                             <Field data-invalid={fieldState.invalid}>
-                                <div className='flex justify-between gap-6'>
-                                    <FieldLabel className='text-base'>Leçon</FieldLabel>
+                                <div className='flex justify-between gap-6 mt-4'>
+                                    <FieldLabel className='text-base font-medium'>Leçon {lessonId >= 1 && <CheckIcon className='text-lime-500 size-4'/>}</FieldLabel>
                                     <Select
                                         value={field.value > 0 ? field.value.toString() : ''}
                                         onValueChange={(v) => {
@@ -81,8 +83,8 @@ export default function SubjectAndLessonCard({ availableSubjects }: { availableS
                                             setValue('summary', '')
                                         }}
                                     >
-                                        <SelectTrigger className='w-full max-w-48 md:max-w-72 truncate text-base h-10!'>
-                                            <SelectValue placeholder='Choisir une leçon' />
+                                        <SelectTrigger className='w-full max-w-48 md:max-w-72 truncate text-sm font-medium h-10!'>
+                                            <SelectValue className='' placeholder='Choisir une leçon' />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>

@@ -1,133 +1,240 @@
-import type { SeanceDurationEntry, StudentEntry } from "@/api/animator/seances.types"
-import { BrandButton } from "@/components/brand-button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { CARD_STYLES, type Subject } from "@/lib/types/data.types"
-import { cn, getElapsedDays } from "@/lib/utils"
-import QcmResultsQuestionnaire from "@/pages/student-page/bilans/qcm-results-questionnaire"
-import { BookCheckIcon, CalendarIcon, CalendarX2Icon, ClockFadingIcon, InfoIcon, MessageCircleQuestionIcon, NotebookPenIcon, NotebookTextIcon, RotateCwFadingClockIcon } from "lucide-react"
+import type { SeanceDurationEntry, StudentEntry } from '@/api/animator/seances.types';
+import { BrandButton } from '@/components/brand-button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { EmptyStateCard } from '@/components/ui/empty-state-card';
+import { CARD_STYLES, type Subject } from '@/lib/types/data.types';
+import { cn, getElapsedDays } from '@/lib/utils';
+import QcmResultsQuestionnaire from '@/pages/student-page/bilans/qcm-results-questionnaire';
+import {
+  AlertTriangleIcon,
+  BookOpenTextIcon,
+  CalendarIcon,
+  CalendarX2Icon,
+  ClockIcon,
+  FileTextIcon,
+  HelpCircleIcon,
+  InfoIcon,
+  RotateCwFadingClockIcon,
+  SparklesIcon,
+  TrophyIcon,
+} from 'lucide-react';
 
-interface AnimCompletedBilanDetailsProps{
-    studentBilan : StudentEntry,
-    seanceDuration : SeanceDurationEntry,
+interface AnimCompletedBilanDetailsProps {
+  studentBilan: StudentEntry;
+  seanceDuration: SeanceDurationEntry;
 }
-const AnimCompletedBilanDetails = ({studentBilan, seanceDuration} : AnimCompletedBilanDetailsProps) => {
-    if(!studentBilan.bilan){
-        return (
-            <Card className='border-2 border-dashed border-zinc-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-xl bg-transparent mt-4 p-4'>
-                <CardHeader className='flex flex-col items-center justify-center w-full'>
-                    <RotateCwFadingClockIcon className='size-10 opacity-70'/>
-                    <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>Aucun bilan n'a été soumis pour cet élève.</CardTitle>
-                    <CardDescription className='text-pretty text-sm max-w-xl text-center'>Les details du bilan seront affichés ici dès son enregistrement.</CardDescription>
-                </CardHeader>   
-            </Card>
-        )
-    }
-    
-    const cardStyle = studentBilan.bilan.presence ? CARD_STYLES[studentBilan.bilan.lesson!.subject.label as Subject] : CARD_STYLES['none'];
+
+const AnimCompletedBilanDetails = ({
+  studentBilan,
+  seanceDuration,
+}: AnimCompletedBilanDetailsProps) => {
+  const bilan = studentBilan.bilan;
+
+  /* --- État Vide (Pas de bilan soumis) --- */
+  if (!bilan) {
     return (
-    <div className="brand-v-scrollbar overflow-x-hidden overflow-y-auto px-2 flex flex-col">
-        {
-            studentBilan.bilan.presence && studentBilan.bilan.presence &&
-            <Card className={cn("border-none shadow-card gap-0",cardStyle.bgColor)}>
-                <CardHeader>
-                    <CardTitle className="text-base flex items-center gap-1">
-                        <BookCheckIcon/> Leçon abordée
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-2 mt-2">
-                    <div className="flex items-center gap-4 justify-between"><span className="flex items-center gap-1 opacity-75">Matière</span> <span className={cn("flex items-center gap-1 px-2 broder",cardStyle.highlightTextColor, cardStyle.borderColor)}><cardStyle.icon className="size-4"/><span className="text-sm uppercase font-bold">{cardStyle.label}</span></span></div>
-                    <div className="flex items-center gap-4 justify-between"><span className="flex items-center gap-1 opacity-75">Leçon</span> <span>{studentBilan.bilan.lesson!.label}</span></div>
-                </CardContent>
-            </Card>
-        }
-        {
-            (!studentBilan.bilan.presence || !studentBilan.bilan.presence) &&
-            <Card className={cn("border-none shadow-card gap-0",cardStyle.bgColor)}>
-                <CardContent className="flex flex-col gap-2">
-                    <div className="flex items-center gap-4 justify-center"><span className={cn("flex items-center gap-1 font-medium text-base", cardStyle.highlightTextColor)}><CalendarX2Icon/> Absence</span></div>
-                </CardContent>
-            </Card>
-        }
+      <EmptyStateCard
+        icon={RotateCwFadingClockIcon}
+        title="Aucun bilan soumis"
+        description="Les détails du bilan ici dès qu'il aura été rédigé et enregistré."
+        className="my-4 h-64 bg-white/80 border-slate-200/80 rounded-3xl"
+      />
+    );
+  }
 
-        {
-            studentBilan.bilan.presence && studentBilan.bilan.lesson &&
-            <Card className={cn("border-none shadow-card gap-0 mt-4")}>
-                <CardHeader>
-                    <CardTitle className="text-base flex items-center gap-1">
-                        <NotebookPenIcon/> Résumé de la séance
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-2 mt-2">
-                    <p>{studentBilan.bilan.summary}</p>
-                </CardContent>
-            </Card>
-        }
+  const isPresent = bilan.presence;
+  const cardStyle = isPresent && bilan.lesson
+    ? CARD_STYLES[bilan.lesson.subject.label as Subject]
+    : CARD_STYLES['none'];
 
-        {
-            studentBilan.bilan.presence && studentBilan.bilan.lesson &&
-            <Card className={cn("border-none shadow-card gap-0 mt-4")}>
-                <CardHeader>
-                    <CardTitle className="text-base flex items-center gap-1">
-                        <MessageCircleQuestionIcon/> QCM
-                    </CardTitle>
-                    {
-                        studentBilan.bilan.qcm &&
-                        <CardDescription className="text-sm">Vous avez généré un QCM pour cette séance</CardDescription>
-                    }
-                    {
-                        !studentBilan.bilan.qcm &&
-                        <CardDescription className="text-sm">Vous m'avez pas généré un QCM pour cette séance</CardDescription>
-                    }
-                </CardHeader>
-                {
-                    studentBilan.bilan.qcm && 
-                    <CardContent className="flex flex-col gap-2 w-full">
-                        <div className="flex items-center gap-4 justify-between mt-4">
-                            <span className="flex items-center gap-1 opacity-75"><NotebookTextIcon/> Résultats </span>
-                            {
-                            studentBilan.bilan.qcm.completed && 
-                            <span>{studentBilan.bilan.qcm.score}/{studentBilan.bilan.qcm.qcmQuestions.length}</span>
-                            }
-                            {
-                            !studentBilan.bilan.qcm.completed && 
-                            <span className="text-end font-medium border rounded-full p-2 text-sm border-zinc-200">QCM encore à faire</span>
-                            }
-                        </div>
-                        {
-                            !studentBilan.bilan.qcm.completed &&
-                            <div className="flex justify-end mt-4">
-                                <QcmResultsQuestionnaire qcm={{...studentBilan.bilan.qcm, submittedBy : {id : 0, firstName : '', lastName : '', gender : 'm'}, date : new Date()}}>
-                                    <BrandButton className="w-full max-w-sm">Voir les questions</BrandButton>
-                                </QcmResultsQuestionnaire> 
-                            </div>
-                        }
-                        {
-                            studentBilan.bilan.qcm.completed &&
-                            <div className="flex justify-end mt-4">
-                                <QcmResultsQuestionnaire qcm={{...studentBilan.bilan.qcm, submittedBy : {id : 0, firstName : '', lastName : '', gender : 'm'}, date : new Date()}}>
-                                    <BrandButton className="w-full max-w-sm">Voir les résultats</BrandButton>
-                                </QcmResultsQuestionnaire> 
-                            </div>
-                        }
-                    </CardContent>
-                }
-            </Card>
-        }
+  return (
+    <div className="space-y-5 font-outfit">
+      
+      {/* 1. Carte Leçon abordée (Conserve sa couleur de fond dynamique) */}
+      {!isPresent ? (
+        <div className="relative overflow-hidden rounded-3xl bg-rose-50/90 border border-rose-200/80 p-5 shadow-xs flex items-center justify-between">
+          <div className="flex items-center gap-3.5">
+            <div className="size-11 rounded-2xl bg-rose-100 text-rose-700 border border-rose-200/60 flex items-center justify-center shrink-0 shadow-2xs">
+              <CalendarX2Icon className="size-6" />
+            </div>
+            <div>
+              <h4 className="font-extrabold text-base sm:text-lg text-rose-900 leading-tight">
+                Séance manquée
+              </h4>
+              <p className="text-xs sm:text-sm text-rose-700/80 font-medium mt-0.5">
+                Aucun bilan à rédiger car l'élève été absent.
+              </p>
+            </div>
+          </div>
+          <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-100/90 text-rose-800 border border-rose-300/80 shadow-2xs shrink-0">
+            Absence
+          </span>
+        </div>
+      ) : (
+        <Card
+          className={cn(
+            'group relative overflow-hidden border shadow-xs rounded-3xl transition-all duration-300 hover:shadow-md gap-3',
+            cardStyle.bgColor,
+            'border-slate-200/80'
+          )}
+        >
+          <CardHeader className="px-5">
+            <CardTitle className="text-base font-bold text-slate-900 flex items-center justify-between">
+              
 
-        <Card className={cn("border-none shadow-card gap-0 mt-4 mb-4")}>
-            <CardHeader>
-                <CardTitle className="text-base flex items-center gap-1">
-                    <InfoIcon/> Informations générales
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-2 mt-2">
-                <div className="flex items-center gap-4 justify-between"><span className="flex items-center gap-1 opacity-75"><CalendarIcon className="size-4"/> Date de la séance</span> <span>{getElapsedDays(studentBilan.bilan.date)}</span></div>
-                <div className="flex items-center gap-4 justify-between"><span className="flex items-center gap-1 opacity-75"><ClockFadingIcon className="size-4"/> Durée de la séance</span> <span>{seanceDuration.label}</span></div>
-            </CardContent>
+              {/* Tag Matière */}
+              <span
+                className={cn(
+                  'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold border shadow-2xs bg-white/90 backdrop-blur-xs',
+                  cardStyle.highlightTextColor,
+                  cardStyle.borderColor
+                )}
+              >
+                <cardStyle.icon className="size-3.5" />
+                <span>{cardStyle.label}</span>
+              </span>
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="space-y-3 relative z-10">
+            {bilan.lesson && (
+              <div className="flex flex-col gap-1">
+                <span className={cn("text-xs font-bold uppercase tracking-tight", cardStyle.highlightTextColor)}>
+                  Intitulé du la leçon
+                </span>
+                <span className="text-base font-extrabold text-slate-900 leading-snug">
+                  {bilan.lesson.label}
+                </span>
+              </div>
+            )}
+          </CardContent>
         </Card>
+      )}
+
+      {/* 2. Résumé de la séance */}
+      {isPresent && bilan.summary && (
+        <Card className="border border-slate-200/80 bg-white shadow-xs rounded-3xl overflow-hidden group hover:shadow-md transition-all gap-3">
+          <CardHeader className="px-5">
+            <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2.5">
+              <div className="size-9 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center shrink-0">
+                <BookOpenTextIcon className="size-5" />
+              </div>
+              <span className="text-base font-extrabold tracking-tight">Résumé de la séance</span>
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent>
+            <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-100 text-sm sm:text-base font-medium text-slate-700 leading-relaxed whitespace-pre-line shadow-2xs">
+              {bilan.summary}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* 3. Statut & Résultats du QCM */}
+      {isPresent && (
+        <Card className="border border-slate-200/80 bg-white shadow-xs rounded-3xl overflow-hidden group hover:shadow-md transition-all">
+          <CardHeader className="px-5">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2.5">
+                <div className="size-9 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center shrink-0">
+                  <HelpCircleIcon className="size-5" />
+                </div>
+                <span className="text-base font-extrabold tracking-tight">QCM</span>
+              </CardTitle>
+
+              {bilan.qcm ? (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200/80 shadow-2xs">
+                  <SparklesIcon className="size-3.5 text-indigo-500" />
+                  QCM Généré
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200/60">
+                  Aucun QCM
+                </span>
+              )}
+            </div>
+            <CardDescription className="text-xs text-slate-500 mt-1">
+              {bilan.qcm
+                ? 'Un questionnaire interactif a été généré suite à cette séance.'
+                : 'Aucun QCM n\'a été généré pour cette séance.'}
+            </CardDescription>
+          </CardHeader>
+
+          {bilan.qcm && (
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-slate-50/80 rounded-2xl border border-slate-100 shadow-2xs">
+                <span className="text-xs sm:text-sm font-bold text-slate-700 flex items-center gap-2">
+                  <FileTextIcon className="size-4 text-slate-400" />
+                  Résultat
+                </span>
+
+                {bilan.qcm.completed ? (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs">
+                    <TrophyIcon className="size-4 text-emerald-600" />
+                    <span>
+                      {bilan.qcm.score} / {bilan.qcm.qcmQuestions.length}
+                    </span>
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200/80 shadow-2xs">
+                    <AlertTriangleIcon className="size-3.5 text-amber-500" />
+                    En attente de réalisation
+                  </span>
+                )}
+              </div>
+
+              {/* Bouton de consultation du QCM */}
+              <div className="pt-4">
+                <QcmResultsQuestionnaire
+                  qcm={{
+                    ...bilan.qcm,
+                    submittedBy: { id: 0, firstName: '', lastName: '', gender: 'm' },
+                    date: new Date(),
+                  }}
+                >
+                  <BrandButton className="w-full text-sm font-bold h-10 rounded-2xl shadow-2xs cursor-pointer">
+                    {bilan.qcm.completed ? 'Consulter les résultats' : 'Voir les questions du QCM'}
+                  </BrandButton>
+                </QcmResultsQuestionnaire>
+              </div>
+            </CardContent>
+          )}
+        </Card>
+      )}
+
+      {/* 4. Informations générales sur la séance */}
+      <Card className="border border-slate-200/80 bg-white shadow-xs rounded-3xl overflow-hidden group hover:shadow-md transition-all">
+        <CardHeader className="px-5">
+          <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2.5">
+            <div className="size-9 rounded-xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center shrink-0">
+              <InfoIcon className="size-5" />
+            </div>
+            <span className="text-base font-extrabold tracking-tight">Informations générales</span>
+          </CardTitle>
+        </CardHeader>
+
+        <CardContent className="space-y-3 text-xs sm:text-sm font-semibold text-slate-600">
+          <div className="flex items-center justify-between">
+            <span className="flex items-center gap-2 text-slate-500">
+              <CalendarIcon className="size-4 text-slate-400" />
+              Date de la séance
+            </span>
+            <span className="font-extrabold text-slate-900">{getElapsedDays(bilan.date)}</span>
+          </div>
+
+          <div className="flex items-center justify-between pt-2.5 border-t border-slate-100">
+            <span className="flex items-center gap-2 text-slate-500">
+              <ClockIcon className="size-4 text-slate-400" />
+              Durée de la séance
+            </span>
+            <span className="font-extrabold text-slate-900">{seanceDuration.label}</span>
+          </div>
+        </CardContent>
+      </Card>
 
     </div>
-  )
-}
+  );
+};
 
-export default AnimCompletedBilanDetails
+export default AnimCompletedBilanDetails;   

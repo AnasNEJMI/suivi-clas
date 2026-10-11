@@ -4,15 +4,11 @@ import { animatorKeys } from '@/api/animator/query-keys';
 import { animatorApiCalls } from '@/api/animator/apiCalls';
 import SeancesStats from './seances-stats';
 import SeancesHistoryByGroup from './seances-history-by-group';
-import { cn } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Button } from '@/components/ui/button';
-import { PlusIcon } from 'lucide-react';
 import CreateSeanceDrawer from './create-seance-drawer';
 import type { BilanEntry, DeleteBilanEntry, SeanceEntry, SeancesDataResponse } from '@/api/animator/seances.types';
+import AnimCreateSeanceButton from './create-seance-button';
 
 const AnimSeancesTabDataWrapper = ({animator} : {animator : User}) => {
-    const isMobile = useIsMobile();
     const {data : {scolarYears, lessonsByLevel, seanceDurations}} = useSuspenseQuery({
         queryKey : animatorKeys.baseData,
         queryFn : animatorApiCalls.fetchBaseData,
@@ -132,7 +128,7 @@ const AnimSeancesTabDataWrapper = ({animator} : {animator : User}) => {
                 existingSeancesByClass = {seancesByScolarYear[0]?.classes?? []}
                 onSeanceCreated = {onSeanceCreated}
             >
-                <Button className={cn('fixed right-4 w-14 h-14 z-20 rounded-md cursor-pointer', isMobile && 'bottom-24', !isMobile && 'bottom-4')}><PlusIcon className='size-6'/></Button>
+                <AnimCreateSeanceButton/>
             </CreateSeanceDrawer>
             <SeancesStats seancesByScolarYear = {seancesByScolarYear}/>
             <SeancesHistoryByGroup

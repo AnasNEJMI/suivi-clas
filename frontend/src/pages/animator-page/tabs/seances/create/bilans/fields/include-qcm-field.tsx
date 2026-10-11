@@ -12,9 +12,10 @@ const IncludeQcmField = () => {
     
     if (lessonId < 1) return null
   return (
-    <Card className={cn("border-none shadow-card gap-0")}>
+    <Card className={cn("border-none shadow-card gap-0 rounded-2xl rounded-tr-none relative mt-8")}>
+        <div className='absolute -top-6 right-0 h-6 px-3 text-xs font-bold rounded-t-md bg-indigo-600 text-white flex items-center justify-center uppercase'>ÉTAPE 2</div>
         <CardHeader className='gap-0'>
-            <CardTitle className="text-base flex items-center gap-1">
+            <CardTitle className="text-base font-bold text-indigo-600 flex items-center gap-1">
                 <MessageCircleQuestionIcon/> QCM
             </CardTitle>
             <CardDescription className='text-sm'>Voulez vous généré automatiquement un qcm pour l'élève autours de la leçon abordée?</CardDescription>

@@ -5,11 +5,12 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import type {SeanceFormValues } from "@/lib/schemas/animator/seances/seance.schema"
 import { format, isValid } from "date-fns"
 import { fr } from "date-fns/locale"
-import { ChevronDownIcon } from "lucide-react"
-import { Controller, useFormContext } from "react-hook-form"
+import { CheckIcon, ChevronDownIcon } from "lucide-react"
+import { Controller, useFormContext, useWatch } from "react-hook-form"
 
 const DateField = () => {
     const {control} = useFormContext<SeanceFormValues>()
+    const date = useWatch({ control, name: 'date' })
   return (
     <Controller
         name = 'date'
@@ -17,13 +18,13 @@ const DateField = () => {
         render = {({field, fieldState}) => (
         <Field data-invalid = {fieldState.invalid}>
             <div className='flex justify-between gap-6'>
-            <FieldLabel className="text-base">Date de séance</FieldLabel>
+            <FieldLabel className="text-base font-bold text-nowrap">Date de séance {date && <CheckIcon className='text-lime-500 size-4'/>}</FieldLabel>
             <Popover>
                 <PopoverTrigger asChild>
                     <Button
                         size='lg'
                         variant="outline"
-                        className="flex-1 md:w-full max-w-full data-[empty=true]:text-muted-foreground justify-between text-left font-normal text-base capitalize"
+                        className="w-42 data-[empty=true]:text-muted-foreground justify-between text-left font-medium text-sm capitalize"
                     >
                         {field.value  && isValid(field.value) ? <span className='truncate'>{format(field.value, "PPP", {locale : fr})}</span> : <span>Choisir une date</span>}
                         <ChevronDownIcon />

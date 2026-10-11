@@ -11,7 +11,7 @@ const AnimSeancesTab = () => {
     const {user : animator} = useRouteLoaderData('animator') as {user: User};
   return (
     <>
-        <TabHeader user={animator} title = 'Éspace animateur' subTitle='Séances' description='Retrouve les données de toutes les séances réalisées cette année.'/>
+        <TabHeader user={animator} title = 'Éspace animateur' subTitle='Séances' description='Retrouvez les données de toutes les séances réalisées cette année'/>
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
             <Suspense fallback = {<SeancesTabSkeleton/>}>
                 <AnimSeancesTabDataWrapper animator = {animator}/>

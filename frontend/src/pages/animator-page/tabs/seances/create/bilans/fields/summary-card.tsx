@@ -4,21 +4,23 @@ import { Field, FieldError }  from '@/components/ui/field'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { BookCheckIcon } from 'lucide-react'
+import { BookCheckIcon, CheckIcon } from 'lucide-react'
 
 export default function SummaryCard() {
     const { control } = useFormContext<CreateBilanFormValues>()
     const lessonId    = useWatch({ control, name: 'lessonId' })
+    const summary    = useWatch({ control, name: 'summary' })
 
     if (lessonId < 1) return null
 
     return (
-        <Card className={cn("border-none shadow-card gap-0")}>
+        <Card className={cn("border-none shadow-card gap-0 relative rounded-2xl rounded-tr-none mt-8")}>
+            <div className='absolute -top-6 right-0 h-6 px-3 text-xs font-bold rounded-t-md bg-indigo-600 text-white flex items-center justify-center uppercase'>ÉTAPE 3</div>
             <CardHeader className='gap-0'>
-                <CardTitle className="text-base flex items-center gap-1">
-                    <BookCheckIcon/> Bilan
+                <CardTitle className="text-base font-bold text-indigo-600 flex items-center gap-1">
+                    <BookCheckIcon/> Bilan {summary.length >= 1 && <CheckIcon className='text-lime-500 size-4'/>}
                 </CardTitle>
-                <CardDescription className='text-sm'>Résumé de la séance.</CardDescription>
+                <CardDescription className='text-sm'>Résumé de la séance</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-2 mt-2">
                 <Controller

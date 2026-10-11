@@ -11,7 +11,7 @@ const AnimSkillEvalsTab = () => {
     const {user : animator} = useRouteLoaderData('animator') as {user: User};
   return (
     <>
-        <TabHeader user={animator} title = 'Éspace animateur' subTitle='Méthodologie' description='Retrouve les évaluations méthodologiques des élèves suivis cette année.'/>
+        <TabHeader user={animator} title = 'Éspace animateur' subTitle='Méthodologie' description='Retrouvez les évaluations méthodologiques des élèves suivis cette année'/>
         <ErrorBoundary fallback = {<SectionError desc = 'des bilans'/>}>
             <Suspense fallback = {<AnimSkillEvalsTabSkeleton/>}>
                 <AnimSkillEvalsTabDataWrapper animator = {animator}/>

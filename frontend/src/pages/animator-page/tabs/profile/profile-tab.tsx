@@ -11,7 +11,7 @@ const AnimProfileTab = () => {
     const {user : animator} = useRouteLoaderData('animator') as {user: User};
   return (
     <>
-        <TabHeader user={animator} title = 'Éspace animateur' subTitle='Profile' description="Récapitulatif de l'année."/>
+        <TabHeader user={animator} title = 'Éspace animateur' subTitle='Profile' description="Retrouvez les données de votre profile et les contrats en cours"/>
         <ErrorBoundary fallback = {<SectionError desc = 'du profile'/>}>
             <Suspense fallback = {<ProfileTabSkeleton/>}>
                 <AnimProfileTabDataWrapper animator = {animator}/>

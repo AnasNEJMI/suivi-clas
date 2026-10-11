@@ -34,7 +34,7 @@ const AnimCreateBilanForm = ({
     const methods = useForm<CreateBilanFormValues>({
         resolver : zodResolver(createBilanFormSchema),
         defaultValues : {
-            presence : studentBilan.bilan?.presence ?? true,
+            presence : studentBilan.bilan?.presence ?? false,
             subjectId : studentBilan.bilan?.lesson?.subject.id ?? -1,
             lessonId : studentBilan.bilan?.lesson?.id ?? -1,
             summary : studentBilan.bilan?.summary ?? '',
@@ -69,14 +69,14 @@ const AnimCreateBilanForm = ({
     }) 
   return (
     <FormProvider {...methods}>
-        <form id='create-bilan-form' onSubmit={methods.handleSubmit((data) => submitMutation.mutate(data))} className='h-full flex flex-col justify-between p-2 gap2'>
+        <form id='create-bilan-form' onSubmit={methods.handleSubmit((data) => submitMutation.mutate(data))} className='h-full flex flex-col p-2 pb-0'>
             <div className='flex-1 flex flex-col gap-2'>
                 <PresenceCard student = {studentBilan}/>
                 <SubjectAndLessonCard availableSubjects={availableSubjects}/>
                 <SummaryCard />
                 <IncludeQcmField />
             </div>
-            <Field className='flex flex-row gap-2 mt-8'>
+            <Field className='flex flex-row gap-2 mt-8 pb-6'>
                 <BrandButton
                     type='button'
                     variant='outline'

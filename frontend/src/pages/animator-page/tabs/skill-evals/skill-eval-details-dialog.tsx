@@ -3,48 +3,79 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { cn, getElapsedDays } from "@/lib/utils"
 import type { ReactNode } from "react"
 import AnimSkillNotesCarousel from "./skill-notes-carousel"
-import { CalendarIcon, GraduationCapIcon, UserIcon } from "lucide-react"
+import { CalendarIcon, GraduationCapIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import AnimSkillEvalCard from "./skill-eval-card"
 import AnimSkillEvalDrawer from "./skill-eval-form-drawer"
 
-const AnimSkillEvalDetailsDialog = ({student, animatorId, group, onSkillEvalUpserted, children} : {student : SkillEvalStudentEntry, animatorId : number, group : string, onSkillEvalUpserted : (skillEval : SkillEvalData)  => void, children : ReactNode}) => {
-  return (
-    <Dialog>
-        <DialogTrigger asChild>
-            {children}
-        </DialogTrigger>
-        <DialogContent className={cn('h-dvh flex flex-col items-start w-full lg:w-[calc(100%-18rem)] lg:left-72 lg:translate-x-0 pr-0 pl-4 pb-2 font-outfit shadow-none border-none bg-zinc-100 md:rounded-t-xl')}>
-            <DialogHeader className='flex w-full gap-0'>
-                <DialogTitle className='font-bold text-xl  md:text-3xl tracking-tight text-start px-2 mt-4'>Évaluation de méthodologie</DialogTitle>
-                <DialogDescription className='text-sm text-pretty lg:text-base leading-4 text-start px-2'>
-                    <span className="flex items-center gap-1 text-sm"><UserIcon className="size-4"/> <span>{student.firstName} {student.lastName}</span></span>
-                    <span className="flex items-center gap-1 text-sm"><GraduationCapIcon className="size-4"/> <span>{group}</span></span>
-                    {
-                        student.skillEval && 
-                        <span className="flex items-center gap-1 text-sm"><CalendarIcon className="size-4"/> <span>{getElapsedDays(student.skillEval.updatedAt)}</span></span>
-                    }
-                </DialogDescription>
-            </DialogHeader>
-            <div className="brand-v-scrollbar overflow-x-hidden overflow-y-auto  pr-4 w-full">
-                <AnimSkillNotesCarousel skillEval={student.skillEval}/>
-                <AnimSkillEvalCard skillEval = {student.skillEval} />
-            </div>
+interface AnimSkillEvalDetailsDialogProps {
+    student: SkillEvalStudentEntry
+    animatorId: number
+    group: string
+    onSkillEvalUpserted: (skillEval: SkillEvalData) => void
+    children: ReactNode
+}
 
-            <div className="fixed bottom-6 right-6">
-                <AnimSkillEvalDrawer
-                    student = {student}
-                    animatorId={animatorId}
-                    onSkillEvalUpserted = {onSkillEvalUpserted}
-                >
-                    <Button className="h-12 w-24">
-                        {student.skillEval? 'Modifier' : 'Créer'}
-                    </Button>
-                </AnimSkillEvalDrawer>
-            </div>
-        </DialogContent>
-    </Dialog>
-  )
+const AnimSkillEvalDetailsDialog = ({
+    student,
+    animatorId,
+    group,
+    onSkillEvalUpserted,
+    children,
+}: AnimSkillEvalDetailsDialogProps) => {
+
+    return (
+        <Dialog>
+            <DialogTrigger asChild>{children}</DialogTrigger>
+            <DialogContent className={cn('h-dvh flex flex-col items-start w-full lg:w-[calc(100%-18rem)] lg:left-72 lg:translate-x-0 p-0 gap-0 font-outfit shadow-none border-none bg-slate-100 overflow-hidden focus:outline-none')}>
+                {/* --- EN-TÊTE DU DIALOGUE --- */}
+                <DialogHeader className="bg-white/90 shrink-0 w-full text-left pt-8 pb-6 px-6">
+                    <div className="flex flex-col items-start gap-3">
+                        <div className="space-y-0.5 min-w-0 flex-1">
+                            <DialogTitle className="font-extrabold text-lg tracking-tight text-slate-900 truncate">
+                                Évaluation de méthodologie
+                            </DialogTitle>
+                            <DialogDescription className="text-xs font-medium text-slate-500 flex flex-wrap gap-1">
+                                <span className="flex items-center gap-1.5">
+                                    <GraduationCapIcon className="size-3.5 text-slate-400" />
+                                    <span>{student.firstName} {student.lastName}</span>
+                                </span>
+                                <span className="flex items-center gap-1.5">
+                                    <GraduationCapIcon className="size-3.5 text-slate-400" />
+                                    <span>{group}</span>
+                                </span>
+                                {student.skillEval && (
+                                    <span className="flex items-center gap-1.5">
+                                        <CalendarIcon className="size-3.5 text-slate-400" />
+                                        <span>Mis à jour {getElapsedDays(student.skillEval.updatedAt)}</span>
+                                    </span>
+                                )}
+                            </DialogDescription>
+                        </div>
+                    </div>
+                </DialogHeader>
+
+                {/* --- CONTENU DÉFILANT --- */}
+                <div className="brand-v-scrollbar overflow-x-hidden overflow-y-auto p-4 pt-6 w-full flex-1 space-y-6 pb-6">
+                    <AnimSkillNotesCarousel skillEval={student.skillEval} />
+                    <AnimSkillEvalCard skillEval={student.skillEval} />
+                </div>
+
+                {/* --- BOUTON D'ACTION FLOTTANT --- */}
+                <div className="absolute bottom-6 right-6 z-10">
+                    <AnimSkillEvalDrawer
+                        student={student}
+                        animatorId={animatorId}
+                        onSkillEvalUpserted={onSkillEvalUpserted}
+                    >
+                        <Button className="h-11 px-5 rounded-xl font-bold text-xs sm:text-sm shadow-md cursor-pointer">
+                            {student.skillEval ? 'Modifier l\'évaluation' : 'Créer l\'évaluation'}
+                        </Button>
+                    </AnimSkillEvalDrawer>
+                </div>
+            </DialogContent>
+        </Dialog>
+    )
 }
 
 export default AnimSkillEvalDetailsDialog

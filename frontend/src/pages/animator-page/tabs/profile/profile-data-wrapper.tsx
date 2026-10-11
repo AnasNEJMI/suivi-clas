@@ -30,7 +30,9 @@ const AnimProfileTabDataWrapper = ({animator} : {animator : User}) => {
   return (
     <>
         <AnimProfileCard animator = {animator}/>
-        <AnimContractsCard animatorProfilesByScolarYear={animatorProfilesByScolarYear}/>
+        <div>
+            <AnimContractsCard animatorProfilesByScolarYear={animatorProfilesByScolarYear}/>
+        </div>
         <LogoutCard/>
     </>
   )

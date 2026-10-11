@@ -11,7 +11,7 @@ const AnimQcmsTab = () => {
     const {user : animator} = useRouteLoaderData('animator') as {user: User};
   return (
     <>
-        <TabHeader user={animator} title = 'Éspace animateur' subTitle='Profile' description="Récapitulatif de l'année."/>
+        <TabHeader user={animator} title = 'Éspace animateur' subTitle='Profile' description="Retrouvez les données des QCMs soumis cette année"/>
         <ErrorBoundary fallback = {<SectionError desc = 'du profile'/>}>
             <Suspense fallback = {<QcmsTabSkeleton/>}>
                 <AnimQcmsTabDataWrapper animator = {animator}/>

@@ -2,10 +2,13 @@ import type { SeanceDurationEntry } from "@/api/animator/seances.types"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { SeanceFormValues } from "@/lib/schemas/animator/seances/seance.schema"
-import { Controller, useFormContext } from "react-hook-form"
+import { CheckIcon } from "lucide-react"
+import { Controller, useFormContext, useWatch } from "react-hook-form"
 
 const SeanceDurationField = ({seanceDurations} : {seanceDurations : SeanceDurationEntry[]}) => {
     const {control} = useFormContext<SeanceFormValues>()
+    const seanceDurationId = useWatch({ control, name: 'seanceDurationId' })
+
     return (
     <Controller
         name='seanceDurationId'
@@ -13,14 +16,14 @@ const SeanceDurationField = ({seanceDurations} : {seanceDurations : SeanceDurati
         render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
                 <div className='flex justify-between gap-6'>
-                    <FieldLabel className="text-base text-nowrap tracking-tight">Durée de séance</FieldLabel>
+                    <FieldLabel className="text-base font-bold text-nowrap tracking-tight">Durée de séance {seanceDurationId >=1 && <CheckIcon className='text-lime-500 size-4'/>}</FieldLabel>
                     <Select
                         value={field.value > 0 ? field.value.toString() : ''}
                         onValueChange={(v) => {
                             field.onChange(parseInt(v))
                         }}
                     >
-                        <SelectTrigger className='w-full max-w-full md:max-w-72 truncate text-base h-10!'>
+                        <SelectTrigger className='w-42 truncate text-base h-10!'>
                             <SelectValue placeholder='Choisir une durée' />
                         </SelectTrigger>
                         <SelectContent>

@@ -1,10 +1,9 @@
-import { FormProvider } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import DateField from './seance/fields/date-field'
 import { Field } from '@/components/ui/field'
 import { BrandButton } from '@/components/brand-button'
 import { SeanceFormSchema, type SeanceFormValues } from '@/lib/schemas/animator/seances/seance.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import type z from 'zod';
 import { useMutation} from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -24,6 +23,7 @@ interface CreateSeanceFormProps {
     seanceExists : (data : SeanceFormValues) => boolean,
     onSeanceCreated : (seance : SeanceEntry) => void,
 }
+
 const CreateSeanceForm = ({
     animator,
     classes,
@@ -54,6 +54,7 @@ const CreateSeanceForm = ({
             submitMutation.mutate(data);
         }
     }
+
     const submitMutation = useMutation({
         mutationFn: (data: SeanceFormValues) => 
             animatorApiCalls.submitSeance(data),
@@ -64,7 +65,7 @@ const CreateSeanceForm = ({
                 toast.error('Erreur lors de la soumission de la séance.');
                 return;
             }
-            toast.success(`seance soumise !`)
+            toast.success(`Séance soumise !`)
             onSeanceCreated(seance);
             console.log('seance soumise : ', seance)
         },
@@ -76,25 +77,32 @@ const CreateSeanceForm = ({
 
   return (
     <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit((data) => onSubmit(data))} className='h-full flex flex-col justify-between p-2'>
-            <div className='brand-v-scrollbar overflow-x-hidden overflow-y-auto px-2 flex flex-col gap-2 h-full'>
-                <div className='bg-white rounded-md p-4 flex flex-col gap-4'>
+        <form 
+            id='create-seance-form'
+            onSubmit={form.handleSubmit((data) => onSubmit(data))} 
+            className='h-full flex flex-col justify-between gap2'
+        >
+            <div className='flex-1 flex flex-col gap-2'>
+                <div className='bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs flex flex-col gap-4'>
                     <DateField/>
                     <SeanceDurationField seanceDurations={seanceDurations}/>
                     <GroupField classes={classes}/>
                 </div>
+
                 {seanceExistsWarningVisible &&
-                    <div className='w-full border border-amber-300 bg-amber-100/50 rounded-md p-6 text-base font-medium text-balance text-center flex flex-col items-center gap-2'>
-                        <TriangleAlertIcon className='size-10 text-amber-500'/>
+                    <div className='w-full border border-amber-300 bg-amber-100/50 rounded-2xl p-6 text-sm font-medium text-balance text-center flex flex-col items-center gap-2 shadow-2xs'>
+                        <TriangleAlertIcon className='size-8 text-amber-500'/>
                         Une séance ayant la même date et le même groupe a déjà été soumise.
                     </div>
                 }
             </div>
+
             <Field className='flex flex-row gap-2 mt-8'>
                 <BrandButton
                     type='button'
                     variant='outline'
                     size='lg'
+                    form='create-seance-form'
                     onClick={() => form.reset()}
                     disabled={submitMutation.isPending}
                     className='flex-1 py-6 text-base font-medium'
