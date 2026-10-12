@@ -13,7 +13,7 @@ const IncludeQcmField = () => {
     if (lessonId < 1) return null
   return (
     <Card className={cn("border-none shadow-card gap-0 rounded-2xl rounded-tr-none relative mt-8")}>
-        <div className='absolute -top-6 right-0 h-6 px-3 text-xs font-bold rounded-t-md bg-indigo-600 text-white flex items-center justify-center uppercase'>ÉTAPE 2</div>
+        <div className='absolute -top-6 right-0 h-6 px-3 text-xs font-bold rounded-t-md bg-indigo-600 text-white flex items-center justify-center uppercase'>ÉTAPE 4</div>
         <CardHeader className='gap-0'>
             <CardTitle className="text-base font-bold text-indigo-600 flex items-center gap-1">
                 <MessageCircleQuestionIcon/> QCM
