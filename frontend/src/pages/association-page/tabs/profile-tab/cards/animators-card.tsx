@@ -26,7 +26,7 @@ const AssocAnimatorsCard = ({ animators }: { animators: Animator[] }) => {
           </CardTitle>
 
           <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200/60">
-            {animators.length} {animators.length > 1 ? 'intervenants' : 'intervenant'}
+            {animators.length} {animators.length > 1 ? 'animateurs' : 'animateur'}
           </span>
         </div>
       </CardHeader>
@@ -65,7 +65,7 @@ const AssocAnimatorsCard = ({ animators }: { animators: Animator[] }) => {
                         {animator.firstName} {animator.lastName}
                       </span>
                       <span className="text-xs text-slate-500 font-medium">
-                        {animator.gender === 'f' ? 'Intervenante' : 'Intervenant'}
+                        {animator.gender === 'f' ? 'Animatrice' : 'Animateur'}
                       </span>
                     </div>
                   </div>

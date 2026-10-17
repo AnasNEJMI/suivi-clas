@@ -43,14 +43,14 @@ export const BadgesCard = ({ bilans, lessonsBySubject }: BadgesCardProps) => {
     .filter((b) => b.presence && b.seance?.seanceDuration?.durationMin)
     .reduce((acc, b) => acc + b.seance.seanceDuration.durationMin, 0);
 
-  // 3. Calculs des QCMs
+  // 3. Calculs des QCM
   const completedQcms = bilans
     .map((b) => b.qcm)
     .filter((q): q is NonNullable<typeof q> => Boolean(q && q.completed));
 
   const hasPerfectScore = completedQcms.some((q) => q.score === 100);
 
-  // Série de 3 QCMs consécutifs avec score >= 80%
+  // Série de 3 QCM consécutifs avec score >= 80%
   let qcmStreak = 0;
   let hasThreeHighQcmStreak = false;
   for (const q of completedQcms) {
@@ -134,7 +134,7 @@ export const BadgesCard = ({ bilans, lessonsBySubject }: BadgesCardProps) => {
     {
       id: 'qcm-streak',
       title: 'Infaillible',
-      description: '3 QCMs consécutifs ≥ 80%',
+      description: '3 QCM consécutifs ≥ 80%',
       icon: CrownIcon,
       unlocked: hasThreeHighQcmStreak,
       activeBg: 'bg-indigo-500 text-white',
@@ -170,7 +170,7 @@ export const BadgesCard = ({ bilans, lessonsBySubject }: BadgesCardProps) => {
     {
       id: 'all-qcms',
       title: 'Objectif 100%',
-      description: 'Tous les QCMs proposés complétés',
+      description: 'Tous les QCM proposés complétés',
       icon: AwardIcon,
       unlocked: is100PercentQcmSubmitted,
       activeBg: 'bg-orange-500 text-white',

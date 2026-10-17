@@ -1,5 +1,5 @@
 import type { User } from '@/api/auth'
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useRouteLoaderData } from 'react-router'
 import SectionError from '../../../section-error'
@@ -9,10 +9,15 @@ import AnimLessonEvalsTabDataWrapper from './lesson-evals-data-wrapper'
 
 const AnimLessonEvalsTab = () => {
     const {user : animator} = useRouteLoaderData('animator') as {user: User};
+
+    useEffect(() =>{
+        window.scrollTo(0,0)
+    },[])
+    
   return (
     <>
         <TabHeader user={animator} title = 'Éspace animateur' subTitle='Programme' description="Retrouvez l'évolution du programme de chacun des élèves suivis cette année"/>
-        <ErrorBoundary fallback = {<SectionError desc = 'des évaluations des leçons'/>}>
+        <ErrorBoundary fallback = {<SectionError/>}>
             <Suspense fallback = {<AnimSkillEvalsTabSkeleton/>}>
                 <AnimLessonEvalsTabDataWrapper animator = {animator}/>
             </Suspense>

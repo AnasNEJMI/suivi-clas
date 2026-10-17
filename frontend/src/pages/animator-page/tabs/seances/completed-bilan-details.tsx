@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { EmptyStateCard } from '@/components/ui/empty-state-card';
 import { CARD_STYLES, type Subject } from '@/lib/types/data.types';
 import { cn, getElapsedDays } from '@/lib/utils';
-import QcmResultsQuestionnaire from '@/pages/student-page/bilans/qcm-results-questionnaire';
+import QcmResultsQuestionnaire from '@/pages/qcm-results-questionnaire';
 import {
   AlertTriangleIcon,
   BookOpenTextIcon,

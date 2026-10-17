@@ -285,7 +285,7 @@ import LessonEvalCard, { LessonEvalCardSkeleton } from './cards/lesson-eval-card
 
 ## 1-2 Student Page — QCM Section
 
-**Goal:** Students have one QCM per bilan (auto-generated on submission). The student page shows pending QCMs. Clicking one launches a game-like session with sounds, animations, streak system, and progress saved to localStorage per `bilanId`.
+**Goal:** Students have one QCM per bilan (auto-generated on submission). The student page shows pending QCM. Clicking one launches a game-like session with sounds, animations, streak system, and progress saved to localStorage per `bilanId`.
 
 ### Status: ⬜ Not started
 
@@ -487,9 +487,9 @@ if (bilan.presence && bilan.lessonId) {
 
 ---
 
-### Sub-task 1-2-D — Backend: fetch student QCMs endpoint
+### Sub-task 1-2-D — Backend: fetch student QCM endpoint
 
-> **To build.** Returns all QCMs for the student with their questions and lesson info. Query: `prisma.qcm.findMany({ where: { studentId }, include: { lesson, bilan, qcmQuestions: { include: { bankQuestion } } } })`.
+> **To build.** Returns all QCM for the student with their questions and lesson info. Query: `prisma.qcm.findMany({ where: { studentId }, include: { lesson, bilan, qcmQuestions: { include: { bankQuestion } } } })`.
 
 ---
 
@@ -606,7 +606,7 @@ The complete game component with sounds, animations, resume prompt, results scre
 
 ### Sub-task 1-2-I — Wire QCM section into student page
 
-> **To build.** Show a list of pending QCMs (not yet completed), each as a card with lesson name + date. Clicking one launches `QcmSession`. Completed QCMs show score.
+> **To build.** Show a list of pending QCM (not yet completed), each as a card with lesson name + date. Clicking one launches `QcmSession`. Completed QCM show score.
 
 ---
 

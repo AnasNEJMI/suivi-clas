@@ -34,6 +34,7 @@ import { submitStudentQcmHandler } from '../controllers/student/submitQcm.contro
 import { associationQcmStatsHandler } from '../controllers/association-member/fetchQcmStats.controller.js';
 import { animatorFetchQcmsHandler } from '../controllers/animator/fetchQcms.controller.js';
 import animatorRouter from './animator.routes.js';
+import { associationMemberFetchClassessHandler } from '../controllers/association-member/fetch-classes.controller.js';
 
 const router = Router();
 
@@ -63,6 +64,7 @@ router.post('/animator/skill-eval', validateBody(skillEvalSchema), requireAuthHa
 
 router.delete('/animator/seance', requireAuthHandler, asyncHandler(animatorDeleteSeanceHandler));
 
+router.get('/association/stats/classes', requireAuthHandler, asyncHandler(associationMemberFetchClassessHandler))
 router.get('/association/stats/presence', requireAuthHandler, asyncHandler(associationMemberFetchPresenceStatsHandler))
 router.get('/association/stats/visits', requireAuthHandler, asyncHandler(associationVisitStatsHandler))
 router.get('/association/stats/animators', requireAuthHandler, asyncHandler(associationAnimatorStatsHandler))

@@ -5,4 +5,5 @@ export const associationMemberQueryKeys = {
     visitStats : ['association-member', 'stats', 'visits'] as const,
     animatorStats : ['association-member', 'stats', 'animators'] as const,
     qcmStats : ['association-member', 'stats', 'qcms'] as const,
+    classes : ['association-member', 'classes'] as const,
 }

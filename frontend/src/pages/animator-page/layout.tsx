@@ -1,5 +1,5 @@
 import { BicepsFlexedIcon, BookOpenTextIcon, FilePenLineIcon, GraduationCapIcon, User2Icon} from 'lucide-react';
-import UserPageWrapper from '../student-page/page-wrapper'
+import UserPageWrapper from '../page-wrapper'
 import { Outlet } from 'react-router'
 import type { UserPageTheme } from '@/lib/types/data.types';
 
@@ -12,7 +12,7 @@ const PAGE_TABS = [
       icon: BookOpenTextIcon,
     },
     {
-      title: "QCMs",
+      title: "QCM",
       url: `${ROOT_PATH}/qcms`,
       icon: FilePenLineIcon,
     },

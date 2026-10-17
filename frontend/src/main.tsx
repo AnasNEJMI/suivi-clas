@@ -2,7 +2,6 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
-import RootLayout from './layouts/root-layout.tsx'
 import { guestRouteLoader } from './router/loaders/guest-route-loader.ts'
 import AboutPage from './pages/about-page.tsx'
 import ContactPage from './pages/contact-page.tsx'
@@ -10,8 +9,7 @@ import { RootErrorBoundary } from './pages/root-error-boundry.tsx'
 import { studentPageLoader } from './router/loaders/student-page-loader.tsx'
 import { AnimatorPageLoader } from './router/loaders/animator.loader.ts'
 import { associationPageLoader } from './router/loaders/association-page-loader.ts'
-import { lazy, Suspense, type FunctionComponent } from 'react'
-import PageSkeleton from './pages/page-skeleton.tsx'
+import { lazy, StrictMode, Suspense, type FunctionComponent } from 'react'
 import MethodPage from './pages/method-page.tsx'
 import StudentSeancesTab from './pages/student-page/tabs/seances/seances-tab.tsx'
 import QcmsTab from './pages/student-page/tabs/qcms/qcms-tab.tsx'
@@ -28,14 +26,20 @@ import AnimProfileTab from './pages/animator-page/tabs/profile/profile-tab.tsx'
 import AnimQcmsTab from './pages/animator-page/tabs/qcms/qcms-tab.tsx'
 import AnimSkillEvalsTab from './pages/animator-page/tabs/skill-evals/skill-evals-tab.tsx'
 import AnimLessonEvalsTab from './pages/animator-page/tabs/lesson-evals/lesson-evals-tab.tsx'
-
+import AppLoader from './pages/app-loader.tsx'
+import { HelmetProvider } from 'react-helmet-async'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { queryClient } from '@/lib/query/client';
+import RootLayout from './layouts/root-layout.tsx'
+import NotFoundPage from './pages/404.tsx'
 
 function lazify<T extends FunctionComponent<any>>(
   factory: () => Promise<{ default: T }>
 ) {
   const Component = lazy(factory)
   return (props: React.ComponentPropsWithoutRef<T>) => (
-    <Suspense fallback={<PageSkeleton />}>
+    <Suspense fallback={<AppLoader />}>
       <Component {...(props as any)} />
     </Suspense>
   )
@@ -100,22 +104,12 @@ const router = createBrowserRouter([
           {path : 'programme', Component : AnimLessonEvalsTab},
         ]
       },
-      // {
-      //   id: "admin",
-      //   path : 'admin',
-      //   Component : Adminboard,
-      //   loader : adminRouteLoader,
-      //   shouldRevalidate: () => true,
-      //   children : [
-      //     {index : true, Component : OrgboardUsers},
-      //     {path : 'users', Component : AdminboardUsers},
-      //     {path : 'bilans', Component : AdminboardBilans},
-      //     {path : 'skills', Component : AdminboardSkills},
-      //     {path : 'lessons', Component : AdminboardLessons},
-      //     {path : 'statistics', Component : AdminboardStatistics},
-      //     {path : 'downloads', Component : AdminboardDownloads},
-      //   ]
-      // },
+      {
+        path: '*',
+        Component: () => (
+          <NotFoundPage />
+        ),
+      },
     ],
   }
 ])
@@ -123,6 +117,14 @@ const router = createBrowserRouter([
 
 const container = document.getElementById('root')
 const root = createRoot(container!);
-root.render(<RouterProvider router={router} />
+root.render(
+  <StrictMode>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </HelmetProvider>
+  </StrictMode>
 )
 

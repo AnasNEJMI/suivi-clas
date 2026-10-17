@@ -29,8 +29,8 @@ import {
   TrophyIcon,
   UserIcon,
 } from 'lucide-react';
-import QcmQuestionnaire from '../../bilans/qcm-questionnaire';
-import QcmResultsQuestionnaire from '../../bilans/qcm-results-questionnaire';
+import QcmQuestionnaire from '../../../qcm-questionnaire';
+import QcmResultsQuestionnaire from '../../../qcm-results-questionnaire';
 
 const StudentSeanceDetailsDrawer = ({
   bilan,

@@ -30,7 +30,7 @@ export const StudentCarouselQcmCard = ({
       ? (student.qcmCompletedTotalPoints / qcmsCompleted).toFixed(1)
       : "-";
 
-  // Définition des seuils de complétion des QCMs
+  // Définition des seuils de complétion des QCM
   const isGood = totalQcms > 0 && completionRate >= 80;
   const isWarning = totalQcms > 0 && completionRate >= 50 && completionRate < 80;
   const isBad = totalQcms > 0 && completionRate < 50;
@@ -104,7 +104,7 @@ export const StudentCarouselQcmCard = ({
           </div>
         </div>
 
-        {/* 4. Statistiques Détaillées (QCMs Complétés / Note Moyenne) */}
+        {/* 4. Statistiques Détaillées (QCM Complétés / Note Moyenne) */}
         <div className="grid grid-cols-2 gap-2.5 mt-4">
           {/* Complétés */}
           <div className="flex items-center gap-2 bg-slate-50/80 border border-slate-200 p-2.5 rounded-xl">
@@ -150,14 +150,14 @@ export const StudentCarouselQcmCard = ({
         {isWarning && (
           <div className="flex items-center gap-2 text-xs font-semibold text-amber-800 bg-amber-50/80 border border-amber-100/80 px-2.5 py-1.5 rounded-xl">
             <AlertCircleIcon className="size-3.5 text-amber-600 shrink-0" />
-            <span className="truncate">Quelques QCMs en attente</span>
+            <span className="truncate">Quelques QCM en attente</span>
           </div>
         )}
 
         {isBad && (
           <div className="flex items-center gap-2 text-xs font-semibold text-rose-800 bg-rose-50/80 border border-rose-100/80 px-2.5 py-1.5 rounded-xl">
             <AlertTriangleIcon className="size-3.5 text-rose-600 shrink-0" />
-            <span className="truncate">Suivi des QCMs nécessaire</span>
+            <span className="truncate">Suivi des QCM nécessaire</span>
           </div>
         )}
 

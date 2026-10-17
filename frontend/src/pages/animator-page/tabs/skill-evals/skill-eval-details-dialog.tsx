@@ -56,7 +56,7 @@ const AnimSkillEvalDetailsDialog = ({
                 </DialogHeader>
 
                 {/* --- CONTENU DÉFILANT --- */}
-                <div className="brand-v-scrollbar overflow-x-hidden overflow-y-auto p-4 pt-6 w-full flex-1 space-y-6 pb-6">
+                <div className="brand-v-scrollbar overflow-x-hidden overflow-y-auto p-6 w-full flex-1 space-y-6 pb-6">
                     <AnimSkillNotesCarousel skillEval={student.skillEval} />
                     <AnimSkillEvalCard skillEval={student.skillEval} />
                 </div>
@@ -68,7 +68,7 @@ const AnimSkillEvalDetailsDialog = ({
                         animatorId={animatorId}
                         onSkillEvalUpserted={onSkillEvalUpserted}
                     >
-                        <Button className="h-11 px-5 rounded-xl font-bold text-xs sm:text-sm shadow-md cursor-pointer">
+                        <Button className="h-11 px-5 rounded-xl font-bold text-sm shadow-md cursor-pointer">
                             {student.skillEval ? 'Modifier l\'évaluation' : 'Créer l\'évaluation'}
                         </Button>
                     </AnimSkillEvalDrawer>

@@ -1,6 +1,6 @@
 import { Toaster } from '@/components/ui/sonner'
 import { useAuth } from '@/contexts/auth/use-auth';
-import LoadingSplashScreen from '@/pages/loading-splash-screen';
+import AppLoader from '@/pages/app-loader';
 import { Outlet } from 'react-router'
 
 const AuthLayout = () => {
@@ -8,7 +8,7 @@ const AuthLayout = () => {
 
   if(isLoading){
     return (
-      <LoadingSplashScreen/>
+      <AppLoader/>
     )
   }
 

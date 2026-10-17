@@ -17,7 +17,7 @@ import type { QcmEntry, SeancesByClassEntry } from '@/api/animator/seances.types
 import type { ScolarYearEntry } from '@/api/animator/types';
 import { useMemo } from 'react';
 
-interface AnimClassQCMsCarouselProps {
+interface AnimClassQCMCarouselProps {
   classStats: SeancesByClassEntry;
   baseData: ScolarYearEntry;
 }
@@ -30,10 +30,10 @@ type QCMBucket = {
   qcms: QcmEntry[];
 };
 
-const AnimClassQCMsCarousel = ({
+const AnimClassQCMCarousel = ({
   classStats,
   baseData,
-}: AnimClassQCMsCarouselProps) => {
+}: AnimClassQCMCarouselProps) => {
   /* --- Optimisation et traitement des données avec useMemo --- */
   const { students, hasData } = useMemo(() => {
     const bilans = classStats.seances.flatMap((s) => s.studentBilans);
@@ -46,7 +46,7 @@ const AnimClassQCMsCarousel = ({
 
     const studentsMap = new Map<number, QCMBucket>();
 
-    // Remplissage à partir des QCMs existants
+    // Remplissage à partir des QCM existants
     for (const qcm of qcms) {
       if (!studentsMap.has(qcm.studentId)) {
         const student = baseData.classes
@@ -121,7 +121,7 @@ const AnimClassQCMsCarousel = ({
         <EmptyStateCard
           icon={RotateCwFadingClockIcon}
           title="Aucune donnée de QCM enregistrée pour ce groupe"
-          description="Les statistiques individuelles des QCMs s'afficheront ici automatiquement."
+          description="Les statistiques individuelles des QCM s'afficheront ici automatiquement."
           className="bg-white/60 border-slate-200/80 rounded-2xl h-48"
         />
       ) : (
@@ -179,7 +179,7 @@ const AnimClassQCMsCarousel = ({
                       <div className="flex items-center justify-between">
                         <span className="flex items-center gap-1.5 text-slate-700">
                           <CalendarCheck2Icon className="size-3.5 text-slate-700" />
-                          QCMs envoyés
+                          QCM envoyés
                         </span>
                         <span className="font-bold text-slate-800">{totalQcms}</span>
                       </div>
@@ -251,4 +251,4 @@ const AnimClassQCMsCarousel = ({
   );
 };
 
-export default AnimClassQCMsCarousel;
+export default AnimClassQCMCarousel;

@@ -3,7 +3,7 @@ import { sendSuccess } from "../../../utils/response.utils.js";
 import { prisma } from "../../../db/prisma.js";
 import { ApiError } from "../../../classes/ApiError.class.js";
 import { PrismaClientKnownRequestError } from "../../../generated/prisma/internal/prismaNamespace.js";
-import { buildSeancesByScolarYear, SeanceDurationEntry, SeancesByScolarYearEntry } from "./utils.js";
+import { buildSeancesByScolarYear, SeancesByScolarYearEntry } from "./utils.js";
 
 export type SeancesDataResponse = {
     scolarYears : SeancesByScolarYearEntry[]

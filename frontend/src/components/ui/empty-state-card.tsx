@@ -18,12 +18,12 @@ export function EmptyStateCard({
   return (
     <Card
       className={cn(
-        'border-2 border-dashed border-indigo-200 dark:border-indigo-900/50 h-64 flex flex-col items-center justify-center w-full rounded-3xl bg-linear-to-b from-indigo-50/50 via-white to-slate-50 shadow-sm p-6 text-center',
+        'border-2 border-dashed border-indigo-200 dark:border-indigo-900/50 min-h-64 flex flex-col items-center justify-center w-full rounded-3xl bg-linear-to-b from-indigo-50/50 via-white to-slate-50 shadow-sm p-6 text-center opacity-75',
         className
       )}
     >
-      <div className="size-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-4 shadow-inner">
-        <Icon className="size-8" />
+      <div className="size-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-4 shadow-inner">
+        <Icon className="size-6" />
       </div>
       <CardTitle className="text-base font-bold tracking-tight text-slate-900 dark:text-white">
         {title}

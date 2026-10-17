@@ -13,17 +13,19 @@ import IncludeQcmField from './fields/include-qcm-field'
 import { BrandButton } from '@/components/brand-button'
 import type { BilanEntry, StudentEntry } from '@/api/animator/seances.types'
 import { useMemo } from 'react'
+import AutoSummaryCard from './fields/auto-summary-fields'
 
 interface AnimBilanFormProps{
     studentBilan : StudentEntry,
     seanceDate : Date,
     seanceId : number,
     animatorId : number,
-    lessonsByLevel: LessonsByLevelEntry[]
+    lessonsByLevel: LessonsByLevelEntry[],
+    canAutoSummary? : boolean
     onBilanSubmitted:  (bilan: BilanEntry) => void
 }
 const AnimCreateBilanForm = ({
-    studentBilan, seanceDate, seanceId, animatorId, lessonsByLevel, onBilanSubmitted
+    studentBilan, seanceDate, seanceId, animatorId, lessonsByLevel, onBilanSubmitted, canAutoSummary = true,
 } : AnimBilanFormProps) => {
 
     const availableSubjects = useMemo(
@@ -66,15 +68,62 @@ const AnimCreateBilanForm = ({
             console.log('bilan soumis : ', bilan)
         },
         onError: () => toast.error('Erreur lors de la soumission du bilan.'),
-    }) 
+    })
+
+    const generateMutation = useMutation({
+        mutationFn: animatorApiCalls.generateBilanSummary,
+        onSuccess: (res) => {
+            if (!res?.paragraphs?.length) {
+                toast.error(`Erreur lors de la génération du résumé. res : ${res}`)
+                return
+            }
+            // Paragraphs become blank-line-separated text in the editable summary field
+            methods.setValue('summary', res.paragraphs.join('\n\n'), {
+                shouldDirty: true,
+                shouldValidate: true,
+            })
+            toast.success('Résumé généré — relisez-le avant de soumettre.')
+        },
+        onError: (err) => toast.error(`Erreur lors de la génération du résumé. error : ${err}`),
+    })
+
+    function handleGenerate() {
+        const {
+            lessonId, summary, activity, engagement,
+            methodologySkill, methodologyTrend, nextStep,
+        } = methods.getValues()
+
+        if (!activity || !engagement || !methodologySkill || !methodologyTrend || !nextStep || lessonId < 1) return
+
+        if (summary?.trim() && !window.confirm('Remplacer le résumé actuel ?')) return
+
+        generateMutation.mutate({
+            studentId: studentBilan.id,
+            lessonId,
+            activity,
+            engagement,
+            methodologySkill,
+            methodologyTrend,
+            nextStep,
+        })
+    }
+
+    const summaryStep = canAutoSummary? 4 : 3;
+    const includeQcmStep = canAutoSummary?5 : 4;
   return (
     <FormProvider {...methods}>
         <form id='create-bilan-form' onSubmit={methods.handleSubmit((data) => submitMutation.mutate(data))} className='h-full flex flex-col p-2 pb-0'>
             <div className='flex-1 flex flex-col gap-2'>
                 <PresenceCard student = {studentBilan}/>
                 <SubjectAndLessonCard availableSubjects={availableSubjects}/>
-                <SummaryCard />
-                <IncludeQcmField />
+                {canAutoSummary && (
+                    <AutoSummaryCard
+                        onGenerate={handleGenerate}
+                        isGenerating={generateMutation.isPending}
+                    />
+                )}
+                <SummaryCard step = {summaryStep}/>
+                <IncludeQcmField step={includeQcmStep}/>
             </div>
             <Field className='flex flex-row gap-2 mt-8 pb-6'>
                 <BrandButton

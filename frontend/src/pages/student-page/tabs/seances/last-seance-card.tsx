@@ -18,8 +18,8 @@ import {
   TrophyIcon,
   ZapIcon,
 } from 'lucide-react';
-import QcmQuestionnaire from '../../bilans/qcm-questionnaire';
-import QcmResultsQuestionnaire from '../../bilans/qcm-results-questionnaire';
+import QcmQuestionnaire from '../../../qcm-questionnaire';
+import QcmResultsQuestionnaire from '../../../qcm-results-questionnaire';
 import StudentSeanceDetailsDrawer from './seance-details-drawer';
 import { EmptyStateCard } from '@/components/ui/empty-state-card';
 

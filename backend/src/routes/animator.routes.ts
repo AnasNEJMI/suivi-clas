@@ -12,6 +12,7 @@ import { animatorDeleteBilanHandler } from "../controllers/animator/seances/dele
 import { animatorFetchProfileDataHandler } from "../controllers/animator/profile/fetch-profile.controller.js";
 import { animatorFetchSkillEvalsHandler } from "../controllers/animator/skill-evals/fetch-skill-evals.controller.js";
 import { animatorFetchLessonEvalsHandler } from "../controllers/animator/lesson-evals/fetch-lesson-evals.controller.js";
+import { animatorAutoSummaryHandler } from "../controllers/animator/seances/auto-generate-summary.controller.js";
 
 const router = Router();
 router.get('/base', requireAuthHandler, asyncHandler(animatorFetchBaseDataHandler));
@@ -26,4 +27,6 @@ router.get('/skill-evals', requireAuthHandler, asyncHandler(animatorFetchSkillEv
 
 router.get('/lesson-evals', requireAuthHandler, asyncHandler(animatorFetchLessonEvalsHandler));
 
+router.post('/bilan/auto-summary',requireAuthHandler, asyncHandler(animatorAutoSummaryHandler),
+)
 export default router;

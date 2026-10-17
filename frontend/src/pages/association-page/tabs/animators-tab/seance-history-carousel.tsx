@@ -4,7 +4,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Button } from "@/components/ui/button";
 import AssocCarouselSeanceCard from "./carousel-seance-card";
 import AssocSeancesListDrawer from "./seances-list-drawer";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyStateCard } from "@/components/ui/empty-state-card";
 
 export type CarouselSeance = {
   animator: { id: number; firstName: string; lastName: string; gender: "f" | "m" };
@@ -55,7 +55,7 @@ const AssocSeanceHistoryCarousel = ({
         return (
           <div key={animator.animator.id} className="bg-slate-50/60 border border-slate-200/60 rounded-3xl p-5 lg:p-6">
             {/* Header Animateur */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-linear-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center font-bold text-base shadow-xs">
                   {animator.animator.firstName.charAt(0)}
@@ -74,19 +74,11 @@ const AssocSeanceHistoryCarousel = ({
 
             {/* État Vide */}
             {seances.length === 0 ? (
-              <Card className="border-2 border-dashed border-slate-200 shadow-none h-48 flex flex-col items-center justify-center w-full rounded-2xl bg-white/50 p-6 text-center">
-                <CardHeader className="p-0 flex flex-col items-center w-full">
-                  <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-2">
-                    <RotateCwFadingClockIcon className="size-6 text-slate-400" />
-                  </div>
-                  <CardTitle className="text-base font-bold text-slate-800">
-                    Aucune séance enregistrée
-                  </CardTitle>
-                  <CardDescription className="text-xs text-slate-500 max-w-sm mt-1">
-                    Les séances validées par cet animateur apparaîtront ici automatiquement.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
+              <EmptyStateCard
+                icon={RotateCwFadingClockIcon}
+                title = 'Aucune séance enregistrée'
+                description="Les séances validées par cet animateur apparaîtront ici automatiquement."
+              />
             ) : (
               /* Carrousel */
               <Carousel opts={{ align: "start" }} className="w-full">

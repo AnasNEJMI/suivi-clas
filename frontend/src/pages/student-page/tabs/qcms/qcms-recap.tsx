@@ -37,7 +37,7 @@ const QcmsRecap = ({ qcms }: QcmsRecapProps) => {
     const completionRate = Math.round((completedCount / totalCount) * 100);
     const pendingRate = Math.round((pendingCount / totalCount) * 100);
 
-    // Calcul de la note moyenne sur 10 pour les QCMs complétés
+    // Calcul de la note moyenne sur 10 pour les QCM complétés
     let totalGradeOn10 = 0;
     let scoredQcmsCount = 0;
 
@@ -91,7 +91,7 @@ const QcmsRecap = ({ qcms }: QcmsRecapProps) => {
       {/* En-tête de section */}
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="font-bold text-lg lg:text-xl text-slate-900 tracking-tight">
-          Bilan des QCMs
+          Bilan des QCM
         </h3>
 
         <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200/60 flex items-center gap-1.5">
@@ -214,7 +214,7 @@ const QcmsRecap = ({ qcms }: QcmsRecapProps) => {
 
             <div className="space-y-1.5">
               <p className="text-[10px] sm:text-[11px] font-medium text-slate-500 truncate">
-                QCMs envoyés
+                QCM envoyés
               </p>
             </div>
           </div>

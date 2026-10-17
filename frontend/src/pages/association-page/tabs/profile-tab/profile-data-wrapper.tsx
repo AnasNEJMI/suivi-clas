@@ -9,9 +9,9 @@ import AssocAnimatorsCard from './cards/animators-card';
 
 const ProfileTabDataWrapper = ({association} : {association : User}) => {
 
-    const {data : {visitStatsPerScolarYear}} = useSuspenseQuery({
-        queryKey :  associationMemberQueryKeys.visitStats,
-        queryFn : associationMemberApiCalls.fetchVisitStats,
+    const {data : {classesPerScolarYear}} = useSuspenseQuery({
+        queryKey :  associationMemberQueryKeys.classes,
+        queryFn : associationMemberApiCalls.fetchClasses,
         staleTime : 2 * 60 * 1000
     })
 
@@ -22,8 +22,9 @@ const ProfileTabDataWrapper = ({association} : {association : User}) => {
     })
 
     const animators = animatorStatsPerScolarYear[0].animators.map(animator => animator.animator);
-    const classes = visitStatsPerScolarYear[0].classes;
+    const classes = classesPerScolarYear[0]?.classes?? [];
 
+    console.log('presence : ', classesPerScolarYear)
   return (
     <>
         <AssocProfileCard association = {association}/>

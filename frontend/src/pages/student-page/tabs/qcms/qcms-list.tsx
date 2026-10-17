@@ -12,8 +12,8 @@ import {
   UserIcon,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import QcmQuestionnaire from '../../bilans/qcm-questionnaire';
-import QcmResultsQuestionnaire from '../../bilans/qcm-results-questionnaire';
+import QcmQuestionnaire from '../../../qcm-questionnaire';
+import QcmResultsQuestionnaire from '../../../qcm-results-questionnaire';
 import { EmptyStateCard } from '@/components/ui/empty-state-card';
 
 interface QcmsListProps {
@@ -32,7 +32,7 @@ const QcmsList = ({ qcms, onQcmSubmit }: QcmsListProps) => {
     return { total, completed, pending };
   }, [qcms]);
 
-  // Filtrage des QCMs
+  // Filtrage des QCM
   const selectedQcms = useMemo(() => {
     if (!qcms) return [];
     if (filter === 'completed') return qcms.filter((q) => q.completed);
@@ -44,7 +44,7 @@ const QcmsList = ({ qcms, onQcmSubmit }: QcmsListProps) => {
     <div className="font-outfit space-y-4 mt-6">
       {/* Barre de Filtres par Statut */}
         <h3 className="font-bold text-lg lg:text-xl text-slate-900 tracking-tight">
-        Bilan des QCMs
+        Bilan des QCM
       </h3>
       <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-2xl border border-slate-200/60 w-fit">
         <button

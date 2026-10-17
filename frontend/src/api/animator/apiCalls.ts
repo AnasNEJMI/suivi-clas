@@ -9,6 +9,7 @@ import type { BilanEntry, DeleteBilanEntry, SeanceEntry, SeancesDataResponse } f
 import type { ProfileDataResponse } from "./profile.types";
 import type { SkillEvalData, SkillEvalsResponse } from "./skill-evals.types";
 import type { LessonEvalData, LessonEvalsResponse } from "./lesson-evals.types";
+import type { Activity, EngagementLevel, MethodologySkill, MethodologyTrend, NextStep } from "./auto-summary-options";
 
 const ANIMATOR_API_ENDPOINT = '/api/animator/';
 
@@ -21,6 +22,7 @@ const animatorEndpoints = {
     qcmsWithQuestions : 'qcmWithQuestions',
     seance : 'seance',
     bilan : 'bilan',
+    bilanAutoSummary : 'bilan/auto-summary',
     lessonEvals : 'lesson-evals',
     lessonEval : 'lesson-eval',
     skillEval : 'skill-eval',
@@ -88,6 +90,17 @@ type BilanPayload = {
     includeQcm? : boolean,
 }
 
+export type AutoSummaryPayload = {
+  studentId:        number
+  lessonId:         number
+  activity:         Activity
+  engagement:       EngagementLevel
+  methodologySkill: MethodologySkill
+  methodologyTrend: MethodologyTrend
+  nextStep:         NextStep
+}
+
+export type AutoSummaryResponse = { paragraphs: string[] }
 
 
 async function fetchAnimatorProfile():Promise<AnimatorProfile | null>{
@@ -186,6 +199,7 @@ export const animatorApiCalls = {
     fetchProfile : fetchAnimatorProfile,
     fetchBaseData : fetchPayloadlessData<AnimatorBaseDataResponse>(animatorEndpoints.baseData, ANIMATOR_API_ENDPOINT),
     fetchSeancesData : fetchPayloadlessData<SeancesDataResponse>(animatorEndpoints.seances, ANIMATOR_API_ENDPOINT),
+    generateBilanSummary: (payload: AutoSummaryPayload) =>submitData<AutoSummaryPayload, AutoSummaryResponse>(payload, animatorEndpoints.bilanAutoSummary),
     fetchProfileData : fetchPayloadlessData<ProfileDataResponse>(animatorEndpoints.profile, ANIMATOR_API_ENDPOINT),
     fetchSkillEvalsData : fetchPayloadlessData<SkillEvalsResponse>(animatorEndpoints.skillEvals, ANIMATOR_API_ENDPOINT),
     fetchLessonEvalsData : fetchPayloadlessData<LessonEvalsResponse>(animatorEndpoints.lessonEvals, ANIMATOR_API_ENDPOINT),

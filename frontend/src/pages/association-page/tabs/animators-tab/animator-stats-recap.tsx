@@ -144,12 +144,12 @@ const AssocAnimatorStatsRecap = ({
           </p>
         </div>
 
-        {/* Card 4: QCMs envoyés */}
+        {/* Card 4: QCM envoyés */}
         <div className="rounded-2xl p-3 sm:p-4 bg-white border border-slate-200/80 shadow-2xs hover:border-amber-300 transition-all duration-150 flex flex-col justify-between gap-2.5 sm:gap-3 relative overflow-hidden group">
           <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-1">
               <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                QCMs envoyés
+                QCM envoyés
               </span>
               <div className="flex items-baseline gap-1">
                 <span className="font-bold text-2xl sm:text-3xl text-slate-900">

@@ -5,15 +5,16 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import {MessageCircleQuestionIcon } from 'lucide-react'
+import { StepBadge } from './step-badge'
 
-const IncludeQcmField = () => {
+const IncludeQcmField = ({step} : {step : number}) => {
     const { control } = useFormContext<CreateBilanFormValues>()
     const lessonId    = useWatch({ control, name: 'lessonId' })
     
     if (lessonId < 1) return null
   return (
     <Card className={cn("border-none shadow-card gap-0 rounded-2xl rounded-tr-none relative mt-8")}>
-        <div className='absolute -top-6 right-0 h-6 px-3 text-xs font-bold rounded-t-md bg-indigo-600 text-white flex items-center justify-center uppercase'>ÉTAPE 4</div>
+        <StepBadge step={step} />
         <CardHeader className='gap-0'>
             <CardTitle className="text-base font-bold text-indigo-600 flex items-center gap-1">
                 <MessageCircleQuestionIcon/> QCM

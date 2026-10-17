@@ -1,7 +1,7 @@
 import type { SeancesByScolarYearEntry } from '@/api/animator/seances.types';
 import { EmptyStateCard } from '@/components/ui/empty-state-card';
 import { RotateCwFadingClockIcon } from 'lucide-react';
-import AnimClassQCMsCarousel from './class-qcms-carousel';
+import AnimClassQCMCarousel from './class-qcms-carousel';
 import type { ScolarYearEntry } from '@/api/animator/types';
 
 interface AnimQcmsStatsPerClassProps {
@@ -20,7 +20,7 @@ const AnimQcmsStatsPerClass = ({
       <div className="space-y-4 font-outfit mt-8">
         <div>
           <h3 className="font-bold text-lg lg:text-xl text-slate-900 tracking-tight">
-            QCMs cette année
+            QCM cette année
           </h3>
           <p className="text-slate-500 text-xs sm:text-sm mt-0.5">
             Suivi des questionnaires par classe et par élève.
@@ -28,8 +28,8 @@ const AnimQcmsStatsPerClass = ({
         </div>
         <EmptyStateCard
           icon={RotateCwFadingClockIcon}
-          title="Les données de QCMs n'ont pas été enregistrées."
-          description="Toutes les données de QCMs enregistrées seront affichées ici dès leur réalisation."
+          title="Les données de QCM n'ont pas été enregistrées."
+          description="Toutes les données de QCM enregistrées seront affichées ici dès leur réalisation."
         />
       </div>
     );
@@ -39,16 +39,16 @@ const AnimQcmsStatsPerClass = ({
     <div className="space-y-6 font-outfit mt-8">
       <div>
         <h3 className="font-bold text-lg lg:text-xl text-slate-900 tracking-tight">
-          QCMs cette année
+          QCM cette année
         </h3>
         <p className="text-slate-500 text-xs sm:text-sm mt-0.5">
-          Suivi détaillé des QCMs par classe et progression individuelle des élèves.
+          Suivi détaillé des QCM par classe et progression individuelle des élèves.
         </p>
       </div>
 
       <div className="space-y-6">
         {seancesStatsPerClass.map((clasSStats) => (
-          <AnimClassQCMsCarousel
+          <AnimClassQCMCarousel
             key={clasSStats.id}
             classStats={clasSStats}
             baseData={baseData}

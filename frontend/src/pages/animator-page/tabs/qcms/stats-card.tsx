@@ -64,12 +64,12 @@ const AnimQcmsStatsCard = ({
     return (
       <div className="font-outfit space-y-3 mt-6">
         <h3 className="font-bold text-lg text-slate-900 dark:text-white tracking-tight">
-          Bilan des QCMs
+          Bilan des QCM
         </h3>
         <EmptyStateCard
           icon={RotateCwFadingClockIcon}
           title="Aucun QCM enregistré pour le moment."
-          description="Les statistiques des QCMs générés et complétés seront affichées ici dès leur enregistrement."
+          description="Les statistiques des QCM générés et complétés seront affichées ici dès leur enregistrement."
         />
       </div>
     );
@@ -78,11 +78,11 @@ const AnimQcmsStatsCard = ({
   return (
     <div className="font-outfit space-y-3">
       <h3 className="font-bold text-lg text-slate-900 dark:text-white tracking-tight">
-        Bilan des QCMs
+        Bilan des QCM
       </h3>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-        {/* 1. QCMs soumis (Pleine largeur sur mobile, 1 col sur lg) */}
+        {/* 1. QCM soumis (Pleine largeur sur mobile, 1 col sur lg) */}
         <div className="col-span-2 lg:col-span-1 relative overflow-hidden rounded-2xl p-4 sm:p-5 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between items-center text-center gap-2.5 sm:gap-3 group">
           <div className="flex items-center justify-center gap-2.5 sm:gap-3">
             <div className="p-2 sm:p-2.5 rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/50 group-hover:scale-105 transition-transform shrink-0">
@@ -94,7 +94,7 @@ const AnimQcmsStatsCard = ({
           </div>
 
           <h4 className="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
-            QCMs soumis
+            QCM soumis
           </h4>
         </div>
 
@@ -110,7 +110,7 @@ const AnimQcmsStatsCard = ({
           </div>
 
           <h4 className="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
-            QCMs complétés
+            QCM complétés
           </h4>
         </div>
 

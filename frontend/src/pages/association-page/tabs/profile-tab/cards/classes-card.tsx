@@ -1,4 +1,4 @@
-import type { ClassVisitStats } from '@/api/association-member/apiCalls';
+import type { ClassInfoEntry } from '@/api/association-member/apiCalls';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -11,7 +11,7 @@ const getInitials = (firstName: string, lastName: string) => {
   return `${f}${l}` || '?';
 };
 
-const AssocClassesCard = ({ classes }: { classes: ClassVisitStats[] }) => {
+const AssocClassesCard = ({ classes }: { classes: ClassInfoEntry[] }) => {
   if (!classes || classes.length === 0) {
     return (
       <Card className="mt-4 gap-0 flex-1 border border-border/60 shadow-sm rounded-2xl">

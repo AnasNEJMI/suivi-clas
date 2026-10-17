@@ -22,6 +22,7 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
+import { EmptyStateCard } from '@/components/ui/empty-state-card';
 
 interface AssocQCMStatsRecapProps {
   qcmStatsPerScolarYear: QcmStatsPerScolarYear[];
@@ -50,7 +51,7 @@ const AssocQCMStatsRecap = ({ qcmStatsPerScolarYear }: AssocQCMStatsRecapProps) 
     let totalQcmsCompleted = 0;
     let totalStudents = 0;
 
-    // Tableau pour stocker les détails des élèves ayant des QCMs non terminés
+    // Tableau pour stocker les détails des élèves ayant des QCM non terminés
     const studentsWithPending: {
       class: { id: number; label: string };
       student: StudentQcmStats;
@@ -124,30 +125,36 @@ const AssocQCMStatsRecap = ({ qcmStatsPerScolarYear }: AssocQCMStatsRecapProps) 
   // État vide
   if (!qcmStats || !qcmStats.classes || qcmStats.classes.length === 0) {
     return (
-      <div className="font-outfit border-2 border-dashed border-slate-200/80 rounded-2xl p-8 flex flex-col items-center justify-center text-center bg-slate-50/50">
-        <div className="p-3.5 rounded-full bg-slate-100 text-slate-400 mb-3">
-          <RotateCwFadingClockIcon className="size-8" />
+      <div className="font-outfit space-y-3">
+        {/* Section Header */}
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h3 className="font-bold text-lg lg:text-xl text-slate-900 tracking-tight">
+            Bilan des QCM
+          </h3>
+          <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200/60 flex items-center gap-1.5">
+            <HelpCircleIcon className="size-3.5 text-slate-400" />
+            {stats.totalQcmsAssigned} QCM assignés au total
+          </span>
         </div>
-        <h4 className="text-base font-semibold text-slate-800">
-          Les données de QCMs n'ont pas encore été enregistrées
-        </h4>
-        <p className="text-xs text-slate-500 max-w-md mt-1">
-          Toutes les statistiques de réponses et de complétion des QCMs par les élèves apparaîtront ici dès leur soumission.
-        </p>
+        <EmptyStateCard
+          icon={RotateCwFadingClockIcon}
+          title = "Aucune donnée de QCM enregistrée"
+          description="Toutes les statistiques de réponses et de complétion des QCM par les élèves apparaîtront ici dès leur soumission."
+        />
       </div>
     );
   }
 
   return (
-    <div className="font-outfit">
+    <div className="font-outfit space-y-3">
       {/* Section Header */}
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="font-bold text-lg lg:text-xl text-slate-900 tracking-tight">
-          Bilan des QCMs
+          Bilan des QCM
         </h3>
         <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200/60 flex items-center gap-1.5">
           <HelpCircleIcon className="size-3.5 text-slate-400" />
-          {stats.totalQcmsAssigned} QCMs assignés au total
+          {stats.totalQcmsAssigned} QCM assignés au total
         </span>
       </div>
 
@@ -185,7 +192,7 @@ const AssocQCMStatsRecap = ({ qcmStatsPerScolarYear }: AssocQCMStatsRecapProps) 
           </div>
         </div>
 
-        {/* Card 2: QCMs en attente */}
+        {/* Card 2: QCM en attente */}
         <div className="rounded-2xl p-3 sm:p-4 bg-white border border-slate-200/80 shadow-2xs hover:border-indigo-300 transition-all duration-150 flex flex-col justify-between gap-2.5 sm:gap-3 relative overflow-hidden group">
           <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-1">
@@ -253,7 +260,7 @@ const AssocQCMStatsRecap = ({ qcmStatsPerScolarYear }: AssocQCMStatsRecapProps) 
                     Voir la liste <ArrowRight className="size-3.5 text-slate-900" />
                   </span>
                 ) : (
-                  <span className="text-emerald-700 font-semibold">Tous les QCMs sont faits</span>
+                  <span className="text-emerald-700 font-semibold">Tous les QCM sont faits</span>
                 )}
               </p>
             </button>
@@ -272,10 +279,10 @@ const AssocQCMStatsRecap = ({ qcmStatsPerScolarYear }: AssocQCMStatsRecapProps) 
                 </div>
 
                 <DrawerTitle className="text-xl font-bold text-slate-900 mt-2">
-                  Élèves ayant des QCMs en attente
+                  Élèves ayant des QCM en attente
                 </DrawerTitle>
                 <DrawerDescription className="text-xs text-slate-500">
-                  Liste des élèves n'ayant pas encore complété l'intégralité des QCMs assignés.
+                  Liste des élèves n'ayant pas encore complété l'intégralité des QCM assignés.
                 </DrawerDescription>
               </DrawerHeader>
 
@@ -319,7 +326,7 @@ const AssocQCMStatsRecap = ({ qcmStatsPerScolarYear }: AssocQCMStatsRecapProps) 
                     <div>
                       <p className="font-semibold text-slate-900">Aucun retardataire</p>
                       <p className="text-sm text-slate-500 mt-1">
-                        Félicitations, tous les élèves ont soumis l'ensemble de leurs QCMs !
+                        Félicitations, tous les élèves ont soumis l'ensemble de leurs QCM !
                       </p>
                     </div>
                   </div>

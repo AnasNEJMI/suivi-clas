@@ -1,5 +1,5 @@
 import type { SkillEvalData } from "@/api/animator/skill-evals.types"
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { EmptyStateCard } from "@/components/ui/empty-state-card"
 import { Progress } from "@/components/ui/progress"
 import { SKILL_CAROUSEL_CARD_STYLES } from "@/lib/types/data.types"
 import { cn } from "@/lib/utils"
@@ -10,21 +10,13 @@ const AnimSkillEvalCard = ({ skillEval }: { skillEval: SkillEvalData | null }) =
         return (
             <div className="space-y-3 mt-6">
                 <h3 className="font-bold text-lg text-slate-900 tracking-tight">
-                    Commentaires
+                    Commentaires & Retours
                 </h3>
-                <Card className='border-2 border-dashed border-slate-200/80 shadow-none h-48 flex flex-col items-center justify-center w-full rounded-2xl bg-white/60 p-6 text-center'>
-                    <CardHeader className='p-0 flex flex-col items-center w-full'>
-                        <div className="size-11 rounded-2xl bg-slate-100/80 flex items-center justify-center mb-2">
-                            <RotateCwFadingClockIcon className='size-5 text-slate-400' />
-                        </div>
-                        <CardTitle className='text-sm font-bold text-slate-800'>
-                            Aucun commentaire enregistré
-                        </CardTitle>
-                        <CardDescription className='text-xs text-slate-500 max-w-sm mt-1'>
-                            Les retours de l'animateur s'afficheront ici dès leur enregistrement.
-                        </CardDescription>
-                    </CardHeader>
-                </Card>
+                <EmptyStateCard
+                    icon={RotateCwFadingClockIcon}
+                    title="Aucun commentaire enregistré"
+                    description="Les retours de l'animateur s'afficheront ici dès leur enregistrement."
+                />
             </div>
         );
     }

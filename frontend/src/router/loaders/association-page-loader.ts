@@ -20,6 +20,12 @@ export async function associationPageLoader(){
         }
 
         void queryClient.prefetchQuery({
+            queryKey : associationMemberQueryKeys.classes,
+            queryFn : associationMemberApiCalls.fetchClasses,
+            staleTime : 2 * 60 * 1000,
+        })
+        
+        void queryClient.prefetchQuery({
             queryKey : associationMemberQueryKeys.presenceStats,
             queryFn : associationMemberApiCalls.fetchPresenceStats,
             staleTime : 2 * 60 * 1000,

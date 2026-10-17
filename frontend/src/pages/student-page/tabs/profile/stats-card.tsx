@@ -58,12 +58,12 @@ export const StatsCard = ({
             </div>
           </div>
 
-          {/* QCMs complétés */}
+          {/* QCM complétés */}
           <div className="p-3 bg-slate-50/80 border border-slate-200/80 rounded-2xl">
             <div className="flex items-center justify-between text-xs font-bold text-slate-700 mb-1.5">
               <span className="flex items-center gap-1.5 text-slate-800">
                 <CheckCircle2Icon className="size-4 text-indigo-600" />
-                QCMs complétés
+                QCM complétés
               </span>
               <span className="text-slate-900 font-extrabold">
                 {qcmCompletedCount} / {qcmCount}

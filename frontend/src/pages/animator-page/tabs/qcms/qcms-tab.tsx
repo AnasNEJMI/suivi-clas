@@ -1,4 +1,4 @@
-import  { Suspense } from 'react'
+import  { Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import SectionError from '../../../section-error'
 import { useRouteLoaderData } from 'react-router'
@@ -9,10 +9,14 @@ import QcmsTabSkeleton from './skeleton'
 
 const AnimQcmsTab = () => {
     const {user : animator} = useRouteLoaderData('animator') as {user: User};
+
+    useEffect(() =>{
+        window.scrollTo(0,0)
+    },[])
   return (
     <>
-        <TabHeader user={animator} title = 'Éspace animateur' subTitle='Profile' description="Retrouvez les données des QCMs soumis cette année"/>
-        <ErrorBoundary fallback = {<SectionError desc = 'du profile'/>}>
+        <TabHeader user={animator} title = 'Éspace animateur' subTitle='QCM' description="Retrouvez les données des QCM soumis cette année"/>
+        <ErrorBoundary fallback = {<SectionError/>}>
             <Suspense fallback = {<QcmsTabSkeleton/>}>
                 <AnimQcmsTabDataWrapper animator = {animator}/>
             </Suspense>

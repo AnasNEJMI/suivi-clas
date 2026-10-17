@@ -10,13 +10,13 @@ import { GraduationCapIcon, RotateCwFadingClockIcon } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { StudentCarouselQcmCard } from "./student-carousel-card";
 
-const AssocClassQCMsCarousel = ({
-  classQCMs,
+const AssocClassQCMCarousel = ({
+  classQCM,
 }: {
-  classQCMs: ClassQcmStats;
+  classQCM: ClassQcmStats;
 }) => {
   // Tri par taux de complétion décroissant
-  const sortedStudents = [...classQCMs.students].sort((a, b) => {
+  const sortedStudents = [...classQCM.students].sort((a, b) => {
     const rateA = a.totalQcms === 0 ? 0 : a.qcmCompletedCount / a.totalQcms;
     const rateB = b.totalQcms === 0 ? 0 : b.qcmCompletedCount / b.totalQcms;
     return rateB - rateA;
@@ -32,10 +32,10 @@ const AssocClassQCMsCarousel = ({
           </div>
           <div>
             <h4 className="font-bold text-slate-900 text-base leading-snug">
-              {classQCMs.class.label}
+              {classQCM.class.label}
             </h4>
             <p className="text-xs text-slate-500 font-medium">
-              Suivi des QCMs des élèves
+              Suivi des QCM des élèves
             </p>
           </div>
         </div>
@@ -56,7 +56,7 @@ const AssocClassQCMsCarousel = ({
               Aucune donnée de QCM
             </CardTitle>
             <CardDescription className="text-xs text-slate-500 max-w-sm mt-1">
-              Les résultats apparaîtront ici dès que des QCMs seront réalisés par les élèves de cette classe.
+              Les résultats apparaîtront ici dès que des QCM seront réalisés par les élèves de cette classe.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -71,7 +71,7 @@ const AssocClassQCMsCarousel = ({
               >
                 <StudentCarouselQcmCard
                   student={student}
-                  classLabel={classQCMs.class.label}
+                  classLabel={classQCM.class.label}
                 />
               </CarouselItem>
             ))}
@@ -96,4 +96,4 @@ const AssocClassQCMsCarousel = ({
   );
 };
 
-export default AssocClassQCMsCarousel;
+export default AssocClassQCMCarousel;

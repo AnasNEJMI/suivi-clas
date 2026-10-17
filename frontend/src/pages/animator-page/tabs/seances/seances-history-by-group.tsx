@@ -1,7 +1,6 @@
 import type { BilanEntry, DeleteBilanEntry, SeancesByScolarYearEntry } from '@/api/animator/seances.types'
 import type { LessonsByLevelEntry } from '@/api/animator/types'
 import { Button } from '@/components/ui/button'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Carousel,
   CarouselContent,
@@ -47,7 +46,7 @@ const SeancesHistoryByGroup = ({
             icon={RotateCwFadingClockIcon}
             title = 'Aucune séance enregistrée pour le moment.'
             description='Les statistiques et bilans des séances réalisées seront affichés ici dès leur enregistrement.'
-        />
+            />
       </div>
     )
   }
@@ -73,11 +72,11 @@ const SeancesHistoryByGroup = ({
 
           return (
             <div
-              key={group.id}
+            key={group.id}
               className="bg-slate-50/60 border border-slate-200/70 rounded-3xl p-5 lg:p-6 shadow-2xs"
             >
               {/* Header du Groupe */}
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className="size-10 rounded-2xl bg-linear-to-tr from-sky-600 via-indigo-600 to-violet-600 text-white flex items-center justify-center font-bold shadow-2xs shrink-0">
                     <UsersRoundIcon className="size-5" />
@@ -99,19 +98,11 @@ const SeancesHistoryByGroup = ({
 
               {/* État vide du Groupe */}
               {group.seances.length === 0 ? (
-                <Card className="border-2 border-dashed border-slate-200/80 shadow-none h-48 flex flex-col items-center justify-center w-full rounded-2xl bg-white/60 p-6 text-center">
-                  <CardHeader className="p-0 flex flex-col items-center w-full">
-                    <div className="size-11 rounded-2xl bg-slate-100/80 flex items-center justify-center mb-2">
-                      <RotateCwFadingClockIcon className="size-5 text-slate-400" />
-                    </div>
-                    <CardTitle className="text-sm font-bold text-slate-800">
-                      Aucune séance enregistrée pour ce groupe
-                    </CardTitle>
-                    <CardDescription className="text-xs text-slate-500 max-w-sm mt-1">
-                      Les bilans et présences liés à ce groupe s'afficheront ici automatiquement.
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
+                <EmptyStateCard
+                  icon={RotateCwFadingClockIcon}
+                  title = 'Aucune séance enregistrée pour ce groupe'
+                  description="Les bilans et présences liés à ce groupe s'afficheront ici automatiquement."              
+                />
               ) : (
                 /* Carrousel de Séances */
                 <Carousel opts={{ align: 'start' }} className="w-full">

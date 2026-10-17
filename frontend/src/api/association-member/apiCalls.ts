@@ -8,6 +8,30 @@ export const associationMemberEndpoints = {
     visitStats : 'visits',
     animatorStats : 'animators',
     qcmStats : 'qcms',
+    classes : 'classes'
+}
+
+
+export type ClassesResponse = {
+    classesPerScolarYear : ClassesPerScolarYear[],
+}
+
+export type ClassesPerScolarYear = {
+    scolarYear : {id : number, label : string},
+    classes : ClassInfoEntry[],
+}
+
+export type ClassInfoEntry = {
+    class : {id : number, label : string},
+    students : StudentInfoEntry[]
+}
+
+export type StudentInfoEntry = {
+    id : number,
+    firstName : string,
+    lastName : string,
+    gender : 'm' | 'f',
+    level : {id : number, label : string}| null
 }
 
 export type PresenceStatsResponse = {
@@ -50,6 +74,7 @@ export type ClassQcmStats = { class : {id: number; label: string}, students: Stu
 export type StudentQcmStats = {id: number; firstName: string;  lastName: string; gender : 'm' | 'f', qcmCompletedCount : number, totalQcms : number, qcmCompletedTotalPoints : number};
 
 export const associationMemberApiCalls = {
+    fetchClasses : fetchPayloadlessData<ClassesResponse>(associationMemberEndpoints.classes, ASSOCIATION_API_STATS_ENDPOINT),
     fetchPresenceStats : fetchPayloadlessData<PresenceStatsResponse>(associationMemberEndpoints.presenceStats, ASSOCIATION_API_STATS_ENDPOINT),
     fetchVisitStats : fetchPayloadlessData<VisitStatsResponse>(associationMemberEndpoints.visitStats, ASSOCIATION_API_STATS_ENDPOINT),
     fetchAnimatorStats : fetchPayloadlessData<AnimatorStatsResponse>(associationMemberEndpoints.animatorStats, ASSOCIATION_API_STATS_ENDPOINT),

@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import type { StudentVisitStats, VisitStatsPerScolarYear } from '@/api/association-member/apiCalls';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getDaysSinceLastVisit } from '@/lib/utils';
 import { 
   CalendarCheck2Icon, 
@@ -22,6 +21,7 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
+import { EmptyStateCard } from '@/components/ui/empty-state-card';
 
 const AssocVisitStatsRecap = ({ visitStatsPerScolarYear }: { visitStatsPerScolarYear: VisitStatsPerScolarYear[] }) => {
   const isMobile = useIsMobile();
@@ -76,17 +76,23 @@ const AssocVisitStatsRecap = ({ visitStatsPerScolarYear }: { visitStatsPerScolar
 
   if (!visitStats || !visitStats.classes || visitStats.classes.length === 0) {
     return (
-      <Card className='border-2 border-dashed border-zinc-200 shadow-none h-64 flex flex-col items-center justify-center w-full rounded-xl bg-transparent mt-4 p-4'>
-        <CardHeader className='flex flex-col items-center justify-center w-full'>
-          <RotateCwFadingClockIcon className='size-10 opacity-70' />
-          <CardTitle className='text-base font-medium opacity-70 text-center text-balance'>
-            Les données de visites n'ont pas été enregistrées pour le moment.
-          </CardTitle>
-          <CardDescription className='text-pretty text-sm max-w-xl text-center'>
-            Toutes les données de visites enregistrées seront affichées ici dès leur réalisation.
-          </CardDescription>
-        </CardHeader>   
-      </Card>
+      <div className="font-outfit space-y-3">
+        {/* Section Header */}
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h3 className="font-bold text-lg lg:text-xl text-slate-900 tracking-tight">
+            Visites cette semaine
+          </h3>
+          <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200/60 flex items-center gap-1.5">
+            <UsersIcon className="size-3.5 text-slate-400" />
+            {stats.totalStudents} élèves suivis
+          </span>
+        </div>
+        <EmptyStateCard
+          icon={RotateCwFadingClockIcon}
+          title = "Les données de visites n'ont pas été enregistrées pour le moment."
+          description="Toutes les données de visites enregistrées seront affichées ici dès leur réalisation."
+        />
+      </div>
     );
   }
 

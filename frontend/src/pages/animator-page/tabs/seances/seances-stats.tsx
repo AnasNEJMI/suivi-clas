@@ -107,7 +107,7 @@ const SeancesStats = ({
           </h4>
         </div>
 
-        {/* 3. QCMs générés (Moitié col-span-1 sur mobile, 1 col sur lg) */}
+        {/* 3. QCM générés (Moitié col-span-1 sur mobile, 1 col sur lg) */}
         <div className="col-span-1 relative overflow-hidden rounded-2xl p-4 sm:p-5 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between items-center text-center gap-2.5 sm:gap-3 group">
           <div className="flex items-center justify-center gap-2.5 sm:gap-3">
             <div className="p-2 sm:p-2.5 rounded-xl bg-amber-50 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-100 dark:border-amber-900/50 group-hover:scale-105 transition-transform shrink-0">
@@ -119,7 +119,7 @@ const SeancesStats = ({
           </div>
 
           <h4 className="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
-            QCMs générés
+            QCM générés
           </h4>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import  { Suspense } from 'react'
+import  { Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import SectionError from '../../../section-error'
 import { useRouteLoaderData } from 'react-router'
@@ -9,10 +9,14 @@ import ProfileTabSkeleton from './skeleton'
 
 const AnimProfileTab = () => {
     const {user : animator} = useRouteLoaderData('animator') as {user: User};
+
+    useEffect(() =>{
+        window.scrollTo(0,0)
+    },[])
   return (
     <>
         <TabHeader user={animator} title = 'Éspace animateur' subTitle='Profile' description="Retrouvez les données de votre profile et les contrats en cours"/>
-        <ErrorBoundary fallback = {<SectionError desc = 'du profile'/>}>
+        <ErrorBoundary fallback = {<SectionError/>}>
             <Suspense fallback = {<ProfileTabSkeleton/>}>
                 <AnimProfileTabDataWrapper animator = {animator}/>
             </Suspense>
