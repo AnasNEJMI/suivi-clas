@@ -107,7 +107,7 @@ export function AppSidebar({ tabs, theme, ...props }: AppSidebarProps) {
           <div className="flex flex-col min-w-0 flex-1">
             <div className="flex items-center justify-between">
               <span className="font-bold text-sm tracking-tight text-zinc-900 truncate">
-                CoursParcours
+                Mon Suivi Scolaire
               </span>
               <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-700">
                 PRO

@@ -2,8 +2,8 @@ export function OrganizationSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type':    'SoftwareApplication',
-    name:       'CoursParcours',
-    url:        'https://coursparcours.vercel.app/',
+    name:       'Mon Suivi Scolaire',
+    url:        'https://monsuiviscolaire.vercel.app/',
     description: "Plateforme d'accompagnement scolaire connectant animateurs, élèves et associations.",
     applicationCategory: 'EducationalApplication',
     operatingSystem: 'Web',
@@ -19,8 +19,8 @@ export function OrganizationSchema() {
     },
     provider: {
       '@type': 'Organization',
-      name:    'CoursParcours',
-      url:     'https://coursparcours.vercel.app/',
+      name:    'Mon Suivi Scolaire',
+      url:     'https://monsuiviscolaire.vercel.app/',
     },
   }
 

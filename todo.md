@@ -1,4 +1,4 @@
-# Suivi CLAS — Remaining Tasks
+# Mon Suivi Scolaire — Remaining Tasks
 
 > Tasks ordered by priority and dependency. Sub-tasks within each section
 > are listed in the optimal implementation order (DB → backend → frontend).

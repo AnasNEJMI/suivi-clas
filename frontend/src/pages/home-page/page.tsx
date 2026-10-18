@@ -13,8 +13,8 @@ export default function HomePage() {
     <>
       {/* head */}
       <SEOHead
-        title='Accompagnement scolaire conçu pour réussir'
-        description="CoursParcours connecte animateurs, élèves et associations autour d'un objectif commun — transformer chaque séance en progrès mesurable et durable."
+        title="Page d'acceuil"
+        description="Mon Suivi Scolaire connecte animateurs, élèves et associations autour d'un objectif commun — transformer chaque séance en progrès mesurable et durable."
         canonical='/'
         includeOrgSchema = {true}
       />

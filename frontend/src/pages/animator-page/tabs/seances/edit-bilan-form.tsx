@@ -74,8 +74,8 @@ const AnimEditBilanForm = ({
             <div className='flex-1 flex flex-col gap-2'>
                 <PresenceCard student = {studentBilan}/>
                 <SubjectAndLessonCard availableSubjects={availableSubjects}/>
-                <SummaryCard />
-                <IncludeQcmField />
+                <SummaryCard step={3} />
+                <IncludeQcmField step={4} />
             </div>
             <Field className='flex flex-row gap-2 mt-8'>
                 <BrandButton
