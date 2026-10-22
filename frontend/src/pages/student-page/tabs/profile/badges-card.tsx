@@ -93,7 +93,6 @@ export const BadgesCard = ({ bilans, lessonsBySubject }: BadgesCardProps) => {
   const is100PercentQcmSubmitted =
     totalQcmsGiven > 0 && completedQcms.length === totalQcmsGiven;
 
-  // Configuration de l'ensemble des badges
   const rawBadges = [
     {
       id: 'streak-5',
@@ -107,7 +106,7 @@ export const BadgesCard = ({ bilans, lessonsBySubject }: BadgesCardProps) => {
     {
       id: 'marathon',
       title: 'Marathonien',
-      description: '15h+ de soutien cumulées (900 min)',
+      description: 'plus de 15h de séances cumulées',
       icon: ClockIcon,
       unlocked: totalMinutesSpent >= 900,
       activeBg: 'bg-sky-500 text-white',
@@ -161,7 +160,7 @@ export const BadgesCard = ({ bilans, lessonsBySubject }: BadgesCardProps) => {
     {
       id: 'subject-master',
       title: 'Matière Dominée',
-      description: '100% des leçons validées sur 1 matière',
+      description: '100% des leçons étudiées sur 1 matière',
       icon: CheckCheckIcon,
       unlocked: hasMasteredSubject,
       activeBg: 'bg-rose-500 text-white',
@@ -211,7 +210,6 @@ export const BadgesCard = ({ bilans, lessonsBySubject }: BadgesCardProps) => {
           {totalUnlocked} / {badges.length} débloqués
         </span>
       </CardHeader>
-
       <CardContent className="p-0">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
           {badges.map((badge) => {

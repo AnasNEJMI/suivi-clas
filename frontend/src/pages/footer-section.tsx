@@ -1,50 +1,84 @@
-import { Separator } from "@/components/ui/separator";
-import { School } from "lucide-react";
+import { ArrowUp, ArrowUpRight } from 'lucide-react'
+import { Link } from 'react-router'
+import { Separator } from '@/components/ui/separator'
+import { SchoolArt } from '@/components/school-art'
+import { SITE_NAME } from '@/site.config'
 
-const footerLinks = {
-  Plateforme: ['À Propos', 'Notre méthode'],
-  Contact:    ['Nous contacter', 'Mentions légales'],
-}
+const columns = [
+  {
+    heading: 'Plateforme',
+    links: [
+      { label: 'Ma méthode', to: '/methode' },
+      { label: 'Se connecter',  to: '/connexion' },
+    ],
+  },
+  {
+    heading: 'Contact',
+    links: [
+      { label: 'Me contacter',   to: '/contact' },
+      { label: 'Mentions légales', to: '/mentions-legales' },   // create this route, or change it
+    ],
+  },
+]
 
 function FooterSection() {
   return (
-    <footer className='px-6 mt-24 mb-6 w-full max-w-7xl'>
-        <div className="bg-zinc-900 rounded-[1.5rem] md:rounded-[3rem] px-6 md:px-12 pt-16 pb-6">
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                <div>
-                    <div className='mb-2 flex items-center gap-2'>
-                        <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white'>
-                        <School className='h-4 w-4 text-white' aria-hidden />
-                        </div>
-                        <span className='text-xl font-medium text-zinc-200'>Mon Suivi Scolaire</span>
-                    </div>
-                    <p className=' md:max-w-72 text-sm md:text-base leading-[1.55] text-white/65'>
-                        La plateforme qui réunit animateurs, élèves et associations autour d'un accompagnement scolaire de qualité.
-                    </p>
-                </div>
-                <div className="flex justify-evenly items-center">
-                    {Object.entries(footerLinks).map(([heading, links]) => (
-                    <div key={heading} className="flex-1">
-                        <h4 className='mb-2.5 text-sm md:text-base font-medium uppercase tracking-[.7px] text-white/90'>
-                        {heading}
-                        </h4>
-                        {links.map((l) => (
-                        <a key={l} href='#' className='mb-1.5 block text-xs md:text-sm text-white/75 font-medium transition-colors hover:text-white/90'>
-                            {l}
-                        </a>
-                        ))}
-                    </div>
-                    ))}
-                </div>
+    <footer className='mb-6 mt-6 w-full max-w-7xl px-4 sm:px-6 z-0'>
+      <div className='relative isolate overflow-hidden rounded-[2rem] bg-zinc-900 px-6 pb-6 pt-14 md:rounded-[3rem] md:px-12 md:pt-16'>
+        <div className='relative z-10 grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr]'>
+          <div>
+            <div className='flex items-center gap-3'>
+              <span className='grid size-11 place-items-center rounded-xl bg-lime-300 text-zinc-900'>
+                <SchoolArt className='size-7' />
+              </span>
+              <span className='text-xl font-bold tracking-tight text-white'>{SITE_NAME}</span>
             </div>
-            <Separator className="mt-12 opacity-20"/>
-            <p className='mt-12 text-white/75 text-sm font-bold flex justify-between'>
-                <span>Droits réservés © 2026</span>
-                <span>Conçu par Anas NEJMI</span>
+            <p className='mt-4 max-w-sm text-sm leading-relaxed text-white/65 md:text-base'>
+              La plateforme qui réunit animateurs, élèves et associations autour d'un accompagnement scolaire de qualité.
             </p>
+            <button
+              type='button'
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className='group mt-6 inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-white/80 transition hover:border-lime-300 hover:text-lime-300'
+            >
+              Retour en haut
+              <ArrowUp className='size-4 transition-transform group-hover:-translate-y-0.5' aria-hidden />
+            </button>
+          </div>
+
+          {columns.map(col => (
+            <nav key={col.heading} aria-label={col.heading}>
+              <h4 className='text-sm font-semibold uppercase tracking-widest text-lime-300'>{col.heading}</h4>
+              <ul className='mt-4 space-y-3'>
+                {col.links.map(l => (
+                  <li key={l.to}>
+                    <Link to={l.to} className='group inline-flex items-center gap-1 text-sm font-medium text-white/70 transition-colors hover:text-white md:text-base'>
+                      {l.label}
+                      <ArrowUpRight className='size-3.5 -translate-x-1 translate-y-1 opacity-0 transition group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100' aria-hidden />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
         </div>
+
+        <p
+          aria-hidden
+          className='relative z-10 mt-14 select-none whitespace-nowrap bg-linear-to-b from-white to-white/50 bg-clip-text text-center text-[clamp(1.5rem,7.6vw,6.5rem)] font-extrabold leading-none tracking-tighter text-transparent'
+        >
+          {SITE_NAME}
+        </p>
+
+        <Separator className='relative z-10 my-8 bg-white/15' />
+
+        <div className='relative z-10 flex flex-col gap-2 text-sm font-semibold text-white/70 sm:flex-row sm:justify-between'>
+          <span>Droits réservés © {new Date().getFullYear()}</span>
+          <span>Conçu par Anas NEJMI</span>
+        </div>
+      </div>
     </footer>
   )
 }
 
-export default FooterSection;
+export default FooterSection

@@ -10,29 +10,14 @@ interface NavBarProps extends React.ComponentProps<'div'>{
 
 const links = [
     {
-        label : "A Propos",
-        to : '/a-propos',
+        label : "Ma méthode",
+        to : '/methode',
     },
     {
         label : "Contact",
         to : '/contact',
     },
 ]
-
-// const usefulLinks = [
-//     {
-//         label : "Cours",
-//         to : '/liens/cours',
-//     },
-//     {
-//         label : "Exercices",
-//         to : '/liens/exercices',
-//     },
-//     {
-//         label : "Fiches",
-//         to : '/liens/fiches',
-//     },
-// ]
 
 const NavBar = ({className, ...props} : NavBarProps) => {
   return (

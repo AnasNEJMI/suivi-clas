@@ -59,7 +59,7 @@ function StatsSection() {
   const [gridRef, inView] = useInView<HTMLDivElement>({ threshold: 0.3 })
 
   return (
-    <section className='relative isolate flex w-full flex-col items-center overflow-hidden bg-lime-300/90 px-6 py-24'>
+    <section className='relative z-10 isolate flex w-full flex-col items-center overflow-hidden bg-lime-300/90 px-6 py-24'>
       <Floating className='left-[6%] top-[14%] size-10 text-white' animation='float-a'><Sparkle /></Floating>
       <Floating className='right-[8%] top-[18%] size-14 text-white/80' animation='float-b' offset={2}><Ring /></Floating>
       <Floating className='bottom-[12%] left-[10%] h-6 w-28 text-amber-500' animation='wiggle' offset={1}><Squiggle /></Floating>

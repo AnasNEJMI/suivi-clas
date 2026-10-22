@@ -23,7 +23,9 @@
     "restore-qcm-bank-questions": "tsx prisma/seed-scripts/restore-qcm-bank-questions.ts",
     "seed-seance-durations" : "tsx prisma/seed-scripts/seed.seance-durations.ts",
     "clean-qcm-latex" : "tsx prisma/seed-scripts/clean-qcm-latex.ts",
-    "seed-summary-paragraphs": "tsx prisma/seed-scripts/seed.summary-paragraphs.ts"
+    "seed-summary-paragraphs": "tsx prisma/seed-scripts/seed.summary-paragraphs.ts",
+    "directory" : "tsx prisma/seed-scripts/sync-directory.ts",
+    "cleanup-sessions" : "tsx prisma/seed-scripts/cleanup-sessions.ts"
   },
   "keywords": [],
   "author": "AnasNEJMI",

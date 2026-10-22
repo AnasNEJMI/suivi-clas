@@ -19,7 +19,6 @@ const StudentSeancesTab = () => {
         <ErrorBoundary fallback = {<SectionError/>}>
             <Suspense fallback = {<UniversalTabSkeleton/>}>
                 <StudentSeancesTabDataWrapper student = {student}/>
-                {/* <BilansSection student = {student}/> */}
             </Suspense>
         </ErrorBoundary>
     </>

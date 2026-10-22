@@ -3,14 +3,11 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import { guestRouteLoader } from './router/loaders/guest-route-loader.ts'
-import AboutPage from './pages/about-page.tsx'
-import ContactPage from './pages/contact-page.tsx'
 import { RootErrorBoundary } from './pages/root-error-boundry.tsx'
 import { studentPageLoader } from './router/loaders/student-page-loader.tsx'
 import { AnimatorPageLoader } from './router/loaders/animator.loader.ts'
 import { associationPageLoader } from './router/loaders/association-page-loader.ts'
 import { lazy, StrictMode, Suspense, type FunctionComponent } from 'react'
-import MethodPage from './pages/method-page.tsx'
 import StudentSeancesTab from './pages/student-page/tabs/seances/seances-tab.tsx'
 import QcmsTab from './pages/student-page/tabs/qcms/qcms-tab.tsx'
 import SkillEvalsTab from './pages/student-page/tabs/skill-evals/skill-evals-tab.tsx'
@@ -50,6 +47,8 @@ const StudentPageLayout = lazify(() => import('./pages/student-page/layout.tsx')
 const AssociationPageLayout = lazify(() => import('./pages/association-page/layout.tsx'))
 const AnimatorPageLayout = lazify(() => import('./pages/animator-page/layout.tsx'))
 const LoginPage = lazify(() => import('./pages/login-page/page.tsx'))
+const ContactPage = lazify(() => import('./pages/contact-page.tsx'))
+const MethodPage = lazify(() => import('./pages/method-page.tsx'))
 
 const router = createBrowserRouter([
   {
@@ -59,7 +58,6 @@ const router = createBrowserRouter([
     children : [
       {index : true, Component : HomePage, loader : guestRouteLoader,  shouldRevalidate: () => true,},
       {path : 'contact', Component : ContactPage, loader : guestRouteLoader,  shouldRevalidate: () => true,},
-      {path : 'a-propos', Component : AboutPage, loader : guestRouteLoader,  shouldRevalidate: () => true,},
       {path : 'connexion', Component : LoginPage, loader : guestRouteLoader,  shouldRevalidate: () => true,},
       {path : 'methode', Component : MethodPage, loader : guestRouteLoader,  shouldRevalidate: () => true,},
       {

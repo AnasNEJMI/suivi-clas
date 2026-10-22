@@ -1,8 +1,11 @@
-import { ArrowRight, BookOpen, ChevronDown, GraduationCap, Pencil, Plus, Sparkle, Sparkles, Triangle } from 'lucide-react'
+import { ArrowRight, ChevronDown, Plus, Sparkle, Sparkles, Triangle } from 'lucide-react'
 import { Link } from 'react-router'
 import { BrandButton } from '@/components/brand-button'
 import { useMouseParallax } from '@/hooks/use-mouse-parallax'
 import { Dots, Floating, HalfCircle, Ring, Squiggle } from '@/hooks/decor-shapes'
+import { BackpackArt, GradCapArt, OpenBookArt, PencilArt, RulerArt } from '@/components/school-art'
+import { WaveUnderline } from '@/components/wave-underline'
+
 const rise = 'animate-rise motion-reduce:animate-none'
 const after = (s: number) => ({ animationDelay: `${s}s` })
 
@@ -18,7 +21,7 @@ function HeroSection() {
   return (
     <section
       ref={ref}
-      className='relative isolate flex min-h-[92svh] w-full flex-col items-center justify-center overflow-hidden rounded-b-[4rem] bg-lime-300/90 px-6 pb-28 pt-32 md:rounded-b-[5rem] md:pb-36 lg:rounded-b-[8rem]'
+      className='relative z-10 isolate flex min-h-[92svh] w-full flex-col items-center justify-center overflow-hidden rounded-b-[4rem] bg-lime-300/90 px-6 pb-28 pt-32 md:rounded-b-[5rem] md:pb-36 lg:rounded-b-[8rem]'
     >
       {/* Soft colour fields */}
       <div aria-hidden className='pointer-events-none absolute -left-32 -top-32 size-120 animate-drift rounded-full bg-lime-200/70 blur-3xl motion-reduce:animate-none' />
@@ -47,15 +50,20 @@ function HeroSection() {
       <Floating className='bottom-[24%] right-[20%] hidden size-12 text-zinc-900/30 sm:block' depth={12} animation='float-b' offset={4}><Dots /></Floating>
       <Floating className='bottom-[9%] left-[38%] size-7 text-zinc-900/40' depth={26} animation='float-a' offset={5}><Ring /></Floating>
 
-      {/* Stickers, large screens only so they never crowd the text */}
-      <Floating className='left-[10%] top-[38%] hidden size-16 -rotate-6 lg:block' depth={36} animation='float-b' offset={2}>
-        <Pencil className='size-8 text-amber-500' />
+      <Floating className='left-[10%] top-[38%] hidden size-10 -rotate-6 lg:block' depth={36} animation='float-b' offset={2}>
+        <PencilArt className='size-16 text-amber-600' />
       </Floating>
-      <Floating className='bottom-[16%] left-[17%] hidden size-14 rotate-6 lg:block' depth={30} animation='float-a' offset={4}>
-        <BookOpen className='size-10 text-emerald-600' />
+      <Floating className='bottom-[16%] left-[17%] hidden size-10 rotate-6 lg:block' depth={30} animation='float-a' offset={4}>
+        <OpenBookArt className='size-20 text-emerald-600' />
       </Floating>
-      <Floating className='right-[11%] top-[44%] hidden size-16 rotate-6 lg:block' depth={36} animation='float-a' offset={1}>
-        <GraduationCap className='size-11 text-indigo-600' />
+      <Floating className='right-[11%] top-[44%] hidden size-10 rotate-6 lg:block' depth={36} animation='float-a' offset={1}>
+        <GradCapArt className='size-16 text-indigo-600' />
+      </Floating>
+      <Floating className='bottom-[12%] right-[17%] hidden size-16 -rotate-12 lg:block' depth={24} animation='float-b' offset={3}>
+        <BackpackArt className='size-18 text-rose-500' />
+      </Floating>
+      <Floating className='left-[24%] top-[24%] hidden size-10 rotate-12 xl:block' depth={28} animation='float-a' offset={5}>
+        <RulerArt className='size-20 text-sky-600' />
       </Floating>
 
       {/* ── Content ── */}
@@ -73,20 +81,10 @@ function HeroSection() {
           style={after(0.15)}
         >
           Chaque élève mérite un suivi qui fait{' '}
-          <span className='relative inline-block'>
-            vraiment
-            <svg aria-hidden viewBox='0 0 200 14' preserveAspectRatio='none' fill='none' className='absolute -bottom-2 left-0 h-3 w-full text-white'>
-              <path
-                d='M3 9C45 3 80 13 120 6s60-3 77 1'
-                pathLength={1}
-                stroke='currentColor'
-                strokeWidth='6'
-                strokeLinecap='round'
-                style={{ strokeDasharray: 1 }}
-                className='animate-draw motion-reduce:animate-none'
-              />
-            </svg>
-          </span>{' '}
+            <span className='relative inline-block'>
+              vraiment
+              <WaveUnderline />
+            </span>{' '}
           la différence.
         </h1>
 

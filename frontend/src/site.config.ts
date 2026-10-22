@@ -5,6 +5,10 @@ export const SITE_NAME       = 'Mon Suivi Scolaire'
 export const SITE_SHORT_NAME = 'Mon Suivi'                        // installed-app label: keep it under ~12 characters
 export const SITE_TAGLINE    = "Plateforme d'accompagnement scolaire"
 
+export const CONTACT_EMAIL = 'monsuiviscolaire.web@gmail.com'
+export const DEVELOPER_NAME = 'Anas NEJMI'
+
+
 // Pages search engines should index → sitemap.xml
 // Paths must match your router: your sitemap said /login, your robots.txt said /connexion
 export const PUBLIC_PAGES = [

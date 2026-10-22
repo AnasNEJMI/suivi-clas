@@ -1,110 +1,159 @@
-import { cn } from "@/lib/utils"
-import { Building2, GraduationCap, PenLine, RefreshCw } from "lucide-react"
-import studentIllustration from '@/./assets/images/student-illus.png';
-import teacherIllustration from '@/./assets/images/teacher-illus.png';
-import associationIllustration from '@/./assets/images/assoc-illus.png';
+import { Check } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Reveal } from '@/components/reveal'
+import {
+  ChalkboardArt, ClipboardArt, GradCapArt, LightbulbArt, NotebookArt,
+  OpenBookArt, RulerArt, SchoolArt, TrophyArt,
+} from '@/components/school-art'
+import studentIllustration from '@/./assets/images/student-illus.png'
+import teacherIllustration from '@/./assets/images/teacher-illus.png'
+import associationIllustration from '@/./assets/images/assoc-illus.png'
+import { Floating } from '@/hooks/decor-shapes'
+import { SectionHeading } from '@/hooks/section-heading'
 
-const forces = [
+type Anim = 'float-a' | 'float-b' | 'wiggle'
+
+const actors = [
   {
-    icon: GraduationCap,
     title: "L'Élève",
-    description:
-      "Suit sa progression, consulte ses bilans séance par séance, accède à ses fiches de révision et s'évalue grâce à des QCM adaptés à son niveau.",
+    description: "Suit sa progression, consulte ses bilans séance par séance, accède à ses fiches de révision et s'évalue grâce à des QCM adaptés à son niveau.",
     tag: 'Guidé et motivé',
-    bar: 'bg-violet-600',
-    iconBg: 'bg-emerald-100',
-    iconColor: 'text-emerald-800',
-    tagBg: 'bg-emerald-100',
-    tagColor: 'text-emerald-800',
-    illustration : studentIllustration,
-    borderColor : 'border-emerald-500'
+    points: ['Ses bilans après chaque séance', 'QCM et fiches de révision', 'Sa progression leçon par leçon'],
+    illustration: studentIllustration,
+    Badge: GradCapArt,
+    minis: [
+      { Art: NotebookArt,  pos: 'left-5 top-6 size-11',   anim: 'float-a' as Anim, offset: 0 },
+      { Art: LightbulbArt, pos: 'right-6 top-8 size-10',  anim: 'float-b' as Anim, offset: 2 },
+    ],
+    tone: {
+      panel: 'bg-emerald-100', blob: 'bg-emerald-200', art: 'text-emerald-600',
+      chip: 'bg-emerald-100 text-emerald-800', check: 'bg-emerald-100 text-emerald-700',
+      hover: 'hover:border-emerald-400 hover:shadow-emerald-500/20',
+    },
   },
   {
-    icon: PenLine,
     title: "L'Animateur",
-    description:
-      "Soumet des bilans détaillés, évalue compétences et méthodologie, et identifie précisément les axes de progression de chaque élève qu'il accompagne.",
+    description: "Soumet des bilans détaillés, évalue compétences et méthodologie, et identifie précisément les axes de progression de chaque élève qu'il accompagne.",
     tag: 'Outillé et éclairé',
-    bar: 'bg-teal-700',
-    iconBg: 'bg-amber-100',
-    iconColor: 'text-amber-800',
-    tagBg: 'bg-amber-100',
-    tagColor: 'text-amber-800',
-    illustration : teacherIllustration,
-    borderColor : 'border-amber-500'
+    points: ['Des bilans en quelques clics', 'Compétences et méthode évaluées', 'Une vue claire de chaque élève'],
+    illustration: teacherIllustration,
+    Badge: ChalkboardArt,
+    minis: [
+      { Art: ClipboardArt, pos: 'left-6 top-8 size-10',  anim: 'float-b' as Anim, offset: 1 },
+      { Art: RulerArt,     pos: 'right-5 top-5 size-11', anim: 'wiggle' as Anim,  offset: 0 },
+    ],
+    tone: {
+      panel: 'bg-amber-100', blob: 'bg-amber-200', art: 'text-amber-600',
+      chip: 'bg-amber-100 text-amber-800', check: 'bg-amber-100 text-amber-700',
+      hover: 'hover:border-amber-400 hover:shadow-amber-500/20',
+    },
   },
   {
-    icon: Building2,
     title: "L'Association",
-    description:
-    "Pilote son programme depuis un tableau de bord complet, suit l'engagement des élèves et visualise l'impact réel de chaque séance sur la progression globale.",
+    description: "Pilote son programme depuis un tableau de bord complet, suit l'engagement des élèves et visualise l'impact réel de chaque séance sur la progression globale.",
     tag: 'Informée et sereine',
-    bar: 'bg-amber-600',
-    iconBg: 'bg-indigo-100',
-    iconColor: 'text-indigo-800',
-    tagBg: 'bg-indigo-100',
-    tagColor: 'text-indigo-800',
-    illustration : associationIllustration,
-    borderColor : 'border-indigo-500'
+    points: ['Un tableau de bord multi-classes', 'Présence et engagement des élèves', "L'impact de chaque séance"],
+    illustration: associationIllustration,
+    Badge: SchoolArt,
+    minis: [
+      { Art: TrophyArt,   pos: 'left-5 top-5 size-11',   anim: 'float-a' as Anim, offset: 3 },
+      { Art: OpenBookArt, pos: 'right-6 top-10 size-10', anim: 'float-b' as Anim, offset: 1 },
+    ],
+    tone: {
+      panel: 'bg-indigo-100', blob: 'bg-indigo-200', art: 'text-indigo-600',
+      chip: 'bg-indigo-100 text-indigo-800', check: 'bg-indigo-100 text-indigo-700',
+      hover: 'hover:border-indigo-400 hover:shadow-indigo-500/20',
+    },
   },
 ]
 
 function ThreeActorsSection() {
   return (
-    <section className='mt-24 mb-12 px-6 flex flex-col items-center max-w-7xl'>
-      <p className='text-center text-sm font-medium uppercase tracking-wide text-lime-600'>
-        Une synergie à trois
-      </p>
-      <h2 className='mt-2 text-center font-bold text-3xl md:text-4xl text-zinc-900'>
-        Trois acteurs. Un seul Objectif.
-      </h2>
-      <p className='mt-2 mx-auto max-w-sm md:max-w-md lg:max-w-lg text-sm lg:text-base text-center text-balance leading-relaxed text-zinc-500'>
-        La réussite scolaire n'est jamais l'œuvre d'un seul effort. Elle naît de la convergence
-        de trois acteurs complémentaires, réunies sur une plateforme conçue pour débloquer leurs potentiels.
-      </p>
-      <div className='grid gird-cols-1 md:grid-cols-3 gap-6 mt-12'>
-        {forces.map((f) => {
-          const Icon = f.icon
-          return (
-            <div
-              key={f.title}
-              className={cn('relative max-w-md bg-white overflow-hidden rounded-xl flex flex-col justify-stretch transition-transform duration-200 hover:-translate-y-1 shadow-card border-3', f.borderColor)}
-            >
-              <div className="w-full aspect-3/2 max-h-48 mt-6 shrink-0">
-                <img src={f.illustration} className="mx-auto h-full">
-                </img>
+    <section className='mb-12 mt-24 flex w-full max-w-7xl flex-col items-center px-6 relative z-10'>
+      <SectionHeading
+        eyebrow='Une synergie à trois'
+        title='Trois acteurs. Un seul objectif.'
+        description="La réussite scolaire n'est jamais l'œuvre d'un seul effort. Elle naît de la convergence de trois acteurs complémentaires, réunis sur une plateforme conçue pour débloquer leurs potentiels."
+      />
+
+      <div className='mt-14 grid w-full max-w-md gap-6 lg:max-w-none lg:grid-cols-3'>
+        {actors.map((a, i) => (
+          <Reveal key={a.title} delay={i * 130} className='h-full'>
+            <article className={cn(
+              'group relative flex h-full flex-col overflow-hidden rounded-3xl border-2 border-zinc-200 bg-white transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl',
+              a.tone.hover,
+            )}>
+              <div className={cn('relative isolate h-56 overflow-hidden', a.tone.panel)}>
+                <div aria-hidden className={cn('absolute -left-10 -top-10 size-44 rounded-full opacity-70', a.tone.blob)} />
+                <div aria-hidden className={cn('absolute -bottom-16 -right-8 size-52 rounded-full opacity-60', a.tone.blob)} />
+                <div
+                  aria-hidden
+                  className='absolute inset-0 opacity-30'
+                  style={{ backgroundImage: 'radial-gradient(rgba(24,24,27,.25) 1px, transparent 1px)', backgroundSize: '18px 18px' }}
+                />
+                {a.minis.map(m => (
+                  <Floating key={m.pos} className={cn(m.pos, a.tone.art)} animation={m.anim} offset={m.offset}>
+                    <m.Art />
+                  </Floating>
+                ))}
+                <img
+                  src={a.illustration} alt=''
+                  className='relative z-10 mx-auto h-full object-contain px-4 pt-6 transition-transform duration-500 group-hover:scale-105'
+                />
               </div>
-              <div className=" pl-4 pt-4">
-                <div className={cn('mb-3 flex h-10 w-10 items-center justify-center rounded-sm', f.iconBg)}>
-                  <Icon className={cn('h-4 w-4', f.iconColor)} aria-hidden />
+
+              <div className='flex flex-1 flex-col px-6 pb-7'>
+                <div className='relative z-20 -mt-9 grid size-18 place-items-center rounded-2xl bg-white shadow-lg ring-1 ring-black/5'>
+                  <a.Badge className={cn('size-11', a.tone.art)} />
                 </div>
-              </div>
-              <div className="px-4 pb-4 h-full flex flex-col">
-                <p className='mt-4 text-lg lg:text-xl font-bold text-zinc-900 uppercase tracking-tight'>
-                  {f.title}
-                </p>
-                <p className='flex-1 mt-2 text-sm lg:text-base leading-[1.55] text-zinc-500'>
-                  {f.description}
-                </p>
-                <span className={cn('mt-2.5 inline-block rounded-full px-2 py-0.5 text-xs font-medium mr-auto', f.tagBg, f.tagColor)}>
-                  {f.tag}
+
+                <h3 className='mt-4 text-xl font-extrabold uppercase tracking-tight text-zinc-900 lg:text-2xl'>{a.title}</h3>
+                <p className='mt-2 text-sm leading-relaxed text-zinc-500 lg:text-base'>{a.description}</p>
+
+                <ul className='mt-5 flex-1 space-y-2'>
+                  {a.points.map(p => (
+                    <li key={p} className='flex items-center gap-2.5 text-sm font-medium text-zinc-700'>
+                      <span className={cn('grid size-5 shrink-0 place-items-center rounded-full', a.tone.check)}>
+                        <Check className='size-3' strokeWidth={3} aria-hidden />
+                      </span>
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+
+                <span className={cn('mr-auto mt-6 inline-block rounded-full px-3 py-1 text-xs font-semibold', a.tone.chip)}>
+                  {a.tag}
                 </span>
               </div>
-            </div>
-          )
-        })}
+            </article>
+          </Reveal>
+        ))}
       </div>
-      <div className='hidden lg:flex mt-6 items-center justify-center gap-2 w-full max-w-xl'>
-        <div className='h-2 w-2 rounded-full bg-violet-600' />
-        <div className='h-px flex-1 bg-zinc-200 dark:bg-zinc-700' />
-        <div className='flex items-center gap-1.5 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-[11px] text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400'>
-          <RefreshCw className='h-3 w-3' aria-hidden /> Plateforme unifiée
+
+      {/* Connector: marching dashes between the two outer cards, platform pill in the middle */}
+      <Reveal delay={250} className='mt-8 hidden w-full lg:block'>
+        <div className='relative grid grid-cols-3 items-center'>
+          <div
+            aria-hidden
+            className='absolute inset-x-[16.67%] top-1/2 h-0.5 -translate-y-1/2 animate-dash motion-reduce:animate-none'
+            style={{ backgroundImage: 'linear-gradient(90deg, #d4d4d8 55%, transparent 0)', backgroundSize: '14px 2px' }}
+          />
+          <div className='relative flex justify-center'>
+            <span className='size-3.5 rounded-full bg-emerald-500 ring-4 ring-white' />
+          </div>
+          <div className='relative flex justify-center'>
+            <span className='inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-600 shadow-sm'>
+              <span className='size-2 animate-pulse-soft rounded-full bg-lime-500 motion-reduce:animate-none' />
+              Une seule plateforme
+            </span>
+          </div>
+          <div className='relative flex justify-center'>
+            <span className='size-3.5 rounded-full bg-indigo-500 ring-4 ring-white' />
+          </div>
         </div>
-        <div className='h-px flex-1 bg-zinc-200 dark:bg-zinc-700' />
-        <div className='h-2 w-2 rounded-full bg-amber-600' />
-      </div>
+      </Reveal>
     </section>
   )
 }
 
-export default ThreeActorsSection;
+export default ThreeActorsSection

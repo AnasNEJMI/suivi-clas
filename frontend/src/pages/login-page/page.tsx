@@ -2,8 +2,12 @@ import BaseLayout from '@/layouts/base-layout'
 import { LoginForm } from '@/components/login/login-form'
 import FooterSection from '../footer-section'
 import { SEOHead } from '@/components/seo-head'
+import { useEffect } from 'react'
 
 const LoginPage = () => {
+    useEffect(() => {
+        window.scroll(0,0);
+    },[])
   return (
     <>
         <SEOHead title='Connexion' canonical='/connexion' />

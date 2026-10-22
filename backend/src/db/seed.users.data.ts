@@ -141,8 +141,8 @@ export const ASSOCIATIONS_SEED : AssociationSeed[] = [
         address : "Dammarie-Les-Lys",
         postalCode : 77190,
         members : [
-            {username : "Sanae-FdL", firstName : "Sanae", lastName : "", password : "Sanae-Suivi-FdL-CLAS-77", gender : "f"},
-            {username : "Sabrina-FdL", firstName : "Sabrina", lastName : "", password : "Sabrina-Suivi-FdL-CLAS-77", gender : "f"}
+            {username : "Sanae-FdL", firstName : "Sanae", lastName : "Fleurs du Lys", password : "Sanae-Suivi-FdL-CLAS-77", gender : "f"},
+            {username : "Sabrina-FdL", firstName : "Sabrina", lastName : "Fleurs du Lys", password : "Sabrina-Suivi-FdL-CLAS-77", gender : "f"}
         ],
         classes : [
             {
@@ -162,9 +162,9 @@ export const ASSOCIATIONS_SEED : AssociationSeed[] = [
             {
                 label : "Groupe Lycée",
                 students : [
-                    {username : "XXXX-YYYY", firstName : "Bilal", lastName : "BENHIDA", password : "XXXX-YYYY", gender : "m", level : "2nde"},
-                    {username : "AAAA-ZZZZ", firstName : "Nasrinne", lastName : "ZIOUCH", password : "ZZZZ-AAAA", gender : "f", level : "1ère"},
-                    {username : "BBBB-CCCC", firstName : "Imran", lastName : "ABDELMOUMNI", password : "BBBB-CCCC", gender : "m", level : "Terminale"},
+                    {username : "XXXX-YYYY", firstName : "XXXX", lastName : "YYYY", password : "XXXX-YYYY", gender : "m", level : "2nde"},
+                    {username : "AAAA-ZZZZ", firstName : "AAAA", lastName : "ZZZZ", password : "ZZZZ-AAAA", gender : "f", level : "1ère"},
+                    {username : "BBBB-CCCC", firstName : "BBBB", lastName : "CCCC", password : "BBBB-CCCC", gender : "m", level : "Terminale"},
                 ]
             },
         ]

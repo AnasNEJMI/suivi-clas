@@ -7,7 +7,7 @@ import { SectionHeading } from '@/hooks/section-heading'
 // Small illustrations of the product, built from plain divs
 
 function SessionVisual() {
-  const rows = ['Yasmine', 'Bilal', 'Inès']
+  const rows = ['Ilias', 'Malak', 'Inès']
   return (
     <div className='w-full max-w-60 space-y-2'>
       {rows.map(name => (
@@ -26,8 +26,8 @@ function SessionVisual() {
 function AnalysisVisual() {
   const items = [
     { icon: HelpCircle, label: 'QCM adapté',            tone: 'bg-violet-100 text-violet-700' },
-    { icon: FileText,   label: 'Fiche de révision',      tone: 'bg-sky-100 text-sky-700' },
-    { icon: Star,       label: 'Compétences évaluées',   tone: 'bg-amber-100 text-amber-700' },
+    { icon: FileText,   label: 'Évaluation de la méthode de travail',      tone: 'bg-sky-100 text-sky-700' },
+    { icon: Star,       label: 'Évaluation de maîtrise des leçons ',   tone: 'bg-amber-100 text-amber-700' },
   ]
   return (
     <div className='w-full max-w-60 space-y-2'>
@@ -84,7 +84,7 @@ function HowItWorksSection() {
   const [gridRef, inView] = useInView<HTMLDivElement>({ threshold: 0.25 })
 
   return (
-    <section className='relative isolate mx-auto mb-24 flex w-full max-w-7xl flex-col items-center overflow-hidden rounded-4xl border border-zinc-200 bg-zinc-50 px-6 py-20 md:px-12 md:py-24'>
+    <section className='relative z-10 isolate mx-auto flex w-full max-w-7xl flex-col items-center overflow-hidden rounded-4xl border border-zinc-200 bg-zinc-50 px-6 py-20 md:px-12 md:py-24'>
       {/* Dotted background, fading toward the edges */}
       <div
         aria-hidden

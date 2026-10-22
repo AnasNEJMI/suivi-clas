@@ -35,6 +35,20 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
  * Génère le titre (Prénom Nom) et les informations secondaires
  * selon le type d'utilisateur (Étudiant, Animateur, Membre d'association).
  */
+function getUserRole(user: User | null) {
+  if(!user) return 'profile';
+
+  if (user.userType === 'animator') {
+    return user.gender === 'f' ? 'animatrice' : 'animateur';
+  }else if (user.userType === 'admin') {
+    return 'administrateur';
+  }else if (user.userType === 'student') {
+    return 'élève';
+  }else if (user.userType === 'associationMember') {
+    return 'association';
+  }
+  return 'profile'
+}
 function getUserCardDetails(user: User) {
   const name = `${user.firstName} ${user.lastName}`
   const userTypeStr = String(user.userType).toUpperCase()
@@ -109,12 +123,9 @@ export function AppSidebar({ tabs, theme, ...props }: AppSidebarProps) {
               <span className="font-bold text-sm tracking-tight text-zinc-900 truncate">
                 Mon Suivi Scolaire
               </span>
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-700">
-                PRO
-              </span>
             </div>
             <span className="text-xs font-medium text-zinc-500 truncate">
-              Espace Moteur
+              Espace <span className='capitalize'>{getUserRole(user)}</span>
             </span>
           </div>
         </div>
