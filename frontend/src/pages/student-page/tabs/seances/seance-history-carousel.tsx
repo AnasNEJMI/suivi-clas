@@ -70,7 +70,7 @@ const StudentSeanceHistoryCarousel = ({
                 .map((bilan) => (
                   <CarouselItem
                     key={bilan.id}
-                    className="pl-3 basis-64 sm:basis-72 shrink-0 h-48"
+                    className="pl-3 basis-64 sm:basis-72 shrink-0 "
                   >
                     <StudentCarouselSeanceCard
                       bilan={bilan}

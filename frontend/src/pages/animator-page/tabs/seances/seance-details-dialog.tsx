@@ -32,6 +32,7 @@ import {
 import type { ReactNode } from 'react'
 import AnimBilanCompletedCard from './bilan-completed-card'
 import AnimBilanToDoCard from './bilan-todo-card'
+import { EmptyStateCard } from '@/components/ui/empty-state-card'
 
 interface AnimSeanceDetailsDialogProps {
   lessonsByLevel: LessonsByLevelEntry[]
@@ -185,13 +186,11 @@ const AnimSeanceDetailsDialog = ({
             </div>
 
             {bilansCompletedCount === 0 ? (
-              <Card className="border-2 border-dashed border-slate-200/80 shadow-none h-40 flex flex-col items-center justify-center w-full rounded-2xl bg-slate-50/50 p-6 text-center mt-2">
-                <div className="size-10 rounded-full bg-white shadow-2xs flex items-center justify-center mb-3 border border-slate-100">
-                  <PackageXIcon className="size-5 text-slate-400" />
-                </div>
-                <CardTitle className="text-sm font-bold text-slate-800">Aucun bilan soumis</CardTitle>
-                <p className="text-xs text-slate-500 mt-1">Vous n'avez pas encore rempli de bilan pour cette séance.</p>
-              </Card>
+              <EmptyStateCard
+                icon={PackageXIcon}
+                title='Aucun bilan soumis'
+                description="Vous n'avez pas encore rempli de bilan pour cette séance."
+              />
             ) : (
               <Carousel opts={{ align: 'start' }} className="w-full mt-2">
                 <CarouselContent className="-ml-3 py-2 px-1">

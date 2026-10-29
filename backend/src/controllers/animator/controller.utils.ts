@@ -3,7 +3,14 @@ import { prisma } from "../../db/prisma.js";
 export type LessonEntry = {
     id:      number;
     label:   string;
+    curriculumSkills : CurriculumSkillEntry[]
 };
+
+export type CurriculumSkillEntry = {
+    id : number,
+    label : string,
+    description : string
+}
 
 export type SubjectEntry = {
     id : number,
@@ -60,6 +67,9 @@ export async function fetchLessonsByLevelAndSpec(levelIdSet : Set<number>, speci
         select : {id : true,label : true,
             lessons : {
                 select : {id : true,label : true,
+                    curriculumSkills : {
+                        select : {id : true, label : true, description : true}
+                    },
                     subject : {
                         select : {
                             id : true,

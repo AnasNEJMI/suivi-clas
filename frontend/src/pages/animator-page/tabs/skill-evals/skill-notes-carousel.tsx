@@ -10,6 +10,7 @@ const SKILL_KEYS = [
     'discipline',
     'organisation',
     'ponctuality',
+    'respect',
     'preparation',
     'regularity',
 ] as const;

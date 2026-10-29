@@ -26,6 +26,7 @@ const AnimSkillEvalCard = ({ skillEval }: { skillEval: SkillEvalData | null }) =
         { label: 'Discipline', cardStyle: SKILL_CAROUSEL_CARD_STYLES['discipline'], value: skillEval.discipline },
         { label: 'Organisation', cardStyle: SKILL_CAROUSEL_CARD_STYLES['organisation'], value: skillEval.organisation },
         { label: 'Ponctualité', cardStyle: SKILL_CAROUSEL_CARD_STYLES['ponctuality'], value: skillEval.ponctuality },
+        { label: 'Respect', cardStyle: SKILL_CAROUSEL_CARD_STYLES['respect'], value: skillEval.respect },
         { label: 'Préparation', cardStyle: SKILL_CAROUSEL_CARD_STYLES['preparation'], value: skillEval.preparation },
         { label: 'Régularité', cardStyle: SKILL_CAROUSEL_CARD_STYLES['regularity'], value: skillEval.regularity },
     ];

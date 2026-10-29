@@ -3,7 +3,7 @@
 import { readFileSync } from 'node:fs'
 import path             from 'node:path'
 import type {
-  Activity, EngagementLevel, MethodologySkill, MethodologyTrend, NextStep,
+  Activity, ComprehensionLevel, EngagementLevel, MethodologySkill, MethodologyTrend, NextStep,
   SummaryParagraphBank,
 } from './auto-summary.types.js'
 
@@ -59,6 +59,7 @@ export type AutoSummaryParams = {
   lessonLabel:      string
   activity:         Activity
   engagement:       EngagementLevel
+  comprehension:    ComprehensionLevel
   methodologySkill: MethodologySkill
   methodologyTrend: MethodologyTrend
   nextStep:         NextStep

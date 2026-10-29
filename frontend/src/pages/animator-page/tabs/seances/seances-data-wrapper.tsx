@@ -15,6 +15,8 @@ const AnimSeancesTabDataWrapper = ({animator} : {animator : User}) => {
         staleTime : 2 * 60 * 1000
     })
 
+    console.log('lessonsbylevel ', lessonsByLevel)
+
     const queryClient = useQueryClient();
     const seancesQueryKey = animatorKeys.seances;
 

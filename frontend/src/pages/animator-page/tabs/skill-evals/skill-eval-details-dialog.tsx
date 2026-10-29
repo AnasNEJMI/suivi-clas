@@ -29,7 +29,7 @@ const AnimSkillEvalDetailsDialog = ({
             <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContent className={cn('h-dvh flex flex-col items-start w-full lg:w-[calc(100%-18rem)] lg:left-72 lg:translate-x-0 p-0 gap-0 font-outfit shadow-none border-none bg-slate-100 overflow-hidden focus:outline-none')}>
                 {/* --- EN-TÊTE DU DIALOGUE --- */}
-                <DialogHeader className="bg-white/90 shrink-0 w-full text-left pt-8 pb-6 px-6">
+                <DialogHeader className="bg-white/90 shrink-0 w-full text-left pt-12 pb-6 px-6">
                     <div className="flex flex-col items-start gap-3">
                         <div className="space-y-0.5 min-w-0 flex-1">
                             <DialogTitle className="font-extrabold text-lg tracking-tight text-slate-900 truncate">

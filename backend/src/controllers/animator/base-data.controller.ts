@@ -13,7 +13,14 @@ export type SeanceDurationEntry = {
 export type LessonEntry = {
     id:      number;
     label:   string;
+    skills : CurriculumSkillEntry[]
 };
+
+export type CurriculumSkillEntry = {
+    id : number,
+    label : string,
+    description : string
+}
 
 export type SubjectEntry = {
     id : number,
@@ -126,16 +133,6 @@ export async function animatorBaseDataHandler(
                                             id : true,
                                             label : true,
                                             order : true,
-                                            lessons : {
-                                                orderBy : {label : 'asc'},
-                                                select : {
-                                                    id : true,
-                                                    label : true,
-                                                    subject : {
-                                                        select : {id : true, label : true}
-                                                    }
-                                                }
-                                            }
                                         },
                                     },
                                     bilans : {
@@ -145,7 +142,10 @@ export async function animatorBaseDataHandler(
                                             presence: true,
                                             summary:  true,
                                             seance : {select : {id : true, date : true,}},
-                                            lesson : {select : {id : true, label : true, subject : {select : {id : true, label : true}}}}
+                                            lesson : {
+                                                select : {id : true, label : true, 
+                                                curriculumSkills : {select : {id : true, label : true, description : true}},
+                                                subject : {select : {id : true, label : true}}}}
                                         }
                                     },
                                     skills : {
@@ -205,6 +205,9 @@ export async function animatorBaseDataHandler(
                         select : {
                             id : true,
                             label : true,
+                            curriculumSkills : {
+                                select : {id : true, label : true, description : true}
+                            },
                             subject : {select : {id : true, label : true}},
                         }
                     }
@@ -231,7 +234,7 @@ export async function animatorBaseDataHandler(
                     }
 
                     const subject = subjectsMap.get(lesson!.subject.id)!;
-                    subject.lessons.push({id : lesson!.id, label : lesson!.label})
+                    subject.lessons.push({id : lesson!.id, label : lesson!.label, skills : lesson!.curriculumSkills})
                 }
 
                 return {
@@ -301,6 +304,9 @@ export async function animatorBaseDataHandler(
         }
 
         const scolarYears = Array.from(scolarYearMap.values());
+
+
+        console.log('lessonsByLevel',JSON.stringify(lessonsByLevel[0]?.subjects[0]))
 
         return sendSuccess<AnimatorBaseDataResponse>(res, {scolarYears, lessonsByLevel, seanceDurations})
 

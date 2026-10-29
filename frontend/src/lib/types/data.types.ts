@@ -1,4 +1,4 @@
-import { AtomIcon, BookOpenCheckIcon, CalendarClockIcon, LandmarkIcon, LanguagesIcon, LeafIcon, LightbulbIcon, NotebookPenIcon, PiIcon, RepeatIcon, ShieldCheckIcon, type LucideProps } from 'lucide-react'
+import { AtomIcon, BookOpenCheckIcon, CalendarClockIcon, LandmarkIcon, LanguagesIcon, LeafIcon, LightbulbIcon, NotebookPenIcon, PiIcon, RepeatIcon, ScaleIcon, ShieldCheckIcon, type LucideProps } from 'lucide-react'
 import { type ForwardRefExoticComponent, type RefAttributes } from 'react'
 
 export type bilanDataPresent = {
@@ -191,6 +191,14 @@ export const SKILL_CAROUSEL_CARD_STYLES : Record<string, SkillCarouselCardStyle>
         highlightTextColor : 'text-rose-700',
         highlightTextColorBg : 'bg-rose-700',
         icon : CalendarClockIcon
+    },
+    respect : {
+        label : 'Respect',
+        bgColor : 'bg-lime-100',
+        borderColor : 'border-lime-400',
+        highlightTextColor : 'text-lime-700',
+        highlightTextColorBg : 'bg-lime-700',
+        icon : ScaleIcon
     },
     preparation : {
         label : 'Préparation',

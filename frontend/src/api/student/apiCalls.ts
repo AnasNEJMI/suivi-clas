@@ -2,6 +2,7 @@ import { ApiError } from "@/lib/errors/apiError.class";
 import type { Bilan, LessonEval} from "../api.types";
 import { apiRequest } from "../client";
 import { ErrorCodes, ErrorStatusMap } from "@/lib/errors/errors.constants";
+import type { CurriculumSkillEntry } from "../animator/types";
 
 export const AnswerChoice = {
   a: 'a',
@@ -71,6 +72,7 @@ export type BilanEntry  = {
     date: Date;
     presence: boolean;
     summary: string | null;
+    curriculumSkills: CurriculumSkillEntry[] | null,
     lesson: {
         id: number;
         label: string;
@@ -133,6 +135,7 @@ export type LessonsBySubject = {
 export type Lesson = {
     id : number,
     label : string,
+    curriculumSkills : CurriculumSkillEntry[],
     eval : LessonEvalEntry | null
 }
 

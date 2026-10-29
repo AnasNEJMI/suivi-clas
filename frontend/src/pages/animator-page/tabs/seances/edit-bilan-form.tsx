@@ -10,7 +10,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import PresenceCard from "./create/bilans/fields/presence-card"
 import SubjectAndLessonCard from "./create/bilans/fields/subject-and-lesson-card"
 import SummaryCard from "./create/bilans/fields/summary-card"
-import IncludeQcmField from "./create/bilans/fields/include-qcm-field"
+import IncludeQcmCard from "./create/bilans/fields/include-qcm-field"
 import { Field } from "@/components/ui/field"
 import { BrandButton } from "@/components/brand-button"
 
@@ -75,7 +75,7 @@ const AnimEditBilanForm = ({
                 <PresenceCard student = {studentBilan}/>
                 <SubjectAndLessonCard availableSubjects={availableSubjects}/>
                 <SummaryCard step={3} />
-                <IncludeQcmField step={4} />
+                <IncludeQcmCard step={4} />
             </div>
             <Field className='flex flex-row gap-2 mt-8'>
                 <BrandButton

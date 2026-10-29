@@ -33,7 +33,7 @@ export async function animatorFetchBaseDataHandler(
                             students : {
                                 orderBy : [{lastName : 'asc'},{firstName : 'asc'}],
                                 select : {
-                                    id : true,username:  true,firstName: true,lastName:  true,gender:    true,
+                                    id : true,username:  true,firstName: true,lastName: true,gender: true,
                                     level : {select : {id : true,label : true,order : true}}}
                             }
                         }

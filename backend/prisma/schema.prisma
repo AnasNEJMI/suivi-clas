@@ -177,8 +177,8 @@ model Class {
 
 model Level {
   id      Int     @id @default(autoincrement())
-  label   String  @unique  // "4ème", "3ème", "2nde", "1ère", "Terminale"
-  order   Int     @unique  // pour trier : 1=4ème, 2=3ème, 3=2nde, 4=1ère, 5=Terminale
+  label   String  @unique  // "6ème", "5ème", "4ème", "3ème", "2nde", "1ère", "Terminale"
+  order   Int     @unique  // pour trier : 1=6ème, 2=5ème, 3=4ème, 4=3ème, 5=2nde, 6=1ère, 7=Terminale
 
   students Student[]
   lessons  Lesson[]
@@ -251,6 +251,8 @@ model Bilan {
 
   summary       String?
 
+  curriculumSkills CurriculumSkill[]
+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -260,6 +262,26 @@ model Bilan {
   @@index([seanceId])
   @@index([submittedById])
   @@unique(name : "bilanId", [studentId, seanceId])
+}
+
+model AutoSummaryParagraph {
+  id                Int                      @id @default(autoincrement())
+  key               String                   @unique
+  type              AutoSummaryParagraphType
+  activity          String?
+  engagement        String?
+  comprehension     String?
+  methodologyTrend  String?
+  nextStep          String?
+  template          String                   @db.Text
+  isActive          Boolean                  @default(true)
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
+
+  @@index([type, activity, engagement, isActive])
+  @@index([type, comprehension, isActive])
+  @@index([type, methodologyTrend, isActive])
+  @@index([type, nextStep, isActive])
 }
 
 model Skill {
@@ -334,9 +356,31 @@ model Lesson {
   documents        Document[]
   qcms             Qcm[]
   qcmBankQuestions QcmBankQuestion[]
+  curriculumSkills CurriculumSkill[]
 
   @@unique([levelId, subjectId, label])
   @@index([subjectId])
+}
+
+// Academic curriculum skills. This intentionally does not replace the existing
+// Skill model above, which stores behavioral ratings for students.
+model CurriculumSkill {
+  id          Int      @id @default(autoincrement())
+  lessonId    Int
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  label       String   @db.VarChar(180)
+  description String   @db.Text
+  position    Int      @default(0)
+
+  qcmBankQuestions QcmBankQuestion[]
+  bilans Bilan[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([lessonId, label])
+  @@index([lessonId])
 }
 
 model LessonEvaluation{
@@ -383,6 +427,10 @@ model QcmBankQuestion {
   lessonId      Int
   lesson        Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
+  curriculumSkillId Int
+  curriculumSkill   CurriculumSkill @relation(fields: [curriculumSkillId], references: [id], onDelete: SetNull)
+  contentHash       String? @unique
+
   question      String       @default("")
   difficulty    Difficulty   @default(e)
   answerA       String       @default("")
@@ -397,6 +445,7 @@ model QcmBankQuestion {
   qcmQuestions  QcmQuestion[]
 
   @@index([lessonId])
+  @@index([curriculumSkillId])
 }
 
 model Qcm {
@@ -467,4 +516,11 @@ enum LessonEval{
   acquiring
   acquired
   expert
+}
+
+enum AutoSummaryParagraphType {
+  SESSION
+  COMPREHENSION
+  METHODOLOGY
+  NEXT_STEP
 }

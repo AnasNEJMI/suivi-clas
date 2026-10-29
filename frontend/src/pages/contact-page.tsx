@@ -98,7 +98,7 @@ function DeveloperCard() {
         </div>
       </div>
       <p className='mt-6 text-sm leading-relaxed text-zinc-600 md:text-base'>
-        {SITE_NAME} est une plateforme que j'ai conçue et développée moi-même, de la première ligne de code à la dernière.
+        {SITE_NAME} est une plateforme que j'ai conçue et développée Anas NEJMI, dans le but de proposer aux association un outil de suivi scolaire permettant de fuildifier, structurer et renforcer leurs dispositifs pédagogiques.
       </p>
       <p className='mt-3 text-sm leading-relaxed text-zinc-600 md:text-base'>
         Pour toute question ou pour en savoir plus, vous pouvez me contacter directement par e-mail.

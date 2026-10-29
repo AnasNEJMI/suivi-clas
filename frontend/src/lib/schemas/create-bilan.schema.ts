@@ -1,14 +1,16 @@
-import { ACTIVITIES, ENGAGEMENT_LEVELS, METHODOLOGY_SKILLS, METHODOLOGY_TRENDS, NEXT_STEPS } from "@/api/animator/auto-summary-options";
+import { ACTIVITIES, COMPREHENSION_LEVELS, ENGAGEMENT_LEVELS, METHODOLOGY_SKILLS, METHODOLOGY_TRENDS, NEXT_STEPS } from "@/api/animator/auto-summary-options";
 import z from "zod";
 
 export const createBilanFormSchema = z.object({
     subjectId : z.number().int(),
     lessonId : z.number().int(),
+    curriculumSkillIds: z.array(z.number().int().positive()),
     presence : z.boolean(),
     summary : z.string(),
     includeQcm : z.boolean(),
     activity:         z.enum(ACTIVITIES).optional(),
-  engagement:       z.enum(ENGAGEMENT_LEVELS).optional(),   // was: performance
+    engagement:       z.enum(ENGAGEMENT_LEVELS).optional(),
+    comprehension:       z.enum(COMPREHENSION_LEVELS).optional(),
     methodologySkill: z.enum(METHODOLOGY_SKILLS).optional(),
     methodologyTrend: z.enum(METHODOLOGY_TRENDS).optional(),
     nextStep:         z.enum(NEXT_STEPS).optional(),

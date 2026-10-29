@@ -17,6 +17,7 @@ const presentBilanSchema = z.object({
     ...sharedFields,
     presence: z.literal(true),
     lessonId: z.int().min(1, { error: lessonIdError }),
+    curriculumSkillIds: z.array(z.number().int().positive()),
     summary:  z.string().min(1, { error: 'Résumé de séance invalide.' }),
     includeQcm : z.boolean()
 })
@@ -26,6 +27,7 @@ const absentBilanSchema = z.object({
     presence: z.literal(false),
     lessonId: z.never().optional(),
     summary:  z.never().optional(),
+    curriculumSkillIds : z.never().optional(),
     includeQcm : z.boolean().optional()
 })
 

@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import {MessageCircleQuestionIcon } from 'lucide-react'
 import { StepBadge } from './step-badge'
 
-const IncludeQcmField = ({step} : {step : number}) => {
+const IncludeQcmCard = ({step} : {step : number}) => {
     const { control } = useFormContext<CreateBilanFormValues>()
     const lessonId    = useWatch({ control, name: 'lessonId' })
     
@@ -58,4 +58,4 @@ const IncludeQcmField = ({step} : {step : number}) => {
   )
 }
 
-export default IncludeQcmField
+export default IncludeQcmCard

@@ -3,7 +3,14 @@ import type { Bilan, Lesson, LessonEval, Level, Skill } from "../api.types";
 export type LessonEntry = {
     id:      number;
     label:   string;
+    curriculumSkills : CurriculumSkillEntry[]
 };
+
+export type CurriculumSkillEntry = {
+    id : number,
+    label : string,
+    description : string
+}
 
 export type SubjectEntry = {
     id : number,

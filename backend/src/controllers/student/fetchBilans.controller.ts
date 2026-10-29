@@ -38,12 +38,14 @@ type BankQuestionEntry = {
     answerD : string,
     correctAnswer : AnswerChoice,
     explanation : string,
+    curriculumSkill : {id : number, label : string, description : string} | null
 }
 
 type BilanEntry  = {
     date: Date;
     presence: boolean;
     summary: string | null;
+    curriculumSkills : {id : number, label : string, description : string}[] | null,
     lesson: {
         id: number;
         label: string;
@@ -84,6 +86,7 @@ export async function studentBilansHandler(
             },
             select : {
                 date : true,
+                curriculumSkills : {select : {id : true, label : true, description : true}},
                 lesson : {
                     select : {
                         id : true,
@@ -133,7 +136,8 @@ export async function studentBilansHandler(
                                         answerC : true,
                                         answerD : true,
                                         correctAnswer : true,
-                                        explanation : true
+                                        explanation : true,
+                                        curriculumSkill : {select : {id : true, label : true, description : true}}
                                     }
                                 }
                             }

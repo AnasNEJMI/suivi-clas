@@ -12,7 +12,6 @@ import {
   CalendarX2Icon,
   CheckCircle2Icon,
   ClockIcon,
-  HelpCircleIcon,
   MessageCircleQuestionIcon,
   SparklesIcon,
   TrophyIcon,
@@ -292,12 +291,7 @@ const StudentLastSeanceCard = ({
 
             {/* No QCM State */}
             {!recentBilan.qcm && (
-              <div className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-center my-2 border border-slate-200 dark:border-slate-700">
-                <HelpCircleIcon className="size-8 mx-auto text-slate-400 mb-1" />
-                <p className="text-sm font-semibold text-slate-600 dark:text-slate-400">
-                  Pas de QCM associé à cette séance.
-                </p>
-              </div>
+              <span className='flex items-center text-slate-500 text-sm'>Pas de QCM associé à cette séance.</span>
             )}
           </div>
 

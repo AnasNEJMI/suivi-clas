@@ -9,7 +9,7 @@ import type { BilanEntry, DeleteBilanEntry, SeanceEntry, SeancesDataResponse } f
 import type { ProfileDataResponse } from "./profile.types";
 import type { SkillEvalData, SkillEvalsResponse } from "./skill-evals.types";
 import type { LessonEvalData, LessonEvalsResponse } from "./lesson-evals.types";
-import type { Activity, EngagementLevel, MethodologySkill, MethodologyTrend, NextStep } from "./auto-summary-options";
+import type { Activity, ComprehensionLevel, EngagementLevel, MethodologySkill, MethodologyTrend, NextStep } from "./auto-summary-options";
 
 const ANIMATOR_API_ENDPOINT = '/api/animator/';
 
@@ -86,6 +86,7 @@ type BilanPayload = {
     seanceId : number,
     presence : boolean,
     lessonId? : number,
+    curriculumSkillIds? : number[],
     summary? : string,
     includeQcm? : boolean,
 }
@@ -94,6 +95,7 @@ export type AutoSummaryPayload = {
   studentId:        number
   lessonId:         number
   activity:         Activity
+  comprehension:    ComprehensionLevel
   engagement:       EngagementLevel
   methodologySkill: MethodologySkill
   methodologyTrend: MethodologyTrend

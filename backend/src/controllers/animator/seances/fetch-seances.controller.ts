@@ -29,8 +29,10 @@ export async function animatorFetchSeancesDataHandler(
                 scolarYear : {select : {id : true, label : true}},
                 seanceDuration : {select : {id : true, label : true, durationMin : true}},
                 bilans : { select : {
+                    curriculumSkills : {select : {id : true, label : true, description : true}},
                     id : true, date : true, presence : true, summary : true, studentId : true, seanceId : true, submittedById : true,
-                    lesson : {select : {id : true, label : true, subject : {select : {id : true, label : true}}}},
+                    lesson : {select : {id : true, label : true,
+                        subject : {select : {id : true, label : true}}}},
                     qcm : {
                         select : {
                             id : true, completed : true, score : true, studentId : true, createdAt : true, updatedAt : true,

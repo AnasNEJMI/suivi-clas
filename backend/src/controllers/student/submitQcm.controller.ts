@@ -42,6 +42,7 @@ export type BankQuestionEntry = {
     answerD : string,
     correctAnswer : AnswerChoice,
     explanation : string,
+    curriculumSkill : {id : number, label : string, description : string} | null
 }
 
 type QcmResponse = {
@@ -103,6 +104,7 @@ export async function submitStudentQcmHandler(
                                 answerD : true,
                                 correctAnswer : true,
                                 explanation : true,
+                                curriculumSkill : {select : {id : true, label : true, description : true}}
                             }
                         }
                     }

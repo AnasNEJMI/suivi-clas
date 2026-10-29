@@ -13,7 +13,11 @@ backend/prisma/qcm-backup.json
 backend/prisma/qcm-invalid-output.json
 backend/prisma/dirty-questions-cleaned-up.json
 backend/prisma/dirty-qcm-questions.json
+backend/prisma/lessons.json
+backend/prisma/qcm-skill-generation-errors.jsonl
+backend/prisma/qcm-bank-export-boosted.json
 backend/prisma/directory
+
 
 
 

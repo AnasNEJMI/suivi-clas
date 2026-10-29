@@ -29,6 +29,7 @@ const AnimCompletedBilanDetails = ({
   seanceDuration,
 }: AnimCompletedBilanDetailsProps) => {
   const bilan = studentBilan.bilan;
+  console.log('bilan', JSON.stringify(bilan))
 
   /* --- État Vide (Pas de bilan soumis) --- */
   if (!bilan) {
@@ -107,6 +108,34 @@ const AnimCompletedBilanDetails = ({
                 </span>
               </div>
             )}
+          </CardContent>
+        </Card>
+      )}
+
+      {isPresent && bilan.lesson && bilan.curriculumSkills && bilan.curriculumSkills.length > 0 && (
+        <Card className="border border-slate-200/80 bg-white shadow-xs rounded-3xl overflow-hidden group hover:shadow-md transition-all gap-3">
+          <CardHeader className="px-5">
+            <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2.5">
+              <div className="size-9 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center shrink-0">
+                <BookOpenTextIcon className="size-5" />
+              </div>
+              <span className="text-base font-extrabold tracking-tight">Compétences travaillées</span>
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent>
+            <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-100 text-sm sm:text-base font-medium text-slate-700 leading-relaxed whitespace-pre-line shadow-2xs">
+              {bilan.curriculumSkills.map((skill) => (
+                <div key= {skill.id} className="min-w-0 flex-1 cursor-pointer">
+                  <span className="flex items-center gap-2 text-sm font-medium">
+                    {skill.label}
+                  </span>
+                  <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                    {skill.description}
+                  </span>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       )}

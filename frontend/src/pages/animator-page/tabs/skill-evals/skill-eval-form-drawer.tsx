@@ -1,9 +1,6 @@
 import type { SkillEvalData, SkillEvalStudentEntry } from '@/api/animator/skill-evals.types'
 import { useState, type ReactNode } from 'react'
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer'
-import { Button } from '@/components/ui/button'
-import { ArrowLeftIcon, MessageSquareTextIcon, NotebookPenIcon, SlidersIcon } from 'lucide-react'
-import { useIsMobile } from '@/hooks/use-mobile'
+import { MessageSquareTextIcon, SlidersIcon } from 'lucide-react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { skillEvalFormSchema, type SkillEvalFormValues } from '@/lib/schemas/skill-eval.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -14,6 +11,7 @@ import { Field } from '@/components/ui/field'
 import { BrandButton } from '@/components/brand-button'
 import AnimSkillSliderField from './skill-slider-field'
 import AnimSkillCommentaryField from './skill-commentary-field'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 
 interface AnimSkillEvalDrawerProps {
     student: SkillEvalStudentEntry
@@ -28,7 +26,6 @@ const AnimSkillEvalDrawer = ({
     onSkillEvalUpserted,
     children,
 }: AnimSkillEvalDrawerProps) => {
-    const isMobile = useIsMobile()
     const [open, setOpen] = useState(false)
     const name = `${student.firstName} ${student.lastName}`
     const initials = `${student.firstName?.[0] ?? ''}${student.lastName?.[0] ?? ''}`.toUpperCase()
@@ -82,31 +79,12 @@ const AnimSkillEvalDrawer = ({
     })
 
     return (
-        <Drawer direction={isMobile ? 'left' : 'right'} open={open} onOpenChange={setOpen}>
-            <DrawerTrigger asChild>{children}</DrawerTrigger>
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>{children}</DialogTrigger>
             
-            <DrawerContent className="h-dvh flex flex-col font-outfit shadow-2xl border-l border-slate-200/80 bg-slate-50/95 backdrop-blur-md p-0 md:rounded-l-2xl overflow-hidden focus:outline-none gap-0">
+            <DialogContent className="h-dvh flex flex-col items-start w-full lg:w-[calc(100%-18rem)] lg:left-72 lg:translate-x-0 p-0 gap-0 font-outfit shadow-none border-none bg-slate-100 overflow-hidden focus:outline-none">
                 {/* --- EN-TÊTE DU DRAWER --- */}
-                <DrawerHeader className="p-4 sm:p-5 border-b border-slate-200/80 bg-white/90 shrink-0 space-y-4 text-left">
-                    {/* Ligne 1 : Navigation Retour & Badge */}
-                    <div className="flex items-center justify-between">
-                        <DrawerClose asChild>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-8 px-2.5 -ml-2 gap-1.5 font-bold text-slate-900 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
-                            >
-                                <ArrowLeftIcon className="size-4" />
-                                <span>Retour</span>
-                            </Button>
-                        </DrawerClose>
-
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/80 text-[11px] font-bold">
-                            <NotebookPenIcon className="size-3 text-indigo-500" />
-                            <span>Méthodologie</span>
-                        </span>
-                    </div>
-
+                <DialogHeader className="bg-white/90 shrink-0 w-full text-left pt-12 pb-6 px-6">
                     {/* Ligne 2 : Identité Élève & Titre */}
                     <div className="flex items-center gap-3">
                         <div className="size-11 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100/80 flex items-center justify-center font-extrabold text-sm shadow-2xs shrink-0">
@@ -114,22 +92,22 @@ const AnimSkillEvalDrawer = ({
                         </div>
 
                         <div className="space-y-0.5 min-w-0 flex-1">
-                            <DrawerTitle className="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 truncate">
+                            <DialogTitle className="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 truncate">
                                 {name}
-                            </DrawerTitle>
-                            <DrawerDescription className="text-xs font-medium text-slate-500">
+                            </DialogTitle>
+                            <DialogDescription className="text-xs font-medium text-slate-500">
                                 Renseignez ou modifiez la grille de compétences
-                            </DrawerDescription>
+                            </DialogDescription>
                         </div>
                     </div>
-                </DrawerHeader>
+                </DialogHeader>
 
                 {/* --- FORMULAIRE DÉFILANT --- */}
                 <FormProvider {...form}>
                     <form
                         id="skill-eval-form"
                         onSubmit={form.handleSubmit((data) => submitMutation.mutate(data))}
-                        className="brand-v-scrollbar overflow-x-hidden overflow-y-auto p-4 sm:p-5 flex-1 space-y-6 flex flex-col justify-between"
+                        className="brand-v-scrollbar overflow-x-hidden overflow-y-auto p-4 sm:p-5 flex-1 space-y-6 flex flex-col justify-between w-full"
                     >
                         <div className="space-y-5">
                             {/* --- CARTE 1 : NOTES & SLIDERS --- */}
@@ -199,8 +177,8 @@ const AnimSkillEvalDrawer = ({
                         </Field>
                     </form>
                 </FormProvider>
-            </DrawerContent>
-        </Drawer>
+            </DialogContent>
+        </Dialog>
     )
 }
 

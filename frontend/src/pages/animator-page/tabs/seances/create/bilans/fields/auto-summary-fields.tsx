@@ -8,16 +8,17 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { BrandButton } from '@/components/brand-button'
-import { ACTIVITIES, ACTIVITY_LABELS, ENGAGEMENT_LABELS, ENGAGEMENT_LEVELS, METHODOLOGY_SKILLS, METHODOLOGY_TRENDS, NEXT_STEP_LABELS, NEXT_STEPS, SKILL_LABELS, toOptions, TREND_LABELS } from '@/api/animator/auto-summary-options'
+import { ACTIVITIES, ACTIVITY_LABELS, COMPREHENSION_LABELS, COMPREHENSION_LEVELS, ENGAGEMENT_LABELS, ENGAGEMENT_LEVELS, METHODOLOGY_SKILLS, METHODOLOGY_TRENDS, NEXT_STEP_LABELS, NEXT_STEPS, SKILL_LABELS, toOptions, TREND_LABELS } from '@/api/animator/auto-summary-options'
 import { StepBadge } from './step-badge'
 
 const ACTIVITY_OPTIONS    = toOptions(ACTIVITIES, ACTIVITY_LABELS)
 const ENGAGEMENT_OPTIONS = toOptions(ENGAGEMENT_LEVELS, ENGAGEMENT_LABELS) 
+const COMPREHENSION_OPTIONS = toOptions(COMPREHENSION_LEVELS, COMPREHENSION_LABELS) 
 const SKILL_OPTIONS       = toOptions(METHODOLOGY_SKILLS, SKILL_LABELS)
 const TREND_OPTIONS       = toOptions(METHODOLOGY_TRENDS, TREND_LABELS)
 const NEXT_STEP_OPTIONS   = toOptions(NEXT_STEPS, NEXT_STEP_LABELS)
 
-type ToggleFieldName = 'activity' | 'engagement' | 'methodologyTrend' | 'nextStep'
+type ToggleFieldName = 'activity' | 'engagement' | 'methodologyTrend' | 'nextStep' | 'comprehension'
 
 function ToggleField({ name, label, options }: {
   name:    ToggleFieldName
@@ -87,6 +88,7 @@ export default function AutoSummaryCard({ onGenerate, isGenerating }: AutoSummar
       <CardContent className='flex flex-col gap-5 mt-6'>
         <ToggleField name='activity'    label='Contenu de la séance'     options={ACTIVITY_OPTIONS} />
         <ToggleField name='engagement' label='Implication pendant la séance' options={ENGAGEMENT_OPTIONS} />
+        <ToggleField name='comprehension'    label='Niveau de compréhension'     options={COMPREHENSION_OPTIONS} />
         <Controller
           name='methodologySkill'
           control={control}

@@ -1,4 +1,5 @@
 import type { AnswerChoice, Difficulty } from "../api.types"
+import type { CurriculumSkillEntry } from "./types"
 
 export type QcmEntry = {
     id : number,
@@ -28,12 +29,14 @@ export type BankQuestionEntry = {
     answerD : string,
     correctAnswer : AnswerChoice,
     explanation : string,
+    curriculumSkill : {id : number, label : string, description : string} | null
 }
 
 export type BilanEntry = {
     date: Date;
     presence: boolean;
     summary: string | null;
+    curriculumSkills: CurriculumSkillEntry[] | null,
     lesson: {
         id: number;
         label: string;
@@ -48,6 +51,8 @@ export type BilanEntry = {
     submittedById: number;
     qcm : QcmEntry | null;
 }
+
+
 
 export type DeleteBilanEntry = {
     id : number,

@@ -31,10 +31,10 @@ export default function SummaryCard({step} : {step : number}) {
                         <Field data-invalid={fieldState.invalid}>
                             <Textarea
                                 {...field}
-                                placeholder='Résumé de la séance'
+                                placeholder='Bonjour, lors de la cette séance ...'
                                 aria-invalid={fieldState.invalid}
                                 autoComplete='off'
-                                className='bg-white focus-visible:ring-lime-500/50 focus-visible:border-lime-200 border-zinc-200 text-base!'
+                                className='bg-white focus-visible:ring-lime-500/50 focus-visible:border-lime-200 border-zinc-200 placeholder:text-sm text-sm'
                             />
                             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                         </Field>

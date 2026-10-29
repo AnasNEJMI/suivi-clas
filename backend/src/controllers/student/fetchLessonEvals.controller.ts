@@ -19,7 +19,14 @@ type LessonsBySubject = {
 export type Lesson = {
     id : number,
     label : string,
+    curriculumSkills : CurriculumSkillEntry[],
     eval : LessonEvalEntry | null
+}
+
+export type CurriculumSkillEntry = {
+    id : number,
+    label : string,
+    description : string
 }
 
 export type LessonEvalEntry = {
@@ -46,6 +53,7 @@ export async function studentLessonEvalsHandler(
             where: { levelId },
             select: {
                 id: true, label: true,
+                curriculumSkills : {select : {id : true, label : true, description : true}},
                 subject: { select: { id: true, label: true } },
                 lessonEvals: {
                     where: { studentId },
@@ -72,7 +80,7 @@ export async function studentLessonEvalsHandler(
             const subject = subjectMap.get(lesson.subject.id);
             if(subject){
                 subject.lessons.push({
-                    id: lesson.id, label: lesson.label, eval: lesson.lessonEvals[0] ?? null,
+                    id: lesson.id, label: lesson.label, curriculumSkills : lesson.curriculumSkills, eval: lesson.lessonEvals[0] ?? null,
                 });
             }
         }

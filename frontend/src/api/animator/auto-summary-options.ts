@@ -5,6 +5,7 @@ export const AUTO_SUMMARY_USERNAME = 'your-username'
 
 export const ACTIVITIES           = ['course_review', 'exercises', 'mixed'] as const
 export const ENGAGEMENT_LEVELS = ['engaged', 'moderate', 'disengaged'] as const
+export const COMPREHENSION_LEVELS = ['secure', 'in_progress', 'needs_review'] as const
 export const METHODOLOGY_SKILLS   = [
   'ponctuality', 'preparation', 'autonomy', 'organisation',
   'regularity', 'discipline', 'respect',
@@ -14,6 +15,7 @@ export const NEXT_STEPS           = ['redo_exercises', 'more_exercises', 'review
 
 export type Activity           = (typeof ACTIVITIES)[number]
 export type EngagementLevel    = (typeof ENGAGEMENT_LEVELS)[number]
+export type ComprehensionLevel    = (typeof COMPREHENSION_LEVELS)[number]
 export type MethodologySkill   = (typeof METHODOLOGY_SKILLS)[number]
 export type MethodologyTrend   = (typeof METHODOLOGY_TRENDS)[number]
 export type NextStep           = (typeof NEXT_STEPS)[number]
@@ -28,6 +30,11 @@ export const ENGAGEMENT_LABELS: Record<EngagementLevel, string> = {
   engaged:    'Forte implication',
   moderate:   'Implication moyenne',
   disengaged: 'Faible implication',
+}
+export const COMPREHENSION_LABELS: Record<ComprehensionLevel, string> = {
+  secure :    'Bonne compréhension',
+  in_progress:   'Compréhension moyenne',
+  needs_review: 'Faible compréhension',
 }
 
 export const SKILL_LABELS: Record<MethodologySkill, string> = {

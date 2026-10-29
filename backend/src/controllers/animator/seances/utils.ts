@@ -35,6 +35,7 @@ export type BilanEntry = {
     date: Date;
     presence: boolean;
     summary: string | null;
+    curriculumSkills : {id : number, label : string, description : string}[] | null,
     lesson: {
         id: number;
         label: string;
