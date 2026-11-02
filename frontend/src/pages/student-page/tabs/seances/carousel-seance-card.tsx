@@ -10,7 +10,6 @@ import {
   CheckCircle2Icon,
   Clock3Icon,
   FileQuestionIcon,
-  TrophyIcon,
   UserRoundIcon,
 } from 'lucide-react';
 import StudentSeanceDetailsDrawer from './seance-details-drawer';
@@ -117,14 +116,6 @@ const StudentCarouselSeanceCard = ({
               QCM à faire
             </span>
           )}
-          {qcm?.completed && (
-            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50/95 px-2 py-1.5 text-[10px] font-bold text-emerald-800">
-              <TrophyIcon className="size-3.5" aria-hidden="true" />
-              {qcm.score != null
-                ? `${qcm.score}/${qcm.qcmQuestions.length}`
-                : 'QCM terminé'}
-            </span>
-          )}
           {!qcm && (
             <span className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-white/70 bg-white/60 px-2 py-1.5 text-[10px] font-semibold text-slate-600">
               <FileQuestionIcon className="size-3.5 text-slate-500" aria-hidden="true" />
@@ -156,7 +147,6 @@ const StudentCarouselSeanceCard = ({
               <span className="capitalize">{bilan.submittedBy.firstName}</span>{' '}
               <span className="uppercase">{bilan.submittedBy.lastName}</span>
             </span>
-            <span className="ml-auto shrink-0 text-[10px] font-medium text-slate-600/80">Animateur</span>
           </p>
 
           <div className="flex items-center justify-between gap-3 text-[11px] font-semibold text-slate-700/85">
@@ -171,7 +161,7 @@ const StudentCarouselSeanceCard = ({
           </div>
 
           {qcm?.completed && (
-            <div className="flex items-center gap-1.5 border-t border-slate-900/10 pt-2 text-[11px] font-semibold text-emerald-800">
+            <div className={cn("flex items-center gap-1.5 border-t border-slate-900/10 pt-2 text-[11px] font-semibold", cardStyle.highlightTextColor)}>
               <CheckCircle2Icon className="size-3.5" aria-hidden="true" />
               QCM terminé
               {qcm.score != null && <span className="ml-auto">Résultat : {qcm.score}/{qcm.qcmQuestions.length}</span>}

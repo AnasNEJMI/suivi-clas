@@ -14,7 +14,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { useIsMobile } from '@/hooks/use-mobile';
 import type { CardStyle } from '@/lib/types/data.types';
-import { cn, getCongralutoryMessage } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import {
@@ -28,12 +28,13 @@ import {
   MessageCircleQuestionIcon,
   NotebookPenIcon,
   NotebookTabsIcon,
-  TrophyIcon,
   UserIcon,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import QcmQuestionnaire from '../../../qcm-questionnaire';
 import QcmResultsQuestionnaire from '../../../qcm-results-questionnaire';
+import { levelFor } from '@/lib/skill-eval-score-level';
+import { ScoreRing } from '@/components/score-ring';
 
 interface StudentSeanceDetailsDrawerProps {
   bilan: BilanEntry;
@@ -42,42 +43,42 @@ interface StudentSeanceDetailsDrawerProps {
   children: ReactNode;
 }
 
-const ScoreRing = ({ score, total }: { score: number; total: number }) => {
-  const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
-  const safePercentage = Math.max(0, Math.min(100, percentage));
-  const radius = 38;
-  const circumference = 2 * Math.PI * radius;
-  const strokeOffset = circumference * (1 - safePercentage / 100);
-  const strokeColor = safePercentage >= 80 ? '#059669' : safePercentage >= 50 ? '#0284c7' : '#d97706';
+// const ScoreRing = ({ score, total }: { score: number; total: number }) => {
+//   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+//   const safePercentage = Math.max(0, Math.min(100, percentage));
+//   const radius = 38;
+//   const circumference = 2 * Math.PI * radius;
+//   const strokeOffset = circumference * (1 - safePercentage / 100);
+//   const strokeColor = safePercentage >= 80 ? '#059669' : safePercentage >= 50 ? '#0284c7' : '#d97706';
 
-  return (
-    <div
-      className="relative grid size-28 shrink-0 place-items-center"
-      role="img"
-      aria-label={`Résultat du QCM : ${score} bonnes réponses sur ${total}, soit ${safePercentage} %`}
-    >
-      <svg viewBox="0 0 100 100" className="size-full -rotate-90" aria-hidden="true">
-        <circle cx="50" cy="50" r={radius} fill="none" stroke="#e2e8f0" strokeWidth="8" />
-        <circle
-          cx="50"
-          cy="50"
-          r={radius}
-          fill="none"
-          stroke={strokeColor}
-          strokeWidth="8"
-          strokeLinecap="round"
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeOffset}
-          className="transition-[stroke-dashoffset] duration-700 ease-out"
-        />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-extrabold tracking-tight text-slate-900">{safePercentage}%</span>
-        <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">réussite</span>
-      </div>
-    </div>
-  );
-};
+//   return (
+//     <div
+//       className="relative grid size-28 shrink-0 place-items-center"
+//       role="img"
+//       aria-label={`Résultat du QCM : ${score} bonnes réponses sur ${total}, soit ${safePercentage} %`}
+//     >
+//       <svg viewBox="0 0 100 100" className="size-full -rotate-90" aria-hidden="true">
+//         <circle cx="50" cy="50" r={radius} fill="none" stroke="#e2e8f0" strokeWidth="8" />
+//         <circle
+//           cx="50"
+//           cy="50"
+//           r={radius}
+//           fill="none"
+//           stroke={strokeColor}
+//           strokeWidth="8"
+//           strokeLinecap="round"
+//           strokeDasharray={circumference}
+//           strokeDashoffset={strokeOffset}
+//           className="transition-[stroke-dashoffset] duration-700 ease-out"
+//         />
+//       </svg>
+//       <div className="absolute inset-0 flex flex-col items-center justify-center">
+//         <span className="text-2xl font-extrabold tracking-tight text-slate-900">{safePercentage}%</span>
+//         <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">réussite</span>
+//       </div>
+//     </div>
+//   );
+// };
 
 const SectionHeading = ({
   icon: Icon,
@@ -96,7 +97,7 @@ const SectionHeading = ({
     </div>
     <div className="min-w-0">
       <h3 className="text-base font-bold tracking-tight text-slate-900">{title}</h3>
-      {subtitle && <p className="mt-0.5 text-xs leading-relaxed text-slate-500">{subtitle}</p>}
+      {subtitle && <p className="mt-0.5 text-sm leading-relaxed text-slate-500">{subtitle}</p>}
     </div>
   </div>
 );
@@ -250,32 +251,26 @@ const StudentSeanceDetailsDrawer = ({
                     <SectionHeading
                       icon={MessageCircleQuestionIcon}
                       title="Défi QCM"
-                      subtitle="Vérifie ce que tu as retenu de la leçon."
+                      subtitle={bilan.qcm?.completed ? "Défi relevé ! Révise tes réponses pour consolider tes acquis." : "Il est temps de mettre ce que tu a appris au test !"}
                       iconClassName="bg-violet-50 text-violet-700"
                     />
                     {bilan.qcm?.completed ? (
-                      <span className="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-extrabold text-emerald-700">Terminé</span>
+                      <span className="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-sm font-extrabold text-emerald-700">Terminé</span>
                     ) : bilan.qcm ? (
-                      <span className="shrink-0 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-extrabold text-amber-800">À faire</span>
+                      <span className="shrink-0 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-sm font-extrabold text-amber-800">À faire</span>
                     ) : (
-                      <span className="shrink-0 rounded-full border border-slate-200 bg-slate-100 px-2.5 py-1 text-[10px] font-bold text-slate-600">Facultatif</span>
+                      <span className="shrink-0 rounded-full border border-slate-200 bg-slate-100 px-2.5 py-1 text-sm font-bold text-slate-600">Facultatif</span>
                     )}
                   </div>
                 </CardHeader>
                 <CardContent className="px-5 pb-5 sm:px-6 sm:pb-6">
                   {bilan.qcm?.completed && (
                     <div className="space-y-4">
-                      <div className="flex flex-col items-center gap-3 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-4 sm:flex-row sm:justify-center sm:gap-5">
-                        <ScoreRing score={qcmScore} total={qcmTotal} />
-                        <div className="text-center sm:text-left">
-                          <div className="flex items-center justify-center gap-2 text-slate-900 sm:justify-start">
-                            <TrophyIcon className="size-5 text-amber-500" />
-                            <span className="text-2xl font-extrabold tracking-tight">{qcmScore}<span className="mx-1 text-slate-400">/</span>{qcmTotal}</span>
-                          </div>
-                          <p className="mt-1 text-xs font-semibold text-slate-500">Bonnes réponses</p>
-                          <p className="mt-2 max-w-xs text-sm font-semibold leading-relaxed text-slate-700">
-                            {getCongralutoryMessage(qcmScore)}
-                          </p>
+                      <div className="flex items-start justify-between gap-3 rounded-2xl border border-slate-200/80 p-4 sm:justify-center sm:gap-5">
+                        <span>Résultat</span>
+                        <div className='flex flex-col items-center'>
+                          <ScoreRing ratio={qcmScore/qcmTotal} size='md' />
+                          <p className={cn('text-sm font-bold', levelFor(qcmScore/qcmTotal).text)}>{levelFor(qcmScore/qcmTotal).label}</p>
                         </div>
                       </div>
                       <QcmResultsQuestionnaire qcm={bilan.qcm}>

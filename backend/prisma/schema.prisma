@@ -47,7 +47,7 @@ model Animator {
   id           Int      @id @default(autoincrement())
   username     String   @unique
   firstName    String   @default("john")
-  lastName     String   @default("doe")
+  lastName     String   @default("")
   passwordHash String
   gender       Gender   @default(m)
 
@@ -249,7 +249,7 @@ model Bilan {
   lessonId      Int?
   lesson        Lesson?   @relation(fields: [lessonId], references: [id], onDelete: SetNull)
 
-  summary       String?
+  summary       String? 
 
   curriculumSkills CurriculumSkill[]
 
