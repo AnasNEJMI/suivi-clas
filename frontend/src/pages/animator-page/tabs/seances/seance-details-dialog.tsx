@@ -39,6 +39,7 @@ interface AnimSeanceDetailsDialogProps {
   onBilanSubmitted: (bilan: BilanEntry) => void
   group: string
   seance: SeanceEntry
+  canAutoSummary : boolean
   children: ReactNode
   onBilanDeleted: (bilan: DeleteBilanEntry) => void
 }
@@ -48,6 +49,7 @@ const AnimSeanceDetailsDialog = ({
   group,
   children,
   lessonsByLevel,
+  canAutoSummary,
   onBilanSubmitted,
   onBilanDeleted,
 }: AnimSeanceDetailsDialogProps) => {
@@ -249,6 +251,7 @@ const AnimSeanceDetailsDialog = ({
                         seanceId={seance.id}
                         animatorId={seance.animatorId}
                         lessonsByLevel={lessonsByLevel}
+                        canAutoSummary = {canAutoSummary}
                         onBilanSubmitted={onBilanSubmitted}
                         seanceDate={seance.date}
                         seanceDuration={seance.seanceDuration}

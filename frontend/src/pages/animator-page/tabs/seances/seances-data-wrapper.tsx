@@ -16,6 +16,7 @@ const AnimSeancesTabDataWrapper = ({animator} : {animator : User}) => {
     })
 
     console.log('lessonsbylevel ', lessonsByLevel)
+    console.log('env ', import.meta.env.VITE_AUTO_SUMMARY_USERNAME)
 
     const queryClient = useQueryClient();
     const seancesQueryKey = animatorKeys.seances;
@@ -136,6 +137,7 @@ const AnimSeancesTabDataWrapper = ({animator} : {animator : User}) => {
             <SeancesHistoryByGroup
                 seancesByScolarYear = {seancesByScolarYear}
                 lessonsByLevel={lessonsByLevel}
+                canAutoSummary = {animator.username === import.meta.env.VITE_AUTO_SUMMARY_USERNAME}
                 onBilanSubmitted={onBilanSubmitted}
                 onBilanDeleted={onBilanDeleted}
             />

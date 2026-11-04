@@ -2,7 +2,7 @@ import type { SkillEvalData } from '@/api/animator/skill-evals.types';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { EmptyStateCard } from '@/components/ui/empty-state-card';
 import { SKILL_CAROUSEL_CARD_STYLES } from '@/lib/types/data.types';
-import SkillCarouselCard from '@/pages/student-page/tabs/skill-evals/skill-carousel-card';
+import SkillCarouselCard from '@/pages/student-page/tabs/skill-evals/skill-carousel-card-new';
 import { RotateCwFadingClockIcon } from 'lucide-react';
 
 const SKILL_KEYS = [
@@ -45,8 +45,8 @@ const AnimSkillNotesCarousel = ({ skillEval }: { skillEval: SkillEvalData | null
                         if (!style) return null;
 
                         return (
-                            <CarouselItem key={key} className="pl-3 max-w-48 h-40 shrink-0">
-                                <SkillCarouselCard cardStyle={style} score={score} />
+                            <CarouselItem key={key} className="pl-3 max-w-48 shrink-0">
+                                <SkillCarouselCard skill={key} ratio={score/20} evaluations={1} />
                             </CarouselItem>
                         );
                     })}

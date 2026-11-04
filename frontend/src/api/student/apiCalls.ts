@@ -159,6 +159,7 @@ const studentEndpoints = {
     bilans : 'bilans',
     skillsEvals : 'skills-evals',
     lessonEvals : 'lesson-evals',
+    visit : 'visit',
     qcm : 'qcm'
 }
 
@@ -194,6 +195,6 @@ export const studentApiCalls = {
     fetchBilans : fetchStudentData<BilansResponse>(studentEndpoints.bilans),
     fetchSkillEvals : fetchStudentData<SkillsEvalsResponse>(studentEndpoints.skillsEvals),
     fetchLessonEvals : fetchStudentData<LessonEvalsResponse>(studentEndpoints.lessonEvals),
-    trackVisit : fetchStudentData<VisitTrackingResponse | null>('visit'),
+    trackVisit : fetchStudentData<VisitTrackingResponse | null>(studentEndpoints.visit),
     submitQcm : (payload : QcmEntry) => submitData<QcmEntry, QcmEntry | null>(payload, studentEndpoints.qcm)
 }

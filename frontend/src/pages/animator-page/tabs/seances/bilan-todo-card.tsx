@@ -15,6 +15,7 @@ interface AnimBilanToDoCardProps {
   seanceDate: Date
   seanceId: number
   animatorId: number
+  canAutoSummary : boolean
   lessonsByLevel: LessonsByLevelEntry[]
   seanceDuration: SeanceDurationEntry
   onBilanSubmitted: (bilan: BilanEntry) => void
@@ -25,6 +26,7 @@ const AnimBilanToDoCard = ({
   studentBilan,
   seanceDate,
   seanceId,
+  canAutoSummary,
   animatorId,
   lessonsByLevel,
   onBilanSubmitted,
@@ -37,6 +39,7 @@ const AnimBilanToDoCard = ({
       lessonsByLevel={lessonsByLevel}
       animatorId={animatorId}
       seanceId={seanceId}
+      canAutoSummary = {canAutoSummary}
       onBilanSubmitted={onBilanSubmitted}
       studentBilan={studentBilan}
       seanceDate={seanceDate}

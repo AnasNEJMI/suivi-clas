@@ -16,6 +16,7 @@ import { EmptyStateCard } from '@/components/ui/empty-state-card'
 interface SeancesHistoryByGroupProps {
   seancesByScolarYear: SeancesByScolarYearEntry[]
   lessonsByLevel: LessonsByLevelEntry[]
+  canAutoSummary: boolean
   onBilanSubmitted: (bilan: BilanEntry) => void
   onBilanDeleted: (bilan: DeleteBilanEntry) => void
 }
@@ -25,6 +26,7 @@ const CAROUSEL_MAX_LENGTH = 6
 const SeancesHistoryByGroup = ({
   seancesByScolarYear,
   lessonsByLevel,
+  canAutoSummary,
   onBilanSubmitted,
   onBilanDeleted,
 }: SeancesHistoryByGroupProps) => {
@@ -141,6 +143,7 @@ const SeancesHistoryByGroup = ({
                     <GroupSeancesListDrawer
                       group={group.label}
                       seances={group.seances}
+                      canAutoSummary={canAutoSummary}
                       lessonsByLevel={lessonsByLevel}
                       onBilanDeleted={onBilanDeleted}
                       onBilanSubmitted={onBilanSubmitted}

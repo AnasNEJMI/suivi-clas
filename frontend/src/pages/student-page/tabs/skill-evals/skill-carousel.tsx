@@ -8,8 +8,8 @@ import {
 } from '@/components/ui/carousel';
 import { SKILL_CAROUSEL_CARD_STYLES } from '@/lib/types/data.types';
 import { RotateCwFadingClockIcon } from 'lucide-react';
-import SkillCarouselCard from './skill-carousel-card';
 import { EmptyStateCard } from '@/components/ui/empty-state-card';
+import SkillCarouselCard from './skill-carousel-card-new';
 
 const SKILL_KEYS = [
   'autonomy',
@@ -80,9 +80,9 @@ const SkillCarousel = ({ skillsEvals }: { skillsEvals: SkillsEvalEntry[] }) => {
             return (
               <CarouselItem
                 key={key}
-                className="pl-3 max-w-48 h-40 shrink-0"
+                className="pl-3 max-w-48 shrink-0"
               >
-                <SkillCarouselCard cardStyle={style} score={avgScore} />
+                <SkillCarouselCard skill={key} ratio={avgScore/20} evaluations={1} />
               </CarouselItem>
             );
           })}

@@ -1,5 +1,4 @@
 import type { BilanEntry, QcmEntry } from '@/api/student/apiCalls';
-import { BrandButton } from '@/components/brand-button';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader} from '@/components/ui/card';
 import {
@@ -25,16 +24,12 @@ import {
   CheckCircle2Icon,
   ClockIcon,
   LibraryBigIcon,
-  MessageCircleQuestionIcon,
   NotebookPenIcon,
   NotebookTabsIcon,
   UserIcon,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
-import QcmQuestionnaire from '../../../qcm-questionnaire';
-import QcmResultsQuestionnaire from '../../../qcm-results-questionnaire';
-import { levelFor } from '@/lib/skill-eval-score-level';
-import { ScoreRing } from '@/components/score-ring';
+import { QcmCard } from '@/components/qcm-card';
 
 interface StudentSeanceDetailsDrawerProps {
   bilan: BilanEntry;
@@ -42,44 +37,6 @@ interface StudentSeanceDetailsDrawerProps {
   onQcmSubmit: (qcm: QcmEntry) => void;
   children: ReactNode;
 }
-
-// const ScoreRing = ({ score, total }: { score: number; total: number }) => {
-//   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
-//   const safePercentage = Math.max(0, Math.min(100, percentage));
-//   const radius = 38;
-//   const circumference = 2 * Math.PI * radius;
-//   const strokeOffset = circumference * (1 - safePercentage / 100);
-//   const strokeColor = safePercentage >= 80 ? '#059669' : safePercentage >= 50 ? '#0284c7' : '#d97706';
-
-//   return (
-//     <div
-//       className="relative grid size-28 shrink-0 place-items-center"
-//       role="img"
-//       aria-label={`Résultat du QCM : ${score} bonnes réponses sur ${total}, soit ${safePercentage} %`}
-//     >
-//       <svg viewBox="0 0 100 100" className="size-full -rotate-90" aria-hidden="true">
-//         <circle cx="50" cy="50" r={radius} fill="none" stroke="#e2e8f0" strokeWidth="8" />
-//         <circle
-//           cx="50"
-//           cy="50"
-//           r={radius}
-//           fill="none"
-//           stroke={strokeColor}
-//           strokeWidth="8"
-//           strokeLinecap="round"
-//           strokeDasharray={circumference}
-//           strokeDashoffset={strokeOffset}
-//           className="transition-[stroke-dashoffset] duration-700 ease-out"
-//         />
-//       </svg>
-//       <div className="absolute inset-0 flex flex-col items-center justify-center">
-//         <span className="text-2xl font-extrabold tracking-tight text-slate-900">{safePercentage}%</span>
-//         <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">réussite</span>
-//       </div>
-//     </div>
-//   );
-// };
-
 const SectionHeading = ({
   icon: Icon,
   title,
@@ -109,12 +66,6 @@ const StudentSeanceDetailsDrawer = ({
   children,
 }: StudentSeanceDetailsDrawerProps) => {
   const isMobile = useIsMobile();
-  const completedQcm = Boolean(bilan.qcm?.completed);
-  const qcmTotal = bilan.qcm?.qcmQuestions.length ?? 0;
-  const qcmScore = bilan.qcm?.score ?? 0;
-  const qcmPercentage = qcmTotal > 0
-    ? Math.round((Math.max(0, Math.min(qcmTotal, qcmScore)) / qcmTotal) * 100)
-    : 0;
   const firstName = bilan.submittedBy.firstName;
   const lastName = bilan.submittedBy.lastName;
 
@@ -244,70 +195,14 @@ const StudentSeanceDetailsDrawer = ({
 
             {/* Side column: QCM and session metadata */}
             <aside className="flex min-w-0 flex-col gap-4 sm:gap-5 lg:col-span-5 lg:gap-6">
-              <Card className="gap-0 overflow-hidden rounded-3xl border border-slate-200/80 bg-white py-0 shadow-sm">
-                <div className="h-1.5 w-full bg-linear-to-r from-violet-500 via-indigo-500 to-sky-500" />
-                <CardHeader className="px-5 pb-3 pt-5 sm:px-6 sm:pt-6">
-                  <div className="flex items-start justify-between gap-3">
-                    <SectionHeading
-                      icon={MessageCircleQuestionIcon}
-                      title="Défi QCM"
-                      subtitle={bilan.qcm?.completed ? "Défi relevé ! Révise tes réponses pour consolider tes acquis." : "Il est temps de mettre ce que tu a appris au test !"}
-                      iconClassName="bg-violet-50 text-violet-700"
-                    />
-                    {bilan.qcm?.completed ? (
-                      <span className="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-sm font-extrabold text-emerald-700">Terminé</span>
-                    ) : bilan.qcm ? (
-                      <span className="shrink-0 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-sm font-extrabold text-amber-800">À faire</span>
-                    ) : (
-                      <span className="shrink-0 rounded-full border border-slate-200 bg-slate-100 px-2.5 py-1 text-sm font-bold text-slate-600">Facultatif</span>
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent className="px-5 pb-5 sm:px-6 sm:pb-6">
-                  {bilan.qcm?.completed && (
-                    <div className="space-y-4">
-                      <div className="flex items-start justify-between gap-3 rounded-2xl border border-slate-200/80 p-4 sm:justify-center sm:gap-5">
-                        <span>Résultat</span>
-                        <div className='flex flex-col items-center'>
-                          <ScoreRing ratio={qcmScore/qcmTotal} size='md' />
-                          <p className={cn('text-sm font-bold', levelFor(qcmScore/qcmTotal).text)}>{levelFor(qcmScore/qcmTotal).label}</p>
-                        </div>
-                      </div>
-                      <QcmResultsQuestionnaire qcm={bilan.qcm}>
-                        <BrandButton className="h-11 w-full rounded-xl text-sm font-bold">
-                          Consulter les corrections
-                        </BrandButton>
-                      </QcmResultsQuestionnaire>
-                    </div>
-                  )}
-
-                  {bilan.qcm && !bilan.qcm.completed && (
-                    <div className="space-y-4">
-                      <div className="rounded-2xl border border-amber-200/80 bg-amber-50/70 p-4">
-                        <p className="text-sm font-semibold leading-relaxed text-amber-950">
-                          Un petit défi t'attend. Réponds aux questions pour vérifier ta compréhension de la leçon.
-                        </p>
-                      </div>
-                      <QcmQuestionnaire onQcmSubmit={onQcmSubmit} qcm={bilan.qcm}>
-                        <BrandButton className="h-11 w-full rounded-xl text-sm font-bold">
-                          Commencer le QCM
-                        </BrandButton>
-                      </QcmQuestionnaire>
-                    </div>
-                  )}
-
-                  {!bilan.qcm && (
-                    <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4">
-                      <p className="text-sm leading-relaxed text-slate-600">
-                        Aucun QCM n'est associé à cette séance. Tu peux revoir les compétences travaillées ci-dessus.
-                      </p>
-                    </div>
-                  )}
-                  {completedQcm && qcmTotal > 0 && qcmPercentage === 100 && (
-                    <p className="mt-3 text-center text-xs font-semibold text-emerald-700">Excellent : toutes les réponses sont correctes.</p>
-                  )}
-                </CardContent>
-              </Card>
+              <div className='rounded-2xl overflow-hidden shadow-md'>
+                <QcmCard
+                  qcm={bilan.qcm}
+                  onQcmSubmit={onQcmSubmit}
+                  framed={false}
+                  className="flex-1 bg-white p-6 dark:bg-slate-900"
+                />
+              </div>
 
               <Card className="gap-0 rounded-3xl border border-slate-200/80 bg-white py-0 shadow-sm">
                 <CardHeader className="px-5 pb-3 pt-5 sm:px-6 sm:pt-6">

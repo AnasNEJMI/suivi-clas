@@ -33,7 +33,7 @@ const AnimCreateBilanForm = ({
   animatorId,
   lessonsByLevel,
   onBilanSubmitted,
-  canAutoSummary = false,
+  canAutoSummary,
 }: AnimBilanFormProps) => {
   const availableSubjects = useMemo(
     () => lessonsByLevel.find((l) => l.id === studentBilan.level.id)?.subjects ?? [],

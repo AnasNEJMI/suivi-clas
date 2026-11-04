@@ -1,61 +1,38 @@
-import type { SkillCarouselCardStyle } from '@/lib/types/data.types';
-import { cn } from '@/lib/utils';
+// skill-carousel-card.tsx
+import { ChevronRightIcon } from 'lucide-react'
+import { LevelMeter } from '@/components/level-meter'
+import { SkillDialog } from '@/components/skill-dialog'
+import { cn } from '@/lib/utils'
+import { SKILLS, type SkillKey } from '@/lib/skills'
+import { levelFor } from '@/lib/skill-eval-score-level'
 
-interface SkillCarouselCardProps {
-  cardStyle: SkillCarouselCardStyle;
-  score: number;
+type Props = { skill: SkillKey; ratio: number; evaluations: number }
+
+const SkillCarouselCard = ({ skill, ratio, evaluations }: Props) => {
+  const info  = SKILLS[skill]
+  const level = levelFor(ratio)
+  const source = `${evaluations} évaluation${evaluations > 1 ? 's' : ''} de tes animateurs`
+
+  return (
+    <SkillDialog skill={skill} ratio={ratio} source={source}>
+      <button
+        type='button'
+        className='group flex h-full min-h-44 w-full flex-col rounded-2xl border border-slate-200 bg-white p-4 text-left font-outfit shadow-xs transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400'
+      >
+        <span className='flex items-center justify-between'>
+          <span className={cn('grid size-10 place-items-center rounded-xl', info.tile)}>
+            <info.Icon className='size-5' aria-hidden />
+          </span>
+          <ChevronRightIcon className='size-4 text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-slate-500' aria-hidden />
+        </span>
+
+        <span className='mt-4 text-sm font-semibold text-slate-500'>{info.label}</span>
+        <span className={cn('mt-0.5 text-xl font-extrabold leading-tight tracking-tight', level.text)}>{level.label}</span>
+
+        <LevelMeter level={level} className='mt-auto pt-4' />
+      </button>
+    </SkillDialog>
+  )
 }
 
-const SkillCarouselCard = ({ cardStyle, score }: SkillCarouselCardProps) => {
-  return (
-    <div
-      className={cn(
-        'group relative w-full h-full p-4 rounded-2xl border transition-all duration-200 flex flex-col justify-between overflow-hidden font-outfit shadow-2xs hover:shadow-md hover:-translate-y-0.5',
-        cardStyle.bgColor,
-        cardStyle.borderColor
-      )}
-    >
-      {/* En-tête : Icône stylisée + Note /20 */}
-      <div className="flex items-start justify-between gap-2">
-        <div className="p-2 rounded-xl bg-white/70 backdrop-blur-xs shadow-2xs shrink-0 transition-transform group-hover:scale-105 duration-200">
-          <cardStyle.icon className={cn('size-5', cardStyle.highlightTextColor)} />
-        </div>
-
-        {/* Score */}
-        <div className="flex items-baseline gap-0.5 font-bold">
-          <span className={cn('text-2xl tracking-tight', cardStyle.highlightTextColor)}>
-            {score}
-          </span>
-          <span className={cn('text-xs font-semibold opacity-60', cardStyle.highlightTextColor)}>
-            /20
-          </span>
-        </div>
-      </div>
-
-      {/* Pied de carte : Nom de la compétence + Barre de progression */}
-      <div className="mt-2">
-        <h4
-          className={cn(
-            'text-xs font-bold uppercase tracking-wider opacity-80 group-hover:opacity-100 transition-opacity',
-            cardStyle.highlightTextColor
-          )}
-        >
-          {cardStyle.label}
-        </h4>
-
-        {/* Micro-barre de progression */}
-        <div className="w-full h-1.5 bg-black/5 rounded-full mt-2 overflow-hidden">
-          <div
-            className={cn(
-              'h-full rounded-full transition-all duration-500 opacity-80',
-              cardStyle.highlightTextColor?.replace('text-', 'bg-')
-            )}
-            style={{ width: `${Math.min(100, Math.max(0, (score / 20) * 100))}%` }}
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default SkillCarouselCard;
+export default SkillCarouselCard

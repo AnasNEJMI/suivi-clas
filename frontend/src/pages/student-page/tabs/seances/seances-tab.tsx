@@ -6,12 +6,14 @@ import type { User } from '@/api/auth'
 import TabHeader from '../../../tab-header'
 import StudentSeancesTabDataWrapper from './seances-data-wrapper'
 import UniversalTabSkeleton from '@/pages/universal-tab-skeleton'
+import { studentApiCalls } from '@/api/student/apiCalls'
 
 const StudentSeancesTab = () => {
     const {user : student} = useRouteLoaderData('student') as {user: User};
 
     useEffect(() =>{
         window.scrollTo(0,0)
+        void studentApiCalls.trackVisit();
     },[])
   return (
     <>

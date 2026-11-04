@@ -1,4 +1,3 @@
-// src/controllers/student/visit.controller.ts
 import { Request, Response, NextFunction } from 'express'
 import { sendSuccess } from '../../utils/response.utils.js'
 import { prisma } from '../../db/prisma.js';

@@ -51,7 +51,6 @@ const StudentPageLayout = () => {
       void studentApiCalls.trackVisit();
     }, [])
     
-
   return (
         <UserPageWrapper
             tabs={PAGE_TABS}

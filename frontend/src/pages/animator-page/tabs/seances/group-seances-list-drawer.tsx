@@ -34,6 +34,7 @@ interface GroupSeancesListDrawerProps {
   lessonsByLevel: LessonsByLevelEntry[]
   onBilanSubmitted: (bilan: BilanEntry) => void
   group: string
+  canAutoSummary : boolean
   onBilanDeleted: (bilan: DeleteBilanEntry) => void
   children: ReactNode
 }
@@ -43,6 +44,7 @@ const GroupSeancesListDrawer = ({
   seances,
   children,
   lessonsByLevel,
+  canAutoSummary,
   onBilanSubmitted,
   onBilanDeleted,
 }: GroupSeancesListDrawerProps) => {
@@ -182,6 +184,7 @@ const GroupSeancesListDrawer = ({
                         key={seance.id}
                         lessonsByLevel={lessonsByLevel}
                         onBilanSubmitted={onBilanSubmitted}
+                        canAutoSummary={canAutoSummary}
                         seance={seance}
                         group={group}
                         onBilanDeleted={onBilanDeleted}

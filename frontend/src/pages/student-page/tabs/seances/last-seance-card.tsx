@@ -1,26 +1,21 @@
 import type { BilanEntry, QcmEntry } from '@/api/student/apiCalls';
-import { BrandButton } from '@/components/brand-button';
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { CARD_STYLES, type Subject } from '@/lib/types/data.types';
-import { cn, getCongralutoryMessage, getElapsedDays } from '@/lib/utils';
+import { cn, getElapsedDays } from '@/lib/utils';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import {
   ArrowRightIcon,
   CalendarIcon,
   CalendarX2Icon,
-  CheckCircle2Icon,
   ClockIcon,
-  MessageCircleQuestionIcon,
   SparklesIcon,
-  TrophyIcon,
   ZapIcon,
 } from 'lucide-react';
-import QcmQuestionnaire from '../../../qcm-questionnaire';
-import QcmResultsQuestionnaire from '../../../qcm-results-questionnaire';
 import StudentSeanceDetailsDrawer from './seance-details-drawer';
 import { EmptyStateCard } from '@/components/ui/empty-state-card';
+import { QcmCard } from '@/components/qcm-card';
 
 const StudentLastSeanceCard = ({
   bilans,
@@ -235,85 +230,12 @@ const StudentLastSeanceCard = ({
         <div className="hidden lg:block w-px bg-slate-200 dark:bg-slate-800 my-4" />
 
         {/* Right 1/3 Section: Gamified QCM Card */}
-        <Card className="border-none shadow-none flex flex-col justify-between flex-1 rounded-none bg-white dark:bg-slate-900 p-6">
-          <div>
-            <div className="flex items-center justify-between w-full mb-3">
-              <div className="flex items-center gap-2">
-                <div className="p-2 rounded-xl bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-300">
-                  <MessageCircleQuestionIcon className="size-5" />
-                </div>
-                <span className="tracking-tight text-lg font-extrabold text-slate-900 dark:text-white">
-                  Défi QCM
-                </span>
-              </div>
-
-              {recentBilan.qcm && recentBilan.qcm.completed && (
-                <span className="bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-400 text-emerald-800 dark:text-emerald-300 rounded-full text-xs px-3 py-1 font-extrabold flex items-center gap-1">
-                  <CheckCircle2Icon className="size-3.5" /> Complété
-                </span>
-              )}
-              {recentBilan.qcm && !recentBilan.qcm.completed && (
-                <span className="bg-amber-100 dark:bg-amber-950/60 border border-amber-400 text-amber-800 dark:text-amber-300 rounded-full text-xs px-3 py-1 font-extrabold animate-bounce">
-                  ⚡À faire
-                </span>
-              )}
-            </div>
-
-            {/* QCM Completed State */}
-            {recentBilan.qcm && recentBilan.qcm.completed && (
-              <div className="space-y-4">
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                  Défi relevé ! Révise tes réponses pour consolider tes acquis.
-                </p>
-                <div className="p-4 rounded-2xl bg-linear-to-br from-emerald-500 via-teal-600 to-emerald-700 text-white shadow-lg shadow-emerald-500/20 text-center relative overflow-hidden">
-                  <TrophyIcon className="size-16 text-white/10 absolute -right-2 -bottom-2 rotate-12 pointer-events-none" />
-                  <div className="flex items-center justify-center gap-2">
-                    <TrophyIcon className="size-7 text-amber-300 fill-amber-300 animate-bounce" />
-                    <span className="text-3xl font-black tracking-tight">
-                      {recentBilan.qcm.score} / {recentBilan.qcm.qcmQuestions.length}
-                    </span>
-                  </div>
-                  <p className="text-xs font-semibold text-emerald-100 mt-2">
-                    {getCongralutoryMessage(recentBilan.qcm.score)}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* QCM Pending State */}
-            {recentBilan.qcm && !recentBilan.qcm.completed && (
-              <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                  Teste tes connaissances sur la leçon pour valider tes points d'expérience !
-                </p>
-              </div>
-            )}
-
-            {/* No QCM State */}
-            {!recentBilan.qcm && (
-              <span className='flex items-center text-slate-500 text-sm'>Pas de QCM associé à cette séance.</span>
-            )}
-          </div>
-
-          {/* Action CTAs */}
-          <div className="mt-6">
-            {recentBilan.qcm && recentBilan.qcm.completed && (
-              <QcmResultsQuestionnaire qcm={recentBilan.qcm}>
-                <BrandButton className="w-full text-sm font-bold h-12 rounded-xl">
-                  Voir les résultats
-                </BrandButton>
-              </QcmResultsQuestionnaire>
-            )}
-
-            {recentBilan.qcm && !recentBilan.qcm.completed && (
-              <QcmQuestionnaire onQcmSubmit={onQcmSubmit} qcm={recentBilan.qcm}>
-                <BrandButton className="w-full text-sm font-bold h-12 rounded-xl">
-                  Compléter le QCM
-                </BrandButton>
-              </QcmQuestionnaire>
-            )}
-          </div>
-        </Card>
+        <QcmCard
+          qcm={recentBilan.qcm}
+          onQcmSubmit={onQcmSubmit}
+          framed={false}
+          className="flex-1 bg-white p-6 dark:bg-slate-900"
+        />
       </div>
     </div>
   );
