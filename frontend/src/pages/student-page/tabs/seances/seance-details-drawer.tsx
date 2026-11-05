@@ -1,4 +1,4 @@
-import type { BilanEntry, QcmEntry } from '@/api/student/apiCalls';
+import { studentApiCalls, type BilanEntry, type QcmEntry } from '@/api/student/apiCalls';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader} from '@/components/ui/card';
 import {
@@ -28,7 +28,7 @@ import {
   NotebookTabsIcon,
   UserIcon,
 } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { QcmCard } from '@/components/qcm-card';
 
 interface StudentSeanceDetailsDrawerProps {
@@ -66,11 +66,17 @@ const StudentSeanceDetailsDrawer = ({
   children,
 }: StudentSeanceDetailsDrawerProps) => {
   const isMobile = useIsMobile();
+  const [open, setOpen] = useState(false);
   const firstName = bilan.submittedBy.firstName;
   const lastName = bilan.submittedBy.lastName;
 
+  function handleOpenChange(next: boolean) {
+    setOpen(next);
+    if (next) void studentApiCalls.trackBilanView(bilan.id).catch(() => {});
+  }
+  
   return (
-    <Drawer direction={isMobile ? 'left' : 'right'}>
+    <Drawer open={open} onOpenChange={handleOpenChange} direction={isMobile ? 'left' : 'right'}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent className="flex h-dvh w-screen max-w-none flex-col gap-0 overflow-hidden border-none bg-slate-50 p-0 font-outfit shadow-2xl focus:outline-none sm:max-w-2xl md:max-w-4xl lg:max-w-6xl">
         {/* Header intentionally remains compact and consistent with the current drawer. */}

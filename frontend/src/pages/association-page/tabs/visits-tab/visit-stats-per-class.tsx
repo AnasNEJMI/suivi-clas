@@ -1,13 +1,13 @@
-import type { VisitStatsPerScolarYear } from '@/api/association-member/apiCalls';
-import AssocClassVisitCarousel from './class-visit-carousel';
+import type { ConsultationStatsPerScolarYear } from '@/api/association-member/apiCalls';
+import AssocClassConsultationCarousel from './class-visit-carousel';
 import { RotateCwFadingClockIcon } from 'lucide-react';
 import { EmptyStateCard } from '@/components/ui/empty-state-card';
 
-const AssocVisitStatsPerClass = ({ visitStatsPerScolarYear }: { visitStatsPerScolarYear: VisitStatsPerScolarYear[] }) => {
-  const visitStats = visitStatsPerScolarYear[0];
+const AssocVisitStatsPerClass = ({ consultationStatsPerScolarYear }: { consultationStatsPerScolarYear: ConsultationStatsPerScolarYear[] }) => {
+  const consultationStats = consultationStatsPerScolarYear[0];
 
   // État vide global
-  if (!visitStats || visitStats.classes.length === 0) {
+  if (!consultationStats || consultationStats.classes.length === 0) {
     return (
       <div className="font-outfit mt-8 space-y-3">
         {/* Titre principal */}
@@ -36,8 +36,8 @@ const AssocVisitStatsPerClass = ({ visitStatsPerScolarYear }: { visitStatsPerSco
       
       {/* Liste des carrousels */}
       <div className="space-y-8">
-        {visitStats.classes.map((classVisits, index) => (
-          <AssocClassVisitCarousel key={index} classVisits={classVisits} />
+        {consultationStats.classes.map((classConsultations, index) => (
+          <AssocClassConsultationCarousel key={index} classConsultations={classConsultations} />
         ))}
       </div>
     </div>

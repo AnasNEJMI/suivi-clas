@@ -14,7 +14,7 @@ const AssocVisitTabDataWrapper = () => {
   return (
     <>
         <AssocVisitStatsRecap visitStatsPerScolarYear = {visitStatsPerScolarYear}/>
-        <AssocVisitStatsPerClass visitStatsPerScolarYear = {visitStatsPerScolarYear}/>
+        <AssocVisitStatsPerClass consultationStatsPerScolarYear = {visitStatsPerScolarYear}/>
         {/* <AssocSeanceHistoryCarousel animatorStatsPerScolarYear = {animatorStatsPerScolarYear}/> */}
     </>
   )

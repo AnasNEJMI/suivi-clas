@@ -1,6 +1,4 @@
 import { Outlet} from 'react-router';
-import {useEffect } from 'react';
-import { studentApiCalls } from '@/api/student/apiCalls';
 import { BicepsFlexedIcon, BookOpenTextIcon, FilePenLineIcon, GraduationCapIcon, User2Icon } from 'lucide-react';
 import UserPageWrapper from '../page-wrapper';
 import type { UserPageTheme } from '@/lib/types/data.types';
@@ -47,10 +45,6 @@ const SEO_PAGE_TITLE = 'Mon espace étudiant';
 
 const StudentPageLayout = () => {
 
-    useEffect(() => {
-      void studentApiCalls.trackVisit();
-    }, [])
-    
   return (
         <UserPageWrapper
             tabs={PAGE_TABS}

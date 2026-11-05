@@ -31,7 +31,6 @@ model Student {
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  lastVisit    DateTime @default(now())
 
   sessions     Session[]
   bilans       Bilan[]
@@ -39,7 +38,6 @@ model Student {
   skills        Skill[]
   qcms         Qcm[]
 
-  visits Visit[]
   @@index([classId])
 }
 
@@ -225,7 +223,6 @@ model ScolarYear {
   endDate   DateTime
 
   seances Seance[]
-  visits Visit[]
   animatorContracts AnimatorContract[]
   
 }
@@ -255,6 +252,12 @@ model Bilan {
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  firstViewedAt DateTime?
+  lastViewedAt  DateTime?
+  viewCount     Int       @default(0)
+
+  @@index([studentId, firstViewedAt])
 
   qcm Qcm?
 
@@ -310,23 +313,6 @@ model Skill {
   @@index([studentId])
   @@index([animatorId])
   @@unique(name : "skillId", [studentId, animatorId])
-}
-
-model Visit {
-  id            Int      @id @default(autoincrement())
-
-  studentId     Int      
-  student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-  scolarYearId Int
-  scolarYear   ScolarYear @relation(fields: [scolarYearId], references: [id], onDelete: Cascade)
-
-  numVisits   Int @default(0)
-  lastVisit    DateTime @default(now())
-
-  @@unique(name : "visitId", [studentId, scolarYearId])
-  @@index([studentId])
-  @@index([scolarYearId])
 }
 
 model Subject {

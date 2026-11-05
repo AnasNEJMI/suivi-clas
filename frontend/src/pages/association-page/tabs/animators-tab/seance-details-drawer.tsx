@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn, getElapsedDays } from "@/lib/utils";
+import { SeanceConsultationCard } from "./seance-consultation-card";
 
 const AssocSeanceDetailsDrawer = ({
   seance,
@@ -179,6 +180,8 @@ const AssocSeanceDetailsDrawer = ({
               })}
             </CardContent>
           </Card>
+
+          <SeanceConsultationCard students={seance.seance.students} />
         </div>
       </DrawerContent>
     </Drawer>

@@ -1,14 +1,38 @@
-// src/controllers/association/visitStats.controller.ts
 import { Request, Response, NextFunction } from 'express'
-import { prisma }                          from '../../db/prisma.js'
-import { ApiError } from '../../classes/ApiError.class.js';
-import { Gender } from '../../generated/prisma/enums.js';
-import { sendSuccess } from '../../utils/response.utils.js';
+import { prisma }       from '../../db/prisma.js'
+import { ApiError }     from '../../classes/ApiError.class.js'
+import { Gender }       from '../../generated/prisma/enums.js'
+import { sendSuccess }  from '../../utils/response.utils.js'
 
-export type VisitStatsResponse          = { visitStatsPerScolarYear: VisitStatsPerScolarYear[] }
-export type VisitStatsPerScolarYear     = { scolarYear: { id: number; label: string }; classes: { class : {id: number; label: string},students: StudentVisitStats[] }[]}
-export type StudentVisitStats           = { id: number; firstName: string; lastName: string; gender: Gender; numVisits: number; lastVisit: Date | null }
+export type ConsultedBilan = {
+  id:            number
+  date:          Date            // date of the séance
+  lessonLabel:   string | null
+  subjectLabel:  string | null
+  firstViewedAt: Date | null     // null = never opened
+  lastViewedAt:  Date | null
+  viewCount:     number
+  delayHours:    number | null   // time between the bilan being written and its first opening
+}
 
+export type StudentConsultationStats = {
+  id: number; firstName: string; lastName: string; gender: Gender
+  bilansReceived:   number            // bilans of séances the student attended
+  bilansRead:       number
+  totalReadings:    number            // sum of openings (one per 30-minute reading)
+  firstVisit:       Date | null
+  lastVisit:        Date | null       // last time any bilan was opened
+  latestBilanDate:  Date | null
+  latestBilanRead:  boolean | null    // null = no bilan
+  medianDelayHours: number | null     // typical time before a bilan is opened
+  bilans:           ConsultedBilan[]  // most recent first
+}
+
+export type ClassConsultationStats  = { class: { id: number; label: string }; students: StudentConsultationStats[] }
+export type VisitStatsPerScolarYear = { scolarYear: { id: number; label: string }; classes: ClassConsultationStats[] }
+export type VisitStatsResponse      = { visitStatsPerScolarYear: VisitStatsPerScolarYear[] }
+
+// Kept exported in case another handler imports it
 export async function fetchAssociationStudents(associationId: number) {
   return prisma.student.findMany({
     where:  { class: { associationId } },
@@ -19,130 +43,108 @@ export async function fetchAssociationStudents(associationId: number) {
   })
 }
 
+// ── Accumulators: year → class → student ─────────────────────────────────────
+
+type StudentAcc = { id: number; firstName: string; lastName: string; gender: Gender; bilans: ConsultedBilan[] }
+type ClassAcc   = { class: { id: number; label: string }; students: Map<number, StudentAcc> }
+type YearAcc    = { scolarYear: { id: number; label: string }; classes: Map<number, ClassAcc> }
+
+const HOUR = 3_600_000
+
+const earliest = (a: Date | null, b: Date | null): Date | null => (a && b ? (a < b ? a : b) : a ?? b)
+const latest   = (a: Date | null, b: Date | null): Date | null => (a && b ? (a > b ? a : b) : a ?? b)
+
+function median(values: number[]): number | null {
+  if (values.length === 0) return null
+  const s   = [...values].sort((a, b) => a - b)
+  const mid = Math.floor(s.length / 2)
+  return s.length % 2 ? s[mid]! : (s[mid - 1]! + s[mid]!) / 2
+}
+
+function toStats(acc: StudentAcc): StudentConsultationStats {
+  const { bilans } = acc   // already most recent first
+  const read   = bilans.filter(b => b.firstViewedAt !== null)
+  const newest = bilans[0] ?? null
+
+  return {
+    id: acc.id, firstName: acc.firstName, lastName: acc.lastName, gender: acc.gender,
+    bilansReceived:   bilans.length,
+    bilansRead:       read.length,
+    totalReadings:    bilans.reduce((n, b) => n + b.viewCount, 0),
+    firstVisit:       bilans.reduce<Date | null>((d, b) => earliest(d, b.firstViewedAt), null),
+    lastVisit:        bilans.reduce<Date | null>((d, b) => latest(d, b.lastViewedAt), null),
+    latestBilanDate:  newest?.date ?? null,
+    latestBilanRead:  newest ? newest.firstViewedAt !== null : null,
+    medianDelayHours: median(read.flatMap(b => (b.delayHours === null ? [] : [b.delayHours]))),
+    bilans,
+  }
+}
+
 export async function associationVisitStatsHandler(req: Request, res: Response, next: NextFunction) {
   try {
     const associationId = req.user!.association?.id
     if (!associationId) throw ApiError.unauthorized('Aucune association liée à ce compte.')
 
-    const [visits, students] = await Promise.all([
-
-      // Query 1: all Visit rows for students in this association.
-      // Visit is pre-aggregated — visitCount and lastVisit are already computed.
-      // We only need studentId + year for grouping, plus the two metric fields.
-      prisma.visit.findMany({
-        where: {
-          student:     { class: { associationId } },
+    // One query: every bilan a present student could have opened
+    const bilans = await prisma.bilan.findMany({
+      where:   { presence: true, seance: { class: { associationId } } },
+      orderBy: { date: 'desc' },
+      select: {
+        id: true, date: true, createdAt: true,
+        viewCount: true, firstViewedAt: true, lastViewedAt: true,
+        lesson:  { select: { label: true, subject: { select: { label: true } } } },
+        student: { select: { id: true, firstName: true, lastName: true, gender: true } },
+        seance: {
+          select: {
+            scolarYear: { select: { id: true, label: true } },
+            class:      { select: { id: true, label: true } },
+          },
         },
-        select: {
-          studentId:   true,
-          numVisits:  true,
-          lastVisit:   true,
-          scolarYear:  { select: { id: true, label: true } },
-        },
-      }),
+      },
+    })
 
-      fetchAssociationStudents(associationId),
-    ])
+    const yearMap = new Map<number, YearAcc>()
 
-    // O(1) lookups
-    const studentMap = new Map(students.map(s => [s.id, s]))
+    for (const b of bilans) {
+      const { scolarYear, class: cls } = b.seance
+      if (!scolarYear || !cls) continue   // a séance without year or class can't be placed
 
-    // Build a set of classIds that had any visits per year.
-    // This drives the fill-in pass: we only add zero-visit students to
-    // (year, class) pairs that already have at least one real visit row.
-    // Without this guard, every student would appear in every year.
-    type ClassYearKey = string
-    const activeClassYearKeys = new Set<ClassYearKey>()
+      let year = yearMap.get(scolarYear.id)
+      if (!year) { year = { scolarYear, classes: new Map() }; yearMap.set(scolarYear.id, year) }
 
-    // Primary accumulator: yearId → classId → studentId → metrics
-    type YearBucket = {
-      scolarYear: { id: number; label: string }
-      classes: Map<number, {
-        class:    { id: number; label: string }
-        students: Map<number, { numVisits: number; lastVisit: Date | null }>
-      }>
-    }
-    const yearMap = new Map<number, YearBucket>()
+      let classAcc = year.classes.get(cls.id)
+      if (!classAcc) { classAcc = { class: cls, students: new Map() }; year.classes.set(cls.id, classAcc) }
 
-    for (const visit of visits) {
-      const scolarYear = visit.scolarYear
-      if (!scolarYear) continue
+      let student = classAcc.students.get(b.student.id)
+      if (!student) { student = { ...b.student, bilans: [] }; classAcc.students.set(b.student.id, student) }
 
-      const student = studentMap.get(visit.studentId)
-      if (!student?.class) continue
-
-      if (!yearMap.has(scolarYear.id)) {
-        yearMap.set(scolarYear.id, { scolarYear, classes: new Map() })
-      }
-      const yearBucket = yearMap.get(scolarYear.id)!
-
-      if (!yearBucket.classes.has(student.class.id)) {
-        yearBucket.classes.set(student.class.id, { class: student.class, students: new Map() })
-      }
-      const classBucket = yearBucket.classes.get(student.class.id)!
-
-      // Each student has at most one Visit row per year (DB unique constraint),
-      // so there's no count to accumulate — just store the values directly.
-      classBucket.students.set(visit.studentId, {
-        numVisits: visit.numVisits,
-        lastVisit:  visit.lastVisit,
-      })
-
-      activeClassYearKeys.add(`${student.class.id}-${scolarYear.id}`)
-    }
-
-    // Fill-in pass: students with no Visit row appear as 0 / null.
-    // Only for (class, year) pairs that were already activated above.
-    for (const student of students) {
-      if (!student.class) continue
-      for (const yearBucket of yearMap.values()) {
-        const key = `${student.class.id}-${yearBucket.scolarYear.id}`
-        if (!activeClassYearKeys.has(key)) continue   // class was inactive this year
-
-        const classBucket = yearBucket.classes.get(student.class.id)
-        if (!classBucket) continue
-
-        if (!classBucket.students.has(student.id)) {
-          classBucket.students.set(student.id, { numVisits: 0, lastVisit: null })
-        }
-      }
-    }
-
-    // Flatten → sort
-    const visitStatsPerScolarYear: VisitStatsPerScolarYear[] = []
-
-    for (const yearBucket of yearMap.values()) {
-        const classes = [];
-      for (const classBucket of yearBucket.classes.values()) {
-        const visitStats: StudentVisitStats[] = Array.from(classBucket.students.entries())
-          .map(([studentId, metrics]) => {
-            const s = studentMap.get(studentId)!
-            return {
-              id:         s.id,
-              firstName:  s.firstName,
-              lastName:   s.lastName,
-              gender:     s.gender,
-              numVisits: metrics.numVisits,
-              lastVisit:  metrics.lastVisit,
-            }
-          })
-          // Most visits first — a useful default for the dashboard view
-          .sort((a, b) => b.numVisits - a.numVisits || a.lastName.localeCompare(b.lastName, 'fr', { sensitivity: 'base' }))
-
-        classes.push({
-          class: classBucket.class,
-          students : visitStats,
-        })
-      }
-      visitStatsPerScolarYear.push({
-          scolarYear: yearBucket.scolarYear,
-          classes
+      student.bilans.push({
+        id: b.id,
+        date: b.date,
+        lessonLabel:   b.lesson?.label ?? null,
+        subjectLabel:  b.lesson?.subject.label ?? null,
+        firstViewedAt: b.firstViewedAt,
+        lastViewedAt:  b.lastViewedAt,
+        viewCount:     b.viewCount,
+        delayHours:    b.firstViewedAt
+          ? Math.round((Math.max(0, b.firstViewedAt.getTime() - b.createdAt.getTime()) / HOUR) * 10) / 10
+          : null,
       })
     }
 
-    visitStatsPerScolarYear.sort(
-      (a, b) =>
-        b.scolarYear.label.localeCompare(a.scolarYear.label))
+    const visitStatsPerScolarYear: VisitStatsPerScolarYear[] = [...yearMap.values()]
+      .map(year => ({
+        scolarYear: year.scolarYear,
+        classes: [...year.classes.values()]
+          .map(c => ({
+            class: c.class,
+            students: [...c.students.values()]
+              .map(toStats)
+              .sort((a, b) => a.lastName.localeCompare(b.lastName, 'fr', { sensitivity: 'base' })),
+          }))
+          .sort((a, b) => a.class.label.localeCompare(b.class.label, 'fr', { sensitivity: 'base' })),
+      }))
+      .sort((a, b) => b.scolarYear.label.localeCompare(a.scolarYear.label))
 
     return sendSuccess(res, { visitStatsPerScolarYear } satisfies VisitStatsResponse)
   } catch (error) {

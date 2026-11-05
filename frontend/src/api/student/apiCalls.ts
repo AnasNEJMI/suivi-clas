@@ -195,6 +195,9 @@ export const studentApiCalls = {
     fetchBilans : fetchStudentData<BilansResponse>(studentEndpoints.bilans),
     fetchSkillEvals : fetchStudentData<SkillsEvalsResponse>(studentEndpoints.skillsEvals),
     fetchLessonEvals : fetchStudentData<LessonEvalsResponse>(studentEndpoints.lessonEvals),
-    trackVisit : fetchStudentData<VisitTrackingResponse | null>(studentEndpoints.visit),
+    trackBilanView: (bilanId: number) =>
+    apiRequest<{ data: { tracked: boolean } }>(`/api/student/bilans/${bilanId}/view`, {
+        method: 'POST', body: JSON.stringify({}),
+    }).then(r => r.data),
     submitQcm : (payload : QcmEntry) => submitData<QcmEntry, QcmEntry | null>(payload, studentEndpoints.qcm)
 }

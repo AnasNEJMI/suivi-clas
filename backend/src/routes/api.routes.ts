@@ -10,12 +10,8 @@ import { studentDataHandler } from '../controllers/student.data.controller.js';
 import { associationDataHandler } from '../controllers/association.data.controller.js';
 import { animatorProfileHandler } from '../controllers/animator/profile.controller.js';
 import { animatorBaseDataHandler } from '../controllers/animator/base-data.controller.js';
-import { seanceSchema } from '../schemas/seance.schema.js';
 import { animatorFetchSeanceHandler } from '../controllers/animator/fetchSeance.controller.js';
-import { animatorSubmitSeanceHandler } from '../controllers/animator/submitSeance.controller.js';
 import { animatorDeleteSeanceHandler } from '../controllers/animator/deleteSeance.controller.js';
-import { bilanSchema } from '../schemas/bilan.schema.js';
-import { animatorSubmitBilanHandler } from '../controllers/animator/submitBilan.controller.js';
 import { animatorFetchLessonEvalsHandler } from '../controllers/animator/fetchLessonEvals.controller.js';
 import { animatorSubmitLessonEvalHandler } from '../controllers/animator/submitLessonEval.controller.js';
 import { lessonEvalSchema } from '../schemas/lessonEval.schema.js';
@@ -26,7 +22,6 @@ import { studentBilansHandler } from '../controllers/student/fetchBilans.control
 import { studentSkillsEvalsHandler } from '../controllers/student/fetchSkillsEvals.controller.js';
 import { studentLessonEvalsHandler } from '../controllers/student/fetchLessonEvals.controller.js';
 import { associationMemberFetchPresenceStatsHandler } from '../controllers/association-member/fetchPresenceStats.controller.js';
-import { studentVisitHandler } from '../controllers/student/visit.controller.js';
 import { associationVisitStatsHandler } from '../controllers/association-member/fetchVisitStats.controller.js';
 import { associationAnimatorStatsHandler } from '../controllers/association-member/fetchAnimatorStats.controller.js';
 import { qcmSchema } from '../schemas/qcm.schema.js';
@@ -35,6 +30,7 @@ import { associationQcmStatsHandler } from '../controllers/association-member/fe
 import { animatorFetchQcmsHandler } from '../controllers/animator/fetchQcms.controller.js';
 import animatorRouter from './animator.routes.js';
 import { associationMemberFetchClassessHandler } from '../controllers/association-member/fetch-classes.controller.js';
+import { studentBilanViewHandler } from '../controllers/student/bilanview.controller.js';
 
 const router = Router();
 
@@ -47,7 +43,7 @@ router.get('/association/data', requireAuthHandler, asyncHandler(associationData
 router.get('/student/bilans', requireAuthHandler, asyncHandler(studentBilansHandler));
 router.get('/student/skills-evals', requireAuthHandler, asyncHandler(studentSkillsEvalsHandler));
 router.get('/student/lesson-evals', requireAuthHandler, asyncHandler(studentLessonEvalsHandler));
-router.get('/student/visit',requireAuthHandler,asyncHandler(studentVisitHandler))
+router.post('/student/bilans/:bilanId/view',requireAuthHandler,asyncHandler(studentBilanViewHandler))
 router.post('/student/qcm', validateBody(qcmSchema),requireAuthHandler, asyncHandler(submitStudentQcmHandler));
 
 router.use('/animator', animatorRouter)

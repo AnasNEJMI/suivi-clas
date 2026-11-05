@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { StudentVisitStats, VisitStatsPerScolarYear } from '@/api/association-member/apiCalls';
+import type { StudentVisitStats, ConsultationStatsPerScolarYear } from '@/api/association-member/apiCalls';
 import { getDaysSinceLastVisit } from '@/lib/utils';
 import { 
   CalendarCheck2Icon, 
@@ -23,7 +23,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { EmptyStateCard } from '@/components/ui/empty-state-card';
 
-const AssocVisitStatsRecap = ({ visitStatsPerScolarYear }: { visitStatsPerScolarYear: VisitStatsPerScolarYear[] }) => {
+const AssocVisitStatsRecap = ({ visitStatsPerScolarYear }: { visitStatsPerScolarYear: ConsultationStatsPerScolarYear[] }) => {
   const isMobile = useIsMobile();
   const visitStats = visitStatsPerScolarYear[0];
 

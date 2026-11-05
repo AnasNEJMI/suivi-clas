@@ -137,7 +137,7 @@ const StudentLastSeanceCard = ({
         {/* Left 2/3 Section: Session Summary */}
         <Card
           className={cn(
-            'border-none font-outfit shadow-none flex flex-col justify-between flex-2 rounded-none p-6 lg:p-7 relative overflow-hidden',
+            'border-none font-outfit shadow-none flex flex-col justify-between flex-1 rounded-none p-6 lg:p-7 relative overflow-hidden',
             cardStyle.bgColor
           )}
         >
@@ -178,10 +178,10 @@ const StudentLastSeanceCard = ({
               </div>
             </div>
 
-            <CardDescription className="text-slate-700 text-sm font-medium  bg-white/60 p-4 rounded-xl">
+            {/* <CardDescription className="text-slate-700 text-sm font-medium  bg-white/60 p-4 rounded-xl">
             <span className='leading-relaxed line-clamp-3 w-full'>{recentBilan.summary}</span>
               
-            </CardDescription>
+            </CardDescription> */}
           </CardHeader>
 
           <CardFooter className="p-0 pt-6 border-t border-slate-900/5 dark:border-white/5 flex items-center justify-between flex-wrap gap-4">

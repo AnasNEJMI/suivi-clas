@@ -196,7 +196,7 @@ function QcmDone({ qcm }: { qcm: QcmEntry }) {
 function QcmPending({ total }: { total: number }) {
   return (
     <>
-      <div className='flex flex-col items-center pb-3'>
+      <div className='flex flex-col items-center justify-center pb-3'>
         <div className='relative'>
           <QcmRing flags={Array.from({ length: total }, () => false)} level={levelFor(0)} done={false} label={`QCM de ${total} questions`}>
             <span className='flex flex-col items-center leading-none'>
@@ -210,18 +210,18 @@ function QcmPending({ total }: { total: number }) {
         </div>
       </div>
 
-      <div className='text-center'>
+      <div className='text-center w-full'>
         <h4 className='text-lg font-extrabold tracking-tight text-slate-900'>Ton QCM t'attend</h4>
         <p className='mx-auto mt-2 max-w-xs text-balance text-sm leading-relaxed text-slate-600'>
           {total} questions pour vérifier ce que tu as retenu de la leçon. Pas de pression : chaque réponse t'aide à progresser.
         </p>
+        <div className='flex flex-wrap justify-center gap-2'>
+          {[`${total} questions`, 'Quelques minutes', 'Correction détaillée à la fin'].map(chip => (
+            <span key={chip} className='rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600'>{chip}</span>
+          ))}
+        </div>
       </div>
 
-      <div className='flex flex-wrap justify-center gap-2'>
-        {[`${total} questions`, 'Quelques minutes', 'Correction détaillée à la fin'].map(chip => (
-          <span key={chip} className='rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600'>{chip}</span>
-        ))}
-      </div>
     </>
   )
 }
@@ -259,7 +259,7 @@ export function QcmCard({ qcm, onQcmSubmit, title = 'Défi QCM', subtitle, frame
     <section className={cn('flex flex-col gap-6 font-outfit', framed && 'rounded-3xl border border-slate-200 bg-white p-6 shadow-xs', className)}>
       <Header title={title} subtitle={subtitle} badge={badge} />
 
-      <div className='flex flex-1 flex-col gap-6'>
+      <div className='flex flex-1 flex-col lg:flex-row gap-6'>
         {!qcm ? <QcmNone />
           : qcm.completed ? <QcmDone qcm={qcm} />
           : <QcmPending total={qcm.qcmQuestions.length} />}

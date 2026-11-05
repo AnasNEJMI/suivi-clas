@@ -8,8 +8,11 @@ export type AnimatorStatsResponse = { animatorStatsPerScolarYear: AnimatorStatsP
 export type AnimatorStatsPerScolarYear = { scolarYear: { id: number; label: string }; animators: AnimatorStats[]}
 export type AnimatorStats = { animator : {id: number; firstName: string;  lastName: string; gender : Gender, specializations : {id : number, label : string}[]},classes: AnimatorClassStats[], totalSeances : number, totalBilans : number, totalQcms : number};
 export type AnimatorClassStats = { class : {id : number, label : string}, seances : SeanceStats[], seancesCount : number; bilansSubmitted : number, qcmsSubmitted : number}
-export type SeanceStats = {id : number, duration : string, date : Date, students : {firstName : string, lastName : string, gender : Gender, presence : boolean}[]}
-
+export type SeanceStudentStats = {
+  firstName: string; lastName: string; gender: Gender; presence: boolean
+  firstViewedAt: Date | null; lastViewedAt: Date | null; viewCount: number
+}
+export type SeanceStats = { id: number; duration: string; date: Date; students: SeanceStudentStats[] }
 
 export async function associationAnimatorStatsHandler(req: Request, res: Response, next: NextFunction) {
   try {
@@ -45,6 +48,7 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
       where : {
         scolarYearId : {in : [...yearIds]},
         animatorId : {in : [...animatorIds]},
+        class : { associationId },
       },
       select : {
         id : true,
@@ -56,13 +60,8 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
           select : {
             qcm : true,
             presence : true,
-            student : {
-              select : {
-                firstName : true,
-                lastName : true,
-                gender : true,
-              }
-            }
+            firstViewedAt : true, lastViewedAt : true, viewCount : true,
+            student : { select : { firstName : true, lastName : true, gender : true } },
           },
         },
         _count : {select : {bilans : true}},
@@ -81,7 +80,7 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
       animators: Map<number, {
         totalSeances : number, totalBilans : number, totalQcms : number,
         animator:    { id: number; firstName: string, lastName : string, gender : Gender, specializations : {id : number, label : string}[]}
-        classes: Map<number, {class : {id : number, label : string}, seances : {id: number, duration : string, date : Date, students : {firstName : string, lastName : string,gender : Gender, presence : boolean}[]}[], seancesCount: number; bilansSubmitted: number, qcmsSubmitted : number}>
+        classes: Map<number, {class : {id : number, label : string}, seances : SeanceStats[], seancesCount: number; bilansSubmitted: number, qcmsSubmitted : number}>
       }>
     }
     
@@ -129,7 +128,13 @@ export async function associationAnimatorStatsHandler(req: Request, res: Respons
         id : seance.id,
         date : seance.date,
         duration : seance.seanceDuration.label,
-        students : seance.bilans.map(b => {return {presence : b.presence, ...b.student}})
+        students : seance.bilans.map(b => ({
+                    presence: b.presence,
+                    firstViewedAt: b.firstViewedAt,
+                    lastViewedAt: b.lastViewedAt,
+                    viewCount: b.viewCount,
+                    ...b.student,
+                  })),
       });
       classBucket.bilansSubmitted+= seance._count.bilans;
       classBucket.seancesCount++;
