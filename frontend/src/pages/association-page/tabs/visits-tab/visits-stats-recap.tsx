@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { StudentVisitStats, ConsultationStatsPerScolarYear } from '@/api/association-member/apiCalls';
+import type { ConsultationStatsPerScolarYear, StudentConsultationStats } from '@/api/association-member/apiCalls';
 import { getDaysSinceLastVisit } from '@/lib/utils';
 import { 
   CalendarCheck2Icon, 
@@ -42,7 +42,7 @@ const AssocVisitStatsRecap = ({ visitStatsPerScolarYear }: { visitStatsPerScolar
     let visitsThisWeekCount = 0;
     let visitsMoreThanAWeekCount = 0;
     
-    const inactiveStudents: { class: { id: number; label: string }; studentStats: StudentVisitStats; daysSinceLastVisit: number | null }[] = [];
+    const inactiveStudents: { class: { id: number; label: string }; studentStats: StudentConsultationStats; daysSinceLastVisit: number | null }[] = [];
 
     visitStats.classes.forEach((cls) => {
       cls.students.forEach((student) => {

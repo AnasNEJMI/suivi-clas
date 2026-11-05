@@ -15,6 +15,7 @@ import AnimSeanceDetailsDialog from './seance-details-dialog'
 interface AnimSeanceCarouselCardProps {
   lessonsByLevel: LessonsByLevelEntry[]
   onBilanSubmitted: (bilan: BilanEntry) => void
+  canAutoSummary : boolean,
   seance: SeanceEntry
   group: string
   onBilanDeleted: (bilan: DeleteBilanEntry) => void
@@ -24,6 +25,7 @@ const AnimSeanceCarouselCard = ({
   seance,
   group,
   lessonsByLevel,
+  canAutoSummary,
   onBilanSubmitted,
   onBilanDeleted,
 }: AnimSeanceCarouselCardProps) => {
@@ -36,6 +38,7 @@ const AnimSeanceCarouselCard = ({
   return (
     <AnimSeanceDetailsDialog
       lessonsByLevel={lessonsByLevel}
+      canAutoSummary = {canAutoSummary}
       onBilanSubmitted={onBilanSubmitted}
       seance={seance}
       group={group}

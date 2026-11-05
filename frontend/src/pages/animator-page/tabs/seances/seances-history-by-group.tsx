@@ -119,6 +119,7 @@ const SeancesHistoryByGroup = ({
                           <AnimSeanceCarouselCard
                             seance={seance}
                             group={group.label}
+                            canAutoSummary = {canAutoSummary}
                             lessonsByLevel={lessonsByLevel}
                             onBilanSubmitted={onBilanSubmitted}
                             onBilanDeleted={onBilanDeleted}

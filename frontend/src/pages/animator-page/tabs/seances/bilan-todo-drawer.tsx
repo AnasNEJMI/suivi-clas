@@ -26,6 +26,7 @@ interface AnimBilanToDoDrawerProps {
   seanceDate: Date
   seanceId: number
   animatorId: number
+  canAutoSummary : boolean
   lessonsByLevel: LessonsByLevelEntry[]
   onBilanSubmitted: (bilan: BilanEntry) => void
   children: ReactNode
@@ -36,6 +37,7 @@ const AnimBilanToDoDrawer = ({
   seanceDate,
   children,
   seanceId,
+  canAutoSummary,
   animatorId,
   lessonsByLevel,
   onBilanSubmitted,
@@ -110,6 +112,7 @@ const AnimBilanToDoDrawer = ({
             studentBilan={studentBilan}
             seanceId={seanceId}
             animatorId={animatorId}
+            canAutoSummary = {canAutoSummary}
             seanceDate={seanceDate}
             lessonsByLevel={lessonsByLevel}
             onBilanSubmitted={onBilanSubmitted}
