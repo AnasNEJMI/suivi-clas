@@ -23,11 +23,11 @@ const AnimContractsCard = ({
             <div className="flex items-center justify-center size-9 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100/80 shadow-2xs">
               <UserRoundPenIcon className="size-5" />
             </div>
-            <span>Mes Contrats</span>
+            <span>Mes Associations</span>
           </CardTitle>
 
-          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200/60">
-            {associations.length} {associations.length > 1 ? 'contrats' : 'contrat'}
+          <span className="text-xs tracking-tighter font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200/60">
+            {associations.length} {associations.length > 1 ? 'associations' : 'association'}
           </span>
         </div>
       </CardHeader>

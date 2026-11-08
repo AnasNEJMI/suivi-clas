@@ -5,14 +5,7 @@ import { prisma } from '../../../db/prisma.js'
 import { ApiError } from '../../../classes/ApiError.class.js'
 import { sendSuccess } from '../../../utils/response.utils.js'
 import { PrismaClientKnownRequestError } from '../../../generated/prisma/internal/prismaNamespace.js'
-import {
-  ACTIVITIES,
-  COMPREHENSION_LEVELS,
-  ENGAGEMENT_LEVELS,
-  METHODOLOGY_SKILLS,
-  METHODOLOGY_TRENDS,
-  NEXT_STEPS,
-} from './auto-summary.types.js'
+import { ACTIVITIES, ENGAGEMENT_LEVELS, NEXT_STEPS } from './auto-summary.types.js'
 import { generateAutoSummaryParagraphsFromDb } from './auto-summary-utils.js'
 
 const autoSummaryBodySchema = z.object({
@@ -20,10 +13,8 @@ const autoSummaryBodySchema = z.object({
   lessonId: z.number().int().positive(),
   activity: z.enum(ACTIVITIES),
   engagement: z.enum(ENGAGEMENT_LEVELS),
-  comprehension: z.enum(COMPREHENSION_LEVELS),
-  methodologySkill: z.enum(METHODOLOGY_SKILLS),
-  methodologyTrend: z.enum(METHODOLOGY_TRENDS),
   nextStep: z.enum(NEXT_STEPS),
+  curriculumSkillIds: z.array(z.number().int().positive()).max(100).default([]),
 })
 
 export type AutoSummaryResponse = { data: { paragraphs: string[] } }
@@ -47,7 +38,9 @@ export async function animatorAutoSummaryHandler(
     if (!parsed.success) {
       throw ApiError.validationError('Paramètres invalides : ' + parsed.error.message)
     }
-    const { studentId, lessonId, ...choices } = parsed.data
+    const { studentId, lessonId, curriculumSkillIds, ...choices } = parsed.data
+    console.log('values ',{ studentId, lessonId, curriculumSkillIds, ...choices })
+    const skillIds = [...new Set(curriculumSkillIds)]
 
     const [contract, lesson] = await Promise.all([
       prisma.animatorContract.findFirst({
@@ -60,7 +53,7 @@ export async function animatorAutoSummaryHandler(
             select: {
               students: {
                 where: { id: studentId },
-                select: { firstName: true },
+                select: { firstName: true, gender: true },
               },
             },
           },
@@ -68,18 +61,35 @@ export async function animatorAutoSummaryHandler(
       }),
       prisma.lesson.findUnique({
         where: { id: lessonId },
-        select: { label: true },
+        select: {
+          label: true,
+          subject: { select: { label: true } },
+          // Only skills that belong to this lesson are returned, in the lesson's own order.
+          curriculumSkills: {
+            where: { id: { in: skillIds } },
+            orderBy: [{ position: 'asc' }, { id: 'asc' }],
+            select: { id: true, label: true },
+          },
+        },
       }),
     ])
 
-    const firstName = contract?.class?.students[0]?.firstName
-    if (!firstName) throw ApiError.unauthorized('Élève introuvable.')
+    const student = contract?.class?.students[0]
+    if (!student) throw ApiError.unauthorized('Élève introuvable.')
     if (!lesson) throw ApiError.unauthorized('Leçon introuvable.')
 
-    // DB-backed selection: four independently selected paragraphs, in reading order.
+    // A selected id that is not a skill of this lesson means a stale or tampered selection.
+    if (lesson.curriculumSkills.length !== skillIds.length) {
+      throw ApiError.validationError('Certaines compétences sélectionnées ne correspondent pas à cette leçon.')
+    }
+
+    // DB-backed selection: three independently selected paragraphs, in reading order.
     const paragraphs = await generateAutoSummaryParagraphsFromDb({
-      firstName,
+      firstName: student.firstName,
+      gender: student.gender,
       lessonLabel: lesson.label,
+      subjectLabel: lesson.subject.label,
+      skillLabels: lesson.curriculumSkills.map(skill => skill.label),
       ...choices,
     })
 

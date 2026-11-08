@@ -1,6 +1,6 @@
 import type { User } from '@/api/auth'
 import { Card } from '@/components/ui/card'
-import { AtSignIcon, CalendarIcon, ShieldCheckIcon } from 'lucide-react'
+import { CalendarIcon, ShieldCheckIcon } from 'lucide-react'
 
 interface AnimProfileCardProps {
   animator: User
@@ -55,10 +55,6 @@ const AnimProfileCard = ({ animator }: AnimProfileCardProps) => {
           </h2>
 
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-3 text-xs lg:text-sm font-semibold text-slate-600">
-            <span className="flex items-center gap-1.5 bg-white/90 backdrop-blur-xs border border-slate-200/80 px-3 py-1 rounded-xl shadow-2xs">
-              <AtSignIcon className="size-4 text-indigo-500" />
-              {animator.username}
-            </span>
             {formattedDate && (
               <span className="flex items-center gap-1.5 bg-white/90 backdrop-blur-xs border border-slate-200/80 px-3 py-1 rounded-xl shadow-2xs">
                 <CalendarIcon className="size-4 text-emerald-500" />

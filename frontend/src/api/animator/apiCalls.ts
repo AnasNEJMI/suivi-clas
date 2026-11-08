@@ -9,7 +9,7 @@ import type { BilanEntry, DeleteBilanEntry, SeanceEntry, SeancesDataResponse } f
 import type { ProfileDataResponse } from "./profile.types";
 import type { SkillEvalData, SkillEvalsResponse } from "./skill-evals.types";
 import type { LessonEvalData, LessonEvalsResponse } from "./lesson-evals.types";
-import type { Activity, ComprehensionLevel, EngagementLevel, MethodologySkill, MethodologyTrend, NextStep } from "./auto-summary-options";
+import type { Activity, EngagementLevel, NextStep } from "./auto-summary-options";
 
 const ANIMATOR_API_ENDPOINT = '/api/animator/';
 
@@ -89,21 +89,19 @@ type BilanPayload = {
     curriculumSkillIds? : number[],
     summary? : string,
     includeQcm? : boolean,
+    lessonEval : LessonEval
 }
 
 export type AutoSummaryPayload = {
-  studentId:        number
-  lessonId:         number
-  activity:         Activity
-  comprehension:    ComprehensionLevel
-  engagement:       EngagementLevel
-  methodologySkill: MethodologySkill
-  methodologyTrend: MethodologyTrend
-  nextStep:         NextStep
+  studentId: number
+  lessonId: number
+  activity: Activity
+  engagement: EngagementLevel
+  nextStep: NextStep
+  curriculumSkillIds? : number[]
 }
 
 export type AutoSummaryResponse = { paragraphs: string[] }
-
 
 async function fetchAnimatorProfile():Promise<AnimatorProfile | null>{
     try{

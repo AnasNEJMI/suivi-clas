@@ -75,7 +75,7 @@ const StudentLastSeanceCard = ({
             </div>
             <CardDescription className="text-slate-700 dark:text-slate-300 font-medium text-base">
               Tu n'as pas pu assister à cette séance. Pas d'inquiétude ! On se retrouve très vite
-              pour continuer à progresser ensemble. 🚀
+              pour continuer à progresser ensemble.
             </CardDescription>
           </CardHeader>
           <CardFooter className="w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-4 px-6 border-t border-rose-100 dark:border-rose-950 flex items-center justify-between">

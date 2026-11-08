@@ -268,22 +268,19 @@ model Bilan {
 }
 
 model AutoSummaryParagraph {
-  id                Int                      @id @default(autoincrement())
-  key               String                   @unique
-  type              AutoSummaryParagraphType
-  activity          String?
-  engagement        String?
-  comprehension     String?
-  methodologyTrend  String?
-  nextStep          String?
-  template          String                   @db.Text
-  isActive          Boolean                  @default(true)
-  createdAt         DateTime                 @default(now())
-  updatedAt         DateTime                 @updatedAt
+  id         Int                      @id @default(autoincrement())
+  key        String                   @unique // ex. "content.course.03"
+  type       AutoSummaryParagraphType
+  activity   String?
+  engagement String?
+  nextStep   String?
+  template   String                   @db.Text
+  isActive   Boolean                  @default(true)
+  createdAt  DateTime                 @default(now())
+  updatedAt  DateTime                 @updatedAt
 
-  @@index([type, activity, engagement, isActive])
-  @@index([type, comprehension, isActive])
-  @@index([type, methodologyTrend, isActive])
+  @@index([type, activity, isActive])
+  @@index([type, engagement, isActive])
   @@index([type, nextStep, isActive])
 }
 
@@ -505,8 +502,7 @@ enum LessonEval{
 }
 
 enum AutoSummaryParagraphType {
-  SESSION
-  COMPREHENSION
-  METHODOLOGY
+  CONTENT
+  ENGAGEMENT
   NEXT_STEP
 }

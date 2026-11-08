@@ -7,9 +7,11 @@ import { cn, getElapsedDays } from '@/lib/utils';
 import QcmResultsQuestionnaire from '@/pages/qcm-results-questionnaire';
 import {
   AlertTriangleIcon,
+  BookOpenIcon,
   BookOpenTextIcon,
   CalendarIcon,
   CalendarX2Icon,
+  CheckCircle2Icon,
   ClockIcon,
   FileTextIcon,
   HelpCircleIcon,
@@ -23,6 +25,28 @@ interface AnimCompletedBilanDetailsProps {
   studentBilan: StudentEntry;
   seanceDuration: SeanceDurationEntry;
 }
+
+const SectionHeading = ({
+  icon: Icon,
+  title,
+  subtitle,
+  iconClassName = 'bg-indigo-50 text-indigo-600',
+}: {
+  icon: typeof BookOpenIcon;
+  title: string;
+  subtitle?: string;
+  iconClassName?: string;
+}) => (
+  <div className="flex items-start gap-3">
+    <div className={cn('grid size-10 shrink-0 place-items-center rounded-xl', iconClassName)}>
+      <Icon className="size-5" aria-hidden="true" />
+    </div>
+    <div className="min-w-0">
+      <h3 className="text-base font-bold tracking-tight text-slate-900">{title}</h3>
+      {subtitle && <p className="mt-0.5 text-sm leading-relaxed text-slate-500">{subtitle}</p>}
+    </div>
+  </div>
+);
 
 const AnimCompletedBilanDetails = ({
   studentBilan,
@@ -113,26 +137,26 @@ const AnimCompletedBilanDetails = ({
       )}
 
       {isPresent && bilan.lesson && bilan.curriculumSkills && bilan.curriculumSkills.length > 0 && (
-        <Card className="border border-slate-200/80 bg-white shadow-xs rounded-3xl overflow-hidden group hover:shadow-md transition-all gap-3">
-          <CardHeader className="px-5">
-            <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2.5">
-              <div className="size-9 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center shrink-0">
-                <BookOpenTextIcon className="size-5" />
-              </div>
-              <span className="text-base font-extrabold tracking-tight">Compétences travaillées</span>
-            </CardTitle>
+        <Card className="gap-0 overflow-hidden rounded-3xl border border-slate-200/80 bg-white py-0 shadow-sm">
+          <CardHeader className="px-5 pb-3 pt-5 sm:px-6 sm:pt-6">
+            <SectionHeading
+              icon={BookOpenTextIcon}
+              title="Compétences travaillées"
+              subtitle="Les connaissances et méthodes abordées pendant cette séance."
+            />
           </CardHeader>
-
-          <CardContent>
-            <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-100 text-sm sm:text-base font-medium text-slate-700 leading-relaxed whitespace-pre-line shadow-2xs">
-              {bilan.curriculumSkills.map((skill) => (
-                <div key= {skill.id} className="min-w-0 flex-1 cursor-pointer">
-                  <span className="flex items-center gap-2 text-sm font-medium">
-                    {skill.label}
-                  </span>
-                  <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
-                    {skill.description}
-                  </span>
+          <CardContent className="px-5 pb-5 sm:px-6 sm:pb-6">
+            <div className="space-y-3">
+              {bilan.curriculumSkills.map((skill, index) => (
+                <div key={skill.id} className="flex gap-3 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-4 transition-colors hover:border-indigo-200 hover:bg-indigo-50/40">
+                  <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-indigo-600 text-xs font-extrabold text-white shadow-sm">
+                    {String(index + 1).padStart(2, '0')}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-sm font-bold leading-snug text-slate-900 sm:text-base">{skill.label}</h4>
+                    <p className="mt-1.5 text-xs leading-relaxed text-slate-600 sm:text-sm">{skill.description}</p>
+                  </div>
+                  <CheckCircle2Icon className="mt-0.5 size-4 shrink-0 text-indigo-400" aria-hidden="true" />
                 </div>
               ))}
             </div>

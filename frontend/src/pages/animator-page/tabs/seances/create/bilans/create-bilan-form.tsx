@@ -14,7 +14,8 @@ import IncludeQcmField from './fields/include-qcm-field'
 import { BrandButton } from '@/components/brand-button'
 import type { BilanEntry, StudentEntry } from '@/api/animator/seances.types'
 import { useMemo } from 'react'
-import AutoSummaryCard from './fields/auto-summary-fields'
+import AutoSummaryCard from './fields/auto-summary-card'
+import LessonEvaluationField from './fields/lesson-eval-field'
 
 interface AnimBilanFormProps {
   studentBilan: StudentEntry
@@ -48,6 +49,7 @@ const AnimCreateBilanForm = ({
       lessonId: studentBilan.bilan?.lesson?.id ?? -1,
       summary: studentBilan.bilan?.summary ?? '',
       includeQcm: false,
+      lessonEval: 'acquiring',
       curriculumSkillIds: [],
     },
   })
@@ -75,6 +77,7 @@ const AnimCreateBilanForm = ({
           includeQcm: data.includeQcm,
           curriculumSkillIds: data.curriculumSkillIds ?? [],
         }),
+        lessonEval : data.lessonEval
       }),
     onSuccess: (bilan) => {
       if (!bilan) {
@@ -110,13 +113,11 @@ const AnimCreateBilanForm = ({
       summary,
       activity,
       engagement,
-      comprehension,
-      methodologySkill,
-      methodologyTrend,
       nextStep,
+      curriculumSkillIds,
     } = methods.getValues()
 
-    if (!activity || !engagement || !methodologySkill || !comprehension || !methodologyTrend || !nextStep || lessonId < 1) return
+    if (!activity || !engagement || !nextStep || lessonId < 1) return
     if (summary?.trim() && !window.confirm('Remplacer le résumé actuel ?')) return
 
     generateMutation.mutate({
@@ -124,15 +125,15 @@ const AnimCreateBilanForm = ({
       lessonId,
       activity,
       engagement,
-      comprehension,
-      methodologySkill,
-      methodologyTrend,
       nextStep,
+      curriculumSkillIds
     })
   }
 
   // The skills card is step 3, so subsequent steps move down by one.
-  const summaryStep = canAutoSummary ? 6 : 5
+  const autoSummaryStep = canAutoSummary ? 4 : 1
+  const summaryStep = canAutoSummary ? 5 : 4
+  const lessonEvalStep = canAutoSummary ? 6 : 5
   const includeQcmStep = canAutoSummary ? 7 : 6
 
   return (
@@ -149,9 +150,10 @@ const AnimCreateBilanForm = ({
             <CurriculumSkillsCard skills={selectedLesson?.curriculumSkills ?? []} />
           )}
           {canAutoSummary && (
-            <AutoSummaryCard onGenerate={handleGenerate} isGenerating={generateMutation.isPending} />
+            <AutoSummaryCard step = {autoSummaryStep} onGenerate={handleGenerate} isGenerating={generateMutation.isPending} />
           )}
           <SummaryCard step={summaryStep} />
+          <LessonEvaluationField step={lessonEvalStep} />
           <IncludeQcmField step={includeQcmStep} />
         </div>
         <Field className="flex flex-row gap-2 mt-8 pb-6">

@@ -1,4 +1,5 @@
-import { ACTIVITIES, COMPREHENSION_LEVELS, ENGAGEMENT_LEVELS, METHODOLOGY_SKILLS, METHODOLOGY_TRENDS, NEXT_STEPS } from "@/api/animator/auto-summary-options";
+import { ACTIVITIES, ENGAGEMENT_LEVELS, NEXT_STEPS } from "@/api/animator/auto-summary-options";
+import { LESSON_EVALS } from "@/api/api.types";
 import z from "zod";
 
 export const createBilanFormSchema = z.object({
@@ -8,11 +9,9 @@ export const createBilanFormSchema = z.object({
     presence : z.boolean(),
     summary : z.string(),
     includeQcm : z.boolean(),
+    lessonEval : z.enum(LESSON_EVALS),
     activity:         z.enum(ACTIVITIES).optional(),
     engagement:       z.enum(ENGAGEMENT_LEVELS).optional(),
-    comprehension:       z.enum(COMPREHENSION_LEVELS).optional(),
-    methodologySkill: z.enum(METHODOLOGY_SKILLS).optional(),
-    methodologyTrend: z.enum(METHODOLOGY_TRENDS).optional(),
     nextStep:         z.enum(NEXT_STEPS).optional(),
 }).superRefine((data, ctx) => {
     if (!data.presence) return;

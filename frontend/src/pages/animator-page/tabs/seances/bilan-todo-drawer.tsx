@@ -1,25 +1,14 @@
 import type { BilanEntry, StudentEntry } from '@/api/animator/seances.types'
 import type { LessonsByLevelEntry } from '@/api/animator/types'
-import { Button } from '@/components/ui/button'
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { getElapsedDays } from '@/lib/utils'
 import {
-  ArrowLeftIcon,
   CalendarIcon,
   GraduationCapIcon,
   PenLineIcon,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import AnimCreateBilanForm from './create/bilans/create-bilan-form'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 
 interface AnimBilanToDoDrawerProps {
   studentBilan: StudentEntry
@@ -42,30 +31,20 @@ const AnimBilanToDoDrawer = ({
   lessonsByLevel,
   onBilanSubmitted,
 }: AnimBilanToDoDrawerProps) => {
-  const isMobile = useIsMobile()
   const name = `${studentBilan.firstName} ${studentBilan.lastName}`
   const initials = `${studentBilan.firstName?.[0] ?? ''}${studentBilan.lastName?.[0] ?? ''}`.toUpperCase()
-  const level = studentBilan.level?.label ?? null
-
+  let level = studentBilan.level?.label ?? 'Niveau non renseigné';
+  if(level.includes("1ère")) level = "1ère";
+  else if(level.includes("Terminale")) level = "Terminale";
   return (
-    <Drawer direction={isMobile ? 'left' : 'right'}>
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       
-      <DrawerContent className="h-dvh flex flex-col font-outfit shadow-2xl border-l border-slate-200/80 bg-slate-50/95 backdrop-blur-md p-0 md:rounded-l-2xl overflow-hidden focus:outline-none gap-0">
+      <DialogContent className="h-dvh w-full flex flex-col font-outfit shadow-2xl border-l border-slate-200/80 bg-slate-50/95 backdrop-blur-md p-0 md:rounded-l-2xl overflow-hidden focus:outline-none gap-0">
         {/* --- EN-TÊTE DU DRAWER --- */}
-        <DrawerHeader className="shrink-0 space-y-4 text-left bg-white">
+        <DialogHeader className="shrink-0 space-y-4 text-left bg-white pt-4 px-6 pb-4">
           {/* Ligne 1 : Navigation Retour */}
           <div className="flex items-center justify-between">
-            <DrawerClose asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 px-2.5 -ml-2 gap-1.5 font-bold text-slate-900 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
-              >
-                <ArrowLeftIcon className="size-4" />
-                <span>Retour</span>
-              </Button>
-            </DrawerClose>
 
             {/* Badge de statut */}
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200/80 text-[11px] font-bold">
@@ -81,12 +60,12 @@ const AnimBilanToDoDrawer = ({
             </div>
 
             <div className="space-y-0.5 min-w-0 flex-1">
-              <DrawerTitle className="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 truncate">
+              <DialogTitle className="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 truncate">
                 {name}
-              </DrawerTitle>
-              <DrawerDescription className="text-xs font-medium text-slate-500">
+              </DialogTitle>
+              <DialogDescription className="text-xs font-medium text-slate-500">
                 Renseignez le bilan d'accompagnement de la séance
-              </DrawerDescription>
+              </DialogDescription>
             </div>
           </div>
 
@@ -104,7 +83,7 @@ const AnimBilanToDoDrawer = ({
               </span>
             )}
           </div>
-        </DrawerHeader>
+        </DialogHeader>
 
         {/* --- FORMULAIRE DÉFILANT --- */}
         <div className="brand-v-scrollbar overflow-x-hidden overflow-y-auto p-4 pb-0 pt-8 sm:p-5 flex-1">
@@ -118,8 +97,8 @@ const AnimBilanToDoDrawer = ({
             onBilanSubmitted={onBilanSubmitted}
           />
         </div>
-      </DrawerContent>
-    </Drawer>
+      </DialogContent>
+    </Dialog>
   )
 }
 

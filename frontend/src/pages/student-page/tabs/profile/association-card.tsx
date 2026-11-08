@@ -5,7 +5,9 @@ import { Building2Icon, GraduationCapIcon, UsersIcon } from 'lucide-react';
 export const AssociationCard = ({ student }: { student: User }) => {
   const assocName = student.association?.label ?? 'Non rattaché';
   const groupName = student.class?.label ?? 'Non renseigné';
-
+  let level = student.level?.label ?? 'Niveau non renseigné';
+  if(level.includes("1ère")) level = "1ère";
+  else if(level.includes("Terminale")) level = "Terminale";
   return (
     <Card className="bg-white border-slate-200 rounded-3xl p-5 lg:p-6 shadow-xs flex flex-col justify-between">
       <div>
@@ -45,7 +47,7 @@ export const AssociationCard = ({ student }: { student: User }) => {
               Niveau scolaire
             </span>
             <span className="text-xs font-extrabold text-slate-900 bg-white px-3 py-1 rounded-xl border border-slate-200/80 shadow-2xs">
-              {student.level?.label ?? 'N/A'}
+              {level}
             </span>
           </div>
         </CardContent>

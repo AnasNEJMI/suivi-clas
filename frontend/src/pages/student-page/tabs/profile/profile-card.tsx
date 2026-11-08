@@ -12,7 +12,9 @@ export const ProfileCard = ({
 }) => {
   const firstName = student.firstName;
   const lastName = student.lastName;
-  const level = student.level?.label ?? 'Niveau non renseigné';
+  let level = student.level?.label ?? 'Niveau non renseigné';
+  if(level.includes("1ère")) level = "1ère";
+  else if(level.includes("Terminale")) level = "Terminale";
   const associationName = student.association?.label;
   const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
 

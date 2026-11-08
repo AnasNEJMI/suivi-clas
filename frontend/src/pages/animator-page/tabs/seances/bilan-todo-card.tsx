@@ -32,7 +32,9 @@ const AnimBilanToDoCard = ({
   onBilanSubmitted,
 }: AnimBilanToDoCardProps) => {
   const name = `${studentBilan.firstName} ${studentBilan.lastName}`
-  const level = studentBilan.level?.label ?? 'Niveau non défini'
+  let level = studentBilan.level?.label ?? 'Niveau non renseigné';
+  if(level.includes("1ère")) level = "1ère";
+  else if(level.includes("Terminale")) level = "Terminale";
 
   return (
     <AnimBilanToDoDrawer

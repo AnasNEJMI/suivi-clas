@@ -1,4 +1,5 @@
 import z from "zod";
+import { LESSON_EVALS } from "./lessonEval.schema.js";
 
 const dateErrorMessage = 'Veuillez soumettre une date valide.';
 const animatorIdError = 'Animateur non identifié.';
@@ -19,7 +20,8 @@ const presentBilanSchema = z.object({
     lessonId: z.int().min(1, { error: lessonIdError }),
     curriculumSkillIds: z.array(z.number().int().positive()),
     summary:  z.string(),
-    includeQcm : z.boolean()
+    includeQcm : z.boolean(),
+    lessonEval : z.enum(LESSON_EVALS)
 })
 
 const absentBilanSchema = z.object({
@@ -28,7 +30,8 @@ const absentBilanSchema = z.object({
     lessonId: z.never().optional(),
     summary:  z.never().optional(),
     curriculumSkillIds : z.never().optional(),
-    includeQcm : z.boolean().optional()
+    includeQcm : z.boolean().optional(),
+    lessonEval : z.enum(LESSON_EVALS).optional()
 })
 
 export const bilanSchema = z.discriminatedUnion('presence', [
