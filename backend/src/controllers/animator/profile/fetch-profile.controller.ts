@@ -3,9 +3,19 @@ import { prisma }                                 from '../../../db/prisma.js'
 import { ApiError }                               from '../../../classes/ApiError.class.js'
 import { sendSuccess }                            from '../../../utils/response.utils.js'
 import { PrismaClientKnownRequestError }          from '../../../generated/prisma/internal/prismaNamespace.js'
-import { Subject } from '../../../db/seed.users.data.js'
 
 // ── Response types ────────────────────────────────────────────────────────────
+
+export const SUBJECTS = [
+  "Mathématiques",
+  "Français",
+  "Histoire-Géographie",
+  "Sciences de la Vie et de la Terre",
+  "Physique-Chimie",
+  "Anglais",
+] as const;
+
+export type Subject = (typeof SUBJECTS)[number];
 
 export type StudentEntry = {
   firstName: string
