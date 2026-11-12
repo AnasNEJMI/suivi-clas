@@ -22,6 +22,8 @@ backend/prisma/qcm-bank-export-new-curriculum.json
 backend/prisma/new-qcm-questions.json
 backend/prisma/directory
 backend/data/
+backend/prisma/curriculum
+backend/prisma/replace-curriculum.ts
 
 
 

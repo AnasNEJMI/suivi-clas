@@ -31,6 +31,13 @@ const links = [
     description: 'Parlons de votre parcours.',
     icon: GraduationCapIcon,
   },
+  {
+    label: 'Connexion',
+    to: '/connexion',
+    number: '02',
+    description: 'Accédez à votre espace personnel.',
+    icon: GraduationCapIcon,
+  },
 ];
 
 const EXIT_ANIMATION_MS = 420;

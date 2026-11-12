@@ -120,7 +120,11 @@ export default defineConfig({
         target : URL,
         changeOrigin : true,
       }
-    }
+    },
+    host: "127.0.0.1",
+    port: 5173,
+    strictPort: true,
+    allowedHosts: ["bs-local.com"],
   },
   build : {
     rollupOptions : {

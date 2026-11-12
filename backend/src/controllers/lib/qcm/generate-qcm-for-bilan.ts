@@ -85,9 +85,8 @@ export async function generateQcmForBilan(
   if (bankQuestions.length === 0) return null;
 
   const selected = [
-    ...shuffle(bankQuestions.filter((q) => q.difficulty === 'e')).slice(0, 4),
+    ...shuffle(bankQuestions.filter((q) => q.difficulty === 'e')).slice(0, 6),
     ...shuffle(bankQuestions.filter((q) => q.difficulty === 'm')).slice(0, 4),
-    ...shuffle(bankQuestions.filter((q) => q.difficulty === 'h')).slice(0, 2),
   ];
 
   try {
