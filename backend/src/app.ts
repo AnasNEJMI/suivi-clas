@@ -16,6 +16,8 @@ import { helmetConfig } from "./configs/helmet.config.js";
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 app.use(helmetConfig)
 
 app.use(

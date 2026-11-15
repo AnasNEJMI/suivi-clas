@@ -3,7 +3,7 @@ import { ErrorCodes, ErrorMessagesMap, ErrorStatusMap } from "@/lib/errors/error
 import type { ApiResponse } from "@/lib/types/response.types";
 
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
 
 export async function apiRequest<T>(
     endpoint : string,

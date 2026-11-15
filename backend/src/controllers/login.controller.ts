@@ -28,8 +28,6 @@ export async function loginHandler(
 ){
     try{
         const {username, password, userType} = req.body as LoginInput;
-        console.log('username :', username);
-        console.log('password :', password);
         
         //animator login
         if(userType === 'animator'){
