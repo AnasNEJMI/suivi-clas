@@ -102,8 +102,8 @@ const QcmResultsQuestionnaire = ({
                   <QuestionnaireProgress
                     className="w-full my-2"
                     render={(props, state) => (
-                      <div {...props}>
-                        <div className="mb-2 flex gap-2" aria-hidden="true">
+                      <div {...props} className='w-full'>
+                        <div className="w-full mb-2 flex gap-2" aria-hidden="true">
                           {Array.from({ length: state.total }, (_, index) => (
                             <span
                               key={index}
