@@ -31,6 +31,12 @@ import { queryClient } from '@/lib/query/client';
 import RootLayout from './layouts/root-layout.tsx'
 import NotFoundPage from './pages/404.tsx'
 
+import { reloadOnce } from "@/lib/chunkReload"
+
+window.addEventListener("vite:preloadError", (event) => {
+  if (reloadOnce()) event.preventDefault()
+})
+
 function lazify<T extends FunctionComponent<any>>(
   factory: () => Promise<{ default: T }>
 ) {
