@@ -24,7 +24,7 @@ function QuestionnaireProgress({ style, ...props }: React.ComponentProps<typeof 
     <QuestionnairePrimitive.Progress
       data-slot="questionnaire-progress"
       style={{
-        minHeight: 16, width: "fit-content", minWidth: "14ch", fontSize: 12, lineHeight: "16px",
+        minHeight: 16, width: "full", minWidth: "14ch", fontSize: 12, lineHeight: "16px",
         fontWeight: 500, color: MUTED, fontVariantNumeric: "tabular-nums", ...asStyle(style),
       }}
       {...props}
