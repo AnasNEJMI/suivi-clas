@@ -4,7 +4,7 @@ import * as React from "react"
 import { Questionnaire as QuestionnairePrimitive } from "@shadcn/react/questionnaire"
 import { cn } from "@/lib/utils"
 import { buttonVariants, type Button } from "@/components/ui/button"
-import { brandButtonVariants } from "../brand-button"
+import { brandButtonVariants, type BrandButton } from "../brand-button"
 
 function Questionnaire({
   className,
@@ -239,7 +239,7 @@ function QuestionnaireSkip({
   variant = "outline",
   ...props
 }: React.ComponentProps<typeof QuestionnairePrimitive.Skip> &
-  Pick<React.ComponentProps<typeof Button>, "size" | "variant">) {
+  Pick<React.ComponentProps<typeof BrandButton>, "size" | "variant">) {
   return (
     <QuestionnairePrimitive.Skip
       data-slot="questionnaire-skip"
@@ -252,7 +252,7 @@ function QuestionnaireSkip({
       )}
       {...props}
     >
-      <div  className="relative z-20 -translate-y-1.5 group-active:translate-y-0 flex flex-row items-center gap-2">
+      <div className="relative z-20 flex flex-row items-center gap-2 transform-[translateY(-0.375rem)] group-active:transform-[translateY(0)]">
         {children ?? "Skip"}
       </div>
     </QuestionnairePrimitive.Skip>
@@ -266,7 +266,7 @@ function QuestionnaireNext({
   variant = "default",
   ...props
 }: React.ComponentProps<typeof QuestionnairePrimitive.Next> &
-  Pick<React.ComponentProps<typeof Button>, "size" | "variant">) {
+  Pick<React.ComponentProps<typeof BrandButton>, "size" | "variant">) {
   return (
     <QuestionnairePrimitive.Next
       data-slot="questionnaire-next"
@@ -279,7 +279,7 @@ function QuestionnaireNext({
       )}
       {...props}
     >
-      <div  className="relative z-20 -translate-y-1.5 group-active:translate-y-0 flex flex-row items-center gap-2">
+      <div className="relative z-20 flex flex-row items-center gap-2 transform-[translateY(-0.375rem)] group-active:transform-[translateY(0)]">
         {children ?? "Next"}
       </div>
     </QuestionnairePrimitive.Next>
@@ -293,7 +293,7 @@ function QuestionnaireSubmit({
   variant = "default",
   ...props
 }: React.ComponentProps<typeof QuestionnairePrimitive.Submit> &
-  Pick<React.ComponentProps<typeof Button>, "size" | "variant">) {
+  Pick<React.ComponentProps<typeof BrandButton>, "size" | "variant">) {
   return (
     <QuestionnairePrimitive.Submit
       data-slot="questionnaire-submit"
@@ -301,12 +301,12 @@ function QuestionnaireSubmit({
       data-variant={variant}
       className={cn(
         brandButtonVariants({ size, variant }),
-        "col-start-3 row-start-1 min-h-11 justify-self-end sm:min-h-0 text-white",
+        "col-start-3 row-start-1 min-h-11 justify-self-end sm:min-h-0 text-[#ffffff]",
         className
       )}
       {...props}
     >
-      <div  className="relative z-20 -translate-y-1.5 group-active:translate-y-0 flex flex-row items-center gap-2">
+      <div className="relative z-20 flex flex-row items-center gap-2 transform-[translateY(-0.375rem)] group-active:transform-[translateY(0)]">
         {children ?? "Submit"}
       </div>
     </QuestionnairePrimitive.Submit>
