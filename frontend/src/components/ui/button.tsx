@@ -9,17 +9,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
-        outline:
-          "border bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
-        qcm : "text-white bg-indigo-700 hover:bg-indigo-600"
+        default:     "bg-[#171717] text-[#fafafa] hover:bg-[rgb(23_23_23/0.9)]",
+        destructive: "bg-[#e7000b] text-[#ffffff] hover:bg-[rgb(231_0_11/0.9)] focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        outline:     "border border-[#e5e5e5] bg-[#ffffff] hover:bg-[#f5f5f5] hover:text-[#171717] dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+        secondary:   "bg-[#f5f5f5] text-[#171717] hover:bg-[rgb(245_245_245/0.8)]",
+        ghost:       "hover:bg-[#f5f5f5] hover:text-[#171717] dark:hover:bg-accent/50",
+        link:        "text-[#171717] underline-offset-4 hover:underline",
+        qcm:         "text-[#ffffff] bg-[#432dd7] hover:bg-[#4f39f6]",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

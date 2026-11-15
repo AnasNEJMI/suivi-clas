@@ -1,6 +1,3 @@
-
-"use client"
-
 import * as React from "react"
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group"
 import { type VariantProps } from "class-variance-authority"
@@ -49,7 +46,7 @@ function ToggleGroup({
       data-spacing={spacing}
       style={groupStyle}
       className={cn(
-        "group/toggle-group flex min-w-0 items-center gap-[var(--toggle-group-gap)]",
+        "group/toggle-group flex min-w-0 items-center gap-(--toggle-group-gap)",
         "data-[orientation=vertical]:w-full",
         "data-[orientation=vertical]:flex-col",
         "data-[orientation=vertical]:items-stretch",
@@ -88,9 +85,9 @@ function ToggleGroupItem({
 
   const variantClasses = {
     outline:
-      "border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900",
+      "border-[#e2e8f0] bg-[#ffffff] [box-shadow:0_1px_3px_0_rgb(0_0_0/0.1),0_1px_2px_-1px_rgb(0_0_0/0.1)] dark:border-[#314158] dark:bg-[#0f172b]",
     default:
-      "border-transparent bg-slate-100 dark:bg-slate-800",
+      "border-transparent bg-[#f1f5f9] dark:bg-[#1d293d]",
   }
 
   return (
@@ -101,80 +98,73 @@ function ToggleGroupItem({
       className={cn(
         "group/toggle-item relative inline-flex min-w-0",
         "items-center justify-center overflow-hidden rounded-2xl border",
-        "font-semibold leading-normal text-slate-700",
+        "font-semibold leading-normal text-[#314158]",
         "outline-none select-none",
         "transition-all duration-200 ease-out",
 
-        // Default appearance
         variantClasses[
           resolvedVariant as keyof typeof variantClasses
         ] ?? variantClasses.outline,
 
-        // Sizes
         sizeClasses[
           resolvedSize as keyof typeof sizeClasses
         ] ?? sizeClasses.default,
 
         // Hover
-        "hover:-translate-y-0.5 hover:border-lime-400",
-        "hover:bg-lime-50/70 hover:shadow-md",
-        "active:translate-y-0 active:shadow-sm",
+        "hover:transform-[translateY(-0.125rem)] hover:border-[#9ae600]",
+        "hover:bg-[rgb(247_254_231/0.7)]",
+        "hover:[box-shadow:0_4px_6px_-1px_rgb(0_0_0/0.1),0_2px_4px_-2px_rgb(0_0_0/0.1)]",
+        "active:transform-[translateY(0)]",
+        "active:[box-shadow:0_1px_3px_0_rgb(0_0_0/0.1),0_1px_2px_-1px_rgb(0_0_0/0.1)]",
 
-        // Selected state
-        "data-[state=on]:border-lime-600",
-        "data-[state=on]:bg-lime-100",
-        "data-[state=on]:text-zinc-950",
-        "data-[state=on]:shadow-[inset_0_0_0_1px_rgba(101,163,13,0.08)]",
+        // Selected
+        "data-[state=on]:border-[#5ea500]",
+        "data-[state=on]:bg-[#ecfcca]",
+        "data-[state=on]:text-[#09090b]",
+        "data-[state=on]:[box-shadow:inset_0_0_0_1px_rgba(101,163,13,0.08)]",
 
-        // Keyboard accessibility
+        // Keyboard focus
         "focus-visible:z-10",
-        "focus-visible:outline-none",
-        "focus-visible:ring-2",
-        "focus-visible:ring-lime-600",
-        "focus-visible:ring-offset-2",
-        "focus-visible:ring-offset-white",
-        "dark:focus-visible:ring-offset-slate-950",
+        "focus-visible:[box-shadow:0_0_0_2px_#ffffff,0_0_0_4px_#5ea500]",
+        "dark:focus-visible:[box-shadow:0_0_0_2px_#020618,0_0_0_4px_#5ea500]",
 
-        // Disabled state
+        // Disabled
         "disabled:pointer-events-none",
         "disabled:cursor-not-allowed",
         "disabled:opacity-45",
-        "data-[disabled]:pointer-events-none",
-        "data-[disabled]:opacity-45",
+        "data-disabled:pointer-events-none",
+        "data-disabled:opacity-45",
 
         // Dark mode
-        "dark:text-slate-200",
-        "dark:hover:border-lime-700",
-        "dark:hover:bg-lime-950/40",
-        "dark:data-[state=on]:border-lime-600",
-        "dark:data-[state=on]:bg-lime-950/60",
-        "dark:data-[state=on]:text-lime-200",
+        "dark:text-[#e2e8f0]",
+        "dark:hover:border-[#497d00]",
+        "dark:hover:bg-[rgb(25_46_3/0.4)]",
+        "dark:data-[state=on]:border-[#5ea500]",
+        "dark:data-[state=on]:bg-[rgb(25_46_3/0.6)]",
+        "dark:data-[state=on]:text-[#d8f999]",
 
         className
       )}
       {...props}
     >
       <div className="flex w-full min-w-0 items-center justify-between gap-3 text-left">
-        <div className="min-w-0 flex-1">
-          {children}
-        </div>
+        <div className="min-w-0 flex-1">{children}</div>
 
-        {/* Persistent space keeps option labels aligned. */}
         <span
           aria-hidden="true"
           className={cn(
             "grid size-5 shrink-0 place-items-center rounded-full border",
-            "border-slate-300 text-transparent",
+            "border-[#cad5e2] text-transparent",
             "transition-all duration-200",
-            "group-data-[state=on]/toggle-item:border-lime-700",
-            "group-data-[state=on]/toggle-item:bg-lime-700",
-            "group-data-[state=on]/toggle-item:text-white",
-            "dark:border-slate-600",
-            "dark:group-data-[state=on]/toggle-item:border-lime-500",
-            "dark:group-data-[state=on]/toggle-item:bg-lime-600"
+            "group-data-[state=on]/toggle-item:border-[#497d00]",
+            "group-data-[state=on]/toggle-item:bg-[#497d00]",
+            "group-data-[state=on]/toggle-item:text-[#ffffff]",
+            "dark:border-[#45556c]",
+            "dark:group-data-[state=on]/toggle-item:border-[#7ccf00]",
+            "dark:group-data-[state=on]/toggle-item:bg-[#5ea500]"
           )}
         >
-          <CheckIcon className="size-3.5 stroke-[3]" />
+          <CheckIcon className="size-3.5 stroke-3" />
         </span>
       </div>
     </ToggleGroupPrimitive.Item>
