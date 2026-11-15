@@ -215,9 +215,7 @@ export function LoginForm({
                       }}
                       aria-label="Choisir le type de compte"
                       variant="outline"
-                      size="lg"
                       spacing={2}
-                      className="w-full"
                     >
                       {USER_TYPES.map((userType) => (
                         <ToggleGroupItem

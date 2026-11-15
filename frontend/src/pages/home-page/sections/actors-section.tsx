@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react'
+import { ArrowRightIcon, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Reveal } from '@/components/reveal'
 import {
@@ -10,6 +10,8 @@ import teacherIllustration from '@/./assets/images/teacher-illus.png'
 import associationIllustration from '@/./assets/images/assoc-illus.png'
 import { Floating } from '@/hooks/decor-shapes'
 import { SectionHeading } from '@/hooks/section-heading'
+import { Link } from 'react-router'
+import { BrandButton } from '@/components/brand-button'
 
 type Anim = 'float-a' | 'float-b' | 'wiggle'
 
@@ -151,6 +153,12 @@ function ThreeActorsSection() {
             <span className='size-3.5 rounded-full bg-indigo-500 ring-4 ring-white' />
           </div>
         </div>
+      </Reveal>
+      <Reveal delay={250} className = 'mt-8 w-full flex flex-col items-center gap-4'>
+        <span className='text-slate-600'>Envi d'en savoir plus?</span>
+        <Link to='/methode'>
+          <BrandButton className='px-6'>Découvrez notre méthode <ArrowRightIcon className='size-3.5' aria-hidden /></BrandButton>
+        </Link>
       </Reveal>
     </section>
   )

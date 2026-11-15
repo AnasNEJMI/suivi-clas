@@ -28,7 +28,7 @@ const DeleteBilanDialog = ({studentBilan, onBilanDeleted} : {studentBilan : Stud
   return (
     <Dialog>
         <DialogTrigger asChild>
-            <Button className='h-10 w-10'><Trash2Icon/></Button>
+            <Button ><Trash2Icon className='size-4'/></Button>
         </DialogTrigger>
         <DialogContent className='rounded-xl min-w-72 min-h-56 flex flex-col'>
                 <DialogHeader className='flex-1 items-center justify-center'>

@@ -53,7 +53,6 @@ const AnimBilanCompletedDrawer = ({
             <DrawerClose asChild>
               <Button
                 variant="ghost"
-                size="sm"
                 className="h-8 px-2.5 -ml-2 gap-1.5 text-base font-bold text-slate-900 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
               >
                 <ArrowLeftIcon className="size-4" />

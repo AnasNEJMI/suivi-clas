@@ -1,174 +1,130 @@
 import * as React from "react"
-import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group"
-import { type VariantProps } from "class-variance-authority"
-import { CheckIcon } from "lucide-react"
+import {
+  FONT, SHADOW_MD, SHADOW_SM, TOGGLE_COLORS as C, TOGGLE_SIZES,
+  type ToggleSize,
+} from "../ui-lite/tokens"
+import { useButtonState } from "../ui-lite/use-button-state";
 
-import { cn } from "@/lib/utils"
-import { toggleVariants } from "@/components/ui/toggle"
-
-type ToggleVariants = VariantProps<typeof toggleVariants>
-
-type ToggleGroupContextValue = {
-  variant?: ToggleVariants["variant"]
-  size?: ToggleVariants["size"]
-  spacing: number
+type Variant = "outline" | "default"
+type Base = {
+  variant?: Variant; size?: ToggleSize; spacing?: number
+  orientation?: "horizontal" | "vertical"; disabled?: boolean
+  style?: React.CSSProperties; children?: React.ReactNode
 }
+type SingleProps = Base & { type?: "single"; value?: string; defaultValue?: string; onValueChange?: (v: string) => void }
+type MultipleProps = Base & { type: "multiple"; value?: string[]; defaultValue?: string[]; onValueChange?: (v: string[]) => void }
+export type ToggleGroupProps = SingleProps | MultipleProps
 
-const ToggleGroupContext =
-  React.createContext<ToggleGroupContextValue>({
-    variant: "outline",
-    size: "default",
-    spacing: 2,
-  })
+type Ctx = { variant: Variant; size: ToggleSize; disabled: boolean; multiple: boolean; isOn: (v: string) => boolean; toggle: (v: string) => void }
+const GroupContext = React.createContext<Ctx | null>(null)
+const toList = (v?: string | string[]) => (Array.isArray(v) ? v : v ? [v] : [])
 
-function ToggleGroup({
-  className,
-  variant = "outline",
-  size = "default",
-  spacing = 2,
-  children,
-  style,
-  ...props
-}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &
-  ToggleVariants & {
-    spacing?: number
-  }) {
-  const groupStyle = {
-    "--toggle-group-gap": `${Math.max(0, spacing) * 0.25}rem`,
-    ...style,
-  } as React.CSSProperties
+export function ToggleGroup(props: ToggleGroupProps) {
+  const { variant = "outline", size = "default", spacing = 2, orientation = "horizontal", disabled = false, style, children } = props
+  const multiple = props.type === "multiple"
+  const vertical = orientation === "vertical"
+  const [inner, setInner] = React.useState<string[]>(() => toList(props.defaultValue))
+  const list = props.value !== undefined ? toList(props.value) : inner
+
+  const toggle = (v: string) => {
+    const next = list.includes(v) ? list.filter((x) => x !== v) : multiple ? [...list, v] : [v]
+    if (props.value === undefined) setInner(next)
+    if (props.type === "multiple") props.onValueChange?.(next)
+    else props.onValueChange?.(next[0] ?? "")
+  }
 
   return (
-    <ToggleGroupPrimitive.Root
-      data-slot="toggle-group"
-      data-variant={variant}
-      data-size={size}
-      data-spacing={spacing}
-      style={groupStyle}
-      className={cn(
-        "group/toggle-group flex min-w-0 items-center gap-(--toggle-group-gap)",
-        "data-[orientation=vertical]:w-full",
-        "data-[orientation=vertical]:flex-col",
-        "data-[orientation=vertical]:items-stretch",
-        className
-      )}
-      {...props}
-    >
-      <ToggleGroupContext.Provider
-        value={{ variant, size, spacing }}
+    <GroupContext.Provider value={{ variant, size, disabled, multiple, isOn: (v) => list.includes(v), toggle }}>
+      <div
+        role={multiple ? "group" : "radiogroup"}
+        style={{
+          display: "flex", minWidth: 0,
+          flexDirection: vertical ? "column" : "row",
+          alignItems: vertical ? "stretch" : "center",
+          width: vertical ? "100%" : undefined,
+          gap: Math.max(0, spacing) * 4,
+          ...style,
+        }}
       >
         {children}
-      </ToggleGroupContext.Provider>
-    </ToggleGroupPrimitive.Root>
+      </div>
+    </GroupContext.Provider>
   )
 }
 
-function ToggleGroupItem({
-  className,
-  children,
-  variant,
-  size,
-  ...props
-}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &
-  ToggleVariants) {
-  const context = React.useContext(ToggleGroupContext)
+type ItemProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "value"> & {
+  value: string; variant?: Variant; size?: ToggleSize
+}
 
-  const resolvedVariant = context.variant ?? variant ?? "outline"
-  const resolvedSize = context.size ?? size ?? "default"
+export function ToggleGroupItem({ value, variant, size, style, children, onClick, ...btn }: ItemProps) {
+  const g = React.useContext(GroupContext)
+  const st = useButtonState(btn)
+  if (!g) throw new Error("ToggleGroupItem must be used inside ToggleGroup")
 
-  const sizeClasses = {
-    sm: "min-h-10 px-3 py-2 text-xs",
-    default: "min-h-12 px-4 py-3 text-sm",
-    lg: "min-h-14 px-5 py-3.5 text-sm",
-    icon: "size-11 p-0",
-  }
+  const v = variant ?? g.variant
+  const sz = TOGGLE_SIZES[size ?? g.size]
+  const on = g.isOn(value)
+  const disabled = g.disabled || !!btn.disabled
 
-  const variantClasses = {
-    outline:
-      "border-[#e2e8f0] bg-[#ffffff] [box-shadow:0_1px_3px_0_rgb(0_0_0/0.1),0_1px_2px_-1px_rgb(0_0_0/0.1)] dark:border-[#314158] dark:bg-[#0f172b]",
-    default:
-      "border-transparent bg-[#f1f5f9] dark:bg-[#1d293d]",
-  }
+  let border = v === "outline" ? C.outlineBorder : "transparent"
+  let bg = v === "outline" ? "#ffffff" : C.defaultBg
+  let color = C.text
+  if (st.hovered) { border = C.hoverBorder; bg = C.hoverBg }
+  if (on) { border = C.onBorder; bg = C.onBg; color = C.onText }
+
+  const shadows: string[] = []
+  if (st.focused) shadows.push(C.ring)
+  if (st.pressed) shadows.push(SHADOW_SM)
+  else if (st.hovered) shadows.push(SHADOW_MD)
+  else if (v === "outline") shadows.push(SHADOW_SM)
+  if (on) shadows.push(C.onInset)
 
   return (
-    <ToggleGroupPrimitive.Item
-      data-slot="toggle-group-item"
-      data-variant={resolvedVariant}
-      data-size={resolvedSize}
-      className={cn(
-        "group/toggle-item relative inline-flex min-w-0",
-        "items-center justify-center overflow-hidden rounded-2xl border",
-        "font-semibold leading-normal text-[#314158]",
-        "outline-none select-none",
-        "transition-all duration-200 ease-out",
-
-        variantClasses[
-          resolvedVariant as keyof typeof variantClasses
-        ] ?? variantClasses.outline,
-
-        sizeClasses[
-          resolvedSize as keyof typeof sizeClasses
-        ] ?? sizeClasses.default,
-
-        // Hover
-        "hover:transform-[translateY(-0.125rem)] hover:border-[#9ae600]",
-        "hover:bg-[rgb(247_254_231/0.7)]",
-        "hover:[box-shadow:0_4px_6px_-1px_rgb(0_0_0/0.1),0_2px_4px_-2px_rgb(0_0_0/0.1)]",
-        "active:transform-[translateY(0)]",
-        "active:[box-shadow:0_1px_3px_0_rgb(0_0_0/0.1),0_1px_2px_-1px_rgb(0_0_0/0.1)]",
-
-        // Selected
-        "data-[state=on]:border-[#5ea500]",
-        "data-[state=on]:bg-[#ecfcca]",
-        "data-[state=on]:text-[#09090b]",
-        "data-[state=on]:[box-shadow:inset_0_0_0_1px_rgba(101,163,13,0.08)]",
-
-        // Keyboard focus
-        "focus-visible:z-10",
-        "focus-visible:[box-shadow:0_0_0_2px_#ffffff,0_0_0_4px_#5ea500]",
-        "dark:focus-visible:[box-shadow:0_0_0_2px_#020618,0_0_0_4px_#5ea500]",
-
-        // Disabled
-        "disabled:pointer-events-none",
-        "disabled:cursor-not-allowed",
-        "disabled:opacity-45",
-        "data-disabled:pointer-events-none",
-        "data-disabled:opacity-45",
-
-        // Dark mode
-        "dark:text-[#e2e8f0]",
-        "dark:hover:border-[#497d00]",
-        "dark:hover:bg-[rgb(25_46_3/0.4)]",
-        "dark:data-[state=on]:border-[#5ea500]",
-        "dark:data-[state=on]:bg-[rgb(25_46_3/0.6)]",
-        "dark:data-[state=on]:text-[#d8f999]",
-
-        className
-      )}
-      {...props}
+    <button
+      type="button"
+      role={g.multiple ? undefined : "radio"}
+      aria-checked={g.multiple ? undefined : on}
+      aria-pressed={g.multiple ? on : undefined}
+      data-state={on ? "on" : "off"}
+      {...st.props}
+      onClick={(e) => { onClick?.(e); if (!e.defaultPrevented) g.toggle(value) }}
+      style={{
+        position: "relative", zIndex: st.focused ? 10 : undefined,
+        display: "inline-flex", alignItems: "center", justifyContent: "center",
+        minWidth: 0, overflow: "hidden", borderRadius: 16,
+        borderWidth: 1, borderStyle: "solid", borderColor: border,
+        minHeight: sz.minHeight, width: sz.width, height: sz.height, padding: sz.padding,
+        fontFamily: FONT, fontSize: sz.fontSize, fontWeight: 600, lineHeight: 1.5,
+        color, backgroundColor: bg, boxShadow: shadows.join(", ") || "none",
+        transform: st.hovered && !st.pressed ? "translateY(-2px)" : "none",
+        outline: "none", WebkitAppearance: "none", appearance: "none",
+        WebkitUserSelect: "none", userSelect: "none",
+        WebkitTapHighlightColor: "transparent",
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.45 : 1, pointerEvents: disabled ? "none" : "auto",
+        transition: "all 200ms ease-out",
+        ...style,
+      }}
     >
-      <div className="flex w-full min-w-0 items-center justify-between gap-3 text-left">
-        <div className="min-w-0 flex-1">{children}</div>
-
+      <div style={{ display: "flex", width: "100%", minWidth: 0, alignItems: "center", justifyContent: "space-between", gap: 12, textAlign: "left" }}>
+        <div style={{ minWidth: 0, flex: 1 }}>{children}</div>
         <span
           aria-hidden="true"
-          className={cn(
-            "grid size-5 shrink-0 place-items-center rounded-full border",
-            "border-[#cad5e2] text-transparent",
-            "transition-all duration-200",
-            "group-data-[state=on]/toggle-item:border-[#497d00]",
-            "group-data-[state=on]/toggle-item:bg-[#497d00]",
-            "group-data-[state=on]/toggle-item:text-[#ffffff]",
-            "dark:border-[#45556c]",
-            "dark:group-data-[state=on]/toggle-item:border-[#7ccf00]",
-            "dark:group-data-[state=on]/toggle-item:bg-[#5ea500]"
-          )}
+          style={{
+            display: "grid", placeItems: "center", flexShrink: 0,
+            width: 20, height: 20, borderRadius: "50%",
+            borderWidth: 1, borderStyle: "solid",
+            borderColor: on ? C.checkOn : C.checkBorder,
+            backgroundColor: on ? C.checkOn : "transparent",
+            color: on ? "#ffffff" : "transparent",
+            transition: "all 200ms",
+          }}
         >
-          <CheckIcon className="size-3.5 stroke-3" />
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
         </span>
       </div>
-    </ToggleGroupPrimitive.Item>
+    </button>
   )
 }
-
-export { ToggleGroup, ToggleGroupItem }

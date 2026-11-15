@@ -18,7 +18,7 @@ interface NavBarProps extends React.ComponentProps<'div'> {
 
 const links = [
   {
-    label: 'Ma méthode',
+    label: 'La méthode',
     to: '/methode',
     number: '01',
     description: 'Une méthode claire pour progresser.',

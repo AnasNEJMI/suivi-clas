@@ -1,13 +1,15 @@
-import { ArrowRight, ChevronDown, Plus, Sparkle, Sparkles, Triangle } from 'lucide-react'
+import {ChevronDown, LogInIcon, Plus, Sparkle, Sparkles, Triangle } from 'lucide-react'
 import { Link } from 'react-router'
 import { BrandButton } from '@/components/brand-button'
 import { useMouseParallax } from '@/hooks/use-mouse-parallax'
 import { Dots, Floating, HalfCircle, Ring, Squiggle } from '@/hooks/decor-shapes'
 import { BackpackArt, GradCapArt, OpenBookArt, PencilArt, RulerArt } from '@/components/school-art'
 import { WaveUnderline } from '@/components/wave-underline'
+import { useAuth } from '@/contexts/auth/use-auth'
 
 const rise = 'animate-rise motion-reduce:animate-none'
 const after = (s: number) => ({ animationDelay: `${s}s` })
+
 
 const roles = [
   { label: 'Associations', dot: 'bg-indigo-500' },
@@ -17,6 +19,8 @@ const roles = [
 
 function HeroSection() {
   const ref = useMouseParallax()
+  const { isAuthenticated } = useAuth();
+  const accountLabel = isAuthenticated ? 'Accédez à votre espace' : 'Connectez vous';
 
   return (
     <section
@@ -95,13 +99,17 @@ function HeroSection() {
           Une plateforme qui connecte animateurs investis, élèves motivés et associations engagées autour d'un objectif commun : transformer chaque séance en progrès mesurable et durable.
         </p>
 
-        <div className={`${rise} mt-9 flex flex-wrap items-center justify-center gap-4`} style={after(0.45)}>
-          <Link to='/methode'>
-            <BrandButton>Comment ça marche <ArrowRight className='size-3.5' aria-hidden /></BrandButton>
-          </Link>
-          <Link to='/contact'>
-            <BrandButton variant='black'>Contact</BrandButton>
-          </Link>
+        <div className={`${rise} flex items-center gap-2 flex-col mt-9`} style={after(0.45)}
+        >
+          <span className='text-sm opacity-75'>Vous êtez inscrits à la platforme ?</span>
+          <div className={`flex flex-wrap items-center justify-center`} >
+            <Link to='/connexion'>
+              <BrandButton className='px-6'>{accountLabel} <LogInIcon className='size-3.5' aria-hidden /></BrandButton>
+            </Link>
+            {/* <Link to='/contact'>
+              <BrandButton variant='black'>Contact</BrandButton>
+            </Link> */}
+          </div>
         </div>
 
         <div className={`${rise} mt-12 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-2`} style={after(0.6)}>

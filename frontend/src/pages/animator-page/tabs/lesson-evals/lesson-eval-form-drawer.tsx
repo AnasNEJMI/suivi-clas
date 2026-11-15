@@ -161,19 +161,17 @@ const AnimLessonEvalFormDrawer = ({
                             <BrandButton
                                 type="button"
                                 variant="outline"
-                                size="lg"
                                 onClick={() => form.reset()}
                                 disabled={submitMutation.isPending}
-                                className="flex-1 h-11 text-sm font-bold"
+                                className="flex-1"
                             >
                                 Réinitialiser
                             </BrandButton>
 
                             <BrandButton
                                 type="submit"
-                                size="lg"
                                 disabled={submitMutation.isPending}
-                                className="flex-1 h-11 text-sm font-bold"
+                                className="flex-1"
                             >
                                 {submitMutation.isPending ? 'Enregistrement...' : "Enregistrer l'évaluation"}
                             </BrandButton>

@@ -287,13 +287,13 @@ const QcmQuestionnaire = ({
             {/* Modal Bottom Actions */}
             <DialogFooter className='flex flex-row px-4'>
               <DialogClose asChild className='flex-1 p-0'>
-                <BrandButton type="button" variant="outline" className='h-12'>
+                <BrandButton type="button" variant="outline">
                   Annuler
                 </BrandButton>
               </DialogClose>
               <QuestionnaireActions className='flex-1 flex'>
-                <QuestionnaireNext className='w-full h-12'>Confimer</QuestionnaireNext>
-                <QuestionnaireSubmit className='w-full h-12'>Envoyer</QuestionnaireSubmit>
+                <QuestionnaireNext className='w-full'>Confimer</QuestionnaireNext>
+                <QuestionnaireSubmit className='w-full'>Envoyer</QuestionnaireSubmit>
               </QuestionnaireActions>
             </DialogFooter>
           </Questionnaire>
